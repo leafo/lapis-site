@@ -4,6 +4,10 @@ $font_size: 16px;
 $link_color: #DA3400;
 $bg: lighten(#EAFFEA, 2%);
 
+$main_width: 900px;
+$nav_width: 300px;
+
+
 body {
     background: $bg;
     font-size: $font_size;
@@ -31,7 +35,10 @@ a {
 }
 
 .nav_column {
+    width: $nav_width;
+
     .sticky_inner {
+        width: $nav_width;
         position: fixed;
         top: 0;
         bottom: 0;
@@ -81,7 +88,7 @@ a {
 }
 
 .text_column {
-    width: 900px;
+    width: $main_width;
     color: #222;
 
     h1 {
@@ -230,5 +237,11 @@ a {
     .m, .mi, .mf, .mh, .o {
         color: #9495ff;
     }
+}
+
+@media all and (max-width: 1200px) {
+  .nav_column {
+      display: none;
+  }
 }
 
