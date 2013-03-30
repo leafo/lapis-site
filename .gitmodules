@@ -1,0 +1,3 @@
+[submodule "lapis"]
+	path = lapis
+	url = git@github.com:leafo/lapis.git
