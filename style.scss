@@ -46,6 +46,18 @@ a {
         display: block;
         padding: 4px 8px;
         color: #777;
+        margin-top: 10px;
+
+        text-decoration: none;
+
+        &.sub {
+            margin-top: 0;
+            padding-left: 16px;
+
+            &:before {
+                content: "— ";
+            }
+        }
 
         &:hover {
             background: white;
@@ -55,6 +67,10 @@ a {
             -webkit-transition: all 0.1s ease-in-out;
             -moz-transition: all 0.1s ease-in-out;
             transition: all 0.1s ease-in-out;
+        }
+
+        code {
+            font-size: 14px;
         }
     }
 
