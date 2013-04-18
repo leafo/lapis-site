@@ -1,12 +1,13 @@
 
 $offset_left: 50px;
-$font_size: 16px;
+$font_size: 18px;
 $link_color: #DA3400;
 $bg: lighten(#EAFFEA, 2%);
 
 $main_width: 900px;
 $nav_width: 300px;
 
+@import url(http://fonts.googleapis.com/css?family=Lato:400,700|Inconsolata);
 
 body {
     background: $bg;
@@ -15,6 +16,9 @@ body {
     font-family: Lato, sans-serif;
 }
 
+code, pre {
+    font-family: Inconsolata, monospace;
+}
 
 a {
     color: $link_color;
@@ -47,6 +51,7 @@ a {
 
     .nav_links {
         margin: 20px;
+        font-size: 16px;
     }
 
     a {
@@ -69,7 +74,7 @@ a {
         &:hover {
             background: white;
             box-shadow: 0 0 0 1px silver;
-            color: red;
+            color: $link_color;
 
             -webkit-transition: all 0.1s ease-in-out;
             -moz-transition: all 0.1s ease-in-out;
@@ -100,6 +105,7 @@ a {
         border-left: 2px solid #939893;
         padding-left: 38px;
         margin-left: 10px;
+        position: relative;
 
         a {
             color: #222;
@@ -108,19 +114,12 @@ a {
                 text-decoration: underline;
             }
         }
-    }
 
-    h2 {
-        position: relative;
-        &:hover {
-            &:before {
-                color: #939893;
-                position: absolute;
-                left: 18px;
-                // content: "§";
-                content: "¶";
-            }
+        code {
+            background: rgba(0,0,0, 0.1);
+            padding: 2px 10px;
         }
+
     }
 
     p {
@@ -132,15 +131,14 @@ a {
     p, li {
         line-height: 24px;
         code {
-            font-size: 13px;
-            // background: darken($bg, 5%);
-            // box-shadow: 0 0 0 1px darken($bg, 10%);
+            font-size: 16px;
 
-            background: rgba(0,0,0, 0.05);
-            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+            background: white;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
 
-            padding: 3px 8px;
-            border-radius: 8px;
+            padding: 2px 4px;
+            margin: 0 2px;
+            border-radius: 4px;
         }
     }
 
@@ -186,16 +184,18 @@ a {
     }
 }
 
-.highlight {
+pre {
     background: #333;
     color: white;
-    font-size: 14px;
+    font-size: 18px;
+    line-height: 20px;
     padding: 10px;
     box-shadow: 0px 1px 3px rgba(0,0,0, 0.7), inset 0px 0px 0px 1px rgba(255,255,255,0.3);
     border-radius: 2px;
     border: 1px solid #222;
+}
 
-
+.highlight {
     // builtins
     .nb {
         color: #FFA67C;
