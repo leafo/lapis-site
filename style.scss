@@ -122,6 +122,23 @@ a {
 
     }
 
+    h2 {
+        margin-top: 50px;
+        padding-left: 40px;
+        border: 0;
+
+        &:before {
+            font-weight: bold;
+            display: block;
+            content: ". . . ";
+            font-size: 60px;
+            color: #C3CAC3;
+            text-align: center;
+            position: relative;
+            top: -30px;
+        }
+    }
+
     p {
         margin: 25px 0;
         margin-left: $offset_left;
@@ -179,6 +196,63 @@ a {
                     font-weight: bold;
                     color: #444;
                 }
+            }
+        }
+    }
+
+    .image_container {
+        text-align: center;
+    }
+
+    .image {
+        display: inline-block;
+        position: relative;
+
+        &:hover {
+            .caption {
+                opacity: 0.0;
+            }
+        }
+
+        .caption_outer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        .caption {
+            display: inline-block;
+            max-width: 80%;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            padding: 10px;
+            background: black;
+            background: rgba(0,0,0, 0.6);
+            border-radius: 2px;
+            border-bottom: 2px solid rgba(0,0,0,0.3);
+
+            -webkit-transition: all 0.1s ease-in-out;
+            -moz-transition: all 0.1s ease-in-out;
+            transition: all 0.1s ease-in-out;
+        }
+
+        img {
+            display: block;
+        }
+    }
+
+    .footer {
+        text-align: center;
+        margin: 80px 0 40px 0;
+
+        a {
+            color: #777;
+            margin: 0 10px;
+            text-decoration: none;
+            &:hover {
+                text-decoration: underline;
             }
         }
     }

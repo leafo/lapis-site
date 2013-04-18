@@ -35,4 +35,25 @@ build_index = ->
           append_header sub, "sub", slug
 
 
+add_captions = ->
+  tpl = (url, caption, alt="Hi") -> """
+    <div class="image_container">
+      <div class="image">
+        <div class="caption_outer">
+          <div class="caption">#{caption}</div>
+        </div>
+        <img src="#{url}" alt="#{alt}" />
+      </div>
+    </div>
+  """
+
+  $(".text_column img[title]").replaceWith ->
+    elm = $(@)
+    tpl elm.attr("src"), elm.attr("title"), elm.attr("alt")
+
 build_index()
+add_captions()
+
+
+
+
