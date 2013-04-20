@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+	<link rel="stylesheet" href="main.css?Fri Apr 19 09:24:38 2013" />
+</head>
+<body>
+  <div class="header">
+    <div class="inner">
+      <div class="animation">
+        hi
+      </div>
+      <h1>
+        Lapis
+      </h1>
+      <h2>A web framework for <a href="http://moonscript.org">MoonScript</a> & <a href="http://openresty.org/">OpenResty</a></h2>
+
+      <div class="social_buttons">Social Buttons</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="inner">
+      <h3>What is it? <span class="decor">❧</span></h3>
+
+      <pre class="highlight lang_moon"><code><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span>
+
+<span class="n">lapis</span><span class="o">.</span><span class="n">serve</span> <span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="n">profile_url</span> <span class="o">=</span> <span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">user_profile</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">leafo</span><span class="s2">&quot;</span>
+    <span class="vc">@html</span> <span class="nf">-&gt;</span>
+      <span class="n">h2</span> <span class="s2">&quot;</span><span class="s">Welcome!</span><span class="s2">&quot;</span>
+      <span class="n">text</span> <span class="s2">&quot;</span><span class="s">Go to my </span><span class="s2">&quot;</span>
+      <span class="n">a</span> <span class="nv">href:</span> <span class="n">profile_url</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">profile</span><span class="s2">&quot;</span>
+
+  <span class="kt">[</span><span class="nv">user_profile:</span> <span class="s2">&quot;</span><span class="s">/:name</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="vc">@html</span> <span class="nf">-&gt;</span>
+      <span class="n">div</span> <span class="nv">class:</span> <span class="s2">&quot;</span><span class="s">profile</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+        <span class="n">text</span> <span class="s2">&quot;</span><span class="s">Welcome to the profile of </span><span class="s2">&quot;</span><span class="p">,</span> <span class="vc">@params</span><span class="o">.</span><span class="n">name</span></code></pre>
+
+
+    </div>
+
+  </div>
+
+</body>
+</html>

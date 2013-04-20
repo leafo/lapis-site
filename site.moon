@@ -10,6 +10,7 @@ sitegen.create_site =>
   coffeescript = tools.system_command "coffee -c -s < %s > %s", "js"
 
   build scssphp, "style.scss", "style.css"
+  build scssphp, "main.scss", "main.css"
   build coffeescript, "main.coffee", "main.js"
 
   deploy_to "leaf@leafo.net", "www/lapis/"
