@@ -15,3 +15,9 @@ lapis.serve class extends lapis.Application
       div class: "profile", ->
         text "Welcome to the profile of ", @params.name
 ```
+
+
+```bash
+$ luarocks install --server=http://rocks.moonscript.org/manifests/leafo lapis
+```
+
