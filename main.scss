@@ -7,6 +7,36 @@ $site_width: 800px;
 
 // @import url(http://fonts.googleapis.com/css?family=Lato:400,700|Inconsolata);
 
+
+::selection {
+    background: red;
+    color: white;
+}
+
+@mixin unselectable {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+@mixin grad($top, $bottom) {
+    background-color: mix($top, $bottom);
+    background-image: linear-gradient(bottom, $bottom 0%, $top 100%);
+    background-image: -webkit-linear-gradient(bottom, $bottom 0%, $top 100%);
+    background-image: -moz-linear-gradient(bottom, $bottom 0%, $top 100%);
+    background-image: -o-linear-gradient(bottom, $bottom 0%, $top 100%);
+    background-image: -ms-linear-gradient(bottom, $bottom 0%, $top 100%);
+}
+
+@mixin autograd($color, $amount: 10%, $flip: false) {
+    @if ($flip) {
+        @include grad(darken($color, $amount), $color);
+    } @else {
+        @include grad($color, darken($color, $amount));
+    }
+}
+
+
 body {
     background: $bg;
     color: #222;
@@ -24,7 +54,7 @@ code, pre {
     background: url("img/arches.png");
 
     .inner {
-        height: 220px;
+        height: 240px;
         width: $site_width;
         margin: 0 auto;
     }
@@ -70,9 +100,59 @@ code, pre {
 .content {
     border-top: 1px solid rgba(0,0,0, 0.1);
 
+    .button_row {
+        text-align: center;
+        background: #C8F0E7;
+        border-top: 1px solid #F4FFF4;
+        border-bottom: 1px solid darken(#C8F0E7, 10%);
+        box-shadow: 0 1px 0 white;
+        padding-bottom: 8px;
+
+        .button_offset {
+            position: relative;
+            top: -6px;
+        }
+
+        .button {
+            display: inline-block;
+            font-weight: bold;
+            $btn_color: #C9518F;
+
+            padding: 10px;
+            text-decoration: none;
+            color: white;
+            background: $btn_color;
+            @include autograd(lighten($btn_color, 5%), $flip: true);
+            border: 1px solid darken($btn_color, 10%);
+            box-shadow: inset 0 1px 0 lighten($btn_color, 10%), 0 1px 0 darken($btn_color, 8%), 0 5px 0 darken($btn_color, 15%), 0 5px 5px rgba(0,0,0, 0.8);
+
+            border-radius: 2px;
+            text-shadow: 1px 1px 1px darken($btn_color, 20%);
+            margin: 0 5px;
+
+            &:active {
+                position: relative;
+                top: 3px;
+                box-shadow: inset 0 1px 0 lighten($btn_color, 10%), 0 1px 0 darken($btn_color, 8%), 0 2px 0 darken($btn_color, 15%), 0 2px 5px rgba(0,0,0, 0.8);
+            }
+        }
+    }
+
     .inner {
         width: $site_width;
+        background: white;
+        padding: 20px;
         margin: 0 auto;
+        margin-top: 20px;
+        border: 1px solid #9DBE9D;
+
+        a {
+            color: $link_color;
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+
     }
     
     h3 {

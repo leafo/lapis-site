@@ -21,9 +21,20 @@
   </div>
 
   <div class="content">
+    <div class="button_row">
+      <div class="button_offset">
+        <a href="#" class="button">Reference Manual</a>
+        <a href="#" class="button">Download v0.0.1</a>
+      </div>
+    </div>
+
     <div class="inner">
       <h3>What is it? <span class="decor">❧</span></h3>
+      <p>Lapis is a farmework for building web applications using <a
+      href="">MoonScript</a> (or <a href="">Lua</a>) that run inside of a
+      customized version of <a href="">Nginx</a> called <a href="">OpenResty</a></p>
 
+      <p>Here's what it looks like:</p>
       <pre class="highlight lang_moon"><code><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span>
 
 <span class="n">lapis</span><span class="o">.</span><span class="n">serve</span> <span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
