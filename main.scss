@@ -27,7 +27,7 @@ $site_width: 800px;
 
 
 ::selection {
-    background: red;
+    background: #0CF;
     color: white;
 }
 
@@ -77,14 +77,72 @@ code, pre {
         margin: 0 auto;
     }
 
-    .animation {
-        float: left;
-        background: #444;
-        color: white;
+    .window_frame {
+        overflow: hidden;
+
         width: 320px;
         height: 200px;
+        float: left;
+
         margin-top: 10px;
         margin-right: 20px;
+
+        background: #EDECEB;
+
+        box-shadow: inset 0 0 0 1px #6D6A68, inset 2px 0 0 white, inset 0 0 0 2px #D2D0CE, 0 0 10px rgba(0,0,0, 0.5);
+        border-radius: 4px 4px 0 0;
+
+        .window_title {
+            $border: #455D7C;
+            $top_highlight: #B2CCED;
+            $left_side_highlight: #9EBDE5;
+            $right_side_highlight: #7BA2D3;
+            $bottom_shadow: #4E76A8;
+            $text_outline: #4E77AB;
+
+            border: 1px solid $border;
+            border-bottom: 0;
+
+            border-radius: 4px 4px 0 0;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            height: 22px;
+            line-height: 22px;
+            background: #99BAE3;
+            @include grad(#99BAE3, #7AA1D1);
+
+            box-shadow: inset 0 1px 0 0 $top_highlight, inset 1px 0 0 $left_side_highlight, inset -1px 0 0 $right_side_highlight, 0 2px 0 -1px $bottom_shadow;
+            color: white;
+            text-shadow: 1px 1px 0 $text_outline, 1px -1px $text_outline, -1px -1px $text_outline, -1px 1px $text_outline;
+        }
+
+        &.pink {
+            .window_title {
+                $border: #94487A;
+                $top_highlight: #F3B3DD;
+                $left_side_highlight: #EDA1D3;
+                $right_side_highlight: #DE7EBD;
+                $bottom_shadow: #BA5096;
+                $text_outline: #BD5198;
+
+                border: 1px solid $border;
+                border-bottom: 0;
+
+                background: #EB99CF;
+                @include grad(#EB99CF, #DE7EBD);
+
+                box-shadow: inset 0 1px 0 0 $top_highlight, inset 1px 0 0 $left_side_highlight, inset -1px 0 0 $right_side_highlight, 0 2px 0 -1px $bottom_shadow;
+                text-shadow: 1px 1px 0 $text_outline, 1px -1px $text_outline, -1px -1px $text_outline, -1px 1px $text_outline;
+            }
+        }
+    }
+
+    .animation {
+        width: 312px;
+        height: 169px;
+        overflow: hidden;
+        margin: 4px;
     }
 
     h1 {
@@ -116,7 +174,7 @@ code, pre {
 }
 
 .content {
-    border-top: 1px solid rgba(0,0,0, 0.1);
+    border-top: 1px solid desaturate(#acd9ce, 10%);
 
     .button_row {
         text-align: center;

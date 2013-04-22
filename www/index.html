@@ -8,8 +8,9 @@
 <body>
   <div class="header">
     <div class="inner">
-      <div class="animation">
-        hi
+      <div class="window_frame pink">
+        <div class="window_title">Lapis</div>
+        <div class="animation" id="screencast"></div>
       </div>
       <h1>
         Lapis
@@ -79,6 +80,17 @@
 
     <div class="texture"></div>
   </div>
+
+  <script type="text/javascript" src="animations/player.js"></script>
+  <script type="text/javascript" src="animations/1/anim.js"></script>
+
+  <script type="text/javascript">
+    (function() {
+      var player = new Player(anim, "animations/1");
+      document.getElementById("screencast").appendChild(player.element);
+      player.start();
+    })();
+  </script>
 
 </body>
 </html>
