@@ -5,8 +5,7 @@ $link_color: #DA3400;
 
 $site_width: 800px;
 
-// @import url(http://fonts.googleapis.com/css?family=Lato:400,700|Inconsolata);
-
+@import url(http://fonts.googleapis.com/css?family=Lato:400,700|Inconsolata);
 
 @function grid_width($size, $divisions: 8, $gutter: 20px, $width: $site_width) {
     @return floor($size * (($width - (($divisions - 1) * $gutter)) / $divisions) + ($size - 1) * $gutter);
@@ -148,6 +147,8 @@ code, pre {
     h1 {
         margin: 0;
         font-size: 120px;
+        position: relative;
+        left: -7px;
     }
 
     h2 {

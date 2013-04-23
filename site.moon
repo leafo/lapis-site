@@ -15,5 +15,6 @@ sitegen.create_site =>
 
   deploy_to "leaf@leafo.net", "www/lapis/"
 
-  add "lapis/docs/reference.md", target: "reference"
+  add "lapis/docs/reference.md", target: "reference", template: "reference"
+  add "index.html", template: "home"
 
