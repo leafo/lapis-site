@@ -1,10 +1,235 @@
 
 <div class="box">
   <h3>What is it? <span class="decor">❧</span></h3>
-  <p>Lapis is a framework for building web applications using <a
-  href="">MoonScript</a> (or <a href="">Lua</a>) that runs inside of a
-  customized version of <a href="">Nginx</a> called <a href="">OpenResty</a>.</p>
+$markdown{[[
+Lapis is a framework for building web applications using [MoonScript](http://moonscript.org) (or [Lua](http://lua.org)) that runs inside of a customized version of [Nginx](http://nginx.org) called [OpenResty](http://openresty.org).
+
+Here's what is looks like:
+]]}
 </div>
 
-$render{[[snippets/basic]]}
+$markdown{[[
+```moon
+lapis = require "lapis"
+
+class extends lapis.Application
+  -- Define a basic pattern that matches /
+  "/": =>
+    profile_url = @url_for "profile", name: "leafo"
+    @html ->
+      h2 "Welcome!"
+      text "Go to my "
+      a href: profile_url, "profile"
+
+  -- Define a named route pattern with a variable called name
+  [profile: "/:name"]: =>
+    @html ->
+      div class: "profile", ->
+        text "Welcome to the profile of ", @params.name
+```
+]]}
+
+
+<div class="box">
+  <h3>How does it work? <span class="decor">❧</span></h3>
+$markdown{[[
+Lua is run directly inside of the Nginx worker, giving you the smallest barrier
+between the webserver and your code. OpenResty executes your Lua/MoonScript
+with LuaJIT, so it's blazing fast. Have a look at [Web Framework
+Benchmarks](http://www.techempower.com/benchmarks/#section=data-r3) just to see
+how OpenResty stacks up against other platforms.
+
+Nginx's event loop is used for all asynchronous actions, including HTTP
+requests and database queries. With the power of Lua coroutines code is written
+synchronously but runs asynchronously, without all that callback spaghetti seen
+in other asynchronous platforms. It's fast, easy to read, and easy to write.
+
+Perform HTTP requests and other asynchronous operations freely without being
+concerned about blocking your application and killing your throughput.
+]]}
+
+</div>
+
+<div class="dotdotdot">. . .</div>
+
+<div class="box">
+  <h3>What does it come with? <span class="decor">❧</span></h3>
+$markdown{[[
+Lapis includes URL routing, [HTML Templating](reference.html#html-generation),
+[CSRF](reference.html#utilities-csrf-protection) and [Session
+](reference.html#request-object-session) support, [PostgreSQL backed models](reference.html#models), [schema generation](reference.html#database-schemas) and [migrations](reference.html#database-migrations) in addition to a [collection of
+useful functions](reference.html#request-object) needed when developing a website.
+
+Get a powerful abstraction layer over your database tables just by
+sub-classing `Model`.
+]]}
+</div>
+
+$markdown{[[
+```moon
+import Model from require "lapis.models"
+
+-- Create a model, automatically backed by the table `users`
+class Users extends Model
+
+old_users = Users\select "where age > ? limit 5", 10
+
+random_user = Users\find 1233 -- find by primary key
+
+lee = Users\find name: "Lee", email: "leemiller@example.com"
+
+user = Users\create {
+  name: "Leaf"
+  email: "leaf@example.com"
+  age: 6
+}
+
+user\update age: 10
+
+user\delete!
+```
+]]}
+
+<div class="box">
+$markdown{[[
+Write your templates with high composability by using
+[MoonScript](http://moonscript.org) directly. No need to learn any goofy
+templating syntax with arbitrary restrictions.
+
+Either inline the HTML template in the action or create a separate view like
+so. Views are just classes, feel free to use inheritance and mix and match
+methods as much as you like.
+]]}
+</div>
+
+$markdown{[[
+```moon
+-- views/index.moon
+import Widget from require "lapis.html"
+
+class Index extends Widget
+  content: =>
+    h1 class: "header", "Hello"
+
+    @user_panel!
+    div class: "body", ->
+      text "Welcome to my site!"
+
+  user_panel: =>
+    return unless @current_user
+    div class: "user_panel", "Welcome back " .. @current_user.name
+```
+]]}
+
+<div class="box">
+$markdown{[[
+Using all the provided tools we can quickly and logically construct high
+performance and low memory web applications. Here's a more complicated example
+complete with forms, CSRF protection, and various database queries.
+]]}
+</div>
+
+$markdown{[[
+```moon
+import Model from require "lapis.models"
+import respond_to, capture_errors from require "lapis.application"
+csrf = require "lapis.csrf"
+
+class Users extends Model
+
+class extends lapis.Application
+  -- Execute code before every action
+  @before_filter =>
+    @csrf_token = csrf.generate_token @
+
+  [list_users: "/users"]: =>
+    users = Users\select! -- `select` all the users
+
+    -- Render HTML inline for simplicity
+    @html ->
+      ul ->
+        for user in *users
+          li ->
+            a href: @url_for("user", user.id), user.name
+
+  [user: "/profile/:id"]: =>
+    user = Users\find id: @params.id
+    return status: 404 unless user
+    @html -> h2 user.name
+
+  -- Respond to different HTTP actions to do the right thing
+  [new_user: "/user/new"]: respond_to {
+    POST: capture_errors =>
+      csrf.assert_token @
+      Users\create name: @params.username
+      redirect_to: @url_for "list_users"
+
+    GET: =>
+      @html ->
+        form method: "POST", action: @url_for("new_user"), ->
+          input type: "hidden", name: "csrf_token", value: @csrf_token
+          input type: "text", name: "username"
+  }
+```
+]]}
+
+<div class="box">
+  <h3>Where can I learn more? <span class="decor">❧</span></h3>
+$markdown{[[
+For a guide and tutorial to Lapis, consult the [reference manual](reference.html).
+
+The source of Lapis can be [found on Github](https://github.com/leafo/lapis)
+and issues can be reported on the [issues
+tracker](https://github.com/leafo/lapis/issues).
+
+[MoonRocks](http://rocks.moonscript.org) is an open source application written
+in Lapis. It is a public Lua Rock repository and the [source can be found on 
+GitHub](https://github.com/leafo/moonrocks-site).
+]]}
+</div>
+
+<div class="box">
+  <h3>Anything else I should know? <span class="decor">❧</span></h3>
+$markdown{[[
+You can deploy a new Lapis application in a few minutes.
+
+If you don't mind using [Heroku](http://www.heroku.com) then it's just a matter
+of using the [Lua Buildpack](https://github.com/leafo/heroku-buildpack-lua) and
+installing the [OpenResty module](https://github.com/leafo/heroku-openresty).
+
+You can use most existing Lua libraries with Lapis with no problems.
+Here are some libraries you might find useful:
+
+* [`web_sanitize`](https://github.com/leafo/web_sanitize) -- HTML sanitization
+* [`magick`](https://github.com/leafo/magick) -- ImageMagick bindings
+* [`cloud_storage`](https://github.com/leafo/cloud_storage) -- Support for Google Cloud Storage
+* [`lapis_console`](https://github.com/leafo/lapis-console) -- Interactive
+  MoonScript console for Lapis that runs inside of your browser. [More information](reference.html#lapis-console).
+]]}
+</div>
+
+
+<div class="box">
+  <h3>About <span class="decor">❧</span></h3>
+$markdown{[[
+Lapis would not be possible without the following libraries:
+
+* [Lua](http://lua.org)
+* [LPeg](http://www.inf.puc-rio.br/~roberto/lpeg/)
+* [OpenResty](http://openresty.org)
+
+Lapis is licensed under the [MIT license](reference.html#license-mit).
+
+Lapis is written by [@moonscript](http://twitter.com/moonscript).
+]]}
+</div>
+
+<div class="has_buttons bottom_buttons">
+  <a href="$root/reference.html" class="button">Reference Manual</a>
+  <a href="https://github.com/leafo/lapis" class="button">Source on GitHub</a>
+</div>
+
+<div class="top_row">
+  <a href="#" class="top_link">&uarr; Top</a>
+</div>
 

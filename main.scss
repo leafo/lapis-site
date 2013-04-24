@@ -1,5 +1,7 @@
 
 $bg: lighten(#EAFFEA, 2%);
+$bg2: #BAF3BA;
+
 $font_size: 18px;
 $link_color: #DA3400;
 
@@ -177,29 +179,7 @@ code, pre {
 .content {
     border-top: 1px solid desaturate(#acd9ce, 10%);
 
-    .button_row {
-        text-align: center;
-        background: #C8F0E7;
-        // @include autograd(#C8F0E7, 5%);
-        border-top: 1px solid #F4FFF4;
-        border-bottom: 1px solid darken(#C8F0E7, 10%);
-        box-shadow: 0 1px 0 white;
-        padding-bottom: 8px;
-
-        .button_offset {
-            position: relative;
-            top: -6px;
-        }
-
-        .line {
-            display: inline-block;
-            margin: 0 4px;
-            background: desaturate(darken(#C8F0E7, 10%), 20%);
-            border-bottom: 1px solid #F4FFF4;
-            height: 1px;
-            width: 100px;
-        }
-
+    .button_row, .has_buttons {
         .button {
             display: inline-block;
             font-weight: bold;
@@ -223,6 +203,31 @@ code, pre {
                 box-shadow: inset 0 1px 0 lighten($btn_color, 10%), 0 1px 0 darken($btn_color, 8%), 0 2px 0 darken($btn_color, 15%), 0 2px 5px rgba(0,0,0, 0.8);
             }
         }
+    }
+
+    .button_row {
+        text-align: center;
+        background: #C8F0E7;
+        // @include autograd(#C8F0E7, 5%);
+        border-top: 1px solid #F4FFF4;
+        border-bottom: 1px solid darken(#C8F0E7, 10%);
+        box-shadow: 0 1px 0 white;
+        padding-bottom: 8px;
+
+        .button_offset {
+            position: relative;
+            top: -6px;
+        }
+
+        .line {
+            display: inline-block;
+            margin: 0 4px;
+            background: desaturate(darken(#C8F0E7, 10%), 20%);
+            border-bottom: 1px solid #F4FFF4;
+            height: 1px;
+            width: 100px;
+        }
+
     }
 
     .install_row {
@@ -304,6 +309,7 @@ code, pre {
 
     p {
         margin: 10px 0;
+        line-height: 26px;
     }
 
 
@@ -312,12 +318,46 @@ code, pre {
         box-shadow: 0 0 0 1px rgba(255,255,255, 0.8), 0 0 20px rgba(0,0,0, 0.2);
         border: 2px solid darken(#D6E6D6, 10%);
         border-radius: 2px;
-        padding: 0 10px;
+        padding: 20px 40px;
+        margin: 0 0 20px 0;
+
+        h3 {
+            margin-bottom: 20px;
+        }
+    }
+
+    pre {
+        margin: 0 0 20px 0;
+        padding: 25px 40px;
+    }
+    
+    .dotdotdot {
+        font-weight: bold;
+        display: block;
+        font-size: 60px;
+        color: #C3CAC3;
+        text-align: center;
+        position: relative;
+        top: -28px;
+    }
+
+    .bottom_buttons {
+        text-align: center;
+    }
+
+    .top_row {
+        margin-top: 25px;
+        text-align: center;
+
+        a {
+            color: #666;
+            text-decoration: none;
+        }
     }
 }
 
 .footer {
-    margin-top: 200px;
+    margin-top: 20px;
     background: #667777;
     color: lighten(#677, 20%);
     text-shadow: 1px 1px 2px darken(#677, 20%);
