@@ -61,11 +61,11 @@
   </div>
 
   <script type="text/javascript" src="animations/player.js"></script>
-  <script type="text/javascript" src="animations/1/anim.js"></script>
+  <script type="text/javascript" src="animations/1/anim_packed.js"></script>
 
   <script type="text/javascript">
     (function() {
-      var player = new Player(anim, "animations/1");
+      var player = new Player(anim_packed, "animations/1");
       document.getElementById("screencast").appendChild(player.element);
       player.start();
     })();
