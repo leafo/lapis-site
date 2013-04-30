@@ -355,7 +355,7 @@ code, pre {
     margin-top: 20px;
     background: #667777;
     color: lighten(#677, 20%);
-    text-shadow: 1px 1px 2px darken(#677, 20%);
+    text-shadow: 1px 1px 2px  #425757;
     font-size: 16px;
     line-height: 22px;
 
@@ -363,6 +363,7 @@ code, pre {
     box-shadow: 0 -1px 0 rgba(0,0,0, 0.2);
 
     .right {
+        font-size: 12px;
         float: right;
     }
 
