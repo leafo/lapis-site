@@ -27,6 +27,32 @@ class extends lapis.Application
       div class: "profile", ->
         text "Welcome to the profile of ", @params.name
 ```
+
+```lua
+local lapis = require "lapis"
+local lua = require "lapis.lua"
+
+lua.class({
+  -- Define a basic pattern that matches /
+  ["/"] = function(self)
+    local profile_url = self:url_for("profile", {name = "leafo"})
+    return self:html(function()
+      h2("Welcome!")
+      text("Go to my ")
+      a({href = profile_url}, "profile")
+    end)
+  end,
+
+  -- Define a named route pattern with a variable called name
+  [{profile = "/:name"}] = function(self)
+    return self:html(function()
+      div({class = "profile"}, function()
+        text("Welcome to the profile of " .. self.params.name)
+      end)
+    end)
+  end
+}, lapis.Application)
+```
 ]]}
 
 
@@ -72,12 +98,14 @@ import Model from require "lapis.models"
 -- Create a model, automatically backed by the table `users`
 class Users extends Model
 
-old_users = Users\select "where age > ? limit 5", 10
+-- fetch some rows from the table
+elderly_users = Users\select "where age > ? limit 5", 10
 
 random_user = Users\find 1233 -- find by primary key
 
 lee = Users\find name: "Lee", email: "leemiller@example.com"
 
+-- create a new row and edit it
 user = Users\create {
   name: "Leaf"
   email: "leaf@example.com"
@@ -87,6 +115,32 @@ user = Users\create {
 user\update age: 10
 
 user\delete!
+```
+
+```lua
+local lua = require "lapis.lua"
+local Model = require("lapis.models").Model
+
+-- Create a model, automatically backed by the table `users`
+local Users = class({}, Model)
+
+-- fetch some rows from the table
+local elderly_users = Users:select("where age > ? limit 5", 10)
+
+local random_user = Users:find(1233) -- find by primary key
+
+local lee = Users:find { name = "Lee", email = "leemiller@example.com" }
+
+-- create a new row and edit it
+local user = Users:create {
+  name = "Leaf"
+  email = "leaf@example.com"
+  age = 6
+}
+
+user:update { age = 10 }
+
+user:delete()
 ```
 ]]}
 
@@ -119,6 +173,30 @@ class Index extends Widget
     return unless @current_user
     div class: "user_panel", "Welcome back " .. @current_user.name
 ```
+
+```lua
+local lua = require "lapis.lua"
+local Widget = require("lapis.html").Widget
+
+return lua.class({
+  content = function(self)
+    h1({ class = "header" }, "Hello")
+
+    self:user_panel()
+    div({ class = "body"}, function()
+      text("Welcome to my site!")
+    end)
+  end,
+
+  user_panel = function(self)
+    if not self.current_user then
+      return
+    end
+
+    div({ class = "user_panel" }, "Welcome back " .. self.current_user.name)
+  end
+}, Widget)
+```
 ]]}
 
 <div class="box">
@@ -131,6 +209,7 @@ complete with forms, CSRF protection, and various database queries.
 
 $markdown{[[
 ```moon
+lapis = require "lapis"
 import Model from require "lapis.models"
 import respond_to, capture_errors from require "lapis.application"
 csrf = require "lapis.csrf"
@@ -170,6 +249,71 @@ class extends lapis.Application
           input type: "hidden", name: "csrf_token", value: @csrf_token
           input type: "text", name: "username"
   }
+```
+
+```lua
+local lapis = require "lapis"
+local csrf = require "lapis.csrf"
+local lua = require "lapis.lua"
+
+local Model = require("lapis.models").Model
+
+local application = require "lapis.application"
+local respond_to, capture_errors, = application.respond_to, application.capture_errors
+
+local app = class({
+  -- Render HTML inline for simplicity
+  [{list_users = "/users"}] = function(self)
+    local users = Users:select() -- `select` all the users
+    return self:html(function()
+      ul(function()
+        for _, user in ipairs(users) do
+          li(function()
+            a({ href = self:url_for("user", user.id)}, user.name)
+          end)
+        end
+      end)
+    end)
+  end,
+
+  [{user = "/profile/:id"}] = function(self)
+    local user = Users:find { id = self.params.id }
+    if not user then
+      return { status = 404 }
+    end
+
+    self:html(function()
+      h2(user.name)
+    end)
+  end,
+
+  -- Respond to different HTTP actions to do the right thing
+  [{new_user = "/user/new"}] = respond_to {
+    POST = capture_errors(function()
+      csrf.assert_token(self)
+      Users:create { name = self.params.username }
+      return { redirect_to: self.url_for("list_users") }
+    end),
+
+    POST = function()
+      return self:html(function()
+        form({ method = "POST", actionn = self.url_for("new_user")}, function()
+          input { type = "hidden", name = "csrf_token", value = self.csrf_token }
+          input { type = "text", name = "username" }
+        end)
+      end)
+    end
+  },
+
+
+}, lapis.Application)
+
+-- Execute code before every action
+app.before_filter(function(self)
+  self.csrf_token = csrf.generate_token(self)
+end)
+
+return app
 ```
 ]]}
 
