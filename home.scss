@@ -61,6 +61,11 @@ body {
     font-size: $font_size;
     margin: 0;
     font-family: Lato, sans-serif;
+
+}
+
+.lang_lua {
+    display: none;
 }
 
 code, pre {
