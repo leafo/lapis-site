@@ -68,6 +68,13 @@ body {
     display: none;
 }
 
+.sticky_bar {
+    .sticky_bar_inner {
+        width: $site_width;
+        margin: 0 auto;
+    }
+}
+
 code, pre {
     font-family: Inconsolata, monospace;
 }
