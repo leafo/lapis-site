@@ -62,6 +62,15 @@ body {
     margin: 0;
     font-family: Lato, sans-serif;
 
+    &.show_lua {
+        .lang_lua {
+            display: block;
+        }
+
+        .lang_moon {
+            display: none;
+        }
+    }
 }
 
 .lang_lua {
@@ -69,11 +78,73 @@ body {
 }
 
 .sticky_bar {
+    $sticky_height: 50px;
+    position: fixed;
+    top: -($sticky_height + 1);
+    left: 0;
+    right: 0;
+
+    background: #667777;
+    border-bottom: 1px solid darken(#667777, 10%);
+    color: white;
+    height: $sticky_height;
+
+    -webkit-transition: top 0.20s ease-in-out;
+    -moz-transition: top 0.20s ease-in-out;
+    transition: top 0.20s ease-in-out;
+
+    &.open {
+        top: 0;
+    }
+
     .sticky_bar_inner {
+        padding-top: 10px;
         width: $site_width;
         margin: 0 auto;
     }
+
+    .sticky_header {
+        font-weight: bold;
+        margin-right: 10px;
+        font-size: 32px;
+        vertical-align: middle;
+    }
 }
+
+
+.lang_picker {
+    display: inline-block;
+    line-height: 30px;
+    font-size: 0;
+    margin-left: 10px;
+
+    .picker {
+        display: inline-block;
+        font-size: $font_size;
+        cursor: pointer;
+        padding: 0 12px;
+
+        background: darken(#667777, 10%);
+        color: lighten(#667777, 30%);
+
+        box-shadow: 0 1px 0 rgba(255,255,255,0.2);
+
+        &.current {
+            background: lighten(#667777, 20%);
+            color: white;
+            text-shadow: 1px 1px 1px #545C5C;
+        }
+    }
+
+    > :first-child {
+        border-radius: 6px 0 0 6px;
+    }
+
+    > :last-child {
+        border-radius: 0 6px 6px 0;
+    }
+}
+
 
 code, pre {
     font-family: Inconsolata, monospace;

@@ -93,7 +93,7 @@ sub-classing `Model`.
 
 $markdown{[[
 ```moon
-import Model from require "lapis.models"
+import Model from require "lapis.db.model"
 
 -- Create a model, automatically backed by the table `users`
 class Users extends Model
@@ -119,7 +119,7 @@ user\delete!
 
 ```lua
 local lua = require "lapis.lua"
-local Model = require("lapis.models").Model
+local Model = require("lapis.db.model").Model
 
 -- Create a model, automatically backed by the table `users`
 local Users = class({}, Model)
@@ -210,7 +210,7 @@ complete with forms, CSRF protection, and various database queries.
 $markdown{[[
 ```moon
 lapis = require "lapis"
-import Model from require "lapis.models"
+import Model from require "lapis.db.model"
 import respond_to, capture_errors from require "lapis.application"
 csrf = require "lapis.csrf"
 
@@ -256,7 +256,7 @@ local lapis = require "lapis"
 local csrf = require "lapis.csrf"
 local lua = require "lapis.lua"
 
-local Model = require("lapis.models").Model
+local Model = require("lapis.db.model").Model
 
 local application = require "lapis.application"
 local respond_to, capture_errors, = application.respond_to, application.capture_errors

@@ -11,6 +11,7 @@ sitegen.create_site =>
 
   build scssphp, "reference.scss", "reference.css"
   build scssphp, "home.scss", "home.css"
+  build coffeescript, "home.coffee", "home.js"
   build coffeescript, "reference.coffee", "reference.js"
 
   deploy_to "leaf@leafo.net", "www/lapis/"

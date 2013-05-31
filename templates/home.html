@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Lapis - A web framework for MoonScript &amp; OpenResty</title>
   <link rel="stylesheet" href="home.css?$generate_date" />
+  <script src="jquery.min.js"></script>
   $analytics{"UA-136625-1"}
 </head>
 <body>
@@ -69,6 +70,18 @@
     <div class="texture"></div>
   </div>
 
+  <div class="sticky_bar">
+    <div class="sticky_bar_inner">
+      <span class="sticky_header">Lapis</span>
+
+      View examples in 
+      <div class="lang_picker" id="lang_picker">
+        <span class="picker current" data-size="moonscript">MoonScript</span>
+        <span class="picker" data-size="lua">Lua</span>
+      </div>
+    </div>
+  </div>
+
   <script type="text/javascript" src="animations/player.js"></script>
   <script type="text/javascript" src="animations/1/anim_packed.js"></script>
 
@@ -92,5 +105,6 @@
 
   <a href="https://github.com/leafo/lapis"><img style="position: fixed; top: 0; right: 0; border: 0;" src="$root/img/fork.png" alt="Fork me on GitHub"></a>
 
+  <script type="text/javascript" src="$root/home.js?$generate_date"></script>
 </body>
 </html>
