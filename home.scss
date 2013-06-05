@@ -80,12 +80,13 @@ body {
 .sticky_bar {
     $sticky_height: 50px;
     position: fixed;
-    top: -($sticky_height + 1);
+    top: -($sticky_height + 5);
     left: 0;
     right: 0;
 
     background: #667777;
     border-bottom: 1px solid darken(#667777, 10%);
+    box-shadow: 0 3px 0 rgba(0,0,0, 0.25);
     color: white;
     height: $sticky_height;
 
@@ -98,27 +99,37 @@ body {
     }
 
     .sticky_bar_inner {
-        padding-top: 10px;
         width: $site_width;
         margin: 0 auto;
     }
 
     .sticky_social {
         float: right;
+        margin-top: 16px;
     }
 
     .sticky_header {
         font-weight: bold;
         margin-right: 10px;
         font-size: 32px;
-        vertical-align: middle;
+        margin-top: 3px;
+    }
+
+    .sticky_lang {
+        margin-top: 10px;
+    }
+
+    .sticky_header, .sticky_lang {
+        display: inline-block;
+        vertical-align: top;
     }
 }
 
-
 .lang_picker {
     display: inline-block;
+    vertical-align: middle;
     line-height: 30px;
+    height: 30px;
     font-size: 0;
     margin-left: 10px;
 
