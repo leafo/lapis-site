@@ -173,6 +173,17 @@ code, pre {
         height: 234px;
         width: $site_width;
         margin: 0 auto;
+        position: relative;
+    }
+
+    .version_flag {
+        position: absolute;
+        background: rgba(255, 192, 203, 0.56);
+        color: darken(pink, 20%);
+        padding: 10px;
+        border-radius: 4px;
+        right: 117px;
+        top: 38px;
     }
 
     .window_frame {
