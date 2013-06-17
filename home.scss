@@ -184,6 +184,15 @@ code, pre {
         border-radius: 4px;
         right: 117px;
         top: 38px;
+
+        a {
+            color: darken(pink, 20%);
+            text-decoration: none;
+
+            &:hover {
+                color: darken(pink, 16%);
+            }
+        }
     }
 
     .window_frame {
@@ -259,6 +268,14 @@ code, pre {
         font-size: 120px;
         position: relative;
         left: -7px;
+
+        a {
+            color: #222;
+            text-decoration: none;
+            &:hover {
+                color: lighten(#222, 5%);
+            }
+        }
     }
 
     h2 {
@@ -278,6 +295,15 @@ code, pre {
         display: inline-block;
         padding: 4px 0px;
     }
+}
+
+.new_banner {
+    background: lighten(#C8F0CE, 5%);
+    border-bottom: 2px solid #C8F0CE;
+
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
 }
 
 .content {
@@ -310,11 +336,12 @@ code, pre {
     }
 
     .button_row {
+        $bg_color: #C8F0CE;
+
         text-align: center;
-        background: #C8F0E7;
-        // @include autograd(#C8F0E7, 5%);
+        background: $bg_color;
         border-top: 1px solid #F4FFF4;
-        border-bottom: 1px solid darken(#C8F0E7, 10%);
+        border-bottom: 1px solid darken($bg_color, 10%);
         box-shadow: 0 1px 0 white;
         padding-bottom: 8px;
 
@@ -326,8 +353,8 @@ code, pre {
         .line {
             display: inline-block;
             margin: 0 4px;
-            background: desaturate(darken(#C8F0E7, 10%), 20%);
-            border-bottom: 1px solid #F4FFF4;
+            background: desaturate(darken($bg_color, 10%), 20%);
+            box-shadow: 0 1px 0 rgba(255,255,255, 0.8);
             height: 1px;
             width: 100px;
         }
