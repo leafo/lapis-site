@@ -2,6 +2,16 @@
 <div class="box only_box">
   <h3>Changelog <span class="decor">❧</span></h3>
 $markdown{[[
+v0.0.4 -- **August 13th, 2013**
+
+  * [`lapis migrate`](reference.html#command-line-interface-lapis-migrate) command will start a temporary server if it can't find a running one
+  * Add [`lapis term`](reference.html#command-line-interface-lapis-term) command to stop a backgrounded server
+  * HTML void tags no longer render a closing tag
+  * Add [paginator](reference.html#models-pagination) for paging through queries with many results
+  * Add `Model\count` for counting items in a query.
+  * `Model\update` and `Model\delete` will convert primary key `nil` values to `db.NULL`
+  * Small enhancements to command line tool
+
 v0.0.3 -- **July 22th, 2013**
 
   * Added ability to execute Lua from command line on server
