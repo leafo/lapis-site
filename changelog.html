@@ -2,13 +2,23 @@
 <div class="box only_box">
   <h3>Changelog <span class="decor">❧</span></h3>
 $markdown{[[
+v0.0.5 -- **September 1st, 2013**
+
+  * Added request mocking for [writing tests](reference.html#testing)
+  * Added [`lapis.cache`](reference.html#utilities-caching) module
+  * Added `autoload` [utility method](reference.html#utilities-methods)
+  * Added [documentation for file uploads](reference.html#utilities-file-uploads)
+  * `widget` method inside of HTML renderer will inject current helpers and set `@parent`
+  * Default config has `code_cache` as a variable now
+  * Enhanced test coverage
+
 v0.0.4 -- **August 13th, 2013**
 
   * [`lapis migrate`](reference.html#command-line-interface-lapis-migrate) command will start a temporary server if it can't find a running one
   * Add [`lapis term`](reference.html#command-line-interface-lapis-term) command to stop a backgrounded server
   * HTML void tags no longer render a closing tag
   * Add [paginator](reference.html#models-pagination) for paging through queries with many results
-  * Add `Model\count` for counting items in a query.
+  * Add `Model\count` for counting items in a query
   * `Model\update` and `Model\delete` will convert primary key `nil` values to `db.NULL`
   * Small enhancements to command line tool
 
