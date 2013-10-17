@@ -19,6 +19,11 @@ class Lapis
 
   setup_lang_picker: ->
     @lang_picker ||= $ "#lang_picker"
+
+    if window.location.href.match(/\bchangelog\b/)
+      @lang_picker.remove()
+      return
+
     pickers = @lang_picker.find ".picker"
     @lang_picker.on "click", ".picker", (e) =>
       pickers.removeClass "current"

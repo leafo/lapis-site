@@ -113,6 +113,11 @@ body {
         margin-right: 10px;
         font-size: 32px;
         margin-top: 3px;
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
     }
 
     .sticky_lang {
@@ -597,6 +602,17 @@ pre {
 
     .si {
         color: #ECA558;
+    }
+}
+
+.changelog {
+    ul {
+        line-height: 1.5;
+        margin-bottom: 40px;
+
+        li {
+            margin-bottom: 5px;
+        }
     }
 }
 
