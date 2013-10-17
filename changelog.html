@@ -2,6 +2,24 @@
 <div class="box only_box">
   <h3>Changelog <span class="decor">❧</span></h3>
 $markdown{[[
+v0.0.6 -- **October 17th, 2013**
+
+  * Added `"lapis.spec.server"` module for spawning a [test server](reference.html#testing-using-the-test-server)
+  * `env LAPIS_ENVIRONMENT=envname` is now injected on top of config to ensure
+    correct environment is passed down when changing environments of a running
+    server. Default config has been updated to no longer have `env
+    LAPIS_ENVIRONMENT`, it's recommended but not required to remove that line
+    from your config.
+  * When an application extends from another it will now search up the
+    inheritance tree and take routes from parents
+  * `mock_request` can take a previous requests headers, see [mocking a request](reference.html#testing-mocking-a-request)
+  * You can now set nil to @session key to delete it
+  * Rewrote how the command line tools provision a server to execute code one,
+    can now run queries directly in the console.
+  * Fix trying to save write session when it hasn't been loaded
+  * Fix issue where multiple cookies could not be set in a single request
+  * Fix issue where adding a third value to a single header would not show up
+
 v0.0.5 -- **September 1st, 2013**
 
   * Added request mocking for [writing tests](reference.html#testing)
