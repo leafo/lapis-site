@@ -2,6 +2,20 @@
 <div class="box only_box changelog">
   <h3>Changelog <span class="decor">❧</span></h3>
 $markdown{[[
+v0.0.7 -- **November 5th, 2013**
+
+  * Added [`prepare_results`](reference.html#models-pagination) option to paginated
+  * Paginator options are passed to select, enabling you to set fields
+  * Fixed an issue where doing an async operation (eg. querying) inside of a
+    widget render would cause it to lose it's environment and crash when handling
+    concurrent requests
+  * Optimized HTML renderer to avoid creating excess tables
+  * Added application cache to `lapis.server`, will cache an instance of the class and reuse it
+  * `@include` class method on widgets and applications can take a string and will load it using `require`
+  * Added [`@include` class method on widgets](reference.html#html-generation-widget-methods) for mixing in other classes
+  * `"lapis.spec.server"`'s `request` function can be passed headers, will extract host header if passed a full URL
+  * Enhanced test coverage
+
 v0.0.6 -- **October 17th, 2013**
 
   * Added `"lapis.spec.server"` module for spawning a [test server](reference.html#testing-using-the-test-server)
