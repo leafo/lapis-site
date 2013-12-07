@@ -2,6 +2,17 @@
 <div class="box only_box changelog">
   <h3>Changelog <span class="decor">❧</span></h3>
 $markdown{[[
+v0.0.8 -- **December 7th, 2013**
+
+  * **CRITICAL:** Fixed an issue where a invalid multipart upload could cause worker to loop infinitely
+  * Added new [`json_params`](reference.html#utilities-application-helpers) function to parse JSON from request body into `@params`
+  * `@content_for` can now be used to set content from view widgets to be seen by layout
+  * `respond_to` now provides a [default HEAD action](reference.html#utilities-application-helpers)
+  * Added `lapis signal` command line command to send arbitrary signal to Nginx process
+  * Added [`find_action`](reference.html#lapis-applications-class-methods) method to applications
+  * Attributes now have spaces around them when using HTML builder
+  * Test coverage improved
+
 v0.0.7 -- **November 5th, 2013**
 
   * Added [`prepare_results`](reference.html#models-pagination) option to paginated
