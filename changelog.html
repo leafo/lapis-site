@@ -2,6 +2,18 @@
 <div class="box only_box changelog">
   <h3>Changelog <span class="decor">❧</span></h3>
 $markdown{[[
+v0.0.9 -- **Jan 9th, 2013**
+
+  * Backwards incompatible change to [`cached` API](reference.html#utilities-caching)
+  * Cached can take expiration time, override cache key, and a function to
+  determine when to cache
+  * Fixed bug where `NULL` check used `=` instead of `is NULL` in generated SQL
+  * `include_in`, take take fields to select as an option
+  * Fixed bug where cache didn't preserve status code
+  * `db.is_raw(val)` for detecting if value is created from `db.raw`
+  * `db.format_date(d)` for formatting time to SQL syntax
+  * More tests
+
 v0.0.8 -- **December 7th, 2013**
 
   * **CRITICAL:** Fixed an issue where a invalid multipart upload could cause worker to loop infinitely
