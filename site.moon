@@ -3,7 +3,7 @@ require "sitegen"
 tools = require "sitegen.tools"
 
 sitegen.create_site =>
-  @current_version = "0.0.9"
+  @current_version = "0.0.10"
   @title = "Lapis"
 
   scssphp = tools.system_command "pscss < %s > %s", "css"
