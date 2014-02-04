@@ -1,4 +1,3 @@
-
 <div class="box">
   <div class="new_banner">
     <strong>January 18th, 2013:</strong> Lapis v0.0.10 is released, read more on the <a href="$root/changelog.html">changelog</a>
@@ -36,7 +35,7 @@ class extends lapis.Application
 local lapis = require "lapis"
 local lua = require "lapis.lua"
 
-lua.class({
+local app = lua.class({
   -- Define a basic pattern that matches /
   ["/"] = function(self)
     local profile_url = self:url_for("profile", {name = "leafo"})
@@ -56,6 +55,8 @@ lua.class({
     end)
   end
 }, lapis.Application)
+
+lapis.serve(app)
 ```
 ]]}
 
