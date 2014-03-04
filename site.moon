@@ -4,7 +4,6 @@ tools = require "sitegen.tools"
 
 sitegen.create_site =>
   @current_version = "0.0.10"
-  @title = "Lapis"
 
   scssphp = tools.system_command "sassc < %s > %s", "css"
   coffeescript = tools.system_command "coffee -c -s < %s > %s", "js"
@@ -17,6 +16,8 @@ sitegen.create_site =>
   deploy_to "leaf@leafo.net", "www/lapis/"
 
   add "lapis/docs/reference.md", target: "reference", template: "reference"
+  add "lapis/docs/actions.md", target: "reference/actions", template: "reference"
+
   add "index.html", template: "home"
   add "changelog.html", template: "home"
 
