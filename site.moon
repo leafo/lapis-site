@@ -18,6 +18,7 @@ sitegen.create_site =>
   add "lapis/docs/reference.md", target: "reference", template: "reference"
   add "lapis/docs/actions.md", target: "reference/actions", template: "reference"
   add "lapis/docs/database.md", target: "reference/database", template: "reference"
+  add "lapis/docs/getting_started.md", target: "reference/getting_started", template: "reference"
 
   add "index.html", template: "home"
   add "changelog.html", template: "home"
