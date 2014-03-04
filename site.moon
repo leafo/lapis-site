@@ -6,7 +6,7 @@ sitegen.create_site =>
   @current_version = "0.0.10"
   @title = "Lapis"
 
-  scssphp = tools.system_command "pscss < %s > %s", "css"
+  scssphp = tools.system_command "sassc < %s > %s", "css"
   coffeescript = tools.system_command "coffee -c -s < %s > %s", "js"
 
   build scssphp, "reference.scss", "reference.css"
