@@ -1,4 +1,3 @@
-
 <div class="box">
   <div class="new_banner">
     <strong>January 18th, 2014:</strong> Lapis v0.0.10 is released, read more on the <a href="$root/changelog.html">changelog</a>
@@ -12,25 +11,12 @@ Here's what it looks like:
 ]]}
 </div>
 
+<div class="split_columns">
+  <div class="lua_column left_column content_column">
+    <div class="column_inner">
+
 $markdown{[[
-```moon
-lapis = require "lapis"
-
-class extends lapis.Application
-  -- Define a basic pattern that matches /
-  "/": =>
-    profile_url = @url_for "profile", name: "leafo"
-    @html ->
-      h2 "Welcome!"
-      text "Go to my "
-      a href: profile_url, "profile"
-
-  -- Define a named route pattern with a variable called name
-  [profile: "/:name"]: =>
-    @html ->
-      div class: "profile", ->
-        text "Welcome to the profile of ", @params.name
-```
+# Lua
 
 ```lua
 local lapis = require "lapis"
@@ -58,6 +44,43 @@ lua.class({
 }, lapis.Application)
 ```
 ]]}
+    </div>
+  </div>
+
+  <div class="moon_column right_column content_column">
+    <div class="column_inner">
+
+$markdown{[[
+
+# MoonScript
+
+```moon
+lapis = require "lapis"
+
+class extends lapis.Application
+  -- Define a basic pattern that matches /
+  "/": =>
+    profile_url = @url_for "profile", name: "leafo"
+    @html ->
+      h2 "Welcome!"
+      text "Go to my "
+      a href: profile_url, "profile"
+
+  -- Define a named route pattern with a variable called name
+  [profile: "/:name"]: =>
+    @html ->
+      div class: "profile", ->
+        text "Welcome to the profile of ", @params.name
+```
+]]}
+
+
+    </div>
+  </div>
+</div>
+
+
+
 
 <iframe width="800" height="450" class="video_embed" src="//www.youtube.com/embed/Eo67iTY1Yf8" frameborder="0" allowfullscreen></iframe>
 
@@ -97,6 +120,46 @@ sub-classing `Model`.
 ]]}
 </div>
 
+
+
+<div class="split_columns">
+  <div class="lua_column left_column content_column">
+    <div class="column_inner">
+
+$markdown{[[
+```lua
+local lua = require "lapis.lua"
+local Model = require("lapis.db.model").Model
+
+-- Create a model, automatically backed by the table `users`
+local Users = class({}, Model)
+
+-- fetch some rows from the table
+local elderly_users = Users:select("where age > ? limit 5", 10)
+
+local random_user = Users:find(1233) -- find by primary key
+
+local lee = Users:find { name = "Lee", email = "leemiller@example.com" }
+
+-- create a new row and edit it
+local user = Users:create {
+  name = "Leaf"
+  email = "leaf@example.com"
+  age = 6
+}
+
+user:update { age = 10 }
+
+user:delete()
+```
+
+]]}
+    </div>
+  </div>
+
+  <div class="moon_column right_column content_column">
+    <div class="column_inner">
+
 $markdown{[[
 ```moon
 import Model from require "lapis.db.model"
@@ -123,32 +186,11 @@ user\update age: 10
 user\delete!
 ```
 
-```lua
-local lua = require "lapis.lua"
-local Model = require("lapis.db.model").Model
-
--- Create a model, automatically backed by the table `users`
-local Users = class({}, Model)
-
--- fetch some rows from the table
-local elderly_users = Users:select("where age > ? limit 5", 10)
-
-local random_user = Users:find(1233) -- find by primary key
-
-local lee = Users:find { name = "Lee", email = "leemiller@example.com" }
-
--- create a new row and edit it
-local user = Users:create {
-  name = "Leaf"
-  email = "leaf@example.com"
-  age = 6
-}
-
-user:update { age = 10 }
-
-user:delete()
-```
 ]]}
+
+    </div>
+  </div>
+</div>
 
 <div class="box">
 $markdown{[[
@@ -162,24 +204,12 @@ methods as much as you like.
 ]]}
 </div>
 
+
+<div class="split_columns">
+  <div class="lua_column left_column content_column">
+    <div class="column_inner">
+
 $markdown{[[
-```moon
--- views/index.moon
-import Widget from require "lapis.html"
-
-class Index extends Widget
-  content: =>
-    h1 class: "header", "Hello"
-
-    @user_panel!
-    div class: "body", ->
-      text "Welcome to my site!"
-
-  user_panel: =>
-    return unless @current_user
-    div class: "user_panel", "Welcome back " .. @current_user.name
-```
-
 ```lua
 local lua = require "lapis.lua"
 local Widget = require("lapis.html").Widget
@@ -204,6 +234,35 @@ return lua.class({
 }, Widget)
 ```
 ]]}
+    </div>
+  </div>
+
+  <div class="moon_column right_column content_column">
+    <div class="column_inner">
+
+$markdown{[[
+```moon
+-- views/index.moon
+import Widget from require "lapis.html"
+
+class Index extends Widget
+  content: =>
+    h1 class: "header", "Hello"
+
+    @user_panel!
+    div class: "body", ->
+      text "Welcome to my site!"
+
+  user_panel: =>
+    return unless @current_user
+    div class: "user_panel", "Welcome back " .. @current_user.name
+```
+]]}
+
+    </div>
+  </div>
+</div>
+
 
 <div class="box">
 $markdown{[[
@@ -213,50 +272,11 @@ complete with forms, CSRF protection, and various database queries.
 ]]}
 </div>
 
+<div class="split_columns">
+  <div class="lua_column left_column content_column">
+    <div class="column_inner">
+
 $markdown{[[
-```moon
-lapis = require "lapis"
-import Model from require "lapis.db.model"
-import respond_to, capture_errors from require "lapis.application"
-csrf = require "lapis.csrf"
-
-class Users extends Model
-
-class extends lapis.Application
-  -- Execute code before every action
-  @before_filter =>
-    @csrf_token = csrf.generate_token @
-
-  [list_users: "/users"]: =>
-    users = Users\select! -- `select` all the users
-
-    -- Render HTML inline for simplicity
-    @html ->
-      ul ->
-        for user in *users
-          li ->
-            a href: @url_for("user", user.id), user.name
-
-  [user: "/profile/:id"]: =>
-    user = Users\find id: @params.id
-    return status: 404 unless user
-    @html -> h2 user.name
-
-  -- Respond to different HTTP actions to do the right thing
-  [new_user: "/user/new"]: respond_to {
-    POST: capture_errors =>
-      csrf.assert_token @
-      Users\create name: @params.username
-      redirect_to: @url_for "list_users"
-
-    GET: =>
-      @html ->
-        form method: "POST", action: @url_for("new_user"), ->
-          input type: "hidden", name: "csrf_token", value: @csrf_token
-          input type: "text", name: "username"
-  }
-```
-
 ```lua
 local lapis = require "lapis"
 local csrf = require "lapis.csrf"
@@ -322,6 +342,60 @@ end)
 return app
 ```
 ]]}
+    </div>
+  </div>
+
+  <div class="moon_column right_column content_column">
+    <div class="column_inner">
+
+$markdown{[[
+```moon
+lapis = require "lapis"
+import Model from require "lapis.db.model"
+import respond_to, capture_errors from require "lapis.application"
+csrf = require "lapis.csrf"
+
+class Users extends Model
+
+class extends lapis.Application
+  -- Execute code before every action
+  @before_filter =>
+    @csrf_token = csrf.generate_token @
+
+  [list_users: "/users"]: =>
+    users = Users\select! -- `select` all the users
+
+    -- Render HTML inline for simplicity
+    @html ->
+      ul ->
+        for user in *users
+          li ->
+            a href: @url_for("user", user.id), user.name
+
+  [user: "/profile/:id"]: =>
+    user = Users\find id: @params.id
+    return status: 404 unless user
+    @html -> h2 user.name
+
+  -- Respond to different HTTP actions to do the right thing
+  [new_user: "/user/new"]: respond_to {
+    POST: capture_errors =>
+      csrf.assert_token @
+      Users\create name: @params.username
+      redirect_to: @url_for "list_users"
+
+    GET: =>
+      @html ->
+        form method: "POST", action: @url_for("new_user"), ->
+          input type: "hidden", name: "csrf_token", value: @csrf_token
+          input type: "text", name: "username"
+  }
+```
+]]}
+
+    </div>
+  </div>
+</div>
 
 <div class="box">
   <h3>Where can I learn more? <span class="decor">❧</span></h3>
