@@ -20,28 +20,25 @@ $markdown{[[
 
 ```lua
 local lapis = require "lapis"
-local lua = require "lapis.lua"
+local app = lapis.Application()
 
-lua.class({
-  -- Define a basic pattern that matches /
-  ["/"] = function(self)
-    local profile_url = self:url_for("profile", {name = "leafo"})
-    return self:html(function()
-      h2("Welcome!")
-      text("Go to my ")
-      a({href = profile_url}, "profile")
-    end)
-  end,
+app:match("/", function(self)
+  local profile_url = self:url_for("profile", {name = "leafo"})
+  return self:html(function()
+    h2("Welcome!")
+    text("Go to my ")
+    a({href = profile_url}, "profile")
+  end)
+end)
 
-  -- Define a named route pattern with a variable called name
-  [{profile = "/:name"}] = function(self)
-    return self:html(function()
-      div({class = "profile"}, function()
-        text("Welcome to the profile of " .. self.params.name)
-      end)
-    end)
-  end
-}, lapis.Application)
+app:match("profile", "/:name", function(self)
+  return self:html(function()
+    div({class = "profile"},
+      "Welcome to the profile of " .. self.params.name)
+  end)
+end)
+
+return app
 ```
 ]]}
     </div>
@@ -139,7 +136,7 @@ local elderly_users = Users:select("where age > ? limit 5", 10)
 
 local random_user = Users:find(1233) -- find by primary key
 
-local lee = Users:find { name = "Lee", email = "leemiller@example.com" }
+local lee = Users:find({ name = "Lee", email = "leemiller@example.com" })
 
 -- create a new row and edit it
 local user = Users:create {
@@ -210,28 +207,17 @@ methods as much as you like.
     <div class="column_inner">
 
 $markdown{[[
-```lua
-local lua = require "lapis.lua"
-local Widget = require("lapis.html").Widget
+```erb
+<h1 class="header"><%= "Hello" %></h1>
+<% if current_user %>
+  <div class="user_panel">
+    Welcome back <%= current_user.name %>
+  </div>
+<% end %>
 
-return lua.class({
-  content = function(self)
-    h1({ class = "header" }, "Hello")
-
-    self:user_panel()
-    div({ class = "body"}, function()
-      text("Welcome to my site!")
-    end)
-  end,
-
-  user_panel = function(self)
-    if not self.current_user then
-      return
-    end
-
-    div({ class = "user_panel" }, "Welcome back " .. self.current_user.name)
-  end
-}, Widget)
+<div class="body">
+  Welcome to my site
+</div>
 ```
 ]]}
     </div>
