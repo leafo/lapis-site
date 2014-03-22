@@ -22,8 +22,10 @@ $markdown{[[
 local lapis = require "lapis"
 local app = lapis.Application()
 
+-- Define a basic pattern that matches /
 app:match("/", function(self)
   local profile_url = self:url_for("profile", {name = "leafo"})
+  -- Use inline HTML helper to quickly write a template
   return self:html(function()
     h2("Welcome!")
     text("Go to my ")
@@ -31,6 +33,7 @@ app:match("/", function(self)
   end)
 end)
 
+-- Define a named route pattern with a variable called name
 app:match("profile", "/:name", function(self)
   return self:html(function()
     div({class = "profile"},
@@ -58,6 +61,7 @@ class extends lapis.Application
   -- Define a basic pattern that matches /
   "/": =>
     profile_url = @url_for "profile", name: "leafo"
+    -- Use inline HTML helper to quickly write a template
     @html ->
       h2 "Welcome!"
       text "Go to my "
@@ -128,24 +132,27 @@ $markdown{[[
 local lua = require "lapis.lua"
 local Model = require("lapis.db.model").Model
 
--- Create a model, automatically backed by the table `users`
-local Users = class({}, Model)
+-- Create a model, backed by the table `users`
+local Users = Model.extend("users")
 
 -- fetch some rows from the table
 local elderly_users = Users:select("where age > ? limit 5", 10)
 
 local random_user = Users:find(1233) -- find by primary key
 
-local lee = Users:find({ name = "Lee", email = "leemiller@example.com" })
+local lee = Users:find({
+  name = "Lee",
+  email = "leemiller@example.com"
+})
 
 -- create a new row and edit it
-local user = Users:create {
+local user = Users:create({
   name = "Leaf"
   email = "leaf@example.com"
   age = 6
-}
+})
 
-user:update { age = 10 }
+user:update({ age = 10 })
 
 user:delete()
 ```

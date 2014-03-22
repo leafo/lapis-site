@@ -423,11 +423,6 @@ code, pre {
         margin-bottom: 20px;
     }
 
-    pre {
-        margin: 0 0 20px 0;
-        padding: 25px 40px;
-    }
-    
     .dotdotdot {
         font-weight: bold;
         display: block;
@@ -490,11 +485,9 @@ pre {
     background: #333;
     color: white;
     font-size: 18px;
-    line-height: 20px;
-    padding: 10px;
-    box-shadow: 0px 1px 3px rgba(0,0,0, 0.7), inset 0px 0px 0px 1px rgba(255,255,255,0.3);
-    border-radius: 2px;
-    border: 1px solid #222;
+    line-height: 1.2;
+    margin: 0 0 20px 0;
+    padding: 25px;
 }
 
 .highlight {
@@ -564,6 +557,10 @@ pre {
 
 .split_columns {
     font-size: 0;
+
+    pre  {
+        width: 600px;
+    }
 }
 
 .content_column {
@@ -576,19 +573,21 @@ pre {
         display: inline-block;
         vertical-align: top;
         text-align: left;
-        background: rgba(255,255,255, 0.5);
     }
 }
 
 .left_column {
-    background: red;
     text-align: right;
+    .column_inner {
+        margin-right: 10px;
+    }
 }
 
 .right_column {
-    background: blue;
+    .column_inner {
+        margin-left: 10px;
+    }
 }
-
 
 .gplus {
     display: none;
