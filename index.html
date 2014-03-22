@@ -265,64 +265,42 @@ complete with forms, CSRF protection, and various database queries.
 $markdown{[[
 ```lua
 local lapis = require "lapis"
-local csrf = require "lapis.csrf"
-local lua = require "lapis.lua"
-
 local Model = require("lapis.db.model").Model
+local capture_errors = require("lapis.application").capture_errors
 
-local application = require "lapis.application"
-local respond_to, capture_errors, = application.respond_to, application.capture_errors
+local Users = Model:extend("users")
 
-local app = class({
-  -- Render HTML inline for simplicity
-  [{list_users = "/users"}] = function(self)
-    local users = Users:select() -- `select` all the users
-    return self:html(function()
-      ul(function()
-        for _, user in ipairs(users) do
-          li(function()
-            a({ href = self:url_for("user", user.id)}, user.name)
-          end)
-        end
-      end)
-    end)
-  end,
+local app = lapis.Application()
 
-  [{user = "/profile/:id"}] = function(self)
-    local user = Users:find { id = self.params.id }
-    if not user then
-      return { status = 404 }
-    end
-
-    self:html(function()
-      h2(user.name)
-    end)
-  end,
-
-  -- Respond to different HTTP actions to do the right thing
-  [{new_user = "/user/new"}] = respond_to {
-    POST = capture_errors(function()
-      csrf.assert_token(self)
-      Users:create { name = self.params.username }
-      return { redirect_to: self.url_for("list_users") }
-    end),
-
-    POST = function()
-      return self:html(function()
-        form({ method = "POST", actionn = self.url_for("new_user")}, function()
-          input { type = "hidden", name = "csrf_token", value = self.csrf_token }
-          input { type = "text", name = "username" }
-        end)
-      end)
-    end
-  },
-
-
-}, lapis.Application)
-
--- Execute code before every action
-app.before_filter(function(self)
+app:before_filter(function(self)
   self.csrf_token = csrf.generate_token(self)
+end)
+
+app:get("list_users", "/users", function(self)
+  self.users = Users:select() -- `select` all users
+  return { render = true }
+end)
+
+app:get("user", "/profile/:id", function(self)
+  local user = Users:find({ id = self.params.id })
+  if not user then
+    return { status = 404 }
+  end
+
+  return { render = true }
+end)
+
+app:post("/user/new", capture_errors(function(self)
+  csrf.assert_token(self)
+  Users:create({
+    name = self.params.username
+  })
+
+  return { redirect_to: self:url_for("list_users") }
+end))
+
+app:get("new_user", "/user/new", function(self)
+  return { render = true }
 end)
 
 return app
