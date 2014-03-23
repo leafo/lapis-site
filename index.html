@@ -14,10 +14,9 @@ Here's what it looks like:
 <div class="split_columns">
   <div class="lua_column left_column content_column">
     <div class="column_inner">
+      <h1 class="lang_header">Lua</h1>
 
 $markdown{[[
-# Lua
-
 ```lua
 local lapis = require "lapis"
 local app = lapis.Application()
@@ -49,10 +48,9 @@ return app
 
   <div class="moon_column right_column content_column">
     <div class="column_inner">
+      <h1 class="lang_header">MoonScript</h1>
 
 $markdown{[[
-
-# MoonScript
 
 ```moon
 lapis = require "lapis"
@@ -80,11 +78,7 @@ class extends lapis.Application
   </div>
 </div>
 
-
-
-
-<iframe width="800" height="450" class="video_embed" src="//www.youtube.com/embed/Eo67iTY1Yf8" frameborder="0" allowfullscreen></iframe>
-
+<iframe style="display: none" width="800" height="450" class="video_embed" src="//www.youtube.com/embed/Eo67iTY1Yf8" frameborder="0" allowfullscreen></iframe>
 
 <div class="box">
   <h3>How does it work? <span class="decor">❧</span></h3>
@@ -358,7 +352,8 @@ class extends lapis.Application
     GET: =>
       @html ->
         form method: "POST", action: @url_for("new_user"), ->
-          input type: "hidden", name: "csrf_token", value: @csrf_token
+          input type: "hidden",
+            name: "csrf_token", value: @csrf_token
           input type: "text", name: "username"
   }
 ```
