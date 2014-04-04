@@ -49,5 +49,6 @@ class Lapis
           visible = false
 
 
-new Lapis()
+$ =>
+  $(".lang_headers").stick_in_parent offset_top: -2
 

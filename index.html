@@ -11,10 +11,14 @@ Here's what it looks like:
 ]]}
 </div>
 
+<div class="lang_headers">
+  <h1 class="lang_header">Lua</h1>
+  <h1 class="lang_header">MoonScript</h1>
+</div>
+
 <div class="split_columns">
   <div class="lua_column left_column content_column">
     <div class="column_inner">
-      <h1 class="lang_header">Lua</h1>
 
 $markdown{[[
 ```lua
@@ -48,8 +52,6 @@ return app
 
   <div class="moon_column right_column content_column">
     <div class="column_inner">
-      <h1 class="lang_header">MoonScript</h1>
-
 $markdown{[[
 
 ```moon
@@ -100,7 +102,7 @@ concerned about blocking your application and killing your throughput.
 
 </div>
 
-<div class="dotdotdot">. . .</div>
+<div class="dotdotdot">&times;</div>
 
 <div class="box">
   <h3>What does it come with? <span class="decor">❧</span></h3>
@@ -111,11 +113,9 @@ Lapis includes URL routing, [HTML Templating](reference.html#html-generation),
 useful functions](reference.html#request-object) needed when developing a website.
 
 Get a powerful abstraction layer over your database tables just by
-sub-classing `Model`.
+sub-classing `Model`:
 ]]}
 </div>
-
-
 
 <div class="split_columns">
   <div class="lua_column left_column content_column">
@@ -123,7 +123,6 @@ sub-classing `Model`.
 
 $markdown{[[
 ```lua
-local lua = require "lapis.lua"
 local Model = require("lapis.db.model").Model
 
 -- Create a model, backed by the table `users`
@@ -268,6 +267,7 @@ $markdown{[[
 local lapis = require "lapis"
 local Model = require("lapis.db.model").Model
 local capture_errors = require("lapis.application").capture_errors
+local csrf = require "lapis.csrf"
 
 local Users = Model:extend("users")
 
@@ -393,8 +393,8 @@ Here are some libraries you might find useful:
 * [`web_sanitize`](https://github.com/leafo/web_sanitize) -- HTML sanitization
 * [`magick`](https://github.com/leafo/magick) -- ImageMagick bindings
 * [`cloud_storage`](https://github.com/leafo/cloud_storage) -- Support for Google Cloud Storage
-* [`lapis_console`](https://github.com/leafo/lapis-console) -- Interactive
-  MoonScript console for Lapis that runs inside of your browser. [More information](reference.html#lapis-console).
+* [`lapis-console`](https://github.com/leafo/lapis-console) -- Interactive MoonScript console for Lapis that runs inside of your browser
+* [`lapis-exceptions`](https://github.com/leafo/lapis-exceptions) -- Exception tracking and reporting
 ]]}
 </div>
 
