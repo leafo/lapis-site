@@ -165,7 +165,8 @@ body {
     text-align: center;
 
     &.is_stuck {
-        box-shadow: 0 3px 0 rgba(0,0,0, 0.1);
+        box-shadow: 0 3px 0 rgba(58, 170, 58, 0.21);
+        z-index: 1;
     }
 
     .lang_header {
