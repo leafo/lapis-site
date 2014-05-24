@@ -15,11 +15,26 @@ sitegen.create_site =>
 
   deploy_to "leaf@leafo.net", "www/lapis/"
 
-  add "lapis/docs/reference.md", target: "reference", template: "reference"
-  add "lapis/docs/actions.md", target: "reference/actions", template: "reference"
-  add "lapis/docs/database.md", target: "reference/database", template: "reference"
-  add "lapis/docs/getting_started.md", target: "reference/getting_started", template: "reference"
-  add "lapis/docs/html_generation.md", target: "reference/html_generation", template: "reference"
+  files = {
+    "actions"
+    "command_line"
+    "configuration"
+    "database"
+    "exception_handling"
+    "getting_started"
+    "html_generation"
+    "input_validation"
+    "lapis_console"
+    "lua_getting_started"
+    "moon_getting_started"
+    "reference"
+    "testing"
+    "utilities"
+  }
+
+  for file in *files
+    target = file == "reference" and "reference" or "reference/#{file}"
+    add "lapis/docs/#{file}.md", :target, template: "reference"
 
   add "index.html", template: "home"
   add "changelog.html", template: "home"

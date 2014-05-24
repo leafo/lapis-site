@@ -3,5 +3,15 @@ code.html
 index.html
 reference.html
 reference/actions.html
+reference/command_line.html
+reference/configuration.html
 reference/database.html
+reference/exception_handling.html
 reference/getting_started.html
+reference/html_generation.html
+reference/input_validation.html
+reference/lapis_console.html
+reference/lua_getting_started.html
+reference/moon_getting_started.html
+reference/testing.html
+reference/utilities.html
