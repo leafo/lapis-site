@@ -11,7 +11,9 @@ reference/getting_started.html
 reference/html_generation.html
 reference/input_validation.html
 reference/lapis_console.html
+reference/lua_creating_configurations.html
 reference/lua_getting_started.html
+reference/moon_creating_configurations.html
 reference/moon_getting_started.html
 reference/testing.html
 reference/utilities.html
