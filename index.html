@@ -6,8 +6,6 @@
   <h3>What is it? <span class="decor">❧</span></h3>
 $markdown{[[
 Lapis is a framework for building web applications using [MoonScript](http://moonscript.org) or [Lua](http://lua.org) that runs inside of a customized version of [Nginx](http://nginx.org) called [OpenResty](http://openresty.org).
-
-Here's what it looks like:
 ]]}
 </div>
 
@@ -15,6 +13,78 @@ Here's what it looks like:
   <h1 class="lang_header">Lua</h1>
   <h1 class="lang_header">MoonScript</h1>
 </div>
+
+<div class="split_columns">
+  <div class="lua_column left_column content_column">
+    <div class="column_inner">
+
+$markdown{[[
+```lua
+local lapis = require "lapis"
+local app = lapis.Application()
+
+app:match("/", function(self)
+  return "Hello world!"
+end)
+
+return app
+```
+]]}
+    </div>
+  </div>
+
+  <div class="moon_column right_column content_column">
+    <div class="column_inner">
+$markdown{[[
+
+```moon
+lapis = require "lapis"
+
+class extends lapis.Application
+  "/": =>
+    "Hello world!"
+```
+]]}
+
+    </div>
+  </div>
+</div>
+
+<iframe style="display: none" width="800" height="450" class="video_embed" src="//www.youtube.com/embed/Eo67iTY1Yf8" frameborder="0" allowfullscreen></iframe>
+
+<div class="box">
+  <h3>How does it work? <span class="decor">❧</span></h3>
+$markdown{[[
+Lua is run directly inside of the Nginx worker, giving you the smallest barrier
+between the webserver and your code. OpenResty executes your Lua/MoonScript
+with LuaJIT, so it's blazing fast. Have a look at [Web Framework
+Benchmarks](http://www.techempower.com/benchmarks/#section=data-r3) just to see
+how OpenResty stacks up against other platforms.
+
+Nginx's event loop is used for all asynchronous actions, including HTTP
+requests and database queries. With the power of Lua coroutines code is written
+synchronously but runs asynchronously, without all that callback spaghetti seen
+in other asynchronous platforms. It's fast, easy to read, and easy to write.
+
+Perform HTTP requests and other asynchronous operations freely without being
+concerned about blocking your application and killing your throughput.
+]]}
+
+</div>
+
+<div class="dotdotdot">&times;</div>
+
+
+<div class="box">
+  <h3>What does it come with? <span class="decor">❧</span></h3>
+$markdown{[[
+Lapis includes URL routing, [HTML Templating](reference.html#html-generation),
+[CSRF](reference.html#utilities-csrf-protection) and [Session
+](reference.html#request-object-session) support, [PostgreSQL backed models](reference.html#models), [schema generation](reference.html#database-schemas) and [migrations](reference.html#database-migrations) in addition to a [collection of
+useful functions](reference.html#request-object) needed when developing a website.
+]]}
+</div>
+
 
 <div class="split_columns">
   <div class="lua_column left_column content_column">
@@ -80,42 +150,15 @@ class extends lapis.Application
   </div>
 </div>
 
-<iframe style="display: none" width="800" height="450" class="video_embed" src="//www.youtube.com/embed/Eo67iTY1Yf8" frameborder="0" allowfullscreen></iframe>
-
 <div class="box">
-  <h3>How does it work? <span class="decor">❧</span></h3>
 $markdown{[[
-Lua is run directly inside of the Nginx worker, giving you the smallest barrier
-between the webserver and your code. OpenResty executes your Lua/MoonScript
-with LuaJIT, so it's blazing fast. Have a look at [Web Framework
-Benchmarks](http://www.techempower.com/benchmarks/#section=data-r3) just to see
-how OpenResty stacks up against other platforms.
-
-Nginx's event loop is used for all asynchronous actions, including HTTP
-requests and database queries. With the power of Lua coroutines code is written
-synchronously but runs asynchronously, without all that callback spaghetti seen
-in other asynchronous platforms. It's fast, easy to read, and easy to write.
-
-Perform HTTP requests and other asynchronous operations freely without being
-concerned about blocking your application and killing your throughput.
-]]}
-
-</div>
-
-<div class="dotdotdot">&times;</div>
-
-<div class="box">
-  <h3>What does it come with? <span class="decor">❧</span></h3>
-$markdown{[[
-Lapis includes URL routing, [HTML Templating](reference.html#html-generation),
-[CSRF](reference.html#utilities-csrf-protection) and [Session
-](reference.html#request-object-session) support, [PostgreSQL backed models](reference.html#models), [schema generation](reference.html#database-schemas) and [migrations](reference.html#database-migrations) in addition to a [collection of
-useful functions](reference.html#request-object) needed when developing a website.
-
 Get a powerful abstraction layer over your database tables just by
 sub-classing `Model`:
 ]]}
 </div>
+
+
+
 
 <div class="split_columns">
   <div class="lua_column left_column content_column">
@@ -191,13 +234,12 @@ user\delete!
 
 <div class="box">
 $markdown{[[
-Write your templates with high composability by using
-[MoonScript](http://moonscript.org) directly. No need to learn any goofy
-templating syntax with arbitrary restrictions.
+Write your templates either in [etlua](https://github.com/leafo/etlua) or in
+pure Lua/MoonScript.
 
-Either inline the HTML template in the action or create a separate view like
-so. Views are just classes, feel free to use inheritance and mix and match
-methods as much as you like.
+The template builder syntax works well in MoonScript and lets your organize
+your templates as classes, allowing you to use inheritance to mix and match
+methods as you see fit.
 ]]}
 </div>
 
@@ -209,7 +251,7 @@ methods as much as you like.
 $markdown{[[
 ```erb
 <h1 class="header"><%= "Hello" %></h1>
-<% if current_user %>
+<% if current_user then %>
   <div class="user_panel">
     Welcome back <%= current_user.name %>
   </div>
