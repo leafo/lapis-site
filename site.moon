@@ -29,14 +29,15 @@ sitegen.create_site =>
     "lua_getting_started"
     "moon_creating_configurations"
     "moon_getting_started"
-    "reference"
     "testing"
     "utilities"
   }
 
   for file in *files
-    target = file == "reference" and "reference" or "reference/#{file}"
+    target = "reference/#{file}"
     add "lapis/docs/#{file}.md", :target, template: "reference"
+
+  add "reference.html", template: "reference"
 
   add "index.html", template: "home"
   add "changelog.html", template: "home"
