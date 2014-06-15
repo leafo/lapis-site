@@ -70,92 +70,6 @@ body {
     font-family: Lato, sans-serif;
 }
 
-.sticky_bar {
-    $sticky_height: 50px;
-    position: fixed;
-    top: -($sticky_height + 5);
-    left: 0;
-    right: 0;
-
-    background: #667777;
-    border-bottom: 1px solid darken(#667777, 10%);
-    box-shadow: 0 3px 0 rgba(0,0,0, 0.25);
-    color: white;
-    height: $sticky_height;
-
-    @include transition(top 0.2s ease);
-
-    &.open {
-        top: 0;
-    }
-
-    .sticky_bar_inner {
-        width: $site_width;
-        margin: 0 auto;
-    }
-
-    .sticky_social {
-        float: right;
-        margin-top: 16px;
-    }
-
-    .sticky_header {
-        font-weight: bold;
-        margin-right: 10px;
-        font-size: 32px;
-        margin-top: 3px;
-
-        a {
-            color: white;
-            text-decoration: none;
-        }
-    }
-
-    .sticky_lang {
-        margin-top: 10px;
-    }
-
-    .sticky_header, .sticky_lang {
-        display: inline-block;
-        vertical-align: top;
-    }
-}
-
-.lang_picker {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 30px;
-    height: 30px;
-    font-size: 0;
-    margin-left: 10px;
-
-    .picker {
-        display: inline-block;
-        font-size: $font_size;
-        cursor: pointer;
-        padding: 0 12px;
-
-        background: darken(#667777, 10%);
-        color: lighten(#667777, 30%);
-
-        box-shadow: 0 1px 0 rgba(255,255,255,0.2);
-
-        &.current {
-            background: lighten(#667777, 20%);
-            color: white;
-            text-shadow: 1px 1px 1px #545C5C;
-        }
-    }
-
-    > :first-child {
-        border-radius: 6px 0 0 6px;
-    }
-
-    > :last-child {
-        border-radius: 0 6px 6px 0;
-    }
-}
-
 .lang_headers {
     @include transition(box-shadow 0.5s ease);
     border-top: 2px solid $border_color;
@@ -347,8 +261,7 @@ code, pre {
     }
 
     .social_buttons {
-        display: inline-block;
-        padding: 4px 0px;
+        margin-top: 15px;
     }
 
     .button_row {
