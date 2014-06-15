@@ -10,8 +10,14 @@ Lapis is a framework for building web applications using [MoonScript](http://moo
 </div>
 
 <div class="lang_headers">
-  <h1 class="lang_header">Lua</h1>
-  <h1 class="lang_header">MoonScript</h1>
+  <h1 class="lang_header lua_header">
+    <span class="label">Lua</span>
+    <span class="lang_toggle" data-hash="lang=moonscript">View examples in MoonScript</span>
+  </h1>
+  <h1 class="lang_header moon_header">
+    <span class="label">MoonScript</span>
+    <span class="lang_toggle" data-hash="lang=lua">View examples in Lua</span>
+  </h1>
 </div>
 
 <div class="split_columns">
@@ -270,7 +276,6 @@ $markdown{[[
 
 $markdown{[[
 ```moon
--- views/index.moon
 import Widget from require "lapis.html"
 
 class Index extends Widget

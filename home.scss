@@ -169,6 +169,37 @@ body {
         z-index: 1;
     }
 
+    .label {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .lang_toggle {
+        @include transition(all 0.2s ease);
+        @include unselectable;
+        display: none;
+        font-size: 16px;
+        padding: 5px 10px;
+        margin-left: 10px;
+        font-weight: normal;
+        text-decoration: none;
+        cursor: pointer;
+
+        color: #888;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+
+        &:hover {
+            background: #667777;
+            border: 2px solid lighten(#667777, 20%);
+            color: white;
+        }
+
+        &:active {
+            background: darken(#667777, 20%);
+        }
+    }
+
     .lang_header {
         display: inline-block;
         text-align: center;
@@ -582,6 +613,7 @@ pre {
   }
 }
 
+
 .split_columns {
     font-size: 0;
 
@@ -620,5 +652,51 @@ pre {
     display: none;
 }
 
+@media all and (max-width: 1340px) {
+    .lang_headers {
+        .lang_header {
+            border: 0 !important;
 
+            &.lua_header {
+                display: none;
+            }
+
+            .lang_toggle {
+                display: inline-block;
+            }
+        }
+    }
+
+    .content_column {
+        width: auto;
+        display: block;
+        text-align: center;
+
+        &.lua_column {
+            display: none;
+        }
+    }
+
+    body.show_lua & {
+        .lang_header {
+            &.lua_header {
+                display: inline-block;
+            }
+
+            &.moon_header {
+                display: none;
+            }
+        }
+
+        .content_column {
+            &.lua_column {
+                display: block;
+            }
+
+            &.moon_column {
+                display: none;
+            }
+        }
+    }
+}
 
