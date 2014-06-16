@@ -84,10 +84,18 @@ concerned about blocking your application and killing your throughput.
 <div class="box">
   <h3>What does it come with? <span class="decor">❧</span></h3>
 $markdown{[[
-Lapis includes URL routing, [HTML Templating](reference.html#html-generation),
-[CSRF](reference.html#utilities-csrf-protection) and [Session
-](reference.html#request-object-session) support, [PostgreSQL backed models](reference.html#models), [schema generation](reference.html#database-schemas) and [migrations](reference.html#database-migrations) in addition to a [collection of
-useful functions](reference.html#request-object) needed when developing a website.
+Lapis includes URL routing, [HTML Templating][1], [CSRF][2] and [Session][3]
+support, [PostgreSQL backed models][4], [schema generation][5] and
+[migrations][6] in addition to a [collection of useful functions][7] needed
+when developing a website.
+
+  [1]: $root/reference/html_generation.html
+  [2]: $root/reference/utilities.html#csrf-protection
+  [3]: $root/reference/actions.html#request-object-session
+  [4]: $root/reference/database.html#models
+  [5]: $root/reference/database.html#database-schemas
+  [6]: $root/reference/database.html#database-migrations
+  [7]: $root/reference/utilities.html
 ]]}
 </div>
 
@@ -413,7 +421,7 @@ class extends lapis.Application
 <div class="box">
   <h3>Where can I learn more? <span class="decor">❧</span></h3>
 $markdown{[[
-For a guide and tutorial to Lapis, consult the [reference manual](reference.html).
+For a guide and tutorial to Lapis, consult the [$reference manual]($root/reference.html).
 
 The source of Lapis can be [found on Github](https://github.com/leafo/lapis)
 and issues can be reported on the [issues
@@ -455,7 +463,7 @@ Lapis would not be possible without the following projects:
 * [LPeg](http://www.inf.puc-rio.br/~roberto/lpeg/)
 * [OpenResty](http://openresty.org)
 
-Lapis is licensed under the [MIT license](reference.html#license-mit).
+Lapis is licensed under the [MIT license](http://opensource.org/licenses/MIT).
 
 Lapis is written by [@moonscript](http://twitter.com/moonscript).
 ]]}
