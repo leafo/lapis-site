@@ -4,6 +4,43 @@ title: Changelog
 <div class="box only_box changelog">
   <h3>Changelog <span class="decor">❧</span></h3>
 $markdown{[[
+v1.0.0 -- **Jun 16 2014**
+
+#### General
+
+  * Add a new Lua friendly API, see [Getting Started With Lua]($root/reference/lua_getting_started.html)
+  * Add support for [etlua](http://github.com/leafo/etlua) as a view language, see Lua guide
+  * Overhaul to [reference manual](reference.html): better organization, Lua examples, and more guides
+
+#### Database
+
+  * `Model\include_in` can take a `where` option to filter results
+  * A flipped `Model\include_in` no longer throws error when not using primary key
+  * `model\find_all` can take a `where` option to filter results
+  * `model\find_all` can take a `db.raw` value as search key
+  * `updated_at` and `created_at` aren't overwritten when creating a model if manually set
+  * `db.escape_identifier` is aware of `db.raw` values, won't try to escape them
+  * `create_index` can take a index method and a tablespace in options table *(dant4z)*
+  * All constraints are checked on `Model\create` instead of just those for values provided
+  * Errors thrown from failed queries have query in them now
+  * Fix bug where `db.raw` values would not work in `create_index`, prevening you from creating indexes on expressions
+  * Postgres connection options can be set as table instead of connect string
+  * Add support for [pgmoon](http://github.com/leafo/pgmoon), documentation forthcoming
+
+#### Util
+
+  * `util.time_ago_in_words` can handle dates in the future
+  * `util.parse_query_string` will correctly parse empty string values
+  * `assert_error` passes through all arguments passed to it instead of just first argument
+  * `cached` can have a dynamically set dictionary by setting `dict` to a function
+
+#### Misc
+
+  * A class passed to `widget` within MoonScript template will automatically be instantiated
+  * Update OpenResty search path to find instalation from Brew on OSX *(Stefan Natchev)*
+  * Add new `logging` config directive for fine grained control over individual logging
+  * Updated homepage, <http://leafo.net/lapis>
+
 v0.0.10 -- **Jan 18th, 2014**
 
   * Correctly detect installation of OpenResty 1.5.x
