@@ -3,11 +3,19 @@ $offset_left: 50px;
 $font_size: 18px;
 $link_color: #DA3400;
 $bg: lighten(#EAFFEA, 2%);
+$text_color: #222;
 
 $main_width: 900px;
 $nav_width: 300px;
 
 @import url(http://fonts.googleapis.com/css?family=Lato:400,700|Inconsolata);
+
+@mixin transition($args...) {
+    -webkit-transition: $args;
+    -moz-transition: $args;
+    -ms-transition: $args;
+    transition: $args;
+}
 
 body {
     background: $bg;
@@ -39,7 +47,19 @@ a {
 }
 
 .nav_column {
+    $nav_bg: mix(black, $bg, 7%);
     width: $nav_width;
+    font-size: 16px;
+    line-height: 1.4;
+
+    h2 {
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: mix($text_color, $bg, 80%);
+        border-bottom: 1px solid mix($text_color, $nav_bg, 20%);
+        padding-bottom: 10px;
+    }
 
     .sticky_inner {
         width: $nav_width;
@@ -47,38 +67,26 @@ a {
         top: 0;
         bottom: 0;
         overflow-y: auto;
+        background: $nav_bg;
     }
 
     .nav_links {
-        margin: 20px;
-        font-size: 16px;
+        margin: 20px 20px 40px 20px;
     }
 
     a {
         display: block;
         padding: 4px 8px;
         color: #777;
-        margin-top: 10px;
 
         text-decoration: none;
-
-        &.sub {
-            margin-top: 0;
-            padding-left: 16px;
-
-            &:before {
-                content: "— ";
-            }
-        }
 
         &:hover {
             background: white;
             box-shadow: 0 0 0 1px silver;
-            color: $link_color;
+            color: $text_color;
 
-            -webkit-transition: all 0.1s ease-in-out;
-            -moz-transition: all 0.1s ease-in-out;
-            transition: all 0.1s ease-in-out;
+            @include transition(all 0.1s ease-in-out);
         }
 
         code {
@@ -90,14 +98,41 @@ a {
         text-decoration: none;
         color: #333;
     }
+
+    // indented
+    a.sub, ul ul a {
+        padding-left: 16px + 8px;
+
+        margin-right: 8px;
+
+        text-indent: -16px;
+        position: relative;
+        left: 8px;
+
+        &:before {
+            content: "— ";
+        }
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    li {
+        margin: 0;
+        padding: 0;
+    }
 }
 
 .text_column {
     width: $main_width;
-    color: #222;
+    color: $text_color;
 
     h1 {
         margin-left: $offset_left;
+        color: mix($text_color, $bg, 75%);
     }
 
     h2, h3, h4 {
@@ -106,9 +141,10 @@ a {
         padding-left: 38px;
         margin-left: 10px;
         position: relative;
+        color: mix($text_color, $bg, 80%);
 
         a {
-            color: #222;
+            color: inherit;
             text-decoration: none;
             &:hover {
                 text-decoration: underline;
@@ -138,6 +174,14 @@ a {
             top: -30px;
         }
     }
+
+    h1 + h2 {
+        margin-top: 40px;
+        &:before {
+            content: none;
+        }
+    }
+
 
     p {
         margin: 25px 0;

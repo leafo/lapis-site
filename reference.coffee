@@ -5,7 +5,7 @@ slugify = (str) ->
 
 
 build_index = ->
-  nav_links = $(".nav_links")
+  nav_links = $(".nav_links:first")
   headers = $(".text_column").find("h2")
 
   append_header = (h, classes=null, parent_slug) ->
