@@ -1,7 +1,7 @@
 
 $offset_left: 50px;
 $font_size: 18px;
-$link_color: #DA3400;
+$link_color: #DA0057;
 $bg: lighten(#EAFFEA, 2%);
 $text_color: #222;
 
@@ -59,6 +59,16 @@ a {
         color: mix($text_color, $bg, 80%);
         border-bottom: 1px solid mix($text_color, $nav_bg, 20%);
         padding-bottom: 10px;
+    }
+
+    .indicator {
+        display: none;
+        position: absolute;
+        font-size: 40px;
+        line-height: 20px;
+        top: 14px;
+        right: 8px;
+        color: mix($text_color, $bg, 80%);
     }
 
     .sticky_inner {
@@ -129,6 +139,7 @@ a {
 .text_column {
     width: $main_width;
     color: $text_color;
+    padding-bottom: 60px;
 
     h1 {
         margin-left: $offset_left;
@@ -363,8 +374,30 @@ pre {
 }
 
 @media all and (max-width: 1200px) {
-  .nav_column {
-      display: none;
-  }
+    $margin: 40px;
+
+    .nav_column {
+        width: $margin;
+
+        .sticky_inner {
+            overflow-y: hidden;
+            z-index: 2;
+            @include transition(left 0.2s ease);
+            left: ($margin - $nav_width);
+
+            .indicator {
+                display: block;
+            }
+
+            &:hover {
+                overflow-y: auto;
+                left: 0;
+
+                .indicator {
+                    display: none;
+                }
+            }
+        }
+    }
 }
 

@@ -1,8 +1,6 @@
 
-
 slugify = (str) ->
   str.replace(/\s+/g, "-").replace(/[^\w_-]/g, "").toLowerCase()
-
 
 build_index = ->
   nav_links = $(".nav_links:first")
@@ -23,6 +21,11 @@ build_index = ->
 
     link.addClass classes if classes
     slug
+
+
+  if headers.length == 0
+    nav_links.remove()
+    return
 
   for h in headers
     do (h) ->
@@ -53,7 +56,5 @@ add_captions = ->
 
 build_index()
 add_captions()
-
-
 
 
