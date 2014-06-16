@@ -60,14 +60,14 @@ setup_lang_picker = ->
   pickers = $(".lang_picker .lang_toggle")
 
   set_lang = (name) ->
-    console.log "setting lang", name
     pickers.removeClass("active")
       .filter("[data-lang='#{name}']")
       .addClass("active")
 
-    body
-      .toggleClass("show_lua", name == "lua")
-      .toggleClass("show_moonscript", name == "moonscript")
+    unless body.find(".override_lang").length
+      body
+        .toggleClass("show_lua", name == "lua")
+        .toggleClass("show_moonscript", name == "moonscript")
 
     window.localStorage?.setItem("reference_lang", name)
 

@@ -3,7 +3,9 @@ $offset_left: 50px;
 $font_size: 18px;
 $link_color: #DA0057;
 $bg: lighten(#EAFFEA, 2%);
-$nav_bg: mix(black, $bg, 7%);
+$nav_bg: mix(white, $bg, 50%);
+$border_color: #B6D3B6;
+// $border_color: mix(black, $nav_bg, 10%);
 
 $text_color: #222;
 
@@ -23,6 +25,11 @@ $nav_width: 300px;
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+}
+
+@mixin border_box {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 ::selection {
@@ -88,9 +95,9 @@ a {
         cursor: pointer;
         vertical-align: middle;
 
-        border: 2px solid mix($text_color, $nav_bg, 20%);
+        border: 2px solid $border_color;
         border-radius: 4px;
-        color: mix($text_color, $nav_bg, 80%);
+        color: mix($text_color, $nav_bg, 70%);
 
 
         &:hover, &.active {
@@ -120,6 +127,24 @@ a {
     font-size: 16px;
     line-height: 1.4;
 
+    h1 {
+        padding: 10px 20px;
+        margin: 0 0 20px 0;
+        font-size: 24px;
+        border-bottom: 2px solid $border_color;
+        background: url("img/arches.png") 50% 0;
+        text-align: center;
+
+        a {
+            padding: 0;
+            text-decoration: none;
+            color: mix($text_color, $nav_bg, 75%);
+            &:hover {
+                color: mix($text_color, $nav_bg, 65%);
+            }
+        }
+    }
+
     h2 {
         font-size: 16px;
         font-weight: bold;
@@ -140,16 +165,23 @@ a {
     }
 
     .sticky_inner {
+        @include border_box;
         width: $nav_width;
         position: fixed;
         top: 0;
         bottom: 0;
         overflow-y: auto;
         background: $nav_bg;
+        border-right: 2px solid $border_color;
     }
+}
 
-    .nav_links {
-        margin: 20px 20px 40px 20px;
+.nav_links {
+    margin: 20px 20px 40px 20px;
+
+    .top_link {
+        text-decoration: none;
+        color: #333;
     }
 
     a {
@@ -170,11 +202,6 @@ a {
         code {
             font-size: 14px;
         }
-    }
-
-    .top_link {
-        text-decoration: none;
-        color: #333;
     }
 
     // indented
