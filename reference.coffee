@@ -54,7 +54,33 @@ add_captions = ->
     elm = $(@)
     tpl elm.attr("src"), elm.attr("title"), elm.attr("alt")
 
+
+setup_lang_picker = ->
+  body = $(document.body)
+  pickers = $(".lang_picker .lang_toggle")
+
+  set_lang = (name) ->
+    console.log "setting lang", name
+    pickers.removeClass("active")
+      .filter("[data-lang='#{name}']")
+      .addClass("active")
+
+    body
+      .toggleClass("show_lua", name == "lua")
+      .toggleClass("show_moonscript", name == "moonscript")
+
+    window.localStorage?.setItem("reference_lang", name)
+
+  body.on "click", ".lang_picker .lang_toggle", (e) ->
+    button = $(e.currentTarget)
+    set_lang button.data "lang"
+    null
+
+  if lang = window.localStorage?.getItem("reference_lang")
+    set_lang lang
+
 build_index()
 add_captions()
+setup_lang_picker()
 
 

@@ -3,6 +3,8 @@ $offset_left: 50px;
 $font_size: 18px;
 $link_color: #DA0057;
 $bg: lighten(#EAFFEA, 2%);
+$nav_bg: mix(black, $bg, 7%);
+
 $text_color: #222;
 
 $main_width: 900px;
@@ -17,11 +19,40 @@ $nav_width: 300px;
     transition: $args;
 }
 
+@mixin unselectable {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+::selection {
+    background: #0CF;
+    color: white;
+}
+
 body {
     background: $bg;
     font-size: $font_size;
     margin: 0;
     font-family: Lato, sans-serif;
+}
+
+.for_lua, .lang_lua {
+    display: none;
+}
+
+body.show_lua {
+    .for_moon, .lang_moon {
+        display: none;
+    }
+
+    .for_lua, .lang_lua {
+        display: block;
+    }
+
+    span.for_lua {
+        display: inline;
+    }
 }
 
 code, pre {
@@ -36,6 +67,44 @@ a {
     }
 }
 
+.lang_picker {
+    margin: 20px 20px 30px 20px;
+    white-space: nowrap;
+
+
+    .label {
+        vertical-align: middle;
+        color: mix($text_color, $nav_bg, 60%);
+    }
+
+    .lang_toggle {
+        @include transition(all 0.2s ease);
+        @include unselectable;
+        font-size: 16px;
+        padding: 5px 10px;
+        margin-left: 10px;
+        font-weight: normal;
+        text-decoration: none;
+        cursor: pointer;
+        vertical-align: middle;
+
+        border: 2px solid mix($text_color, $nav_bg, 20%);
+        border-radius: 4px;
+        color: mix($text_color, $nav_bg, 80%);
+
+
+        &:hover, &.active {
+            background: #667777;
+            border-color: #667777;
+            color: white;
+        }
+
+        &:active {
+            background: darken(#667777, 20%);
+        }
+    }
+}
+
 .columns {
     font-size: 0;
 }
@@ -47,7 +116,6 @@ a {
 }
 
 .nav_column {
-    $nav_bg: mix(black, $bg, 7%);
     width: $nav_width;
     font-size: 16px;
     line-height: 1.4;
