@@ -58,26 +58,32 @@ add_captions = ->
 setup_lang_picker = ->
   body = $(document.body)
   pickers = $(".lang_picker .lang_toggle")
+  override = body.find(".override_lang")
 
-  set_lang = (name) ->
+  set_lang = (name, save=true) ->
     pickers.removeClass("active")
       .filter("[data-lang='#{name}']")
       .addClass("active")
 
-    unless body.find(".override_lang").length
-      body
-        .toggleClass("show_lua", name == "lua")
-        .toggleClass("show_moonscript", name == "moonscript")
+    real_lang = name
+    if override.length
+      real_lang = override.data "lang"
 
-    window.localStorage?.setItem("reference_lang", name)
+    if real_lang
+      body
+        .toggleClass("show_lua", real_lang == "lua")
+        .toggleClass("show_moonscript", real_lang == "moonscript")
+
+    if save
+      window.localStorage?.setItem("reference_lang", name)
 
   body.on "click", ".lang_picker .lang_toggle", (e) ->
     button = $(e.currentTarget)
     set_lang button.data "lang"
     null
 
-  if lang = window.localStorage?.getItem("reference_lang")
-    set_lang lang
+  lang = window.localStorage?.getItem("reference_lang")
+  set_lang lang, false if lang
 
 build_index()
 add_captions()
