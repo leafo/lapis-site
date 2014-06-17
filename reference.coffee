@@ -61,9 +61,10 @@ setup_lang_picker = ->
   override = body.find(".override_lang")
 
   set_lang = (name, save=true) ->
-    pickers.removeClass("active")
-      .filter("[data-lang='#{name}']")
-      .addClass("active")
+    if name
+      pickers.removeClass("active")
+        .filter("[data-lang='#{name}']")
+        .addClass("active")
 
     real_lang = name
     if override.length
@@ -83,7 +84,7 @@ setup_lang_picker = ->
     null
 
   lang = window.localStorage?.getItem("reference_lang")
-  set_lang lang, false if lang
+  set_lang lang, false
 
 build_index()
 add_captions()
