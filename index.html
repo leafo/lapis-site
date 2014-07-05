@@ -352,7 +352,7 @@ app:post("/user/new", capture_errors(function(self)
     name = self.params.username
   })
 
-  return { redirect_to: self:url_for("list_users") }
+  return { redirect_to = self:url_for("list_users") }
 end))
 
 app:get("new_user", "/user/new", function(self)
