@@ -6,6 +6,7 @@ reference/actions.html
 reference/command_line.html
 reference/configuration.html
 reference/database.html
+reference/etlua_templates.html
 reference/exception_handling.html
 reference/getting_started.html
 reference/html_generation.html

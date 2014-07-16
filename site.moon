@@ -3,7 +3,7 @@ require "sitegen"
 tools = require "sitegen.tools"
 
 sitegen.create_site =>
-  @current_version = "1.0.1"
+  @current_version = "1.0.2"
 
   scssphp = tools.system_command "sassc < %s > %s", "css"
   coffeescript = tools.system_command "coffee -c -s < %s > %s", "js"
@@ -20,6 +20,7 @@ sitegen.create_site =>
     "command_line"
     "configuration"
     "database"
+    "etlua_templates"
     "exception_handling"
     "getting_started"
     "html_generation"
