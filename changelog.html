@@ -4,6 +4,16 @@ title: Changelog
 <div class="box only_box changelog">
   <h3>Changelog <span class="decor">❧</span></h3>
 $markdown{[[
+v1.0.3 -- **July 23 2014**
+
+  * Default application structure updated, `lapis.serve` is now executed from Nginx configuration. Default application code is now a regular Lua module that can be required with no side effects
+  * `ngx_postgres` is deprecated, docs removed. [pgmoon documentation added]($root/reference/database.html). (ngx_postgres support will be removed in 1.1.0)
+  * Spec server waits to shut down before starting new one when runnning non-attached (fixes timeout when executing many test files in a row)
+  * Spec server can be run on fresh checkout without running `lapis build` first
+  * Added [new documentation for request lifecycle]($root/reference/actions.html)
+  * Added [`cookie_attributes` extension function]($root/reference/actions.html#request-object-cookies) for configuring new cookies
+  * Fix leaking objects passed to `lapis.serve` (only applies when sending many different applications)
+
 v1.0.2 -- **July 15 2014**
 
   * Add new [reference guide for etlua]($root/reference/etlua_templates.html)
