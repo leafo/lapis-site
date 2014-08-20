@@ -4,6 +4,17 @@ title: Changelog
 <div class="box only_box changelog">
   <h3>Changelog <span class="decor">❧</span></h3>
 $markdown{[[
+v1.0.4 -- **August 19th 2014**
+
+  * Add performance metrics api with `measure_performance` config
+  * Add environment module for pushing and popping config environments
+  * Experiment support for [Leda](https://github.com/sergeyzavadski/leda) as a server
+  * pgmoon automatically connects when executing `lapis.db` queries from command line
+  * Errors in spec server as passed back and rethrown locally with backtrace
+  * Nginx config files can be written in etlua when using `.etlua` extension
+  * Add `--etlua-config` flag to `lapis new` to create blank project with etlua config
+  * The names of cookies are correctly unescaped
+
 v1.0.3 -- **July 23 2014**
 
   * Default application structure updated, `lapis.serve` is now executed from Nginx configuration. Default application code is now a regular Lua module that can be required with no side effects
