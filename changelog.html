@@ -4,6 +4,18 @@ title: Changelog
 <div class="box only_box changelog">
   <h3>Changelog <span class="decor">❧</span></h3>
 $markdown{[[
+v1.0.5 -- **October 10th 2014**
+
+  * Add [refresh method to model instance](reference/database.html#models-refreshing-a-model-instance) for reloading properties
+  * `updated_at` [update can be disabled](reference/database.html#models-timestamps) for model `update` method now
+  * `total_items` method of paginator aware of joins, bails out with `group by`
+  * SQL clause parser (for paginator) is aware of joins and sub queries now, along with other assorted fixes and performance improvements
+  * Add ordered paginator, paginator can be instantiated without where clause
+  * `@POST` is only parsed if `content-type` header is set to be a form
+  * `truncate_tables` is only allowed to run in test environment
+  * `mock_request` supports `expect_json`
+  * `mock_request` correctly stubs `ngx.now`, `ngx.update_time` and `remote_addr`
+
 v1.0.4 -- **August 19th 2014**
 
   * Add [performance metrics API](reference/configuration.html#performance-measurement) with `measure_performance` config
