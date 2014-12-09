@@ -183,7 +183,7 @@ $markdown{[[
 local Model = require("lapis.db.model").Model
 
 -- Create a model, backed by the table `users`
-local Users = Model.extend("users")
+local Users = Model:extend("users")
 
 -- fetch some rows from the table
 local elderly_users = Users:select("where age > ? limit 5", 10)
