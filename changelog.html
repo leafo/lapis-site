@@ -4,6 +4,14 @@ title: Changelog
 <div class="box only_box changelog">
   <h3>Changelog <span class="decor">❧</span></h3>
 $markdown{[[
+
+v1.0.6 -- **October 27th 2014**
+
+  * Fix `http.request` when URL does not contain path
+  * `json_params` will read body before trying to parse it
+  * `util.autoload` can take multiple search prefixes
+  * `util.slugify` improved to avoid generating multiple `-`, will also conver `_` to `-` now
+
 v1.0.5 -- **October 10th 2014**
 
   * Add [refresh method to model instance](reference/database.html#models-refreshing-a-model-instance) for reloading properties
