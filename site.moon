@@ -20,6 +20,7 @@ sitegen.create_site =>
     "command_line"
     "configuration"
     "database"
+    "models"
     "etlua_templates"
     "exception_handling"
     "getting_started"
