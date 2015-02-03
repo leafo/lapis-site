@@ -5,6 +5,32 @@ title: Changelog
   <h3>Changelog <span class="decor">❧</span></h3>
 $markdown{[[
 
+v1.1.0 -- **February 3rd 2015**
+
+#### Models
+
+ * Added [support for relations to models](reference/models.html#describing-relationships)
+ * Added [`enum` function for models](reference/models.html#enum)
+ * Add `returning` option to `Model.create` to fetch initial values from database during create
+ * `db.raw` values passed to `Model.create` are loaded from database after create
+ * `db.raw` values passed to `Model.update` are loaded from database after update
+ * Fix bug where constraints were not working correctly for `Model.update`
+ * Many minor fixes to ordered paginator
+ * Migrations table automatically created on running migrations if it doesn't exist
+ * Migrations are now run outside of Nginx
+
+### Widgets
+
+ * `content_for` data in widgets is prefixed to avoid conflict with user defined variables
+ * Boolean values for attributes in HTML builder will render value-less attribute
+ * Multiple `content_for` of same name will now append instead of overwrite
+
+#### Misc
+
+ * `Flow` can now expose instance variable assignments to request with `expose_assigns`
+ * Added new `lapis generate` command, add basic generators for model and spec
+ * `request` method in `lapis.spec.server` will now send merged GET parameters passed with those in URL
+
 v1.0.6 -- **October 27th 2014**
 
   * Fix `http.request` when URL does not contain path
