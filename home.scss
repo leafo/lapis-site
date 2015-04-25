@@ -116,12 +116,13 @@ a {
         text-decoration: none;
         cursor: pointer;
 
-        border: 2px solid #ddd;
+        border: 2px solid $border_color;
         border-radius: 4px;
 
         &:hover {
             background: #667777;
-            border: 2px solid lighten(#667777, 20%);
+            border-color: #667777;
+            color: white;
         }
 
         &:active {
@@ -406,7 +407,7 @@ code, pre {
     }
 
     .box {
-        width: $site_width;
+        max-width: $site_width;
         margin: 60px auto;
     }
 
@@ -608,10 +609,24 @@ pre {
         display: block;
         text-align: center;
 
+        .column_inner {
+            margin-left: 0;
+            margin-right: 0;
+            display: block;
+            padding: 0 40px;
+            
+            pre {
+                width: auto;
+                max-width: $site_width;
+                margin: 0 auto;
+            }
+        }
+
         &.lua_column {
             display: none;
         }
     }
+
 
     body.show_lua & {
         .lang_header {
