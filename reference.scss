@@ -131,7 +131,7 @@ a {
         font-size: 24px;
         text-align: center;
         letter-spacing: 0.5px;
-        background: $green;
+        background: $mid_green;
         background: linear-gradient(45deg, $green, adjust-hue($green, 40deg));
 
         a {
@@ -409,7 +409,6 @@ pre {
     line-height: 22px;
     padding: 12px 10px;
     border-radius: 2px;
-    border: 1px solid #222;
 }
 
 .highlight {

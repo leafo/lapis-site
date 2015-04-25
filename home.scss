@@ -1,12 +1,17 @@
 
-$bg: lighten(#EAFFEA, 2%);
-$bg2: #BAF3BA;
+$bg: lighten(#D0EAD9, 2%);
 
 $font_size: 18px;
-$link_color: #DA0057;
 $border_color: #b6d3b6;
 
 $site_width: 800px;
+
+$green: #70BD70;
+$mid_green: #70BD86;
+
+$link_color: mix(#DA0057, $green, 50%);
+
+$text_color: #4C4E4C;
 
 @import url(http://fonts.googleapis.com/css?family=Lato:400,700|Inconsolata);
 
@@ -62,24 +67,36 @@ $site_width: 800px;
     transition: $args;
 }
 
+@mixin border_box {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
 body {
-    background: $bg;
-    color: #222;
+    background: white;
+    color: $text_color;
     font-size: $font_size;
     margin: 0;
     font-family: Lato, sans-serif;
+}
+
+a {
+    color: $link_color;
+    &:hover {
+        opacity: 0.8;
+    }
 }
 
 .lang_headers {
     @include transition(box-shadow 0.5s ease);
     border-top: 2px solid $border_color;
     border-bottom: 2px solid $border_color;
-    background: white;
+    background: mix($bg, white, 60%);
     margin-bottom: 30px;
     text-align: center;
 
     &.is_stuck {
-        box-shadow: 0 3px 0 rgba(58, 170, 58, 0.21);
+        box-shadow: 0 3px 0 rgba(168, 171, 168, 0.21);
         z-index: 1;
     }
 
@@ -99,14 +116,12 @@ body {
         text-decoration: none;
         cursor: pointer;
 
-        color: #888;
         border: 2px solid #ddd;
         border-radius: 4px;
 
         &:hover {
             background: #667777;
             border: 2px solid lighten(#667777, 20%);
-            color: white;
         }
 
         &:active {
@@ -122,7 +137,6 @@ body {
         vertical-align: top;
         padding: 10px 0;
         margin: 0;
-        color: #667066;
 
         &:first-child {
             border-right: 2px solid $border_color;
@@ -134,33 +148,71 @@ code, pre {
     font-family: Inconsolata, monospace;
 }
 
+.sub_header {
+    background: $bg;
+    text-align: center;
+    padding: 10px 20px;
+}
+
 .header {
-    background: url("img/arches.png") 50% 0;
+    background: $mid_green;
+    background: linear-gradient(45deg, $green, adjust-hue($green, 40deg));
+    padding: 40px 0 45px 0;
 
     .inner {
-        padding-top: 10px;
         height: 234px;
         width: $site_width;
         margin: 0 auto;
         position: relative;
     }
 
+    .button {
+        @include unselectable;
+        @include border_box;
+        display: inline-block;
+        margin: 0 6px;
+
+        color: white;
+        text-decoration: none;
+        color: white;
+        border: 2px solid white;
+        border-radius: 4px;
+        height: 48px;
+        line-height: 44px;
+        padding: 0 15px;
+        vertical-align: top;
+
+        img {
+            height: 24px;
+            vertical-align: middle;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        &:hover {
+            background: rgba(white, 0.1);
+        }
+
+        &:active {
+            background: rgba(black, 0.1);
+        }
+
+    }
+
     .version_flag {
         position: absolute;
-        background: rgba(255, 192, 203, 0.56);
-        color: darken(pink, 20%);
+        background: rgba(155, 244, 150, 0.7);
+        font-weight: bold;
+        font-size: 16px;
+        color: white;
         padding: 10px;
         border-radius: 4px;
         right: 90px;
         top: 38px;
 
         a {
-            color: darken(pink, 20%);
+            color: inherit;
             text-decoration: none;
-
-            &:hover {
-                color: darken(pink, 16%);
-            }
         }
     }
 
@@ -176,7 +228,7 @@ code, pre {
 
         background: #EDECEB;
 
-        box-shadow: inset 0 0 0 1px #6D6A68, inset 2px 0 0 white, inset 0 0 0 2px #D2D0CE, 0 0 10px rgba(0,0,0, 0.5);
+        box-shadow: inset 0 0 0 1px #6D6A68, inset 2px 0 0 white, inset 0 0 0 2px #D2D0CE;
         border-radius: 4px 4px 0 0;
 
         .window_title {
@@ -237,13 +289,11 @@ code, pre {
         font-size: 120px;
         position: relative;
         left: -7px;
+        color: rgba(white, 0.9);
 
         a {
-            color: #222;
+            color: inherit;
             text-decoration: none;
-            &:hover {
-                color: lighten(#222, 5%);
-            }
         }
     }
 
@@ -251,12 +301,12 @@ code, pre {
         margin: 0px 0 4px 0;
         font-weight: normal;
         font-size: 18px;
-        color: #666;
+        color: rgba(white, 0.7);
 
         a {
             text-decoration: none;
             font-style: italic;
-            color: #222;
+            color: white;
         }
     }
 
@@ -280,52 +330,50 @@ code, pre {
 }
 
 .button {
-    @include unselectable;
-    display: inline-block;
-    font-weight: bold;
-    $btn_color: #C9518F;
+    // @include unselectable;
+    // display: inline-block;
+    // font-weight: bold;
+    // $btn_color: #C9518F;
 
-    padding: 10px;
-    text-decoration: none;
-    color: white !important;
-    background: $btn_color;
-    @include autograd(lighten($btn_color, 5%), $flip: true);
-    border: 1px solid darken($btn_color, 10%);
-    box-shadow: inset 0 1px 0 lighten($btn_color, 10%), 0 1px 0 darken($btn_color, 8%), 0 5px 0 darken($btn_color, 15%), 0 5px 5px rgba(0,0,0, 0.8);
+    // padding: 10px;
+    // text-decoration: none;
+    // color: white !important;
+    // background: $btn_color;
+    // @include autograd(lighten($btn_color, 5%), $flip: true);
+    // border: 1px solid darken($btn_color, 10%);
+    // box-shadow: inset 0 1px 0 lighten($btn_color, 10%), 0 1px 0 darken($btn_color, 8%), 0 5px 0 darken($btn_color, 15%), 0 5px 5px rgba(0,0,0, 0.8);
 
-    border-radius: 2px;
-    text-shadow: 1px 1px 1px darken($btn_color, 20%);
-    margin: 0 6px 20px 6px;
+    // border-radius: 2px;
+    // text-shadow: 1px 1px 1px darken($btn_color, 20%);
+    // margin: 0 6px 20px 6px;
 
-    &:hover {
-        @include autograd(lighten($btn_color, 7%), $flip: true);
-    }
+    // &:hover {
+    //     @include autograd(lighten($btn_color, 7%), $flip: true);
+    // }
 
-    &:active {
-        position: relative;
-        top: 3px;
-        @include autograd(lighten($btn_color, 2%), $flip: true);
-        box-shadow: inset 0 1px 0 lighten($btn_color, 10%), 0 1px 0 darken($btn_color, 8%), 0 2px 0 darken($btn_color, 15%), 0 2px 5px rgba(0,0,0, 0.8);
-    }
+    // &:active {
+    //     position: relative;
+    //     top: 3px;
+    //     @include autograd(lighten($btn_color, 2%), $flip: true);
+    //     box-shadow: inset 0 1px 0 lighten($btn_color, 10%), 0 1px 0 darken($btn_color, 8%), 0 2px 0 darken($btn_color, 15%), 0 2px 5px rgba(0,0,0, 0.8);
+    // }
 }
 
 
 .installer {
     $installer_height: 48px;
+
     vertical-align: top;
     display: inline-block;
     text-align: left;
     margin: 0 6px;
 
-    background: #333;
+    // background: rgba(#333, 0.8);
+    background: #3C3C3C;
     color: white;
     font-size: 0;
 
-    // box-shadow: 0px 1px 3px rgba(0,0,0, 0.7), inset 0px 0px 0px 1px rgba(255,255,255,0.3);
-    box-shadow: inset 0px 0px 0px 1px rgba(255,255,255,0.3);
     border-radius: 2px;
-    border: 1px solid #222;
-
 
     .install_label, .install_promp {
         font-size: $font_size;
@@ -337,9 +385,9 @@ code, pre {
     }
 
     .install_label {
-        box-shadow: inset 0 0 0 1px lighten(#677, 15%);
-        background: #677;
+        background: lighten(mix($mid_green, #3C3C3C, 20%), 4%);
         text-shadow: 1px 1px 2px darken(#677, 30%);
+        border-radius: 2px 0 0 2px;
     }
 
     .install_promp {
@@ -352,40 +400,14 @@ code, pre {
 }
 
 .content {
-    border-top: 2px solid $border_color;
-
-    a {
-        color: $link_color;
-        &:hover {
-            opacity: 0.8;
-        }
-    }
-
-    h3 {
-        color: #667066;
-        margin: 0 0 22px 0;
-        font-size: 36px;
-
-        .decor {
-            color: #ADB8AD;
-            font-weight: normal;
-            display: none;
-        }
-    }
-
     p, ul {
         margin: 0 0 27px 0;
         line-height: 27px;
     }
 
-
     .box {
         width: $site_width;
-        margin: 30px auto;
-        background: white;
-        border: 2px solid $border_color;
-        border-radius: 2px;
-        padding: 30px 40px 0 40px;
+        margin: 60px auto;
     }
 
     .video_embed {
@@ -424,7 +446,6 @@ code, pre {
     color: lighten(#677, 20%);
     font-size: 18px;
     line-height: 52px;
-    border-top: 2px solid desaturate(darken(#667777, 10%), 10%);
 
     .right {
         font-size: 14px;
@@ -452,60 +473,62 @@ code, pre {
 
 
 pre {
-    background: #333;
+    background: #3C3C3C;
     color: white;
     font-size: 18px;
-    line-height: 1.2;
+    line-height: 22px;
     padding: 25px;
     margin: 0;
     border-radius: 2px;
 }
 
 .highlight {
-    // builtins
+    /* builtins */
     .nb {
-        color: #FFA67C;
+        color: #F69385; // new
     }
 
-    // strings
-    .s, .s1, .s2, .se, .nt {
-        color: #ffe898;
+    /* strings */
+    .s, .s1, .s2, .se {
+        color: #F1BF8E; // new
     }
 
-    // proper names
+    /* proper names, self */
     .nc, .vc, .bp {
-        color: #98d9ff;
+        color: #99CBCA; // new
     }
 
-    // true, false, nil
+    /* true, false, nil */
     .kc {
-        color: #acfff0;
+        color: #B3EFE5; // new
     }
 
-    // function lit, braces, parens
+    /* function lit, braces, parens  */
     .nf, .kt {
-        color: #9fff98;
+        color: #B0D89C; // new
+    }
+
+    /* operators */
+    .o, .si {
+        color: #F277A1; // new
     }
 
     .nv {
-        color: #ff9898;
+        color: #F277A1; // new
     }
 
-    // keywords
-    .k, .kd, .na {
-        color: #cb98ff;
+    /* keywords */
+    .k, .kd {
+        color: #BB84B4; // new
     }
 
     .c1, .c2 {
         color: #929292;
     }
 
-    .m, .mi, .mf, .mh, .o {
-        color: #9495ff;
-    }
-
-    .si {
-        color: #ECA558;
+    // numbers
+    .m, .mi, .mf, .mh {
+        color: #9D8FF2; // new
     }
 }
 

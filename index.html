@@ -1,9 +1,5 @@
 <div class="box">
-  <div class="new_banner">
-    <strong>February 3rd, 2015:</strong> Lapis v1.1.0 is released, read more on the <a href="$root/changelog.html">changelog</a>
-  </div>
-
-  <h3>What is it? <span class="decor">❧</span></h3>
+  <h1>What is it?</h1>
 $markdown{[[
 Lapis is a framework for building web applications using [MoonScript](http://moonscript.org) or [Lua](http://lua.org) that runs inside of a customized version of [Nginx](http://nginx.org) called [OpenResty](http://openresty.org).
 ]]}
@@ -59,7 +55,7 @@ class extends lapis.Application
 <iframe style="display: none" width="800" height="450" class="video_embed" src="//www.youtube.com/embed/Eo67iTY1Yf8" frameborder="0" allowfullscreen></iframe>
 
 <div class="box">
-  <h3>How does it work? <span class="decor">❧</span></h3>
+  <h1>How does it work?</h1>
 $markdown{[[
 Lua is run directly inside of the Nginx worker, giving you the smallest barrier
 between the webserver and your code. OpenResty executes your Lua/MoonScript
@@ -82,7 +78,7 @@ concerned about blocking your application and killing your throughput.
 
 
 <div class="box">
-  <h3>What does it come with? <span class="decor">❧</span></h3>
+  <h1>What does it come with?</h1>
 $markdown{[[
 Lapis includes URL routing, [HTML Templating][1], [CSRF Protection][2] and [Session][3]
 support, [PostgreSQL backed models][4], [schema generation][5] and
@@ -166,6 +162,7 @@ class extends lapis.Application
 
 <div class="box">
 $markdown{[[
+## Models
 Get a powerful abstraction layer over your database tables just by
 sub-classing `Model`:
 ]]}
@@ -248,6 +245,7 @@ user\delete!
 
 <div class="box">
 $markdown{[[
+## Templates
 Write your templates either in [etlua](https://github.com/leafo/etlua) or in
 pure Lua/MoonScript.
 
@@ -307,6 +305,7 @@ class Index extends Widget
 
 <div class="box">
 $markdown{[[
+## Example
 Using all the provided tools we can quickly and logically construct high
 performance and low memory web applications. Here's a more complicated example
 complete with forms, CSRF protection, and various database queries.
@@ -419,7 +418,7 @@ class extends lapis.Application
 </div>
 
 <div class="box">
-  <h3>Where can I learn more? <span class="decor">❧</span></h3>
+  <h1>Where can I learn more?</h1>
 $markdown{[[
 For a guide and tutorial to Lapis, consult the [$reference manual]($root/reference.html).
 
@@ -434,7 +433,7 @@ GitHub](https://github.com/leafo/moonrocks-site).
 </div>
 
 <div class="box">
-  <h3>Anything else I should know? <span class="decor">❧</span></h3>
+  <h1>Anything else I should know?</h1>
 $markdown{[[
 You can deploy a new Lapis application in a few minutes.
 
@@ -455,7 +454,7 @@ Here are some libraries you might find useful:
 
 
 <div class="box">
-  <h3>About <span class="decor">❧</span></h3>
+  <h1>About</h1>
 $markdown{[[
 Lapis would not be possible without the following projects:
 
