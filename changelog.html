@@ -5,6 +5,30 @@ title: Changelog
   <h3>Changelog <span class="decor">❧</span></h3>
 $markdown{[[
 
+v1.1.1 -- **April 25th 2015**
+
+#### Models
+
+* Add `singular_name` method to model classes, used when determining field name in relations and `inclue_in
+* Add `clause` parameter to `find_all`
+* `delete` method returns `true` if a row is actually removed, `false` otherwise
+* Relation getters will no longer error if foreign key has `nil` value
+* Fixed bug where ordered paginator with multiple keys could skip records if non-specific keys shared values
+
+#### `lapis.cache`
+
+* `cached` will only cache `GET` requests
+* `cached` updated to not interfere with `request` method
+
+#### Misc
+
+* `url_for` now takes a third argument, a table of query parameters
+* A flow can be passed to a flow in place of the `req` object.
+* New config field, `max_request_args`, controls OpenResty's maximum request argument truncation from `get_post_args` and `get_uri_args`.
+* Generated config includes pid directive to ensure compile time flags don't interfere
+* New `lapis.spec` module with `use_test_env` and `use_test_server` for busted
+* Fixed a bug where `respond_to` was returning multiple arguments and interfering with Lua match API
+
 v1.1.0 -- **February 3rd 2015**
 
 #### Models
