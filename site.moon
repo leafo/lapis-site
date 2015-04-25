@@ -2,6 +2,29 @@ require "sitegen"
 
 tools = require "sitegen.tools"
 
+PygmentsPlugin = require "sitegen.plugins.pygments"
+IndexerPlugin = require "sitegen.plugins.indexer"
+
+PygmentsPlugin.custom_highlighters.lua = (code_text, page) =>
+  _, err = loadstring(code_text)
+
+  if err
+    -- try again, make valid if it's just an expression
+    _, err2 = loadstring("_ = " .. code_text)
+    if err2
+      error "[#{page.source}] failed to compile: #{err}: #{code_text}"
+
+  @pre_tag @highlight "lua", code_text
+
+PygmentsPlugin.custom_highlighters.moon = (code_text, page) =>
+  parse = require "moonscript.parse"
+  _, err =  parse.string code_text
+
+  if err
+    error "[#{page.source}] failed to compile: #{err}: #{code_text}"
+
+  @pre_tag @highlight "moon", code_text
+
 sitegen.create_site =>
   @current_version = "1.1.1"
 
