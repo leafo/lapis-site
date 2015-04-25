@@ -14,7 +14,7 @@ PygmentsPlugin.custom_highlighters.lua = (code_text, page) =>
     if err2
       error "[#{page.source}] failed to compile: #{err}: #{code_text}"
 
-  @pre_tag @highlight "lua", code_text
+  @pre_tag @highlight("lua", code_text), "lua"
 
 PygmentsPlugin.custom_highlighters.moon = (code_text, page) =>
   parse = require "moonscript.parse"
@@ -23,7 +23,7 @@ PygmentsPlugin.custom_highlighters.moon = (code_text, page) =>
   if err
     error "[#{page.source}] failed to compile: #{err}: #{code_text}"
 
-  @pre_tag @highlight "moon", code_text
+  @pre_tag @highlight("moon", code_text), "moon"
 
 sitegen.create_site =>
   @current_version = "1.1.1"
