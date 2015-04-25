@@ -1,13 +1,16 @@
 
 $offset_left: 50px;
 $font_size: 18px;
-$link_color: #DA0057;
 $bg: lighten(#EAFFEA, 2%);
 $nav_bg: mix(white, $bg, 50%);
 $border_color: #B6D3B6;
-// $border_color: mix(black, $nav_bg, 10%);
 
-$text_color: #222;
+$green: #70BD70;
+$mid_green: #70BD86;
+
+$link_color: mix(#DA0057, $green, 50%);
+
+$text_color: mix($bg, #222, 20%);
 
 $main_width: 900px;
 $nav_width: 300px;
@@ -38,8 +41,9 @@ $nav_width: 300px;
 }
 
 body {
-    background: $bg;
+    background: white;
     font-size: $font_size;
+    color: $text_color;
     margin: 0;
     font-family: Lato, sans-serif;
 }
@@ -112,36 +116,28 @@ a {
     }
 }
 
-.columns {
-    font-size: 0;
-}
-
-.text_column, .nav_column {
-    display: inline-block;
-    font-size: $font_size;
-    vertical-align: top;
-}
-
 .nav_column {
     width: $nav_width;
     font-size: 16px;
     line-height: 1.4;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
 
     h1 {
         padding: 10px 20px;
         margin: 0 0 20px 0;
         font-size: 24px;
-        border-bottom: 2px solid $border_color;
-        background: url("img/arches.png") 50% 0;
         text-align: center;
+        letter-spacing: 0.5px;
+        background: $green;
+        background: linear-gradient(45deg, $green, adjust-hue($green, 40deg));
 
         a {
             padding: 0;
             text-decoration: none;
-            color: mix($text_color, $nav_bg, 75%);
-            &:hover {
-                color: mix($text_color, $nav_bg, 65%);
-            }
+            color: white;
         }
     }
 
@@ -149,7 +145,6 @@ a {
         font-size: 16px;
         font-weight: bold;
         text-transform: uppercase;
-        color: mix($text_color, $bg, 80%);
         border-bottom: 1px solid mix($text_color, $nav_bg, 20%);
         padding-bottom: 10px;
     }
@@ -161,13 +156,13 @@ a {
         line-height: 20px;
         top: 14px;
         right: 8px;
-        color: mix($text_color, $bg, 80%);
+        color: white;
     }
 
-    .sticky_inner {
+    .scrolling_inner {
         @include border_box;
         width: $nav_width;
-        position: fixed;
+        position: absolute;
         top: 0;
         bottom: 0;
         overflow-y: auto;
@@ -192,10 +187,7 @@ a {
         text-decoration: none;
 
         &:hover {
-            background: white;
-            box-shadow: 0 0 0 1px silver;
-            color: $text_color;
-
+            background: rgba($mid_green, 0.3);
             @include transition(all 0.1s ease-in-out);
         }
 
@@ -231,14 +223,17 @@ a {
     }
 }
 
+.nav_offset {
+    margin-left: $nav_width;
+}
+
 .text_column {
-    width: $main_width;
-    color: $text_color;
+    max-width: $main_width;
     padding-bottom: 60px;
+    padding-right: 20px;
 
     h1 {
         margin-left: $offset_left;
-        color: mix($text_color, $bg, 75%);
     }
 
     h2, h3, h4 {
@@ -247,7 +242,6 @@ a {
         padding-left: 38px;
         margin-left: 10px;
         position: relative;
-        color: mix($text_color, $bg, 80%);
 
         a {
             color: inherit;
@@ -283,6 +277,7 @@ a {
 
     h1 + h2 {
         margin-top: 40px;
+
         &:before {
             content: none;
         }
@@ -300,13 +295,11 @@ a {
 
         code {
             font-size: 16px;
-
-            background: white;
-            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+            background: rgba(0,0,0, 0.1);
 
             padding: 2px 4px;
-            margin: 0 2px;
-            border-radius: 4px;
+            margin: 0 4px;
+            border-radius: 2px;
         }
     }
 
@@ -410,75 +403,92 @@ a {
 }
 
 pre {
-    background: #333;
+    background: #3C3C3C;
     color: white;
     font-size: 18px;
-    line-height: 20px;
-    padding: 10px;
-    box-shadow: 0px 1px 3px rgba(0,0,0, 0.7), inset 0px 0px 0px 1px rgba(255,255,255,0.3);
+    line-height: 22px;
+    padding: 12px 10px;
     border-radius: 2px;
     border: 1px solid #222;
 }
 
 .highlight {
-    // builtins
+    /* builtins */
     .nb {
-        color: #FFA67C;
+        color: #F69385; // new
     }
 
-    // strings
-    .s, .s1, .s2, .se, .nt {
-        color: #ffe898;
+    /* strings */
+    .s, .s1, .s2, .se {
+        color: #F1BF8E; // new
     }
 
-    // proper names
+    /* proper names, self */
     .nc, .vc, .bp {
-        color: #98d9ff;
+        color: #99CBCA; // new
     }
 
-    // true, false, nil
+    /* true, false, nil */
     .kc {
-        color: #acfff0;
+        color: #B3EFE5; // new
     }
 
-    // function lit, braces, parens
+    /* function lit, braces, parens  */
     .nf, .kt {
-        color: #9fff98;
+        color: #B0D89C; // new
+    }
+
+    /* operators */
+    .o, .si {
+        color: #F277A1; // new
     }
 
     .nv {
-        color: #ff9898;
+        color: #F277A1; // new
     }
 
-    // keywords
-    .k, .kd, .na {
-        color: #cb98ff;
+    /* keywords */
+    .k, .kd {
+        color: #BB84B4; // new
     }
 
-    .c1, .c2, .c {
+    .c1, .c2 {
         color: #929292;
     }
 
-    .m, .mi, .mf, .mh, .o {
-        color: #9495ff;
+    // numbers
+    .m, .mi, .mf, .mh {
+        color: #9D8FF2; // new
     }
 
-    .si {
-        color: #ECA558;
-    }
 }
 
 @media all and (max-width: 1200px) {
     $margin: 40px;
 
+    .nav_offset {
+        margin-left: $margin;
+    }
+
     .nav_column {
         width: $margin;
+        @include transition(left 0.2s ease);
+        left: ($margin - $nav_width);
 
-        .sticky_inner {
+        &:hover {
+            left: 0;
+            .scrolling_inner {
+                overflow-y: auto;
+
+                .indicator {
+                    display: none;
+                }
+            }
+        }
+
+        .scrolling_inner {
             overflow-y: hidden;
             z-index: 2;
-            @include transition(left 0.2s ease);
-            left: ($margin - $nav_width);
 
             .indicator {
                 display: block;
