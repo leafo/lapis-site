@@ -89,14 +89,12 @@ a {
 
 .lang_headers {
     @include transition(box-shadow 0.5s ease);
-    border-top: 2px solid $border_color;
-    border-bottom: 2px solid $border_color;
-    background: mix($bg, white, 60%);
+    background: $bg;
     margin-bottom: 30px;
     text-align: center;
 
     &.is_stuck {
-        box-shadow: 0 3px 0 rgba(168, 171, 168, 0.21);
+        box-shadow: 0 2px 0 $border_color;
         z-index: 1;
     }
 
@@ -116,7 +114,7 @@ a {
         text-decoration: none;
         cursor: pointer;
 
-        border: 2px solid $border_color;
+        border: 1px solid $border_color;
         border-radius: 4px;
 
         &:hover {
@@ -133,7 +131,7 @@ a {
     .lang_header {
         display: inline-block;
         text-align: center;
-        font-size: 30px;
+        font-size: 24px;
         width: 650px;
         vertical-align: top;
         padding: 10px 0;
