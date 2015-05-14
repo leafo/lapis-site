@@ -5,6 +5,35 @@ title: Changelog
   <h1>Changelog</h1>
 $markdown{[[
 
+v1.2.0 -- **May 14th 2015**
+
+**Breaking changes**
+
+There are a few changes that might affect the backwards compatibility of your
+application:
+
+* The `default` Postgres backend, which utilizes `ngx_postgres` has been entirely removed. It's recommended to upgrade to `pgmoon` if you haven't already.
+* The `has_many` relation now defines two methods, the `get_relation` method no longer returns a pager but all the associated rows. A new method, `get_relation_paginated` will return the pager
+
+#### Models
+
+* `include_in` can now preload many assocaited objects when `many` option is set to true
+* A flipped `include_in` can now specify the `local_key` to use a different key than `id`
+* Add `polymorphic_belongs_to` relation
+* `has_many` now defines two methods, one for pagination and one for fetching all the rows
+* `has_many` relation now supports the `order` option
+
+#### Database
+
+* Add support for MySQL (documentation forthcoming)
+* Add `db.list` for automatically building SQL list syntax for `where x in ()` queries
+
+#### Misc
+
+* Enhance `singularize` function, can singularize words like *Categories* to *Category*
+* Lapis and spec server can now be launched in different directories from the current
+* Fixed a bug when setting config values that would cause function blocks to override previous function blocks instead of merging
+
 v1.1.1 -- **April 25th 2015**
 
 #### Models
