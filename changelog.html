@@ -9,11 +9,10 @@ v1.2.0 -- **May 14th 2015**
 
 **Breaking changes**
 
-There are a few changes that might affect the backwards compatibility of your
-application:
+There are a few changes that affect backwards compatibility:
 
-* The `default` Postgres backend, which utilizes `ngx_postgres` has been entirely removed. It's recommended to upgrade to `pgmoon` if you haven't already.
-* The `has_many` relation now defines two methods, the `get_relation` method no longer returns a pager but all the associated rows. A new method, `get_relation_paginated` will return the pager
+* The `default` Postgres backend, which utilizes `ngx_postgres`, has been entirely removed. It's recommended to upgrade to `pgmoon` if you are an early Lapis user who hasn't upgraded
+* The `has_many` relation now defines two methods: the `get_relation` method no longer returns a pager but all the associated rows. A new method, `get_relation_paginated` will return a pager
 
 #### Models
 
@@ -31,7 +30,7 @@ application:
 #### Misc
 
 * Enhance `singularize` function, can singularize words like *Categories* to *Category*
-* Lapis and spec server can now be launched in different directories from the current
+* Main Lapis server and spec server can now be launched in different directories from the current
 * Fixed a bug when setting config values that would cause function blocks to override previous function blocks instead of merging
 
 v1.1.1 -- **April 25th 2015**
