@@ -414,7 +414,7 @@ pre {
 
 .highlight {
     /* builtins */
-    .nb {
+    .nb, .nt {
         color: #F69385; // new
     }
 
@@ -434,7 +434,7 @@ pre {
     }
 
     /* function lit, braces, parens  */
-    .nf, .kt {
+    .nf, .kt, .na {
         color: #B0D89C; // new
     }
 
@@ -443,7 +443,7 @@ pre {
         color: #F277A1; // new
     }
 
-    .nv {
+    .nv, .ow {
         color: #F277A1; // new
     }
 
@@ -452,7 +452,7 @@ pre {
         color: #BB84B4; // new
     }
 
-    .c1, .c2 {
+    .c1, .c2, .c {
         color: #929292;
     }
 
