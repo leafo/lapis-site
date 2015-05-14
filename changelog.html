@@ -11,8 +11,13 @@ v1.2.0 -- **May 14th 2015**
 
 There are a few changes that affect backwards compatibility:
 
-* The `default` Postgres backend, which utilizes `ngx_postgres`, has been entirely removed. It's recommended to upgrade to `pgmoon` if you are an early Lapis user who hasn't upgraded
+* The `default` Postgres backend, which utilizes `ngx_postgres`, has been entirely removed. Early users of Lapis are recommended to upgrade to `pgmoon`
 * The `has_many` relation now defines two methods: the `get_relation` method no longer returns a pager but all the associated rows. A new method, `get_relation_paginated` will return a pager
+
+#### Database
+
+* Add support for MySQL (Thanks [starius](https://github.com/leafo/lapis/pull/250))
+* Add `db.list` for automatically building SQL list syntax for `where x in ()` queries
 
 #### Models
 
@@ -21,11 +26,7 @@ There are a few changes that affect backwards compatibility:
 * Add `polymorphic_belongs_to` relation
 * `has_many` now defines two methods, one for pagination and one for fetching all the rows
 * `has_many` relation now supports the `order` option
-
-#### Database
-
-* Add support for MySQL (documentation forthcoming)
-* Add `db.list` for automatically building SQL list syntax for `where x in ()` queries
+* Fix all syntax errors in reference manual
 
 #### Misc
 
