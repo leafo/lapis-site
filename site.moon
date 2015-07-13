@@ -3,7 +3,6 @@ require "sitegen"
 tools = require "sitegen.tools"
 
 PygmentsPlugin = require "sitegen.plugins.pygments"
-IndexerPlugin = require "sitegen.plugins.indexer"
 
 PygmentsPlugin.custom_highlighters.lua = (code_text, page) =>
   _, err = loadstring(code_text)
