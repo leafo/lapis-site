@@ -5,6 +5,39 @@ title: Changelog
   <h1>Changelog</h1>
 $markdown{[[
 
+v1.3.0 -- **July 18th 2015**
+
+**Additions**
+
+* pgmoon updated to 1.2.0
+* Add support for Postgres array types
+ * All schema builders have new `array` property
+ * Add `db.postgres.array` and `db.postgres.is_array` for constructing and testing arrays
+ * Array types automatically deserialized and serialized
+* update spec generator to support both model and server style specs
+* custom generators can be created by creating modules in `generators.`
+* `create_table` now fails if table already exists (Postgres, MySQL)
+* `create_index` now fails by default if index exists (Postgres, MySQL)
+* `create_index` can take `index_name` option to set specific index name (Postgres, MySQL)
+* `create_index` can take `if_not_exists` option to skip if already exixists (Postgres)
+* `belongs_to` relations now support a `key` option
+* `Model\select` now can take a `load` option to control what model the results are loaded with. Can take false to not load any model
+* Add `has_items` method to paginator
+* Add `enum` schema type for alias to `small int` (Postgres)
+* Polymorphic relation preload can take `fields` option
+
+**Changes**
+
+* Any empty table passed to URL params in `url_for` no longer leaves a `?` at
+the end of the URL
+
+**Bugs**
+
+* Fix bug where `before_filter` would not work in Lua API
+* Fix bug where HTTP 1.0 requests without host header would fail
+* Fix bug where sending two content type headers would cause error
+* Fix a bug where Model table name caching could affect subclasses
+
 v1.2.0 -- **May 14th 2015**
 
 **Breaking changes**
