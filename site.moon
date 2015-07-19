@@ -24,7 +24,7 @@ PygmentsPlugin.custom_highlighters.moon = (code_text, page) =>
 
   @pre_tag @highlight("moon", code_text), "moon"
 
-sitegen.create_site =>
+sitegen.create =>
   @current_version = "1.3.0"
 
   scssphp = tools.system_command "sassc < %s > %s", "css"
