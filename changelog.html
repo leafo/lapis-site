@@ -5,6 +5,22 @@ title: Changelog
   <h1>Changelog</h1>
 $markdown{[[
 
+v1.3.0 -- **October 23rd 2015**
+
+** Additions **
+
+* Add `Model\scoped_model` for easily creating plugins/extensions that have their own models
+* Add extension point to add custom `lapis` command line commands
+* `build_url` can take empty string scheme to build protocol relative URL
+* Add `util.date_diff` function
+
+**Changes**
+
+* Improve error messages for models with table name
+* `ngx`'s query string escape function will be used if available
+* Invalid enum access throw better error messages
+* Error page will wrap exception error to avoid scrollbar
+
 v1.3.0 -- **July 18th 2015**
 
 **Additions**
