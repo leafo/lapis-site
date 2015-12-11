@@ -1,0 +1,25 @@
+{
+  "name": "lapis-site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leafo/lapis-site.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leafo/lapis-site/issues"
+  },
+  "homepage": "https://github.com/leafo/lapis-site#readme",
+  "dependencies": {
+    "jquery": "^2.1.4",
+    "lunr": "^0.6.0",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3"
+  }
+}

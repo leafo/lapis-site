@@ -66,3 +66,5 @@ sitegen.create =>
   add "index.html", template: "home"
   add "changelog.html", template: "home"
 
+  add "reference.json.moon", template: false, target_fname: "reference.json"
+
