@@ -1,8 +1,16 @@
 
 import to_json from require "lapis.util"
 
+
+should_index = (source) ->
+  return true if source\match "/docs/"
+  return true if source\match "^reference"
+  return true if source\match "^changelog"
+  false
+
+
 ref_pages = for page in *site\query_pages {}
-  continue unless page.source\match "/docs/"
+  continue unless should_index page.source
   page
 
 out = {
