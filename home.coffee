@@ -18,7 +18,9 @@ R.component "DocumentationSearch", {
       selected_result: 0
     }
 
-  componentDidUpdate: ->
+  componentDidUpdate: (prev) ->
+    if !prev.search && @props.search && @state.search_query
+      @do_search @state.search_query
 
   do_search: (query) ->
     return unless @props.search
