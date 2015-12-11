@@ -15,6 +15,12 @@ $text_color: #4C4E4C;
 
 @import url(http://fonts.googleapis.com/css?family=Lato:400,700|Inconsolata);
 
+@mixin single_line {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @function grid_width($size, $divisions: 8, $gutter: 20px, $width: $site_width) {
     @return floor($size * (($width - (($divisions - 1) * $gutter)) / $divisions) + ($size - 1) * $gutter);
 }
@@ -612,7 +618,7 @@ pre {
             margin-right: 0;
             display: block;
             padding: 0 40px;
-            
+
             pre {
                 width: auto;
                 max-width: $site_width;
@@ -649,3 +655,60 @@ pre {
     }
 }
 
+.searcher {
+    margin: 20px auto 0 auto;
+    width: 400px;
+    position: relative;
+
+    .results_popup {
+        position: absolute;
+        background: white;
+        z-index: 2;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin-top: 5px;
+        margin-left: -1px;
+        margin-right: -1px;
+        box-shadow: 0 0 10px rgba(black, 0.1);
+
+        border: 2px solid $border_color;
+        border-radius: 2px;
+        overflow: hidden;
+
+        .result_row {
+            @include single_line;
+            padding: 8px 15px;
+            line-height: 20px;
+
+            .result_sub {
+                color: #999;
+            }
+
+            &.empty {
+                color: #999;
+            }
+
+            &.selected {
+                background-color: #D7EDDF;
+            }
+        }
+    }
+
+    .search_input {
+        font-family: Lato;
+        border: 1px solid $border_color;
+        padding: 8px 15px;
+        border-radius: 2px;
+        font-size: 18px;
+        width: 100%;
+        box-sizing: border-box;
+
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 1px $border_color;
+        }
+
+    }
+
+}
