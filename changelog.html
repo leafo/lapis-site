@@ -9,9 +9,9 @@ v1.3.2 -- **December 10rd 2015**
 
 ** Additions **
 
-* relation getters now keep track if they've fetched before with internal state to prevent fetching again on null relations
-* add `clear_loaded_relation` method to clear new cached loaded relations
-* The `class` attribute for HTML builders can now take a table to generate class list from
+* relation getters now keep track if they've fetched before with internal state to prevent fetching again on `nil` relations
+* add `clear_loaded_relation` method to clear a cached relation's value to module `lapis.models.relations`
+* The `class` attribute for HTML builders [can now take a table](http://leafo.net/lapis/reference/html_generation.html#html-builder-syntax-special-attributes) to generate class
 
 ** Fixes **
 
