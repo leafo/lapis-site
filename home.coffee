@@ -3,7 +3,7 @@
 
 { div, span, a, p, ol, ul, li, strong, em, img,
   form, label, input, textarea, button,
-  h1, h2, h3, h4, h5, h6 } = React.DOM
+  h1, h2, h3, h4, h5, h6, code } = React.DOM
 
 R.component = (name, data) ->
   data.displayName = "R.#{name}"
@@ -81,12 +81,30 @@ R.component "DocumentationSearch", {
 
       if @state.search_query
         results = @state.results.map (result, i) =>
+          title = result.page.title
+          is_code = title.match(/^[^A-Z]*$/) || title.match /_/
+
+          if is_code
+            # remove the return values
+            title = title.replace /[^=]+=\s+/, ""
+
           classes = "result_row"
           if @state.selected_result == i
             classes += " selected"
 
+          link = a href: result.page.url, title
+
           div className: classes, children: [
-            a href: result.page.url, result.page.title
+            if is_code
+              code {}, link
+            else
+              link
+
+            if result.page.subtitle
+              [
+                " "
+                span className: "result_sub", result.page.subtitle
+              ]
           ]
 
         unless results.length
@@ -115,23 +133,23 @@ class Lapis
     ReactDOM.render c, $("#search_drop")[0]
 
   setup_search: ->
-    @pages_by_url = {}
+    @pages_by_id = {}
     @render_search()
 
     $.get("reference.json").done (res) =>
       @index = lunr ->
         @field "title"
-        @ref "url"
+        @ref "id"
 
       for page in res.pages
-        @pages_by_url[page.url] = page
+        @pages_by_id[page.id] = page
         @index.add page
 
       @render_search {
         search: (query) =>
           results = @index.search query
           for res in results
-            page = @pages_by_url[res.ref]
+            page = @pages_by_id[res.ref]
             {
               score: res.score
               page: page

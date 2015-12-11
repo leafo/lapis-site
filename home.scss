@@ -680,13 +680,11 @@ pre {
             @include single_line;
             padding: 8px 15px;
             line-height: 20px;
+            color: #999;
 
             .result_sub {
-                color: #999;
-            }
-
-            &.empty {
-                color: #999;
+                margin-left: 10px;
+                font-size: 14px;
             }
 
             &.selected {
