@@ -5,6 +5,25 @@ title: Changelog
   <h1>Changelog</h1>
 $markdown{[[
 
+v1.3.2 -- **December 10rd 2015**
+
+** Additions **
+
+* relation getters now keep track if they've fetched before with internal state to prevent fetching again on null relations
+* add `clear_loaded_relation` method to clear new cached loaded relations
+* The `class` attribute for HTML builders can now take a table to generate class list from
+
+** Fixes **
+
+* Ordered paginator prefixes column names with table names to allow for joins with shared columns
+* `https` URLs generated with port 443 will have the port stripped from the output
+* All json encoding now strips any keys that are not strings or numbers
+* The `returning` option for `Model\create` can take the value `"*"` to return all fields
+
+** Misc **
+
+* Rebuilt with latest MoonScript
+
 v1.3.1 -- **October 23rd 2015**
 
 ** Additions **
