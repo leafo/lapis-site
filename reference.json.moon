@@ -109,11 +109,13 @@ for page in *site\query_pages {}
 
     for flat in *flatten_headers headers
       continue unless flat.trail -- top level index covered by page
+      import slugify from require "sitegen.common"
+
       table.insert out.pages, {
         id: #out.pages
         title: flat.name
         subtitle: table.concat flat.trail, " « "
-        url: url
+        url: "#{url}##{slugify flat.name}"
       }
 
 write to_json out
