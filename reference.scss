@@ -103,6 +103,25 @@ body.show_lua {
             }
         }
     }
+
+    .version_flag {
+        position: absolute;
+        top: 8px;
+        right: 20px;
+        background: white;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 16px;
+        padding: 0 10px;
+        height: 33px;
+        line-height: 33px;
+        text-decoration: none;
+        color: $green;
+
+        &:hover {
+            background: mix($green, white, 10%);
+        }
+    }
 }
 
 code, pre {
