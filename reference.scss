@@ -197,16 +197,6 @@ a {
         padding-bottom: 10px;
     }
 
-    .indicator {
-        display: none;
-        position: absolute;
-        font-size: 40px;
-        line-height: 20px;
-        top: 14px;
-        right: 8px;
-        color: white;
-    }
-
     .scrolling_inner {
         @include border_box;
         width: $nav_width;
@@ -272,12 +262,16 @@ a {
 }
 
 .nav_offset {
-    margin-left: $nav_width;
+    position: fixed;
+    top: $header_height;
+    left: $nav_width;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
 }
 
 .text_column {
     max-width: $main_width;
-    padding-top: $header_height;
     padding-bottom: 60px;
     padding-right: 20px;
 
@@ -331,7 +325,6 @@ a {
             content: none;
         }
     }
-
 
     p {
         margin: 25px 0;
@@ -515,7 +508,7 @@ pre {
     $margin: 40px;
 
     .nav_offset {
-        margin-left: $margin;
+        left: $margin;
     }
 
     .nav_column {
@@ -527,10 +520,6 @@ pre {
             left: 0;
             .scrolling_inner {
                 overflow-y: auto;
-
-                .indicator {
-                    display: none;
-                }
             }
         }
 
@@ -538,17 +527,9 @@ pre {
             overflow-y: hidden;
             z-index: 2;
 
-            .indicator {
-                display: block;
-            }
-
             &:hover {
                 overflow-y: auto;
                 left: 0;
-
-                .indicator {
-                    display: none;
-                }
             }
         }
     }
