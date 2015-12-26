@@ -1,82 +1,14 @@
-
-$bg: lighten(#D0EAD9, 2%);
-
-$font_size: 18px;
-$border_color: #b6d3b6;
-
-$site_width: 800px;
-
-$green: #70BD70;
-$mid_green: #70BD86;
-
-$link_color: mix(#DA0057, $green, 50%);
-
-$text_color: #4C4E4C;
-
+@import "common";
+@import "search";
 @import url(http://fonts.googleapis.com/css?family=Lato:400,700|Inconsolata);
 
-@mixin single_line {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-@function grid_width($size, $divisions: 8, $gutter: 20px, $width: $site_width) {
-    @return floor($size * (($width - (($divisions - 1) * $gutter)) / $divisions) + ($size - 1) * $gutter);
-}
-
-@mixin grid_cell($size, $divisions: 8, $gutter: 20px, $width: $site_width) {
-    display: inline-block;
-    vertical-align: top;
-    font-size: $font_size;
-
-    width: grid_width($size, $divisions, $gutter, $width);
-    margin-right: $gutter;
-
-    &:last-child, &.last {
-        margin-right: 0;
-    }
-}
+$bg: lighten(#D0EAD9, 2%);
 
 ::selection {
     background: #0CF;
     color: white;
 }
 
-@mixin unselectable {
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-@mixin grad($top, $bottom) {
-    background-color: mix($top, $bottom);
-    background-image: linear-gradient(bottom, $bottom 0%, $top 100%);
-    background-image: -webkit-linear-gradient(bottom, $bottom 0%, $top 100%);
-    background-image: -moz-linear-gradient(bottom, $bottom 0%, $top 100%);
-    background-image: -o-linear-gradient(bottom, $bottom 0%, $top 100%);
-    background-image: -ms-linear-gradient(bottom, $bottom 0%, $top 100%);
-}
-
-@mixin autograd($color, $amount: 10%, $flip: false) {
-    @if ($flip) {
-        @include grad(darken($color, $amount), $color);
-    } @else {
-        @include grad($color, darken($color, $amount));
-    }
-}
-
-@mixin transition($args...) {
-    -webkit-transition: $args;
-    -moz-transition: $args;
-    -ms-transition: $args;
-    transition: $args;
-}
-
-@mixin border_box {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-}
 
 body {
     background: white;
@@ -658,55 +590,4 @@ pre {
 .searcher {
     margin: 20px auto 0 auto;
     width: $site_width;
-    position: relative;
-
-    .results_popup {
-        position: absolute;
-        background: white;
-        z-index: 2;
-        top: 100%;
-        left: 0;
-        right: 0;
-        margin-top: 5px;
-        margin-left: -1px;
-        margin-right: -1px;
-        box-shadow: 0 0 10px rgba(black, 0.1);
-
-        border: 2px solid $border_color;
-        border-radius: 2px;
-        overflow: hidden;
-
-        .result_row {
-            @include single_line;
-            padding: 8px 15px;
-            line-height: 20px;
-            color: #999;
-
-            .result_sub {
-                margin-left: 10px;
-                font-size: 14px;
-            }
-
-            &.selected {
-                background-color: #D7EDDF;
-            }
-        }
-    }
-
-    .search_input {
-        font-family: Lato;
-        border: 1px solid $border_color;
-        padding: 8px 15px;
-        border-radius: 2px;
-        font-size: 18px;
-        width: 100%;
-        box-sizing: border-box;
-
-        &:focus {
-            outline: none;
-            box-shadow: 0 0 0 1px $border_color;
-        }
-
-    }
-
 }

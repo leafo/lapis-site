@@ -1,14 +1,10 @@
+@import "common";
+@import "search";
+
 
 $offset_left: 50px;
-$font_size: 18px;
 $bg: lighten(#EAFFEA, 2%);
 $nav_bg: mix(white, $bg, 50%);
-$border_color: #B6D3B6;
-
-$green: #70BD70;
-$mid_green: #70BD86;
-
-$link_color: mix(#DA0057, $green, 50%);
 
 $text_color: mix($bg, #222, 20%);
 
@@ -16,24 +12,6 @@ $main_width: 900px;
 $nav_width: 300px;
 
 @import url(http://fonts.googleapis.com/css?family=Lato:400,700|Inconsolata);
-
-@mixin transition($args...) {
-    -webkit-transition: $args;
-    -moz-transition: $args;
-    -ms-transition: $args;
-    transition: $args;
-}
-
-@mixin unselectable {
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-@mixin border_box {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-}
 
 ::selection {
     background: #0CF;
@@ -63,6 +41,38 @@ body.show_lua {
 
     span.for_lua {
         display: inline;
+    }
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+
+    z-index: 10;
+
+    background: $mid_green;
+    background: linear-gradient(45deg, $green, adjust-hue($green, 40deg));
+
+    h1 {
+        font-size: 24px;
+        letter-spacing: 0.5px;
+        margin: 0;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    a {
+        padding: 0;
+        text-decoration: none;
+        color: white;
+    }
+
+    #search_drop {
+        display: inline-block;
+        vertical-align: top;
     }
 }
 
@@ -125,22 +135,6 @@ a {
     top: 0;
     bottom: 0;
     left: 0;
-
-    h1 {
-        padding: 10px 20px;
-        margin: 0 0 20px 0;
-        font-size: 24px;
-        text-align: center;
-        letter-spacing: 0.5px;
-        background: $mid_green;
-        background: linear-gradient(45deg, $green, adjust-hue($green, 40deg));
-
-        a {
-            padding: 0;
-            text-decoration: none;
-            color: white;
-        }
-    }
 
     h2 {
         font-size: 16px;

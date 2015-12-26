@@ -1,0 +1,54 @@
+
+$font_size: 18px;
+$border_color: #b6d3b6;
+
+$site_width: 800px;
+
+$green: #70BD70;
+$mid_green: #70BD86;
+
+$link_color: mix(#DA0057, $green, 50%);
+
+$text_color: #4C4E4C;
+
+@mixin single_line {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@mixin unselectable {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+@mixin grad($top, $bottom) {
+    background-color: mix($top, $bottom);
+    background-image: linear-gradient(bottom, $bottom 0%, $top 100%);
+    background-image: -webkit-linear-gradient(bottom, $bottom 0%, $top 100%);
+    background-image: -moz-linear-gradient(bottom, $bottom 0%, $top 100%);
+    background-image: -o-linear-gradient(bottom, $bottom 0%, $top 100%);
+    background-image: -ms-linear-gradient(bottom, $bottom 0%, $top 100%);
+}
+
+@mixin autograd($color, $amount: 10%, $flip: false) {
+    @if ($flip) {
+        @include grad(darken($color, $amount), $color);
+    } @else {
+        @include grad($color, darken($color, $amount));
+    }
+}
+
+@mixin transition($args...) {
+    -webkit-transition: $args;
+    -moz-transition: $args;
+    -ms-transition: $args;
+    transition: $args;
+}
+
+@mixin border_box {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
