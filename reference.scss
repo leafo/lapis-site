@@ -51,6 +51,8 @@ body.show_lua {
     left: 0;
     right: 0;
     height: $header_height;
+    display: flex;
+    align-items: center;
 
     z-index: 10;
 
@@ -61,7 +63,7 @@ body.show_lua {
         font-size: 24px;
         letter-spacing: 0.5px;
         margin: 0;
-        margin: 9px 35px 0 35px;
+        margin: 0 35px;
         display: inline-block;
         vertical-align: top;
 
@@ -73,13 +75,13 @@ body.show_lua {
     }
 
     #search_drop {
-        display: inline-block;
-        vertical-align: top;
-        margin-top: 6px;
+        flex: 1;
     }
 
     .searcher {
         font-size: 16px;
+        max-width: 500px;
+
         $input_border: darken(#70BD88, 15%);
 
         .results_popup {
@@ -89,9 +91,12 @@ body.show_lua {
 
         .search_input {
             font-size: 16px;
-            width: 500px;
-            padding-top: 7px;
-            padding-bottom: 7px;
+            padding-top: 0;
+            padding-bottom: 0;
+
+            height: 36px; // 4 for border
+            line-height: 32px;
+
             border: 2px solid $input_border;
 
             &:focus {
@@ -103,18 +108,16 @@ body.show_lua {
     }
 
     .version_flag {
-        position: absolute;
-        top: 8px;
-        right: 20px;
         background: white;
         border-radius: 4px;
         font-weight: bold;
         font-size: 16px;
         padding: 0 10px;
-        height: 33px;
-        line-height: 33px;
+        height: 32px;
+        line-height: 32px;
         text-decoration: none;
         color: $green;
+        margin: 0 20px;
 
         &:hover {
             background: mix($green, white, 10%);
