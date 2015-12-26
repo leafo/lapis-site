@@ -15,7 +15,6 @@ add_captions = ->
     elm = $(@)
     tpl elm.attr("src"), elm.attr("title"), elm.attr("alt")
 
-
 setup_lang_picker = ->
   body = $(document.body)
   pickers = $(".lang_picker .lang_toggle")

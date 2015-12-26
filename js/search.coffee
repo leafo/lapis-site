@@ -1,5 +1,35 @@
-
 @R = {}
+@L ||= {}
+
+L.setup_search = (el) ->
+  render = (opts={}) ->
+    c = R.DocumentationSearch opts
+    ReactDOM.render c, el[0]
+
+  pages_by_id = {}
+  index = null
+
+  render()
+
+  $.get("reference.json").done (res) =>
+    index = lunr ->
+      @field "title"
+      @ref "id"
+
+    for page in res.pages
+      pages_by_id[page.id] = page
+      index.add page
+
+    render {
+      search: (query) =>
+        results = index.search query
+        for res in results
+          page = pages_by_id[res.ref]
+          {
+            score: res.score
+            page: page
+          }
+    }
 
 { div, span, a, p, ol, ul, li, strong, em, img,
   form, label, input, textarea, button,
@@ -115,58 +145,3 @@ R.component "DocumentationSearch", {
         div className: "results_popup", children: results
     ]
 }
-
-class Lapis
-  constructor: ->
-    @setup_lang_picker()
-    $(".lang_headers").stick_in_parent offset_top: -2
-
-    $(document.body).on "click", ".top_link", (e) =>
-      $(window).scrollTop 0
-      false
-
-    @update_lang()
-    @setup_search()
-
-  render_search: (opts) ->
-    c = R.DocumentationSearch opts
-    ReactDOM.render c, $("#search_drop")[0]
-
-  setup_search: ->
-    @pages_by_id = {}
-    @render_search()
-
-    $.get("reference.json").done (res) =>
-      @index = lunr ->
-        @field "title"
-        @ref "id"
-
-      for page in res.pages
-        @pages_by_id[page.id] = page
-        @index.add page
-
-      @render_search {
-        search: (query) =>
-          results = @index.search query
-          for res in results
-            page = @pages_by_id[res.ref]
-            {
-              score: res.score
-              page: page
-            }
-      }
-
-  update_lang: ->
-    if m = window.location.hash.match /\blang=(\w+)\b/
-      lang = m[1]
-      $(document.body).toggleClass "show_lua", lang == "lua"
-
-  setup_lang_picker: ->
-    $(document.body).on "click", ".lang_toggle", (e) =>
-      window.location.hash = $(e.currentTarget).data "hash"
-      setTimeout =>
-        @update_lang()
-      , 1
-
-$ => new Lapis
-
