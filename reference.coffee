@@ -1,43 +1,4 @@
 
-slugify = (str) ->
-  str.replace(/\s+/g, "-").replace(/[^\w_-]/g, "").toLowerCase()
-
-build_index = ->
-  nav_links = $(".nav_links:first")
-  headers = $(".text_column").find("h2")
-
-  append_header = (h, classes=null, parent_slug) ->
-    slug = h.text()
-    slug = parent_slug + " " + slug if parent_slug
-    slug = slugify slug
-
-    h.attr "id", slug
-
-    link = $("<a href='##{slug}'></a>")
-      .html(h.html())
-      .appendTo(nav_links)
-
-    h.html $("<a href='##{slug}'>").html h.html()
-
-    link.addClass classes if classes
-    slug
-
-
-  if headers.length == 0
-    nav_links.remove()
-    return
-
-  for h in headers
-    do (h) ->
-      h = $(h)
-      slug = append_header h
-
-      for sub in h.nextUntil("h2", "h3")
-        do (sub) ->
-          sub = $ sub
-          append_header sub, "sub", slug
-
-
 add_captions = ->
   tpl = (url, caption, alt="Hi") -> """
     <div class="image_container">
@@ -86,8 +47,6 @@ setup_lang_picker = ->
   lang = window.localStorage?.getItem("reference_lang")
   set_lang lang, false
 
-build_index()
 add_captions()
 setup_lang_picker()
-
 
