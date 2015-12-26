@@ -65,13 +65,19 @@ sitegen.create =>
       index: {
         link_headers: true
         min_depth: 2
+        slugify: (header) ->
+          -- just use the name of the method/function as the slug
+          if header.html_content\match "^<code>"
+            if method = header.title\match "([%w_]+)%("
+              return method
+
+          import slugify from require "sitegen.common"
+          slugify header.title
       }
     }
 
   add "reference.html", template: "reference"
-
   add "index.html", template: "home"
   add "changelog.html", template: "home"
-
   add "reference.json.moon", template: false, target_fname: "reference.json"
 
