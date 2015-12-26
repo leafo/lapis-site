@@ -20,10 +20,12 @@
           <span class="lang_toggle" data-lang="lua">Lua</span>
         </div>
 
-        <div class="nav_links">
-          <h2>Contents</h2>
-          $index
-        </div>
+        $unless{"hide_index"}[[
+          <div class="nav_links">
+            <h2>Contents</h2>
+            $index
+          </div>
+        ]]
 
         <div class="nav_links">
           <h2>All Guides</h2>
