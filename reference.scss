@@ -5,6 +5,7 @@
 $offset_left: 50px;
 $bg: lighten(#EAFFEA, 2%);
 $nav_bg: mix(white, $bg, 50%);
+$header_height: 50px;
 
 $text_color: mix($bg, #222, 20%);
 
@@ -49,7 +50,7 @@ body.show_lua {
     top: 0;
     left: 0;
     right: 0;
-    height: 50px;
+    height: $header_height;
 
     z-index: 10;
 
@@ -60,19 +61,46 @@ body.show_lua {
         font-size: 24px;
         letter-spacing: 0.5px;
         margin: 0;
+        margin-top: 7px;
+        margin-left: 20px;
         display: inline-block;
         vertical-align: top;
-    }
 
-    a {
-        padding: 0;
-        text-decoration: none;
-        color: white;
+        a {
+            padding: 0;
+            text-decoration: none;
+            color: white;
+        }
     }
 
     #search_drop {
         display: inline-block;
         vertical-align: top;
+        margin-left: 40px;
+        margin-top: 6px;
+    }
+
+    .searcher {
+        font-size: 16px;
+        $input_border: darken(#70BD88, 15%);
+
+        .results_popup {
+            border-color: $input_border;
+        }
+
+        .search_input {
+            font-size: 16px;
+            width: 500px;
+            padding-top: 7px;
+            padding-bottom: 7px;
+            border: 2px solid $input_border;
+
+            &:focus {
+                outline: none;
+                box-shadow: none;
+                border-color: darken($input_border, 10%);
+            }
+        }
     }
 }
 
@@ -132,7 +160,7 @@ a {
     line-height: 1.4;
     position: fixed;
     z-index: 2;
-    top: 0;
+    top: $header_height;
     bottom: 0;
     left: 0;
 
@@ -224,6 +252,7 @@ a {
 
 .text_column {
     max-width: $main_width;
+    padding-top: $header_height;
     padding-bottom: 60px;
     padding-right: 20px;
 
