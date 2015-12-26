@@ -1,17 +1,19 @@
 @R = {}
 @L ||= {}
 
-L.setup_search = (el) ->
-  render = (opts={}) ->
-    c = R.DocumentationSearch opts
+L.setup_search = (el, opts={}) ->
+  render = (props={}) ->
+    c = R.DocumentationSearch props
     ReactDOM.render c, el[0]
 
   pages_by_id = {}
   index = null
 
-  render()
+  render {
+    root: opts.root
+  }
 
-  $.get("reference.json").done (res) =>
+  $.get(opts.index).done (res) =>
     index = lunr ->
       @field "title"
       @ref "id"
@@ -21,6 +23,7 @@ L.setup_search = (el) ->
       index.add page
 
     render {
+      root: opts.root
       search: (query) =>
         results = index.search query
         for res in results
@@ -92,7 +95,7 @@ R.component "DocumentationSearch", {
               e.preventDefault()
               result = @state.results[@state.selected_result]
               if result
-                window.location = result.page.url
+                window.location = "#{@props.root}/#{result.page.url}"
               return
             # esc
             when 27
@@ -122,7 +125,7 @@ R.component "DocumentationSearch", {
           if @state.selected_result == i
             classes += " selected"
 
-          link = a href: result.page.url, title
+          link = a href: "#{@props.root}/#{result.page.url}", title
 
           div className: classes, children: [
             if is_code

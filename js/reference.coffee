@@ -4,6 +4,14 @@ class L.Reference
   constructor: ->
     @setup_captions()
     @setup_lang_picker()
+    @setup_search()
+
+  setup_search: =>
+    drop = $("#search_drop")
+    L.setup_search drop, {
+      index: drop.data "index"
+      root: drop.data "root"
+    }
 
   setup_captions: ->
     tpl = (url, caption, alt="Hi") -> """
