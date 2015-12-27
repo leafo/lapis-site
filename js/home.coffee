@@ -13,7 +13,11 @@ class L.Home
     @setup_search()
 
   setup_search: ->
-    L.setup_search $("#search_drop")
+    drop = $("#search_drop")
+    L.setup_search drop, {
+      index: drop.data "index"
+      root: drop.data "root"
+    }
 
   update_lang: ->
     if m = window.location.hash.match /\blang=(\w+)\b/
