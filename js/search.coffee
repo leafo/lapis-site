@@ -49,6 +49,7 @@ R.component "DocumentationSearch", {
     {
       search_query: ""
       selected_result: 0
+      has_focus: false
     }
 
   componentDidUpdate: (prev) ->
@@ -69,6 +70,12 @@ R.component "DocumentationSearch", {
         type: "text"
         value: @state.search_query
         placeholder: "Search documentation..."
+        onFocus: =>
+          @setState has_focus: true
+
+        onBlur: =>
+          @setState has_focus: false
+
         onKeyDown: (e) =>
           switch e.keyCode
             # up
@@ -112,39 +119,43 @@ R.component "DocumentationSearch", {
           @do_search e.target.value
       }
 
-      if @state.search_query
-        results = @state.results.map (result, i) =>
-          title = result.page.title
-          is_code = title.match(/^[^A-Z]*$/) || title.match /_/
-
-          if is_code
-            # remove the return values
-            title = title.replace /[^=]+=\s+/, ""
-
-          classes = "result_row"
-          if @state.selected_result == i
-            classes += " selected"
-
-          link = a href: "#{@props.root}/#{result.page.url}", title
-
-          div className: classes, children: [
-            if is_code
-              code {}, link
-            else
-              link
-
-            if result.page.subtitle
-              [
-                " "
-                span className: "result_sub", result.page.subtitle
-              ]
-          ]
-
-        unless results.length
-          results = [
-            div className: "result_row empty", "Nothing found"
-          ]
-
-        div className: "results_popup", children: results
+      if @state.search_query && @state.has_focus
+        @render_results()
     ]
+
+  render_results: ->
+    results = @state.results.map (result, i) =>
+      title = result.page.title
+      is_code = title.match(/^[^A-Z]*$/) || title.match /_/
+
+      if is_code
+        # remove the return values
+        title = title.replace /[^=]+=\s+/, ""
+
+      classes = "result_row"
+      if @state.selected_result == i
+        classes += " selected"
+
+      link = a href: "#{@props.root}/#{result.page.url}", title
+
+      div className: classes, children: [
+        if is_code
+          code {}, link
+        else
+          link
+
+        if result.page.subtitle
+          [
+            " "
+            span className: "result_sub", result.page.subtitle
+          ]
+      ]
+
+    unless results.length
+      results = [
+        div className: "result_row empty", "Nothing found"
+      ]
+
+    div className: "results_popup", children: results
+
 }
