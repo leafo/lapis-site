@@ -6,13 +6,37 @@
   <h1>Changelog</h1>
 $markdown{[[
 
+v1.4.0 -- **December 29th 2015**
+
+** Additions **
+
+* Relations provide preload functions for automatically calling `include_in` with the correct parrameters
+* Introduce `preload_relations` and `preload_relation` on models with relations
+* Introduce `clear_loaded_relation` method on models with relations
+* Rewrite `super` for lua classes to avoid issues with complicated hierarchies
+* `Model.include_in` can take a relation name with `for_relation` to mark it as loaded
+* `Model.include_in` can take a `group` option to add a `group by` clause to query
+* `Model.include_in` can take a `value` option to transform the fetched results before being placed on the model instances
+*  `laips new` now generates a `models.moon` file, with code to autoload from models directory
+
+** Changes **
+
+* Relations are now implemented as intermediate class (can override their helpers and call super)
+* `Model.include_in` will now set an empty array for any `many` preloads that return no results
+* `Model.refresh` will clear relation load satus when refreshing all columns
+
+** Fixes **
+
+* Fix bug where `__inherited` callback was called twice when using Lua classes
+* MySQL connection initized if necessary when trying to escape value (fixes migration issue)
+
 v1.3.2 -- **December 10rd 2015**
 
 ** Additions **
 
 * relation getters now keep track if they've fetched before with internal state to prevent fetching again on `nil` relations
 * add `clear_loaded_relation` method to clear a cached relation's value to module `lapis.models.relations`
-* The `class` attribute for HTML builders [can now take a table](http://leafo.net/lapis/reference/html_generation.html#html-builder-syntax-special-attributes) to generate class
+* The `class` attribute for HTML builders [can now take a table]($root/reference/html_generation.html#html-builder-syntax/special-attributes) to generate class
 
 ** Fixes **
 
