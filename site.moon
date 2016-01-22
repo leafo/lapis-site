@@ -27,11 +27,11 @@ PygmentsPlugin.custom_highlighters.moon = (code_text, page) =>
 sitegen.create =>
   @current_version = "1.4.0"
 
-  scssphp = tools.system_command "sassc -I scss < %s > %s", "css"
+  scss = tools.system_command "sassc -I scss < %s > %s", "css"
   coffeescript = tools.system_command "coffee -c -s < %s > %s", "js"
 
-  build scssphp, "reference.scss", "reference.css"
-  build scssphp, "home.scss", "home.css"
+  build scss, "reference.scss", "reference.css"
+  build scss, "home.scss", "home.css"
 
   build coffeescript, "js/home.coffee", "home.js"
   build coffeescript, "js/reference.coffee", "reference.js"
