@@ -6,6 +6,31 @@
   <h1>Changelog</h1>
 $markdown{[[
 
+v1.4.2 -- **January 22nd 2015**
+
+** Additions **
+
+Read about all the new route matching syntax: [Routes and URL patterns]($root/reference/actions.html#routes-and-url-patterns)
+
+* Routes now have a precedence and are sorted. Static routes have highest precedence
+* New syntax for optional parts of routes using parentheses
+* Splats in routes are no longer greedy, text after splat can match
+* Named parameters in routes are no longer greedy, text after parameter can match
+* Named parameters can take character classes
+* `url_for` can correctly fill the splat parameter
+* Add `allow_error` option to `mock_request` to allow 500 error to return without failing spec
+* Add documentation for `OrderedPaginator`
+
+** Changes **
+
+* Empty `class` attributes within HTML builder do not add a blank attribute
+
+** Fixes **
+
+* `OrderedPaginator` with multiple fields now works correctly when fetching additional pages
+* Typo in `time_ago_in_words`
+
+
 v1.4.0 -- **December 29th 2015**
 
 ** Additions **
@@ -17,7 +42,7 @@ v1.4.0 -- **December 29th 2015**
 * `Model.include_in` can take a relation name with `for_relation` to mark it as loaded
 * `Model.include_in` can take a `group` option to add a `group by` clause to query
 * `Model.include_in` can take a `value` option to transform the fetched results before being placed on the model instances
-*  `laips new` now generates a `models.moon` file, with code to autoload from models directory
+* `lapis new` now generates a `models.moon` file, with code to autoload from models directory
 
 ** Changes **
 
