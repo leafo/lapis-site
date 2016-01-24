@@ -52,6 +52,13 @@ R.component "DocumentationSearch", {
       has_focus: false
     }
 
+  componentDidMount: ->
+    $(document.body).on "click", (e) =>
+      return unless @state.has_focus
+      el = ReactDOM.findDOMNode(@)
+      unless $(e.target).closest(el).length
+        @setState has_focus: false
+
   componentDidUpdate: (prev) ->
     if !prev.search && @props.search && @state.search_query
       @do_search @state.search_query
@@ -72,9 +79,6 @@ R.component "DocumentationSearch", {
         placeholder: "Search documentation..."
         onFocus: =>
           @setState has_focus: true
-
-        onBlur: =>
-          @setState has_focus: false
 
         onKeyDown: (e) =>
           switch e.keyCode
