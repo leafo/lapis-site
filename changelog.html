@@ -6,7 +6,21 @@
   <h1>Changelog</h1>
 $markdown{[[
 
-v1.4.2 -- **January 22nd 2015**
+v1.4.3 -- **January 23rd 2016**
+
+** Additions **
+
+* [`url_for`]($root/reference/actions.html#request-object-methods/url_for) will only include optional components of routes if all nested parameters are provided
+* `time_ago_in_words` is documented, add `date` module as a dependency
+* `validate` can take options, add `key` option to return errors as hash table insead of array
+* `layout` field of app can be specified as string, will be loaded as module from views directy at runtime
+
+** Fixes **
+
+* Fix issue where `url_for` was including character class of named parameter in result
+* Fix issue with `--trace` flag interrupting arguments of command line commands
+
+v1.4.2 -- **January 22nd 2016**
 
 ** Additions **
 
