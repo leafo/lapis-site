@@ -11,6 +11,9 @@ $link_color: mix(#DA0057, $green, 50%);
 
 $text_color: #4C4E4C;
 
+$grad_left: #9AA3F4;
+$grad_right: #C69DDF;
+
 @mixin single_line {
     white-space: nowrap;
     overflow: hidden;

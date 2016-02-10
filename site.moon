@@ -57,6 +57,7 @@ sitegen.create =>
     "moon_getting_started"
     "testing"
     "utilities"
+    "quick_reference"
   }
 
   for file in *files
