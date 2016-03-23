@@ -6,6 +6,30 @@
   <h1>Changelog</h1>
 $markdown{[[
 
+
+v1.5.0 -- **2016**
+
+** Additions **
+
+* Add `flow` method to request object for invoking flows
+* You can now pass output headers to `write` and action return values
+* `has_one` relations now work with `where` clause
+* Better error message for missing value during query interpolation
+
+** Changes ** 
+
+* Error handling interface rewritten to match regular actions
+* Any `db.NULL` passed to Model.create will be stripped
+* Any `db.NULL` passed to Model.update will be stripped, and not assigned to updated model
+* Flows instances inherit the `__call` metamethod
+* Passing `nil` as an argument to truncate tables will error
+* Request support methods no longer take up names on the request object
+* The cookie and session loading code is now overridable
+
+** Fixes **
+
+* Fix crash when using `?` inside query value with no interpolation.  Interpolation is only performed when extra fields are passed.
+
 v1.4.3 -- **January 23rd 2016**
 
 ** Additions **
