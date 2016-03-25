@@ -1,15 +1,8 @@
 language: python
 sudo: false
 
-###
-# taken from: https://gist.github.com/petrbel/c3bf7e0f59c22a52f534
 git:
   submodules: false
-
-before_install:
-  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-  - git submodule update --init --recursive
-###
 
 env:
   global:
@@ -18,6 +11,8 @@ env:
     - LUA=luajit2.1
 
 before_install:
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodule update --init --recursive
   - source .travis/setenv_lua.sh
 
 install:
