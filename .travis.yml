@@ -26,4 +26,4 @@ install:
 
 script: 
   - find .
-  - pygmentize
+  - which pygmentize
