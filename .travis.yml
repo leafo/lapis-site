@@ -25,5 +25,4 @@ install:
   - luarocks install https://luarocks.org/manifests/leafo/sitegen-dev-1.rockspec
 
 script: 
-  - find .
-  - which pygmentize
+  - sitegen
