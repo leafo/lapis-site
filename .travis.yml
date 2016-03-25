@@ -1,0 +1,19 @@
+language: python
+sudo: false
+
+env:
+  global:
+    - LUAROCKS=2.2.2
+  matrix:
+    - LUA=luajit2.1
+
+
+before_install:
+  - source .travis/setenv_lua.sh
+
+install:
+  - pip install --user -r requirements.txt
+  - luarocks install https://luarocks.org/manifests/leafo/sitegen-dev-1.rockspec
+
+script: 
+  - find .
