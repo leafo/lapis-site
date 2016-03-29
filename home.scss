@@ -304,6 +304,7 @@ code, pre {
     display: inline-block;
     text-align: left;
     margin: 0 6px;
+    position: relative;
 
     // background: rgba(#333, 0.8);
     background: #3C3C3C;
@@ -333,6 +334,16 @@ code, pre {
             content: "$ ";
             color: #ff9898;
         }
+    }
+
+    .installer_sub {
+        color: rgba(white, 0.85);
+        position: absolute;
+        bottom: -23px;
+        font-size: 13px;
+        text-align: center;
+        left: 0;
+        right: 0;
     }
 }
 
