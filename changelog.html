@@ -6,6 +6,32 @@
   <h1>Changelog</h1>
 $markdown{[[
 
+v1.5.1 -- **July 21st 2016**
+
+** Security Fixes **
+
+* The `trim` implementation was vulnerable to high CPU usage with a specially crafted string due to how the pattern was written. (See [here](http://stackstatus.net/post/147710624694/outage-postmortem-july-20-2016))
+
+** Additions **
+
+* `has_one` relations can specify a `local_key` (similar to the parameter passed to `include_in`)
+* `has_many` relations can specify a `local_key`
+* Add a generate template for flows: `lapis generate flow my_flow`
+
+** Changes ** 
+
+* Flows now use `_` as the backing variable, so it's clear they can be used on any type of object. (Previously `_req`)
+* Interval fields cleaned up and renamed on `Request` to make way for different server backends
+* Nginx specific modules moved to make way for different server backends (daurnimator)
+* Add `/opt/openresty/nginx/sbin/` to the OpenResty search path for `lapis server` (Cristian Haunsen)
+
+** Fixes **
+
+* `has_one` work correctly by default if primary key is not `id`
+* Many documentation fixes, thanks to all the contributors: https://github.com/leafo/lapis/pulls?q=is%3Apr+is%3Aclosed
+* Host and port correct passed to console MySQL connection (Douglas Roeder)
+* Test environments automatically close database connections to avoid lingering connections due to Busted hiding module
+
 v1.5.0 -- **March 25th 2016**
 
 ** Additions **
@@ -38,8 +64,8 @@ v1.4.3 -- **January 23rd 2016**
 
 * [`url_for`]($root/reference/actions.html#request-object-methods/url_for) will only include optional components of routes if all nested parameters are provided
 * `time_ago_in_words` is documented, add `date` module as a dependency
-* `validate` can take options, add `key` option to return errors as hash table insead of array
-* `layout` field of app can be specified as string, will be loaded as module from views directy at runtime
+* `validate` can take options, add `key` option to return errors as hash table instead of array
+* `layout` field of app can be specified as string, will be loaded as module from views directory at runtime
 
 ** Fixes **
 
@@ -88,12 +114,12 @@ v1.4.0 -- **December 29th 2015**
 
 * Relations are now implemented as intermediate class (can override their helpers and call super)
 * `Model.include_in` will now set an empty array for any `many` preloads that return no results
-* `Model.refresh` will clear relation load satus when refreshing all columns
+* `Model.refresh` will clear relation load status when refreshing all columns
 
 ** Fixes **
 
 * Fix bug where `__inherited` callback was called twice when using Lua classes
-* MySQL connection initized if necessary when trying to escape value (fixes migration issue)
+* MySQL connection initialized if necessary when trying to escape value (fixes migration issue)
 
 v1.3.2 -- **December 10rd 2015**
 

@@ -575,7 +575,7 @@ pre {
     }
 
 
-    body.show_lua & {
+    body.show_lua {
         .lang_header {
             &.lua_header {
                 display: inline-block;
