@@ -6,6 +6,56 @@
   <h1>Changelog</h1>
 $markdown{[[
 
+v1.6.0 -- **April 28th 2017**
+
+** Additions **
+
+* Add a new general purpose `preload` function that can preload many relations
+at once for many kinds of model instances, including recursively preloading relations
+* Addition of `cqueues` and `lua-http` server backend
+* Pgmoon connection status is logged to performance table for each request when
+performance measurements are enable
+* `fetch` relations can provide a method for preloading with the `preload` option
+* `default_url_params` has been added to request support object for extending the default parameters passed into `url_for
+* `matches_pattern` validation can be used to test an input against a Lua pattern
+* `relation_is_loaded` function can be used to test if a model has a relation loaded
+* `mock_request` can insert a session via a Lua table
+* `lapis.time` module with a `sleep` function that executes correct implementation for the current backend server
+* If you use `when` instead of `where` when creating an index an error is thrown
+* Add `render_to_file` method for widgets
+* Add documentation for `Flow`
+
+** Changes **
+
+* Route precedence sorting now uses a score based approach where multiple variables or splats can affect the final order
+* Mocked requests have `ngx.md5` implemented with `luacrypto`
+* Query logs use luasocket to measure time elapsed for a more accurate measurement
+* URL parsing uses `find` and `sub` instead of `match` to parse very long paths faster ([#498](https://github.com/leafo/lapis/issues/498))
+* `db.NULL` values are always stripped when inserting a new row from a model's `create` method
+* Test server can be run even if there isn't a database configured
+* Refactor backend implementation to be extensible to allow for `cqueues`/`lua-http` implementation
+* Add support for test server to run on cqueues backend
+
+** Minor changes **
+
+* Lua and MoonScript are added as mime types in default `mime.types` file ([#513](https://github.com/leafo/lapis/issues/513))
+* Various improvements to the documentation
+
+** Fixes **
+
+* Encoding a query string with a parameter with a boolean value will no longer throw an error
+* Fix issue where `*.lua` would be included in `.gitignore` for Lua projects ([#501](https://github.com/leafo/lapis/issues/501))
+* A user set content type will no longer be overwritten when outputting with the `json` action return handler
+
+** Note on `cqueues`/`lua-http` **
+
+With this release we're adding a new server backend for Lapis. Although the
+backend is functional, there are some things that aren't available yet.
+Database connections are shared across all requests so you have to be careful
+about leaving transactions or state open. Additionally, there's no way to spawn
+multiple workers. For production environments we still recommend OpenResty.
+
+
 v1.5.1 -- **July 21st 2016**
 
 ** Security Fixes **
