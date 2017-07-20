@@ -6,7 +6,7 @@
   <h1>Changelog</h1>
 $markdown{[[
 
-v1.6.0 -- **July 19th 2017**
+## v1.6.0 -- July 20th 2017
 
 ** Additions **
 
@@ -58,8 +58,7 @@ Database connections are shared across all requests so you have to be careful
 about leaving transactions or state open. Additionally, there's no way to spawn
 multiple workers. For production environments we still recommend OpenResty.
 
-
-v1.5.1 -- **July 21st 2016**
+## v1.5.1 -- July 21st 2016
 
 ** Security Fixes **
 
@@ -81,11 +80,11 @@ v1.5.1 -- **July 21st 2016**
 ** Fixes **
 
 * `has_one` work correctly by default if primary key is not `id`
-* Many documentation fixes, thanks to all the contributors: https://github.com/leafo/lapis/pulls?q=is%3Apr+is%3Aclosed
+* Many documentation fixes, thanks to [all the contributors](https://github.com/leafo/lapis/pulls?q=is%3Apr+is%3Aclosed)
 * Host and port correct passed to console MySQL connection (Douglas Roeder)
 * Test environments automatically close database connections to avoid lingering connections due to Busted hiding module
 
-v1.5.0 -- **March 25th 2016**
+## v1.5.0 -- March 25th 2016
 
 ** Additions **
 
@@ -111,7 +110,7 @@ v1.5.0 -- **March 25th 2016**
 * Fix crash when using `?` inside query value with no interpolation.  Interpolation is only performed when extra fields are passed.
 * Empty `where` in `include_in` and `find_all` will no longer generate invalid query
 
-v1.4.3 -- **January 23rd 2016**
+## v1.4.3 -- January 23rd 2016
 
 ** Additions **
 
@@ -125,7 +124,7 @@ v1.4.3 -- **January 23rd 2016**
 * Fix issue where `url_for` was including character class of named parameter in result
 * Fix issue with `--trace` flag interrupting arguments of command line commands
 
-v1.4.2 -- **January 22nd 2016**
+## v1.4.2 -- January 22nd 2016
 
 ** Additions **
 
@@ -150,7 +149,7 @@ Read about all the new route matching syntax: [Routes and URL patterns]($root/re
 * Typo in `time_ago_in_words`
 
 
-v1.4.0 -- **December 29th 2015**
+## v1.4.0 -- December 29th 2015
 
 ** Additions **
 
@@ -174,7 +173,7 @@ v1.4.0 -- **December 29th 2015**
 * Fix bug where `__inherited` callback was called twice when using Lua classes
 * MySQL connection initialized if necessary when trying to escape value (fixes migration issue)
 
-v1.3.2 -- **December 10rd 2015**
+## v1.3.2 -- December 10rd 2015
 
 ** Additions **
 
@@ -193,7 +192,7 @@ v1.3.2 -- **December 10rd 2015**
 
 * Rebuilt with latest MoonScript
 
-v1.3.1 -- **October 23rd 2015**
+## v1.3.1 -- October 23rd 2015
 
 ** Additions **
 
@@ -209,7 +208,7 @@ v1.3.1 -- **October 23rd 2015**
 * Invalid enum access throw better error messages
 * Error page will wrap exception error to avoid scrollbar
 
-v1.3.0 -- **July 18th 2015**
+## v1.3.0 -- July 18th 2015
 
 **Additions**
 
@@ -242,7 +241,7 @@ the end of the URL
 * Fix bug where sending two content type headers would cause error
 * Fix a bug where Model table name caching could affect subclasses
 
-v1.2.0 -- **May 14th 2015**
+## v1.2.0 -- May 14th 2015
 
 **Breaking changes**
 
@@ -271,7 +270,7 @@ There are a few changes that affect backwards compatibility:
 * Main Lapis server and spec server can now be launched in different directories from the current
 * Fixed a bug when setting config values that would cause function blocks to override previous function blocks instead of merging
 
-v1.1.1 -- **April 25th 2015**
+## v1.1.1 -- April 25th 2015
 
 #### Models
 
@@ -295,7 +294,7 @@ v1.1.1 -- **April 25th 2015**
 * New `lapis.spec` module with `use_test_env` and `use_test_server` for busted
 * Fixed a bug where `respond_to` was returning multiple arguments and interfering with Lua match API
 
-v1.1.0 -- **February 3rd 2015**
+## v1.1.0 -- February 3rd 2015
 
 #### Models
 
@@ -321,14 +320,14 @@ v1.1.0 -- **February 3rd 2015**
  * Added new `lapis generate` command, add basic generators for model and spec
  * `request` method in `lapis.spec.server` will now send merged GET parameters passed with those in URL
 
-v1.0.6 -- **October 27th 2014**
+## v1.0.6 -- October 27th 2014
 
   * Fix `http.request` when URL does not contain path
   * `json_params` will read body before trying to parse it
   * `util.autoload` can take multiple search prefixes
   * `util.slugify` improved to avoid generating multiple `-`, will also conver `_` to `-` now
 
-v1.0.5 -- **October 10th 2014**
+## v1.0.5 -- October 10th 2014
 
   * Add [refresh method to model instance](reference/database.html#models-refreshing-a-model-instance) for reloading properties
   * `updated_at` [update can be disabled](reference/database.html#models-timestamps) for model `update` method now
@@ -340,7 +339,7 @@ v1.0.5 -- **October 10th 2014**
   * `mock_request` supports `expect_json`
   * `mock_request` correctly stubs `ngx.now`, `ngx.update_time` and `remote_addr`
 
-v1.0.4 -- **August 19th 2014**
+## v1.0.4 -- August 19th 2014
 
   * Add [performance metrics API](reference/configuration.html#performance-measurement) with `measure_performance` config
   * Add environment module for pushing and popping config environments
@@ -351,7 +350,7 @@ v1.0.4 -- **August 19th 2014**
   * Add `--etlua-config` flag to `lapis new` to create blank project with etlua config
   * The names of cookies are correctly unescaped
 
-v1.0.3 -- **July 23 2014**
+## v1.0.3 -- July 23 2014
 
   * Default application structure updated, `lapis.serve` is now executed from Nginx configuration. Default application code is now a regular Lua module that can be required with no side effects
   * `ngx_postgres` is deprecated, docs removed. [pgmoon documentation added]($root/reference/database.html). (ngx_postgres support will be removed in 1.1.0)
@@ -361,7 +360,7 @@ v1.0.3 -- **July 23 2014**
   * Added [`cookie_attributes` extension function]($root/reference/actions.html#request-object-cookies) for configuring new cookies
   * Fix leaking objects passed to `lapis.serve` (only applies when sending many different applications)
 
-v1.0.2 -- **July 15 2014**
+## v1.0.2 -- July 15 2014
 
   * Add new [reference guide for etlua]($root/reference/etlua_templates.html)
   * Enforce routes to be searched in order they are defined for Lua style applications
@@ -370,13 +369,13 @@ v1.0.2 -- **July 15 2014**
   * `LAPIS_SHOW_QUERIES` environment variable can be used to enable printing `pgmoon` queries during specs
   * Misc documentation updates, more specs
 
-v1.0.1 -- **Jun 30 2014**
+## v1.0.1 -- Jun 30 2014
 
   * `LAPIS_OPENRESTY` environment variable can be used to set OpenResty binary location
   * Fixed a bug with `lapis.serve` that prevented a string argument from loading correctly
   * Deprecate old PostgreSQL configuration syntax, document [new table based syntax]($root/reference/database.html#establishing-a-connection)
 
-v1.0.0 -- **Jun 16 2014**
+## v1.0.0 -- Jun 16 2014
 
 #### General
 
@@ -413,13 +412,13 @@ v1.0.0 -- **Jun 16 2014**
   * Add new `logging` config directive for fine grained control over individual logging
   * Updated homepage, <http://leafo.net/lapis>
 
-v0.0.10 -- **Jan 18th, 2014**
+## v0.0.10 -- Jan 18th, 2014
 
   * Correctly detect installation of OpenResty 1.5.x
   * Bug fix and documentation for [`@content_for`](reference.html#html-generation-widget-methods)
   * Add `@has_content_for`
 
-v0.0.9 -- **Jan 9th, 2014**
+## v0.0.9 -- Jan 9th, 2014
 
   * Backwards incompatible change to [`cached` API](reference.html#utilities-caching)
   * Cached can take expiration time, override cache key, and a function to
@@ -431,7 +430,7 @@ v0.0.9 -- **Jan 9th, 2014**
   * `db.format_date(d)` for formatting time to SQL syntax
   * More tests
 
-v0.0.8 -- **December 7th, 2013**
+## v0.0.8 -- December 7th, 2013
 
   * **CRITICAL:** Fixed an issue where a invalid multipart upload could cause worker to loop infinitely
   * Added new [`json_params`](reference.html#utilities-application-helpers) function to parse JSON from request body into `@params`
@@ -442,7 +441,7 @@ v0.0.8 -- **December 7th, 2013**
   * Attributes now have spaces around them when using HTML builder
   * Test coverage improved
 
-v0.0.7 -- **November 5th, 2013**
+## v0.0.7 -- November 5th, 2013
 
   * Added [`prepare_results`](reference.html#models-pagination) option to paginated
   * Paginator options are passed to select, enabling you to set fields
@@ -456,7 +455,7 @@ v0.0.7 -- **November 5th, 2013**
   * `"lapis.spec.server"`'s `request` function can be passed headers, will extract host header if passed a full URL
   * Enhanced test coverage
 
-v0.0.6 -- **October 17th, 2013**
+## v0.0.6 -- October 17th, 2013
 
   * Added `"lapis.spec.server"` module for spawning a [test server](reference.html#testing-using-the-test-server)
   * `env LAPIS_ENVIRONMENT=envname` is now injected on top of config to ensure
@@ -474,7 +473,7 @@ v0.0.6 -- **October 17th, 2013**
   * Fix issue where multiple cookies could not be set in a single request
   * Fix issue where adding a third value to a single header would not show up
 
-v0.0.5 -- **September 1st, 2013**
+## v0.0.5 -- September 1st, 2013
 
   * Added request mocking for [writing tests](reference.html#testing)
   * Added [`lapis.cache`](reference.html#utilities-caching) module
@@ -484,7 +483,7 @@ v0.0.5 -- **September 1st, 2013**
   * Default config has `code_cache` as a variable now
   * Enhanced test coverage
 
-v0.0.4 -- **August 13th, 2013**
+## v0.0.4 -- August 13th, 2013
 
   * [`lapis migrate`](reference.html#command-line-interface-lapis-migrate) command will start a temporary server if it can't find a running one
   * Add [`lapis term`](reference.html#command-line-interface-lapis-term) command to stop a backgrounded server
@@ -494,7 +493,7 @@ v0.0.4 -- **August 13th, 2013**
   * `Model\update` and `Model\delete` will convert primary key `nil` values to `db.NULL`
   * Small enhancements to command line tool
 
-v0.0.3 -- **July 22th, 2013**
+## v0.0.3 -- July 22th, 2013
 
   * Added ability to execute Lua from command line on server
   * [Documentation for command line interface](reference.html#command-line-interface)
@@ -503,7 +502,7 @@ v0.0.3 -- **July 22th, 2013**
   * `lapis new` can take optional `--git` and `--tup` flags
   * Commands use `lapis_environment` module to get default environment
 
-v0.0.2 -- **June 17th, 2013**
+## v0.0.2 -- June 17th, 2013
 
   * Session secret and name are now [stored in the config](reference.html#request-object-session)
   * `json` and `redirect_to` can also set `status`
@@ -514,7 +513,7 @@ v0.0.2 -- **June 17th, 2013**
   * Add a lot more documentation, fix typos
   * Add test suite
 
-v0.0.1 -- **April 24th, 2013**
+## v0.0.1 -- April 24th, 2013
 
  * Initial release
 ]]}
