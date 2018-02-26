@@ -6,6 +6,28 @@
   <h1>Changelog</h1>
 $markdown{[[
 
+## v1.7.0 -- Feb XXth 2018
+
+** Changes **
+
+* Replaced the CSRF implementation, removed the `key` parameter and replaced with it randomly generated string stored in cookie.
+* Sessions now use the `lapis.encoding` module to encode an decode. Session loading error messages have changed to include the error from `encode_with_secret` and `decode_with_secret`
+* Remove all support for luacrypto, luaossl is required
+
+** Additions **
+
+* Add support for chaning HMAC function, add sha256 HMAC config option
+* Support parsing cookies when there are multiple cookie headers
+* Add `enum` type fro MySQL
+* Add support for encoding NULL and empty arrays for `to_json` and JSON render
+* Add config template for cqueues/lua-http support
+
+** Fixes **
+
+* Fix issue with MySQL migrations where query result was not being converted to number
+* Fix a crash when request args could not be parsed
+* Fix a crash when the query parameter type changes when being parsed (between table and literal)
+
 ## v1.6.0 -- July 20th 2017
 
 ** Additions **
