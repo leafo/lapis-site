@@ -5,6 +5,11 @@ class L.Reference
     @setup_captions()
     @setup_lang_picker()
     @setup_search()
+    @setup_menu()
+
+  setup_menu: =>
+    $("#menu_toggle").on "click", =>
+      $(document.body).toggleClass "navigation_open"
 
   setup_search: =>
     drop = $("#search_drop")

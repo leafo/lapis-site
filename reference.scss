@@ -1,16 +1,21 @@
 @import "common";
 @import "search";
 
-
-$offset_left: 50px;
 $bg: lighten(#EAFFEA, 2%);
 $nav_bg: mix(white, $bg, 50%);
 $header_height: 50px;
 
 $main_width: 900px;
 $nav_width: 300px;
+$mobile_width: 600px;
 
-@import url(http://fonts.googleapis.com/css?family=Lato:400,700|Inconsolata);
+@mixin mobile_width  {
+    @media (max-width: $mobile_width) {
+        @content;
+    }
+}
+
+@import url(http://fonts.googleapis.com/css?family=Lato:400,700,900|Inconsolata);
 
 ::selection {
     background: #0CF;
@@ -57,13 +62,46 @@ body.show_lua {
     background: $mid_green;
     background: linear-gradient(45deg, $green, adjust-hue($green, 40deg));
 
+    .toggle_nav_btn {
+        margin-right: 10px;
+        display: none;
+        @include mobile_width {
+            display: block;
+        }
+
+        border: 0;
+        background: transparent;
+        width: 30px;
+        height: 25px;
+        margin-left: 10px;
+        position: relative;
+        font-size: 0;
+        padding: 0;
+        background: rgba(white, 0.1);
+        cursor: pointer;
+        box-shadow: inset 0 5px 0 white, inset 0 -5px 0 white;
+
+        &:before {
+            content: "";
+            position: absolute;
+            background: white;
+            top: 50%;
+            left: 0;
+            margin-top: -2px;
+            width: 100%;
+            height: 5px;
+        }
+    }
+
     h1 {
         font-size: 24px;
         letter-spacing: 0.5px;
-        margin: 0;
-        margin: 0 35px;
-        display: inline-block;
-        vertical-align: top;
+        margin: 0 20px;
+        font-weight: 900;
+
+        @include mobile_width {
+            margin: 0 10px 0 0;
+        }
 
         a {
             padding: 0;
@@ -97,6 +135,11 @@ body.show_lua {
 
             border: 2px solid $input_border;
 
+            @include mobile_width {
+                font-size: 14px;
+                padding: 0 10px;
+            }
+
             &:focus {
                 outline: none;
                 box-shadow: none;
@@ -119,6 +162,11 @@ body.show_lua {
 
         &:hover {
             background: mix($green, white, 10%);
+        }
+
+        @include mobile_width {
+            font-size: 14px;
+            margin: 0 10px;
         }
     }
 }
@@ -190,6 +238,38 @@ a {
     bottom: 0;
     left: 0;
 
+    @media (max-width: 1200px) {
+        $margin: 40px;
+        width: $margin;
+        @include transition(left 0.2s ease);
+        left: ($margin - $nav_width);
+
+        &:hover {
+            left: 0;
+            .scrolling_inner {
+                overflow-y: auto;
+            }
+        }
+
+        .scrolling_inner {
+            overflow-y: hidden;
+            z-index: 2;
+
+            &:hover {
+                overflow-y: auto;
+                left: 0;
+            }
+        }
+    }
+
+    @include mobile_width {
+        left: -100%;
+
+        .navigation_open & {
+            left: 0;
+        }
+    }
+
     h2 {
         font-size: 16px;
         font-weight: bold;
@@ -207,6 +287,14 @@ a {
         overflow-y: auto;
         background: $nav_bg;
         border-right: 2px solid $border_color;
+
+        @include mobile_width {
+            width: 100vw;
+            max-width: $nav_width;
+            @media (max-width: $nav_width) {
+                border-right: 0;
+            }
+        }
     }
 }
 
@@ -272,22 +360,52 @@ a {
     right: 0;
     bottom: 0;
     overflow: auto;
+
+    @media (max-width: 1200px) {
+        left: 40px;
+    }
+
+    @include mobile_width {
+        left: 0;
+    }
 }
 
 .text_column {
     max-width: $main_width;
-    padding-bottom: 60px;
-    padding-right: 20px;
+    padding: 20px 40px 60px 40px;
+    position: relative;
 
-    h1 {
-        margin-left: $offset_left;
+    @include mobile_width {
+        padding-left: 15px;
+        padding-right: 15px;
+        font-size: 16px;
+
+        .navigation_open & {
+            &:before {
+                content: "";
+                z-index: 10;
+                background: rgba(white, 0.8);
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                position: absolute;
+            }
+        }
+    }
+
+
+    > *:first-child {
+        margin-top: 0;
+    }
+
+    h1  {
+        font-weight: 900;
     }
 
     h2, h3, h4 {
+        font-weight: 900;
         margin: 40px 0 10px 0;
-        border-left: 2px solid #939893;
-        padding-left: 38px;
-        margin-left: 10px;
         position: relative;
 
         a {
@@ -305,23 +423,6 @@ a {
 
     }
 
-    h2 {
-        margin-top: 50px;
-        padding-left: 40px;
-        border: 0;
-
-        &:before {
-            font-weight: bold;
-            display: block;
-            content: ". . . ";
-            font-size: 60px;
-            color: #C3CAC3;
-            text-align: center;
-            position: relative;
-            top: -30px;
-        }
-    }
-
     h1 + h2 {
         margin-top: 40px;
 
@@ -332,7 +433,6 @@ a {
 
     p {
         margin: 25px 0;
-        margin-left: $offset_left;
 
     }
 
@@ -346,22 +446,25 @@ a {
             padding: 2px 4px;
             margin: 0 4px;
             border-radius: 2px;
+
+            @include mobile_width {
+                font-size: 14px;
+            }
         }
     }
 
 
-    pre {
-        margin-left: $offset_left;
-    }
-
     ul, ol {
         margin: 25px 0;
-        margin-left: $offset_left;
         padding-left: 0;
 
         li {
             margin: 10px 0;
             margin-left: 40px;
+            @include mobile_width {
+                margin-left: 25px;
+            }
+
             > ul, > ol {
                 margin: 0;
             }
@@ -371,7 +474,6 @@ a {
     blockquote {
         $color: #eee;
         margin: 25px 0;
-        margin-left: $offset_left;
         padding: 10px;
 
         background: $color;
@@ -458,6 +560,12 @@ pre {
     line-height: 22px;
     padding: 12px 10px;
     border-radius: 2px;
+
+    @include mobile_width {
+        overflow: auto;
+        font-size: 14px;
+        line-height: 1.3;
+    }
 }
 
 .highlight {
@@ -509,36 +617,5 @@ pre {
         color: #9D8FF2; // new
     }
 
-}
-
-@media all and (max-width: 1200px) {
-    $margin: 40px;
-
-    .nav_offset {
-        left: $margin;
-    }
-
-    .nav_column {
-        width: $margin;
-        @include transition(left 0.2s ease);
-        left: ($margin - $nav_width);
-
-        &:hover {
-            left: 0;
-            .scrolling_inner {
-                overflow-y: auto;
-            }
-        }
-
-        .scrolling_inner {
-            overflow-y: hidden;
-            z-index: 2;
-
-            &:hover {
-                overflow-y: auto;
-                left: 0;
-            }
-        }
-    }
 }
 
