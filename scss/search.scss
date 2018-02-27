@@ -1,5 +1,13 @@
 @import "common";
 
+$mobile_width: 600px;
+
+@mixin mobile_width  {
+    @media (max-width: $mobile_width) {
+        @content;
+    }
+}
+
 .searcher {
     position: relative;
     .results_popup {
@@ -17,6 +25,15 @@
         border: 2px solid $border_color;
         border-radius: 3px;
         overflow: hidden;
+
+        @include mobile_width {
+            left: 10px;
+            right: 10px;
+            top: 50px;
+            max-height: calc(100vh - 75px);
+            overflow: auto;
+            position: fixed;
+        }
 
         .result_row {
             @include single_line;
