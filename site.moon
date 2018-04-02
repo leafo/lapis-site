@@ -84,3 +84,43 @@ sitegen.create =>
   add "changelog.html", template: "home"
   add "reference.json.moon", template: false, target_fname: "reference.json"
 
+
+  @config_table = (items) ->
+    discount = require "discount"
+
+    import render_html from require "lapis.html"
+    import trim_leading_white from require "sitegen.common"
+
+    render_html ->
+      element "table", class: "configuration_table", cellspacing: "0", cellpadding: "0", ->
+        thead ->
+          tr ->
+            td "Name"
+            td "Description"
+            td "Default value"
+            td "Servers"
+
+        tbody ->
+          for row in *items
+            description = (row.description or "")\gsub "^[\r\n]+", ""
+            description = trim_leading_white description
+
+            tr ->
+              td ->
+                code row.name
+
+              td ->
+                raw discount description
+
+              td ->
+                raw discount row.default or "`nil`"
+
+              td ->
+                if row.servers
+                  for i, server in ipairs row.servers
+                    if i < 1
+                      text ", "
+
+                    strong server
+                else
+                  em "Any"

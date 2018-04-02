@@ -335,7 +335,8 @@ a {
         left: 8px;
 
         &:before {
-            content: "— ";
+            content: "└ ";
+            
             float: left;
             margin-right: 4px;
         }
@@ -348,8 +349,11 @@ a {
     }
 
     li {
-        margin: 0;
+        margin: 10px 0 0 0;
         padding: 0;
+        &:first-child {
+            margin-bottom: 0;
+        }
     }
 }
 
@@ -436,7 +440,7 @@ a {
 
     }
 
-    p, li {
+    p, li, td {
         line-height: 1.5;
 
         code {
@@ -619,3 +623,49 @@ pre {
 
 }
 
+
+.configuration_table {
+    border: 1px solid $border_color;
+    width: 100%;
+    font-size: 16px;
+
+    thead {
+        background: #DEF2DE;
+        font-weight: bold;
+
+        td {
+            font-size: 14px;
+            color: rgba($text_color, 0.8);
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+                border-bottom: 1px solid mix(white, #dadada, 50%);
+            }
+
+            &:last-child {
+                td {
+                    border: 0;
+                }
+            }
+        }
+    }
+
+    td {
+        padding: 4px 8px;
+
+        p {
+            margin: 0 0 5px 0;
+
+            p:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        code {
+            white-space: nowrap;
+        }
+    }
+}

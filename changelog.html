@@ -6,7 +6,7 @@
   <h1>Changelog</h1>
 $markdown{[[
 
-## v1.7.0 -- Feb XXth 2018
+## v1.7.0 -- April 2 2018
 
 ** Changes **
 
@@ -21,12 +21,21 @@ $markdown{[[
 * Add `enum` type fro MySQL
 * Add support for encoding NULL and empty arrays for `to_json` and JSON render
 * Add config template for cqueues/lua-http support
+* Request object for cqueues/lua-http contains all the same fields as OpenResty counterpart
+* Performance object is available for cqueues/lua-http
+* Environment name is shown on server start log
+* Add `bind_host` config option to set which interface cqueues/lua-http binds to, defaults to `0.0.0.0`
 
 ** Fixes **
 
 * Fix issue with MySQL migrations where query result was not being converted to number
 * Fix a crash when request args could not be parsed
 * Fix a crash when the query parameter type changes when being parsed (between table and literal)
+* `json_params` works with cqueues/lua-http
+* cqeueus/lua-http test server now works correctly, is now part of CI
+* cqeueus/lua-http will no longer get stuck in infinite loop when port is already taken
+* cqeueus/lua-http will only ready &amp; parse body for form encoded content type
+* Terminal output buffering is disabled for cqeueus/lua-http so service files can read logs from stdout/stderr
 
 ## v1.6.0 -- July 20th 2017
 
