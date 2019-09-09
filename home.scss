@@ -30,6 +30,8 @@ a {
     background: $bg;
     margin-bottom: 30px;
     text-align: center;
+    position: sticky;
+    top: 0;
 
     &.is_stuck {
         box-shadow: 0 2px 0 $border_color;

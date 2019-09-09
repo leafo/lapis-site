@@ -3,7 +3,6 @@
 class L.Home
   constructor: ->
     @setup_lang_picker()
-    $(".lang_headers").stick_in_parent offset_top: -2
 
     $(document.body).on "click", ".top_link", (e) =>
       $(window).scrollTop 0
