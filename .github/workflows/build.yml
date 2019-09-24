@@ -22,7 +22,7 @@ jobs:
       run: |
         sudo apt-get install -q python-pygments
         sudo apt-get install -q sassc
-        sudo npm install -g coffee-script
+        sudo npm install -g coffee-script tree
         luarocks install --dev sitegen
         luarocks install lapis
 
