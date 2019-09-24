@@ -39,5 +39,5 @@ jobs:
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 700 ~/.ssh
         chmod 600 ~/.ssh/id_rsa
-        ssh leaf@leafo.net ls -lah www/hi.png
+        ssh -o StrictHostKeyChecking=no leaf@leafo.net ls -lah www/hi.png
         rsync -v
