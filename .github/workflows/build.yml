@@ -34,10 +34,14 @@ jobs:
     - name: test ssh
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        LANGUAGE: en_US.UTF-8
+        LANG: en_US.UTF-8
+        LC_ALL: en_US.UTF-8
       run: |
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 700 ~/.ssh
         chmod 600 ~/.ssh/id_rsa
+
         ssh -o StrictHostKeyChecking=no leaf@leafo.net ls -lah www/hi.png
-        rsync -v
+        # rsync -v
