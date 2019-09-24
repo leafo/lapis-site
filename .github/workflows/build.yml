@@ -13,6 +13,9 @@ jobs:
       with:
         luaVersion: "luajit"
 
+    - name: checkout lapis
+      run: git submodule update --init --recursive
+
     - uses: leafo/gh-actions-luarocks@v2
 
     - name: dependencies
