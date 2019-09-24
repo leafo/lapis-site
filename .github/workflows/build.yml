@@ -1,0 +1,29 @@
+name: build
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    - uses: leafo/gh-actions-lua@v3
+      with:
+        luaVersion: "luajit"
+
+    - uses: leafo/gh-actions-luarocks@v2
+
+    - name: dependencies
+      run: |
+        sudo apt-get install -q python-pygments
+        sudo apt-get install -q sassc
+        sudo npm install -g coffee-script
+        luarocks install --dev sitegen
+        luarocks install lapis
+
+    - name: build
+      run: |
+        sitegen
+        tree www
