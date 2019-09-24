@@ -9,29 +9,28 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-#     - uses: leafo/gh-actions-lua@v3
-#       with:
-#         luaVersion: "luajit"
-# 
-#     - name: checkout lapis
-#       run: git submodule update --init --recursive
-# 
-#     - uses: leafo/gh-actions-luarocks@v2
-# 
-#     - name: dependencies
-#       run: |
-#         sudo apt-get install -q python-pygments
-#         sudo apt-get install -q sassc
-#         sudo npm install -g coffee-script tree
-#         luarocks install --dev sitegen
-#         luarocks install lapis
-# 
-#     - name: build
-#       run: |
-#         sitegen
-#         tree www
+    - uses: leafo/gh-actions-lua@v3
+      with:
+        luaVersion: "luajit"
 
-    - name: test ssh
+    - name: checkout lapis
+      run: git submodule update --init --recursive
+
+    - uses: leafo/gh-actions-luarocks@v2
+
+    - name: dependencies
+      run: |
+        sudo apt-get install -q python-pygments
+        sudo apt-get install -q sassc
+        sudo npm install -g coffee-script
+        luarocks install --dev sitegen
+        luarocks install lapis
+
+    - name: build
+      run: |
+        sitegen
+
+    - name: deploy to leafo.net/lapis
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         LANGUAGE: en_US.UTF-8
@@ -40,8 +39,8 @@ jobs:
       run: |
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        cat known_hosts > ~/.ssh/known_hosts
         chmod 700 ~/.ssh
         chmod 600 ~/.ssh/id_rsa
-
-        ssh -o StrictHostKeyChecking=no leaf@leafo.net ls -lah www/hi.png
-        # rsync -v
+        chmod 644 ~/.ssh/known_hosts
+        rsync -arvuz www/ leaf@leafo.net:www/lapis-test
