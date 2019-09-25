@@ -1,6 +1,6 @@
 @import "common";
 @import "search";
-@import url(https://fonts.googleapis.com/css?family=Lato:400,700|Inconsolata);
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,900|Inconsolata);
 
 $bg: lighten(#D0EAD9, 2%);
 
@@ -18,6 +18,10 @@ body {
     font-family: Lato, sans-serif;
 }
 
+h1 {
+    font-weight: 900;
+}
+
 a {
     color: $link_color;
     &:hover {
@@ -25,18 +29,32 @@ a {
     }
 }
 
+.content .chat_banner {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+
+    > svg {
+        margin-right: 5px;
+        opacity: 0.6;
+    }
+
+    > p {
+        margin: 0;
+    }
+}
+
 .lang_headers {
     @include transition(box-shadow 0.5s ease);
-    background: $bg;
+    background: rgba(white, 0.8);
     margin-bottom: 30px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
     position: sticky;
+    box-shadow: 0 0 0 1px #dadada;
+    webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
     top: 0;
-
-    &.is_stuck {
-        box-shadow: 0 2px 0 $border_color;
-        z-index: 1;
-    }
 
     .label {
         display: inline-block;
@@ -69,16 +87,21 @@ a {
     }
 
     .lang_header {
-        display: inline-block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         text-align: center;
-        font-size: 24px;
-        width: 650px;
+        font-size: 18px;
+        flex: 1;
+        min-width: 0;
+        max-width: 650px;
         vertical-align: top;
         padding: 10px 0;
         margin: 0;
+        font-weight: 900;
 
         &:first-child {
-            border-right: 2px solid $border_color;
+            border-right: 1px solid #dadada;
         }
     }
 }
@@ -236,7 +259,7 @@ code, pre {
         font-size: 120px;
         position: relative;
         left: -7px;
-        color: rgba(white, 0.9);
+        color: white;
 
         a {
             color: inherit;
@@ -582,4 +605,8 @@ pre {
 .searcher {
     margin: 20px auto 0 auto;
     width: $site_width;
+
+    .search_input {
+        box-shadow: 0 1px 4px rgba(60, 60, 60, 0.17);
+    }
 }
