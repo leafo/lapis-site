@@ -32,7 +32,7 @@ jobs:
         sitegen
 
     - name: deploy to leafo.net/lapis
-      if: github.ref == "master"
+      if: secrets.SSH_PRIVATE_KEY && github.ref == 'master' && github.actor == 'leafo'
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         LANGUAGE: en_US.UTF-8
