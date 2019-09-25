@@ -1,6 +1,8 @@
 @R = {}
 @L ||= {}
 
+SUGGESTION_URL = "https://github.com/luarocks/luarocks-site/issues/new?body=Please%20tell%20us%20what%20you%20were%20trying%20to%20find.%20What%20you%20typed%20and%20what%20you%20expected%20to%20see.%20This%20can%20either%20be%20for%20existing%20pages%2C%20or%20pages%2Fquestions%20you%20think%20should%20be%20answered%20in%20the%20documentation%0A&title=Search%20suggestion%3A%20<<what%20were%20you%20trying%20to%20find%3F>>"
+
 L.setup_search = (el, opts={}) ->
   render = (props={}) ->
     c = R.DocumentationSearch props
@@ -157,7 +159,11 @@ R.component "DocumentationSearch", {
 
     unless results.length
       results = [
-        div className: "result_row empty", "Nothing found"
+        div className: "result_row empty",
+          "Nothing found"
+          " — "
+          span className: "help_search",
+            a href: SUGGESTION_URL, target: "_blank", "Help improve search/documentation..."
       ]
 
     div className: "results_popup", children: results
