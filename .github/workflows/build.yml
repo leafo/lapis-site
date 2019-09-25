@@ -25,6 +25,7 @@ jobs:
         sudo npm install -g coffee-script
         luarocks install --dev sitegen
         luarocks install lapis
+        npm install
 
     - name: build
       run: |
