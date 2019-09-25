@@ -1,6 +1,9 @@
 name: build
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -32,7 +35,6 @@ jobs:
         sitegen
 
     - name: deploy to leafo.net/lapis
-      if: github.ref == 'master'
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         LANGUAGE: en_US.UTF-8
