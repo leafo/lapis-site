@@ -43,4 +43,4 @@ jobs:
         chmod 700 ~/.ssh
         chmod 600 ~/.ssh/id_rsa
         chmod 644 ~/.ssh/known_hosts
-        rsync -arvuz www/ leaf@leafo.net:www/lapis-test
+        rsync -arvuzL www/ leaf@leafo.net:www/lapis-test
