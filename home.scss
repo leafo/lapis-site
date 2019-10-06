@@ -435,6 +435,44 @@ pre {
 }
 
 .highlight {
+    .sh_keyword {
+        color: #BB84B4;
+    }
+
+    .sh_string {
+        color: #F1BF8E;
+    }
+
+    .sh_operator {
+        color: #F277A1;
+    }
+
+    .sh_fndef, .sh_preprocessor, .sh_symbol, .sh_embedded {
+        color: #B0D89C;
+    }
+
+    .sh_class, .sh_self_ref, .sh_label {
+        color: #99CBCA;
+    }
+
+    .sh_tbl_key, .sh_regex {
+        color: #F277A1; // new
+    }
+
+    .sh_comment {
+        color: #929292;
+    }
+
+    .sh_number {
+        color: #9D8FF2;
+    }
+
+    .sh_function { // builtins
+        color: #F69385;
+    }
+}
+
+.highlight {
     /* builtins */
     .nb {
         color: #F69385; // new
@@ -470,7 +508,7 @@ pre {
     }
 
     /* keywords */
-    .k, .kd {
+    .k, .kd, .kr {
         color: #BB84B4; // new
     }
 
