@@ -2,6 +2,7 @@ require "sitegen"
 
 tools = require "sitegen.tools"
 
+-- TODO: this code checking needs to be upgraded for new syntax highlighter
 PygmentsPlugin = require "sitegen.plugins.pygments"
 
 PygmentsPlugin.custom_highlighters.lua = (code_text, page) =>
@@ -84,9 +85,58 @@ sitegen.create =>
   add "changelog.html", template: "home"
   add "reference.json.moon", template: false, target_fname: "reference.json"
 
+  @options_table = (page, items) ->
+    md = page.site\get_renderer "sitegen.renderers.markdown"
+    render_markdown = (str) ->
+      md\render page, assert str, "missing string for markdown render"
 
-  @config_table = (items) ->
-    discount = require "discount"
+    import render_html from require "lapis.html"
+    import trim_leading_white from require "sitegen.common"
+
+    has_example = false
+    for row in *items
+      if row.example
+        has_example = true
+        break
+
+    render_html ->
+      element "table", class: "configuration_table", cellspacing: "0", cellpadding: "0", ->
+        thead ->
+          tr ->
+            td "Name"
+            td "Description"
+            td "Default"
+            if has_example
+              td "Example"
+
+        tbody ->
+          for row in *items
+            description = (row.description or "")\gsub "^[\r\n]+", ""
+            description = trim_leading_white description
+
+            tr ->
+              td ->
+                code row.name
+
+              td ->
+                raw render_markdown description
+
+              td ->
+                if row.default
+                  raw render_markdown row.default
+                else
+                  em class: "default_value", ->
+                    code "nil"
+
+              if has_example
+                td ->
+                  if row.example
+                    raw render_markdown row.example
+
+  @config_table = (page, items) ->
+    md = page.site\get_renderer "sitegen.renderers.markdown"
+    render_markdown = (str) ->
+      md\render page, assert str, "missing string for markdown render"
 
     import render_html from require "lapis.html"
     import trim_leading_white from require "sitegen.common"
@@ -110,10 +160,10 @@ sitegen.create =>
                 code row.name
 
               td ->
-                raw discount description
+                raw render_markdown description
 
               td ->
-                raw discount row.default or "`nil`"
+                raw render_markdown row.default or "`nil`"
 
               td ->
                 if row.servers

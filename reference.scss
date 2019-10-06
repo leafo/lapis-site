@@ -347,7 +347,7 @@ a {
     }
 
     li {
-        margin: 10px 0 0 0;
+        margin: 5px 0 0 0;
         padding: 0;
         &:first-child {
             margin-bottom: 0;
@@ -373,9 +373,21 @@ a {
 }
 
 .text_column {
-    max-width: $main_width;
-    padding: 20px 40px 60px 40px;
+    padding: 20px 20px 60px 40px;
     position: relative;
+
+    > * {
+        box-sizing: border-box;
+        max-width: $main_width;
+    }
+
+    > table {
+        max-width: $main_width + 200px;
+    }
+
+    @media (max-width: 1200px) {
+        padding-left: 20px;
+    }
 
     @include mobile_width {
         padding-left: 15px;
@@ -440,7 +452,9 @@ a {
 
     p, li, td {
         line-height: 1.5;
+    }
 
+    p, li, td > {
         code {
             font-size: 16px;
             background: rgba(0,0,0, 0.1);
@@ -698,6 +712,14 @@ pre {
             p:last-child {
                 margin-bottom: 0;
             }
+        }
+
+        .default_value {
+            opacity: 0.7;
+        }
+
+        pre > code {
+            white-space: pre;
         }
 
         code {
