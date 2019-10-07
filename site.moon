@@ -85,6 +85,31 @@ sitegen.create =>
   add "changelog.html", template: "home"
   add "reference.json.moon", template: false, target_fname: "reference.json"
 
+  @dual_code = (page, opts) ->
+    md = page.site\get_renderer "sitegen.renderers.markdown"
+    render_markdown = (str) ->
+      md\render page, assert str, "missing string for markdown render"
+
+    {moon_code} = opts
+
+    import trim_leading_white from require "sitegen.common"
+    moon_code = moon_code\gsub "^\n", ""
+    moon_code = trim_leading_white moon_code
+    moonscript = require "moonscript.base"
+
+    lua_code = assert moonscript.to_lua moon_code, implicitly_return_root: false
+
+    import trim_leading_white from require "sitegen.common"
+    assert render_markdown [[
+```lua
+]] .. lua_code .. [[
+```
+
+```moon
+]] .. moon_code .. [[
+```]]
+
+
   @options_table = (page, items) ->
     md = page.site\get_renderer "sitegen.renderers.markdown"
     render_markdown = (str) ->
