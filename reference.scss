@@ -679,6 +679,14 @@ pre {
     width: 100%;
     font-size: 16px;
 
+    .option_example {
+        summary {
+            user-select: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    }
+
     thead {
         background: #DEF2DE;
         font-weight: bold;
@@ -692,6 +700,7 @@ pre {
     tbody {
         tr {
             td {
+                vertical-align: top;
                 border-bottom: 1px solid mix(white, #dadada, 50%);
             }
 

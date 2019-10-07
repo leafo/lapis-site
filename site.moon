@@ -93,12 +93,6 @@ sitegen.create =>
     import render_html from require "lapis.html"
     import trim_leading_white from require "sitegen.common"
 
-    has_example = false
-    for row in *items
-      if row.example
-        has_example = true
-        break
-
     render_html ->
       element "table", class: "configuration_table", cellspacing: "0", cellpadding: "0", ->
         thead ->
@@ -106,8 +100,6 @@ sitegen.create =>
             td "Name"
             td "Description"
             td "Default"
-            if has_example
-              td "Example"
 
         tbody ->
           for row in *items
@@ -121,6 +113,11 @@ sitegen.create =>
               td ->
                 raw render_markdown description
 
+                if row.example
+                  details class: "option_example", ->
+                    summary "Show Example"
+                    raw render_markdown row.example
+
               td ->
                 if row.default
                   raw render_markdown row.default
@@ -128,10 +125,6 @@ sitegen.create =>
                   em class: "default_value", ->
                     code "nil"
 
-              if has_example
-                td ->
-                  if row.example
-                    raw render_markdown row.example
 
   @config_table = (page, items) ->
     md = page.site\get_renderer "sitegen.renderers.markdown"
