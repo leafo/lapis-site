@@ -133,7 +133,10 @@ sitegen.create =>
 
             tr ->
               td ->
-                code row.name
+                if row.name == "..."
+                  em "…"
+                else
+                  code row.name
 
               td ->
                 raw render_markdown description
@@ -146,7 +149,7 @@ sitegen.create =>
               td ->
                 if row.default
                   raw render_markdown row.default
-                else
+                else if row.name != "..."
                   em class: "default_value", ->
                     code "nil"
 
