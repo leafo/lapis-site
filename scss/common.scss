@@ -1,18 +1,17 @@
 
 $font_size: 18px;
-$border_color: #b6d3b6;
+
+$background_sub: #e8d7ed;
 
 $site_width: 800px;
 
-$green: #70BD70;
-$mid_green: #70BD86;
+$link_color: #a55f64;
+$text_color: #333334;
 
-$link_color: mix(#DA0057, $green, 50%);
+$grad_left: #7079bd;
+$grad_right: #70b6bd;
 
-$text_color: darken(#4C4E4C, 10%);
-
-$grad_left: #9AA3F4;
-$grad_right: #C69DDF;
+$border_color: $grad_right;
 
 @mixin single_line {
     white-space: nowrap;

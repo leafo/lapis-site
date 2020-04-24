@@ -39,7 +39,7 @@ $mobile_width: 600px;
             @include single_line;
             padding: 8px 15px;
             line-height: 20px;
-            color: #999;
+            color: rgba($text_color, 0.6);
 
             .result_sub {
                 margin-left: 10px;
@@ -47,7 +47,7 @@ $mobile_width: 600px;
             }
 
             &.selected {
-                background-color: #D7EDDF;
+                background-color: rgba($background_sub, 0.4);
             }
         }
     }

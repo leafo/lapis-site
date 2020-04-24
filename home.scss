@@ -2,7 +2,6 @@
 @import "search";
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700,900|Inconsolata);
 
-$bg: lighten(#D0EAD9, 2%);
 
 ::selection {
     background: #0CF;
@@ -111,7 +110,7 @@ code, pre {
 }
 
 .sub_header {
-    background: $bg;
+    background: $background_sub;
     padding: 10px 20px;
 
     .inner {
@@ -121,8 +120,8 @@ code, pre {
 }
 
 .header {
-    background: $mid_green;
-    background: linear-gradient(45deg, $green, adjust-hue($green, 40deg));
+    background: mix($grad_left, $grad_right, 50%);
+    background: linear-gradient(45deg, $grad_left, $grad_right);
     padding: 40px 0 45px 0;
 
     .inner {
@@ -316,7 +315,7 @@ code, pre {
     color: white;
     font-size: 0;
 
-    border-radius: 2px;
+    border-radius: 3px;
 
     .install_label, .install_promp {
         font-size: $font_size;
@@ -328,8 +327,8 @@ code, pre {
     }
 
     .install_label {
-        background: lighten(mix($mid_green, #3C3C3C, 20%), 4%);
-        border-radius: 2px 0 0 2px;
+        background: #584f61;
+        border-radius: 3px 0 0 3px;
     }
 
     .install_promp {
