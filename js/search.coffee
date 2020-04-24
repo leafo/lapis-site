@@ -5,8 +5,7 @@ SUGGESTION_URL = "https://github.com/luarocks/luarocks-site/issues/new?body=Plea
 
 L.setup_search = (el, opts={}) ->
   render = (props={}) ->
-    c = R.DocumentationSearch props
-    ReactDOM.render c, el[0]
+    ReactDOM.render React.createElement(R.DocumentationSearch, props), el[0]
 
   pages_by_id = {}
   index = null
@@ -36,136 +35,127 @@ L.setup_search = (el, opts={}) ->
           }
     }
 
+RDF = ReactDOMFactories
+
 { div, span, a, p, ol, ul, li, strong, em, img,
   form, label, input, textarea, button,
-  h1, h2, h3, h4, h5, h6, code } = React.DOM
+  h1, h2, h3, h4, h5, h6, code } = RDF
 
-R.component = (name, data) ->
-  data.displayName = "R.#{name}"
-  cl = React.createClass(data)
-  R[name] = React.createFactory(cl)
-  R[name]._class = cl
+{ useState, useEffect, useRef } = React
 
-R.component "DocumentationSearch", {
-  getInitialState: ->
-    {
-      search_query: ""
-      selected_result: 0
-      has_focus: false
+R.DocumentationSearchResults = React.memo DocumentationSearchResults = (props) ->
+  results = props.results.map (result, i) ->
+    title = result.page.title
+    is_code = title.match(/^[^A-Z]*$/) || title.match /_/
+
+    if is_code
+      # remove the return values
+      title = title.replace /[^=]+=\s+/, ""
+
+    classes = "result_row"
+    if props.selected_result == i
+      classes += " selected"
+
+    link = a href: "#{props.root}/#{result.page.url}", title
+
+    div className: classes, key: "result-#{i}",
+      if is_code
+        code {}, link
+      else
+        link
+
+      if result.page.subtitle
+        React.createElement React.Fragment, {},
+          " "
+          span className: "result_sub", result.page.subtitle
+
+  unless results.length
+    results = div className: "result_row empty",
+      "Nothing found"
+      " — "
+      span className: "help_search",
+        a href: SUGGESTION_URL, target: "_blank", "Help improve search/documentation..."
+
+  div className: "results_popup", results
+
+R.DocumentationSearch = DocumentationSearch = (props) ->
+  container_ref = useRef null
+  [search_query, set_search_query] = useState ""
+  [results, set_results] = useState null
+  [selected_result, set_selected_result] = useState 0
+  [has_focus, set_has_focus] = useState false
+
+  do_search = (query) =>
+    return unless props.search
+    set_selected_result 0
+    set_results props.search query
+
+  useEffect =>
+    click_body = (e) =>
+      return unless has_focus
+      unless $(e.target).closest(container_ref.current).length
+        set_has_focus false
+
+    $(document.body).on "click", click_body
+
+    => $(document.body).off "click", click_body
+
+  # handle if they typed something before the search function was ready
+  useEffect(
+    =>
+      if props.search && search_query
+        do_search search_query
+    [props.search]
+  )
+
+  div className: "searcher", ref: container_ref,
+    input {
+      type: "text"
+      className: "search_input"
+      value: search_query
+      placeholder: "Search documentation..."
+      onFocus: => set_has_focus true
+
+      onChange: (e) =>
+        set_search_query e.target.value
+        do_search e.target.value
+
+      onKeyDown: (e) =>
+        switch e.keyCode
+          # up
+          when 38
+            return unless results
+            e.preventDefault()
+            len = results.length
+            set_selected_result (selected_result + len - 1) % len
+            return
+          # down
+          when 40
+            return unless results
+            e.preventDefault()
+            len = results.length
+            set_selected_result (selected_result + 1) % len
+            return
+          # enter
+          when 13
+            e.preventDefault()
+            result = results && results[selected_result]
+            if result
+              window.location = "#{props.root}/#{result.page.url}"
+            return
+
+          # esc
+          when 27
+            e.preventDefault()
+            set_search_query ""
+            set_results null
+            return
     }
 
-  componentDidMount: ->
-    $(document.body).on "click", (e) =>
-      return unless @state.has_focus
-      el = ReactDOM.findDOMNode(@)
-      unless $(e.target).closest(el).length
-        @setState has_focus: false
-
-  componentDidUpdate: (prev) ->
-    if !prev.search && @props.search && @state.search_query
-      @do_search @state.search_query
-
-  do_search: (query) ->
-    return unless @props.search
-    @setState {
-      selected_result: 0
-      results: @props.search query
-    }
-
-  render: ->
-    div className: "searcher", children: [
-      input {
-        className: "search_input"
-        type: "text"
-        value: @state.search_query
-        placeholder: "Search documentation..."
-        onFocus: =>
-          @setState has_focus: true
-
-        onKeyDown: (e) =>
-          switch e.keyCode
-            # up
-            when 38
-              e.preventDefault()
-              return unless @state.results
-              len = @state.results.length
-              @setState {
-                selected_result: (@state.selected_result + len - 1) % len
-              }
-              return
-            # down
-            when 40
-              return unless @state.results
-              e.preventDefault()
-              len = @state.results.length
-              @setState {
-                selected_result: (@state.selected_result + 1) % len
-              }
-
-              return
-            # enter
-            when 13
-              e.preventDefault()
-              result = @state.results[@state.selected_result]
-              if result
-                window.location = "#{@props.root}/#{result.page.url}"
-              return
-            # esc
-            when 27
-              @setState {
-                search_query: ""
-                results: null
-              }
-
-              e.preventDefault()
-              return
-
-        onChange: (e) =>
-          @setState search_query: e.target.value
-          @do_search e.target.value
+    if search_query && has_focus && results
+      React.createElement R.DocumentationSearchResults, {
+        results
+        selected_result
+        root: props.root
       }
 
-      if @state.search_query && @state.has_focus
-        @render_results()
-    ]
-
-  render_results: ->
-    results = @state.results.map (result, i) =>
-      title = result.page.title
-      is_code = title.match(/^[^A-Z]*$/) || title.match /_/
-
-      if is_code
-        # remove the return values
-        title = title.replace /[^=]+=\s+/, ""
-
-      classes = "result_row"
-      if @state.selected_result == i
-        classes += " selected"
-
-      link = a href: "#{@props.root}/#{result.page.url}", title
-
-      div className: classes, children: [
-        if is_code
-          code {}, link
-        else
-          link
-
-        if result.page.subtitle
-          [
-            " "
-            span className: "result_sub", result.page.subtitle
-          ]
-      ]
-
-    unless results.length
-      results = [
-        div className: "result_row empty",
-          "Nothing found"
-          " — "
-          span className: "help_search",
-            a href: SUGGESTION_URL, target: "_blank", "Help improve search/documentation..."
-      ]
-
-    div className: "results_popup", children: results
-
-}

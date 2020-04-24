@@ -736,3 +736,9 @@ pre {
         }
     }
 }
+
+hr {
+    border: 0;
+    height: 2px;
+    background: $border_color;
+}
