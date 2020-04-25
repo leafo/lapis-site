@@ -1,7 +1,7 @@
 @import "common";
 @import "search";
+@import "syntaxhighlight";
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700,900|Inconsolata);
-
 
 ::selection {
     background: #0CF;
@@ -440,98 +440,6 @@ pre {
     padding: 25px;
     margin: 0;
     border-radius: 2px;
-}
-
-.highlight {
-    .sh_keyword {
-        color: #BB84B4;
-    }
-
-    .sh_string {
-        color: #F1BF8E;
-    }
-
-    &.lang_bash .sh_default {
-        color: #F277A1;
-    }
-
-    .sh_operator {
-        color: #F277A1;
-    }
-
-    .sh_fndef, .sh_preprocessor, .sh_symbol, .sh_embedded {
-        color: #B0D89C;
-    }
-
-    .sh_class, .sh_self_ref, .sh_label {
-        color: #99CBCA;
-    }
-
-    .sh_tbl_key, .sh_regex {
-        color: #F277A1; // new
-    }
-
-    .sh_comment {
-        color: #929292;
-    }
-
-    .sh_number {
-        color: #9D8FF2;
-    }
-
-    .sh_function { // builtins
-        color: #F69385;
-    }
-}
-
-.highlight {
-    /* builtins */
-    .nb {
-        color: #F69385; // new
-    }
-
-    /* strings */
-    .s, .s1, .s2, .se {
-        color: #F1BF8E; // new
-    }
-
-    /* proper names, self */
-    .nc, .vc, .bp {
-        color: #99CBCA; // new
-    }
-
-    /* true, false, nil */
-    .kc {
-        color: #B3EFE5; // new
-    }
-
-    /* function lit, braces, parens  */
-    .nf, .kt {
-        color: #B0D89C; // new
-    }
-
-    /* operators */
-    .o, .si {
-        color: #F277A1; // new
-    }
-
-    .nv {
-        color: #F277A1; // new
-    }
-
-    /* keywords */
-    .k, .kd, .kr {
-        color: #BB84B4; // new
-    }
-
-    .c1, .c2 {
-        color: #929292;
-    }
-
-    // numbers
-    .m, .mi, .mf, .mh {
-        color: #9D8FF2; // new
-    }
 }
 
 .changelog {

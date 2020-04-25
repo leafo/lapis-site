@@ -1,0 +1,92 @@
+
+// syntaxhighlight
+.highlight {
+    .sh_keyword {
+        color: #BB84B4;
+    }
+
+    .sh_string {
+        color: #F1BF8E;
+    }
+
+    .sh_operator {
+        color: #F277A1;
+    }
+
+    .sh_fndef, .sh_preprocessor, .sh_symbol, .sh_embedded, .sh_library {
+        color: #B0D89C;
+    }
+
+    .sh_class, .sh_self_ref, .sh_label {
+        color: #99CBCA;
+    }
+
+    .sh_tbl_key, .sh_regex {
+        color: #F277A1; // new
+    }
+
+    .sh_comment {
+        color: #929292;
+    }
+
+    .sh_number {
+        color: #9D8FF2;
+    }
+
+    .sh_function { // builtins
+        color: #F69385;
+    }
+}
+
+
+// legacgy pygments highlighter
+.highlight {
+    /* builtins */
+    .nb, .nt {
+        color: #F69385; // new
+    }
+
+    /* strings */
+    .s, .s1, .s2, .se {
+        color: #F1BF8E; // new
+    }
+
+    /* proper names, self */
+    .nc, .vc, .bp {
+        color: #99CBCA; // new
+    }
+
+    /* true, false, nil */
+    .kc {
+        color: #B3EFE5; // new
+    }
+
+    /* function lit, braces, parens  */
+    .nf, .kt, .na, .p {
+        color: #B0D89C; // new
+    }
+
+    /* operators */
+    .o, .si {
+        color: #F277A1; // new
+    }
+
+    .nv, .ow {
+        color: #F277A1; // new
+    }
+
+    /* keywords */
+    .k, .kd {
+        color: #BB84B4; // new
+    }
+
+    .c1, .c2, .c {
+        color: #929292;
+    }
+
+    // numbers
+    .m, .mi, .mf, .mh {
+        color: #9D8FF2; // new
+    }
+
+}
