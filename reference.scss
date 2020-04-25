@@ -128,10 +128,10 @@ body.show_lua {
             padding-top: 0;
             padding-bottom: 0;
 
-            height: 36px; // 4 for border
+            height: 32px;
             line-height: 32px;
 
-            border: 2px solid $border_color;
+            border: 0;
 
             @include mobile_width {
                 font-size: 14px;

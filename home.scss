@@ -55,11 +55,6 @@ a {
     backdrop-filter: saturate(180%) blur(20px);
     top: 0;
 
-    .label {
-        display: inline-block;
-        vertical-align: middle;
-    }
-
     .lang_toggle {
         @include transition(all 0.2s ease);
         @include unselectable;
@@ -303,15 +298,13 @@ code, pre {
 .installer {
     $installer_height: 48px;
 
-    vertical-align: top;
-    display: inline-block;
+    display: flex;;
     text-align: left;
     margin-right: 10px;
     position: relative;
     min-width: 320px;
 
-    // background: rgba(#333, 0.8);
-    background: #3C3C3C;
+    background: rgba(black, 0.6);
     color: white;
     font-size: 0;
 
@@ -319,22 +312,23 @@ code, pre {
 
     .install_label, .install_promp {
         font-size: $font_size;
-        display: inline-block;
-        vertical-align: top;
+        display: flex;
+        align-items: center;
         padding: 0 12px;
-        line-height: $installer_height;
         height: $installer_height;
     }
 
     .install_label {
-        background: #584f61;
+        background: rgba(black, 0.2);
         border-radius: 3px 0 0 3px;
     }
 
     .install_promp {
+        flex: 1;
         &:before {
             font-family: Inconsolata, monospace;
             content: "$ ";
+            margin-right: 5px;
             color: #ff9898;
         }
     }

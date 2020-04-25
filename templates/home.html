@@ -61,8 +61,7 @@
       </div>
 
       <div>
-        by <a href="http://leafo.net">leaf corcoran</a> 
-        <a rel="author" href="https://plus.google.com/114377626084940227656" class="gplus"><img src="http://www.google.com/images/icons/ui/gprofile_button-16.png" width="16" height="16"></a>
+        by <a href="https://leafo.net">leaf corcoran</a>
         <span class="dot">&middot;</span>
         licensed under MIT
       </div>
@@ -74,9 +73,12 @@
 
   <script type="text/javascript">
     (function() {
-      var player = new Player(anim_packed, "animations/1");
-      document.getElementById("screencast").appendChild(player.element);
-      player.start();
+      var el = document.getElementById("screencast")
+      if (el) {
+        var player = new Player(anim_packed, "animations/1");
+        el.appendChild(player.element);
+        player.start();
+      }
     })();
   </script>
 
