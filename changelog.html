@@ -42,8 +42,6 @@ $markdown{[[
   objects into raw SQL
   * (`lapis.db.postgres.schema`) `create_index` support a `concurrently` option to
   create index concurrently (Contributed by Michael Ball [659](https://github.com/leafo/lapis/pull/659))
-  * `classnames` html helper will now ignore empty strings and return existing
-  string objects directory
   * add `test` validation for manually specifying a function to test input
 
 #### Changes
@@ -59,7 +57,8 @@ $markdown{[[
   error
   * `measure_performance` now works even when outside of nginx when reporting
   query time
-  * (`lapis.html`) `classnames` HTML helper will now ignore empty strings and return existing
+  * (`lapis.html`) `classnames` ignores empty strings and will return first
+	argument directly if passed a string
   * (`lapis.logging`) `query` log function can now take a prefix and duration
   * Removed undocumented `locals` action render option
 
