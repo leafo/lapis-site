@@ -8,83 +8,87 @@ $markdown{[[
 
 ## v1.8.0 -- April 24 2018
 
-** Deprecations **
+#### Deprecations
 
-* The `flip` and `local_key` options are now deprecated for use with
-`include_in` and any relations. Replacement syntax available in
-[documentation for `Model\include_in`](reference/models.html#class-methods/include_in).
+  * The `flip` and `local_key` used with `include_in` or any relations are now
+  deprecated. Replacement syntax available in [documentation for
+  `Model\include_in`](reference/models.html#class-methods/include_in)
 
+#### Additions
 
-** Additions **
+  * Add support for a column mapping table when specifying the key for
+  `include_in` and any relations. See more documentation for
+  [`Model\include_in`](reference/models.html#class-methods/include_in)
+  * Add support for composite foreign keys with `include_in` and relations
+  * `each_item` method for Paginators that will return a Lua iterator for going
+  over every row but queries in batches set by `per_page`
+  * An `ordered` option can be passed to `Model\paginated` an `get_X_paginated`
+  to create an `OrderedPaginator` instead of a `OffsetPaginator`
+  * Add `skip_render` action render option to prevent Lapis from writing
+  anything (Suitable for manually writing to output buffer with something like
+  `ngx.print`)
+  * `fetch` relations can now specify if they return a collection of items with
+  `many` so nested preloading can traverse the loaded objects
+  * add `serve` alias for the `lapis server` command line command
+  * add `app_only` code cache option for cqueues to attempt to load app on every
+  dispatch
+  * A `resty_mysql` object can be included in the MySQL configuration object to
+  provide additional parameters when initializng a `resty.mysql` connection
+  * Pgmoon connections will now read the `timeout` field from the PostgreSQL
+  config object (Contributed by turbo [679](https://github.com/leafo/lapis/pull/679))
+  * Add `set_logger` and `get_logger` functions to the `lapis.db.mysql` and
+  `lapis.db.postgres` module
+  * (`lapis.db.postgres`) `escape_identifier` function will now flatten `db.list`
+  objects into raw SQL
+  * (`lapis.db.postgres.schema`) `create_index` support a `concurrently` option to
+  create index concurrently (Contributed by Michael Ball [659](https://github.com/leafo/lapis/pull/659))
+  * `classnames` html helper will now ignore empty strings and return existing
+  string objects directory
+  * add `test` validation for manually specifying a function to test input
 
-* Add support for a column mapping table when specifing the key for
-`include_in` and any relations. See more in
-[`Model\include_in`](reference/models.html#class-methods/include_in).
-* Add support for composite forign keys with `include_in`
-* `each_item` method for Paginators that will return a Lua iterator for going
-over every row but queries in batches set by `per_page`
-* An `ordered` option can be passed to `Model\paginated` an `get_X_paginated`
-to create an `OrderedPaginator` instead of a `OffsetPaginator`
-* Add `skip_render` action render option to prevent Lapis from writing
-anything (Suitable for manually writing to output buffer with something like
-`ngx.print`)
-* `fetch` relations can now specify if they return a collection of items with
-`many` so nested preloading can traverse the loaded objects
-* add `serve` alias for the `lapis server` command line command
-* add `app_only` code cache option for cqueues to attempt to load app on every
-dispatch
-* A `resty_mysql` object can be included in the MySQL configuration object to
-provide additional parameters when initializng a `resty.mysql` connection
-* Pgmoon connections will now read the `timeout` field from the PostgreSQL
-config object
-* Add `set_logger` and `get_logger` functions to the `lapis.db.mysql` and
-`lapis.db.postgres` module
-* (`lapis.db.postgres`) `escape_identifier` function will now flatten `db.list`
-objects into raw SQL
-* (`lapis.db.postgres.schema`) `create_index` support a `concurrently` option to
-create index concurrently
-* `classnames` html helper will now ignore empty strings and return existing
-string objects directory
-* add `test` validation for manually specifing a function to test input
+#### Changes
 
-** Changes **
+  * `assert_error` will now fail with `error` if the error it yielded was not
+  captured and execution attempted to continue
+  * initial project templates use `content_by_lua_block` (Contributed by
+  ryanford [674](https://github.com/leafo/lapis/pull/674))
+  * `each_page` method on paginators no longer allocates a coroutine, a plain
+  function iterator is used
+  * attempting to preload an object that isn't a class will throw an error
+  * attempting to use an invalid order with `OrderedPaginator` will throw an
+  error
+  * `measure_performance` now works even when outside of nginx when reporting
+  query time
+  * (`lapis.html`) `classnames` HTML helper will now ignore empty strings and return existing
+  * (`lapis.logging`) `query` log function can now take a prefix and duration
+  * Removed undocumented `locals` action render option
 
-* `assert_error` will now fail with `error` if the error it yielded was not
-captured and execution attempted to continue
-* inital project templates use `content_by_lua_block`
-* `each_page` method on paginators no longer allocates a coroutine, a plain
-function iterator is used
-* attempting to preload an object that isn't a class will throw an error
-* attempting to use an invalid order with `OrderedPaginator` will throw an
-error
-* `measure_performance` now works even when outside of nginx when reporting
-query time
-* (`lapis.html`) `classnames` HTML helper will now ignore empty strings and return existing
-* (`lapis.logging`) `query` log function can now take a prefix and duration
-* Removed undocumented `locals` action render option
+#### Fixes
 
-** Fixes **
+  * Fix bug where internal shell_escape function would strip `'` characters
+  * Returning `{ json = false }` in action render will actually render false as
+  json instead of skipping json render
 
-* Fix bug where internal shell_escape function would strip `'` characters
-* Returning `{ json = false }` in action render will actually render false as
-json instead of skipping json render
+#### Documentation
 
-** Documentation **
+  * Started rewriting how options tables are described in the documentation.
+  Uses a grid layout with collapsing examples.
+  * Many parts of Models documentation have been rewritten for clarity
+  * Remove outdated references to fields that are deprecated/removed (eg.
+  `cmd_url`)
+  * Add documentation for the `timestamp` option for `model\update`
+  * Updated colors of site to be blue
 
-* Started rewriting how options tables are described in the documentation.
-Uses a grid layout with collapsing examples.
-* Many parts of Models documentation have been rewritten for clarity
-* Remove outdated references to fields that are deprecated/removed (eg.
-`cmd_url`)
-* Add documentation for the `timestamp` option for `model\update`
-* Updated colors of site to be blue
+#### Misc
 
-** Misc **
-
-* Specs now run on GitHub actions with matrix for LuaJIT, OpenResty's LuaJIT,
-and all versions of Lua
-* We now have a MoonScript discrord, join here: <https://discord.gg/Y75ZXrD>
-
+  * Specs now run on GitHub actions with matrix for LuaJIT, OpenResty's LuaJIT,
+  and all versions of Lua
+  * We now have a MoonScript discrord, join here: <https://discord.gg/Y75ZXrD>
+  * Fix typo in docs from Chris Tanner [621](https://github.com/leafo/lapis/pull/621)
+  * Fix typo in docs from TangentFoxy
+  [634](https://github.com/leafo/lapis/pull/634)
+  [685](https://github.com/leafo/lapis/pull/685)
+  [672](https://github.com/leafo/lapis/pull/672)
 
 ## v1.7.0 -- April 2 2018
 
