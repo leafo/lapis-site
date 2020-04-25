@@ -176,10 +176,10 @@ code, pre {
 
     .version_flag {
         position: absolute;
-        background: rgba(155, 244, 150, 0.7);
+        background: white;
         font-weight: bold;
         font-size: 16px;
-        color: white;
+        color: $grad_left;
         padding: 10px;
         border-radius: 4px;
         right: 90px;
@@ -354,6 +354,21 @@ code, pre {
     p, ul {
         margin: 0 0 27px 0;
         line-height: 27px;
+    }
+
+    p, li {
+        code {
+            font-size: 16px;
+            background: rgba(0,0,0, 0.1);
+
+            padding: 2px 4px;
+            margin: 0 4px;
+            border-radius: 2px;
+
+            @include mobile_width {
+                font-size: 14px;
+            }
+        }
     }
 
     .box {

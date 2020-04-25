@@ -673,7 +673,7 @@ pre {
 
 
 .configuration_table {
-    border: 1px solid $border_color;
+    border: 2px solid $border_color;
     width: 100%;
     font-size: 16px;
 
@@ -686,7 +686,7 @@ pre {
     }
 
     thead {
-        background: #DEF2DE;
+        background: $background_sub;
         font-weight: bold;
 
         td {
