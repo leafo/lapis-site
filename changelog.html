@@ -12,13 +12,13 @@ $markdown{[[
 
   * The `flip` and `local_key` used with `include_in` or any relations are now
   deprecated. Replacement syntax available in [documentation for
-  `Model\include_in`](reference/models.html#class-methods/include_in)
+  `Model\include_in`]($root/reference/models.html#class-methods/include_in)
 
 #### Additions
 
   * Add support for a column mapping table when specifying the key for
   `include_in` and any relations. See more documentation for
-  [`Model\include_in`](reference/models.html#class-methods/include_in)
+  [`Model\include_in`]($root/reference/models.html#class-methods/include_in)
   * Add support for composite foreign keys with `include_in` and relations
   * `each_item` method for Paginators that will return a Lua iterator for going
   over every row but queries in batches set by `per_page`
@@ -412,8 +412,8 @@ There are a few changes that affect backwards compatibility:
 
 #### Models
 
- * Added [support for relations to models](reference/models.html#describing-relationships)
- * Added [`enum` function for models](reference/models.html#enum)
+ * Added [support for relations to models]($root/reference/models.html#describing-relationships)
+ * Added [`enum` function for models]($root/reference/models.html#enum)
  * Add `returning` option to `Model.create` to fetch initial values from database during create
  * `db.raw` values passed to `Model.create` are loaded from database after create
  * `db.raw` values passed to `Model.update` are loaded from database after update
@@ -443,8 +443,8 @@ There are a few changes that affect backwards compatibility:
 
 ## v1.0.5 -- October 10th 2014
 
-  * Add [refresh method to model instance](reference/database.html#models-refreshing-a-model-instance) for reloading properties
-  * `updated_at` [update can be disabled](reference/database.html#models-timestamps) for model `update` method now
+  * Add [refresh method to model instance]($root/reference/database.html#models-refreshing-a-model-instance) for reloading properties
+  * `updated_at` [update can be disabled]($root/reference/database.html#models-timestamps) for model `update` method now
   * `total_items` method of paginator aware of joins, bails out with `group by`
   * SQL clause parser (for paginator) is aware of joins and sub queries now, along with other assorted fixes and performance improvements
   * Add ordered paginator, paginator can be instantiated without where clause
@@ -455,7 +455,7 @@ There are a few changes that affect backwards compatibility:
 
 ## v1.0.4 -- August 19th 2014
 
-  * Add [performance metrics API](reference/configuration.html#performance-measurement) with `measure_performance` config
+  * Add [performance metrics API]($root/reference/configuration.html#performance-measurement) with `measure_performance` config
   * Add environment module for pushing and popping config environments
   * Experimental support for [Leda](https://github.com/sergeyzavadski/leda) as a server
   * pgmoon automatically connects when executing `lapis.db` queries from command line
@@ -495,7 +495,7 @@ There are a few changes that affect backwards compatibility:
 
   * Add a new Lua friendly API, see [Getting Started With Lua]($root/reference/lua_getting_started.html)
   * Add support for [etlua](http://github.com/leafo/etlua) as a view language, see Lua guide
-  * Overhaul to [reference manual](reference.html): better organization, Lua examples, and more guides
+  * Overhaul to [reference manual]($root/reference.html): better organization, Lua examples, and more guides
 
 #### Database
 
@@ -529,12 +529,12 @@ There are a few changes that affect backwards compatibility:
 ## v0.0.10 -- Jan 18th, 2014
 
   * Correctly detect installation of OpenResty 1.5.x
-  * Bug fix and documentation for [`@content_for`](reference.html#html-generation-widget-methods)
+  * Bug fix and documentation for [`@content_for`]($root/reference.html#html-generation-widget-methods)
   * Add `@has_content_for`
 
 ## v0.0.9 -- Jan 9th, 2014
 
-  * Backwards incompatible change to [`cached` API](reference.html#utilities-caching)
+  * Backwards incompatible change to [`cached` API]($root/reference.html#utilities-caching)
   * Cached can take expiration time, override cache key, and a function to
   determine when to cache
   * Fixed bug where `NULL` check used `=` instead of `is NULL` in generated SQL
@@ -547,17 +547,17 @@ There are a few changes that affect backwards compatibility:
 ## v0.0.8 -- December 7th, 2013
 
   * **CRITICAL:** Fixed an issue where a invalid multipart upload could cause worker to loop infinitely
-  * Added new [`json_params`](reference.html#utilities-application-helpers) function to parse JSON from request body into `@params`
+  * Added new [`json_params`]($root/reference.html#utilities-application-helpers) function to parse JSON from request body into `@params`
   * `@content_for` can now be used to set content from view widgets to be seen by layout
-  * `respond_to` now provides a [default HEAD action](reference.html#utilities-application-helpers)
+  * `respond_to` now provides a [default HEAD action]($root/reference.html#utilities-application-helpers)
   * Added `lapis signal` command line command to send arbitrary signal to Nginx process
-  * Added [`find_action`](reference.html#lapis-applications-class-methods) method to applications
+  * Added [`find_action`]($root/reference.html#lapis-applications-class-methods) method to applications
   * Attributes now have spaces around them when using HTML builder
   * Test coverage improved
 
 ## v0.0.7 -- November 5th, 2013
 
-  * Added [`prepare_results`](reference.html#models-pagination) option to paginated
+  * Added [`prepare_results`]($root/reference.html#models-pagination) option to paginated
   * Paginator options are passed to select, enabling you to set fields
   * Fixed an issue where doing an async operation (eg. querying) inside of a
     widget render would cause it to lose it's environment and crash when handling
@@ -565,13 +565,13 @@ There are a few changes that affect backwards compatibility:
   * Optimized HTML renderer to avoid creating excess tables
   * Added application cache to `lapis.server`, will cache an instance of the class and reuse it
   * `@include` class method on widgets and applications can take a string and will load it using `require`
-  * Added [`@include` class method on widgets](reference.html#html-generation-widget-methods) for mixing in other classes
+  * Added [`@include` class method on widgets]($root/reference.html#html-generation-widget-methods) for mixing in other classes
   * `"lapis.spec.server"`'s `request` function can be passed headers, will extract host header if passed a full URL
   * Enhanced test coverage
 
 ## v0.0.6 -- October 17th, 2013
 
-  * Added `"lapis.spec.server"` module for spawning a [test server](reference.html#testing-using-the-test-server)
+  * Added `"lapis.spec.server"` module for spawning a [test server]($root/reference.html#testing-using-the-test-server)
   * `env LAPIS_ENVIRONMENT=envname` is now injected on top of config to ensure
     correct environment is passed down when changing environments of a running
     server. Default config has been updated to no longer have `env
@@ -579,7 +579,8 @@ There are a few changes that affect backwards compatibility:
     from your config.
   * When an application extends from another it will now search up the
     inheritance tree and take routes from parents
-  * `mock_request` can take a previous requests headers, see [mocking a request](reference.html#testing-mocking-a-request)
+  * `mock_request` can take a previous requests headers, see [mocking a
+	request]($root/reference.html#testing-mocking-a-request)
   * You can now set nil to @session key to delete it
   * Rewrote how the command line tools provision a server to execute code one,
     can now run queries directly in the console.
@@ -589,20 +590,20 @@ There are a few changes that affect backwards compatibility:
 
 ## v0.0.5 -- September 1st, 2013
 
-  * Added request mocking for [writing tests](reference.html#testing)
-  * Added [`lapis.cache`](reference.html#utilities-caching) module
-  * Added `autoload` [utility method](reference.html#utilities-methods)
-  * Added [documentation for file uploads](reference.html#utilities-file-uploads)
+  * Added request mocking for [writing tests]($root/reference.html#testing)
+  * Added [`lapis.cache`]($root/reference.html#utilities-caching) module
+  * Added `autoload` [utility method]($root/reference.html#utilities-methods)
+  * Added [documentation for file uploads]($root/reference.html#utilities-file-uploads)
   * `widget` method inside of HTML renderer will inject current helpers and set `@parent`
   * Default config has `code_cache` as a variable now
   * Enhanced test coverage
 
 ## v0.0.4 -- August 13th, 2013
 
-  * [`lapis migrate`](reference.html#command-line-interface-lapis-migrate) command will start a temporary server if it can't find a running one
-  * Add [`lapis term`](reference.html#command-line-interface-lapis-term) command to stop a backgrounded server
+  * [`lapis migrate`]($root/reference.html#command-line-interface-lapis-migrate) command will start a temporary server if it can't find a running one
+  * Add [`lapis term`]($root/reference.html#command-line-interface-lapis-term) command to stop a backgrounded server
   * HTML void tags no longer render a closing tag
-  * Add [paginator](reference.html#models-pagination) for paging through queries with many results
+  * Add [paginator]($root/reference.html#models-pagination) for paging through queries with many results
   * Add `Model\count` for counting items in a query
   * `Model\update` and `Model\delete` will convert primary key `nil` values to `db.NULL`
   * Small enhancements to command line tool
@@ -610,19 +611,19 @@ There are a few changes that affect backwards compatibility:
 ## v0.0.3 -- July 22th, 2013
 
   * Added ability to execute Lua from command line on server
-  * [Documentation for command line interface](reference.html#command-line-interface)
-  * `lapis build` command for [building config and sending HUP](reference.html#command-line-interface-lapis-build)
-  * `lapis migrate` command for [running migrations on command line](reference.html#command-line-interface-lapis-migrate)
+  * [Documentation for command line interface]($root/reference.html#command-line-interface)
+  * `lapis build` command for [building config and sending HUP]($root/reference.html#command-line-interface-lapis-build)
+  * `lapis migrate` command for [running migrations on command line]($root/reference.html#command-line-interface-lapis-migrate)
   * `lapis new` can take optional `--git` and `--tup` flags
   * Commands use `lapis_environment` module to get default environment
 
 ## v0.0.2 -- June 17th, 2013
 
-  * Session secret and name are now [stored in the config](reference.html#request-object-session)
+  * Session secret and name are now [stored in the config]($root/reference.html#request-object-session)
   * `json` and `redirect_to` can also set `status`
   * Fix issue with precedence of HTML builder helpers
-  * [Lua mode](reference.html#lapis-in-lua)
-  * updated `trim_filter` helper, [reference](reference.html#utilities-methods)
+  * [Lua mode]($root/reference.html#lapis-in-lua)
+  * updated `trim_filter` helper, [reference]($root/reference.html#utilities-methods)
   * Misc bug fixes
   * Add a lot more documentation, fix typos
   * Add test suite
