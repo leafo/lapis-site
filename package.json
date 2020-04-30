@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/leafo/lapis-site#readme",
   "dependencies": {
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "lunr": "^0.6.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
