@@ -1,4 +1,4 @@
-require "sitegen"
+sitegen = require "sitegen"
 
 tools = require "sitegen.tools"
 
@@ -87,6 +87,7 @@ sitegen.create =>
 
   @dual_code = (page, opts) ->
     md = page.site\get_renderer "sitegen.renderers.markdown"
+
     render_markdown = (str) ->
       md\render page, assert str, "missing string for markdown render"
 
@@ -99,16 +100,10 @@ sitegen.create =>
 
     lua_code = assert moonscript.to_lua moon_code, implicitly_return_root: false
 
-    import trim_leading_white from require "sitegen.common"
-    assert render_markdown [[
-```lua
-]] .. lua_code .. [[
-```
-
-```moon
-]] .. moon_code .. [[
-```]]
-
+    assert render_markdown table.concat {
+      "```lua", lua_code, "```"
+      "```moon", moon_code, "```"
+    }, "\n"
 
   @options_table = (page, items) ->
     md = page.site\get_renderer "sitegen.renderers.markdown"
