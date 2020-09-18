@@ -28,24 +28,20 @@ body {
     color: $text_color;
     margin: 0;
     font-family: Lato, sans-serif;
-}
 
-.for_lua, .lang_lua {
-    display: none;
-}
 
-body.show_lua {
-    .for_moon, .lang_moon {
-        display: none;
+    &.show_lua {
+        .lang_moon, .for_moon {
+            display: none
+        }
     }
 
-    .for_lua, .lang_lua {
-        display: block;
+    &:not(.show_lua) {
+        .lang_lua, .for_lua {
+            display: none
+        }
     }
 
-    span.for_lua {
-        display: inline;
-    }
 }
 
 .header {
