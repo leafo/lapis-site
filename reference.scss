@@ -482,7 +482,7 @@ a {
         }
     }
 
-    blockquote {
+    blockquote, details.aside {
         $color: #eee;
         margin: 25px 0;
         padding: 10px;
@@ -491,7 +491,15 @@ a {
         border: 1px solid darken($color, 10%);
         border-radius: 3px;
         box-shadow: 0px 1px 3px rgba(0,0,0, 0.1), inset 0px 0px 0px 1px rgba(255,255,255,0.3);
+    }
 
+    details.aside {
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    blockquote {
         p {
             margin: 0;
 
