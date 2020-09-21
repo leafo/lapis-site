@@ -10,15 +10,15 @@ $markdown{[[
 
 ### Additions
 
-* `db.delete` can take additional arguments for `RETURNING`, model `delete`
-method also supports returning arguments
-* `get_X_paginated` model method now supports passing `where` and `order`
-options to the paginator constructor
+* `db.delete` can take additional arguments for `RETURNING`, `Model\delete`
+method also supports additional arguments to control returning clause
+* `get_X_paginated` model relation method now supports passing `where` and
+`order` options to the paginator constructor
 
 #### Fixes
 
-* When using `order` and `group` in `Model\include_in` an invalid query would
-be generated
+* Using `order` and `group` at the same time with `Model\include_in` will no
+longer generate an invalid query
 * When running `lapis` command, the environment is immediately loaded when
 checking what commands are available for the server, fixes
 [#665](https://github.com/leafo/lapis/issues/665)
@@ -27,31 +27,29 @@ result from parameter parsing, fixes
 [683](https://github.com/leafo/lapis/issues/68)
 * The substring `-` is no longer matched by accident for route pattern filters [#696](https://github.com/leafo/lapis/issues/696)
 
-
 #### Changes
 
-* When running in `busted`, the test environment is set as the default before any
-tests are run. It is not longer necessary to have a `before` call to configure
-the environment
+* When running in `busted`, the `test` environment is set as the default
+environment any tests are run. It is not longer necessary to have a `setup` or
+`use_test_env` call to configure the environment
 * Default buffer size and timout for parsing multipart form data has been
 increased to allow for slower connections (4k bytes per 5 seconds)
-* Commands log to stdout when not running in Nginx
+* All logging goes stdout when not running in Nginx
 * Compatibility patches for Lua 5.2, 5.3, 5.4
-* Improved error message for some lapis command when using incomplete config
+* Improved error message for some `lapis` commands when using an incomplete
+configuration
 * Improved error message when file can not be written when generating app
 files
-* Internal environment function `default_environment` moved to
-`lapis.environment` module
-* Add internal `set_default_environment` function in `lapis.environment`
-module
+* (Internal) `default_environment` function moved to `lapis.environment`
+module, added `set_default_environment` function
 * Better error message when trying to use `belongs_to` with composite key
 (`has_one` should be used instead)
 * Better error when trying to use default composite primary key with a
-`has_one` relation.
+`has_one` relation
 
 #### Misc
 
-* Test suites are now running on all versions of Lua on GitHub actions
+* Test suites run across on all versions of Lua on GitHub actions
 * Added docs for how [request parameters are parsed and
 merged]($root/reference/actions.html#request-parameters)
 * Added docs for [how the default environment
