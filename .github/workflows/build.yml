@@ -12,14 +12,14 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - uses: leafo/gh-actions-lua@v3
+    - uses: leafo/gh-actions-lua@master
       with:
         luaVersion: "luajit"
 
     - name: checkout lapis
       run: git submodule update --init --recursive
 
-    - uses: leafo/gh-actions-luarocks@v2
+    - uses: leafo/gh-actions-luarocks@master
 
     - name: dependencies
       run: |
