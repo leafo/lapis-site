@@ -1,6 +1,9 @@
-name: build
+name: deploy
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -30,3 +33,18 @@ jobs:
     - name: build
       run: |
         sitegen
+
+    - name: deploy to leafo.net/lapis-test
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        LANGUAGE: en_US.UTF-8
+        LANG: en_US.UTF-8
+        LC_ALL: en_US.UTF-8
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        cat known_hosts > ~/.ssh/known_hosts
+        chmod 700 ~/.ssh
+        chmod 600 ~/.ssh/id_rsa
+        chmod 644 ~/.ssh/known_hosts
+        rsync -arvuzL www/ leaf@leafo.net:www/lapis-test
