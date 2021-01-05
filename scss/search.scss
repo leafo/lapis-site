@@ -51,7 +51,11 @@ $mobile_width: 600px;
             }
 
             &.selected {
-                background-color: rgba(var(--background-sub), 0.4);
+                background-color: rgba($background_sub, 0.4);
+
+                @media (prefers-color-scheme: dark) {
+                    background-color: rgba($background_sub_dark, 0.4);
+                }
             }
         }
     }
