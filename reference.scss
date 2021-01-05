@@ -660,7 +660,11 @@ pre {
 
         td {
             font-size: 14px;
-            color: rgba(var(--text-color), 0.8);
+            color: rgba($text_color, 0.8);
+
+            @media (prefers-color-scheme: dark) {
+                background-color: rgba($text_color_dark, 0.8);
+            }
         }
     }
 
