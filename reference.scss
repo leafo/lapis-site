@@ -335,7 +335,12 @@ a {
     a {
         display: block;
         padding: 4px 8px;
-        color: rgba(var(--text-color), 0.8);
+        color: rgba($text_color, 0.8);
+
+        @media (prefers-color-scheme: dark) {
+            color: rgba($text_color_dark, 0.8);
+        }
+
 
         text-decoration: none;
 
