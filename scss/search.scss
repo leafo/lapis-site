@@ -43,7 +43,11 @@ $mobile_width: 600px;
             @include single_line;
             padding: 8px 15px;
             line-height: 20px;
-            color: rgba(var(--text-color), 0.6);
+            color: rgba($text_color, 0.6);
+
+            @media (prefers-color-scheme: dark) {
+                color: rgba($text_color_dark, 0.6);
+            }
 
             .result_sub {
                 margin-left: 10px;
