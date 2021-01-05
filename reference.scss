@@ -2,12 +2,22 @@
 @import "search";
 @import "syntaxhighlight";
 
-$nav_bg: mix(white, $grad_left, 95%);
 $header_height: 50px;
 
 $main_width: 900px;
 $nav_width: 300px;
 $mobile_width: 600px;
+
+$nav_bg: mix(white, $grad_left, 95%);
+$nav_bg_dark: mix(#18191A, $grad_left, 95%);
+
+:root {
+    --nav-bg: #{$nav_bg};
+
+    @media (prefers-color-scheme: dark) {
+        --nav-bg: #{$nav_bg_dark};
+    }
+}
 
 @mixin mobile_width  {
     @media (max-width: $mobile_width) {
@@ -24,8 +34,13 @@ $mobile_width: 600px;
 
 body {
     background: white;
+
+    @media (prefers-color-scheme: dark) {
+        background: #111;
+    }
+
     font-size: $font_size;
-    color: $text_color;
+    color: var(--text-color);
     margin: 0;
     font-family: Lato, sans-serif;
 
@@ -170,10 +185,14 @@ code, pre {
 }
 
 a {
-    color: $link_color;
+    color: var(--link-color);
 
     &:hover {
         color: lighten($link_color, 10%);
+
+        @media (prefers-color-scheme: dark) {
+            color: lighten($link_color_dark, 10%);
+        }
     }
 }
 
@@ -194,11 +213,15 @@ a {
         cursor: pointer;
         vertical-align: middle;
         text-align: center;
-        background: $nav_bg;
+        background: var(--nav-bg);
 
         border: 2px solid $grad_right;
         border-radius: 4px;
         color: mix($text_color, $nav_bg, 70%);
+
+        @media (prefers-color-scheme: dark) {
+            color: mix($text_color_dark, $nav_bg_dark, 70%);
+        }
 
         margin: 0 5px;
 
@@ -218,6 +241,10 @@ a {
 
         &:active {
             background: darken($grad_left, 20%);
+
+            @media (prefers-color-scheme: dark) {
+                color: #{$grad_left};
+            }
         }
     }
 }
@@ -271,6 +298,10 @@ a {
         border-bottom: 2px solid $grad_right;
         padding-bottom: 10px;
         color: darken($grad_left, 20%);
+
+        @media (prefers-color-scheme: dark) {
+            color: #{$grad_left};
+        }
     }
 
     .scrolling_inner {
@@ -280,7 +311,7 @@ a {
         top: 0;
         bottom: 0;
         overflow-y: auto;
-        background: $nav_bg;
+        background: var(--nav-bg);
         border-right: 2px solid $grad_right;
 
         @include mobile_width {
@@ -304,7 +335,7 @@ a {
     a {
         display: block;
         padding: 4px 8px;
-        color: rgba($text_color, 0.8);
+        color: rgba(var(--text-color), 0.8);
 
         text-decoration: none;
 
@@ -428,6 +459,10 @@ a {
         code {
             background: rgba(0,0,0, 0.1);
             padding: 2px 10px;
+
+            @media (prefers-color-scheme: dark) {
+                background: #252525;
+            }
         }
 
     }
@@ -461,6 +496,10 @@ a {
             @include mobile_width {
                 font-size: 14px;
             }
+
+            @media (prefers-color-scheme: dark) {
+                background: #3C3C3C;
+            }
         }
     }
 
@@ -483,12 +522,17 @@ a {
     }
 
     blockquote, details.aside {
-        $color: #eee;
+        --color: #eee;
+
+        @media (prefers-color-scheme: dark) {
+            --color: #222;
+        }
+
         margin: 25px 0;
         padding: 10px;
 
-        background: $color;
-        border: 1px solid darken($color, 10%);
+        background: --color;
+        border: 1px solid darken(#eee, 10%);
         border-radius: 3px;
         box-shadow: 0px 1px 3px rgba(0,0,0, 0.1), inset 0px 0px 0px 1px rgba(255,255,255,0.3);
     }
@@ -508,7 +552,11 @@ a {
                     content: "Note:";
                     margin-right: 10px;
                     font-weight: bold;
-                    color: #444;
+                    color: rgb(156, 156, 156);
+
+                    @media (prefers-color-scheme: dark) {
+                        --color: rgb(54, 54, 54);
+                    }
                 }
             }
         }
@@ -602,12 +650,12 @@ pre {
     }
 
     thead {
-        background: $background_sub;
+        background: var(--background-sub);
         font-weight: bold;
 
         td {
             font-size: 14px;
-            color: rgba($text_color, 0.8);
+            color: rgba(var(--text-color), 0.8);
         }
     }
 
