@@ -6,6 +6,30 @@
   <h1>Changelog</h1>
 $markdown{[[
 
+## v1.8.3 -- February 9 2021
+
+### Additions 
+
+* Support lazy loading route actions from route name to module name [#710](https://github.com/leafo/lapis/issues/710)
+* Add UTF8 helper module, `lapis.utf8`, for identifying single UTF8 chars and whitespace (lpeg patterns that can be used for trimming and sanitization)
+* Add `cascade` option to postgres drop index schema function
+
+### Changes
+
+* Remove unused `mimetypes` dependency
+* If `yield_error` or `assert_error` are not captured by a outer coroutine then a hard error will happen
+* `Request\add_params` does not need a name
+* When searching for OpenResty installation, also accept a binary named `openresty` (for openresty install on mac with brew)
+* pgmoon connection error messages are prefixed with "postgres" to make them easier to identify
+* remove excess `;` characters in generated SQL for some postgres schema functions
+* Postgres create index schema function `if_not_exists` option will now use the sql clause `if not exists` instead of running a query to see if the entity exists
+
+### Misc
+
+* Update test suite to GitHub actions, remove TravisCI. Test suite works across all versions of Lua
+* Update docker test suite to latest postgres/mysql 
+
+
 ## v1.8.2 -- September 21 2020
 
 ### Additions
