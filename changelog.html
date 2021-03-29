@@ -6,6 +6,44 @@
   <h1>Changelog</h1>
 $markdown{[[
 
+## v1.9.0 -- March 29 2021
+
+### Changes
+
+* `Widget\include` is now implemented completely different: A dynamic mixins class is generated and inserted into the class hierarchy of the widget when `include` is first called. All fields and methods from any included classes are copied into this mixin class.
+  * It's now possible to override a method that is provided by an included class. (The current class has higher precedence than the *mixins* class)
+  * `super` can be used to call the method provided by the included by the class when overriding
+  * Some undocumented functionality regarding method merging was removed
+  * Only one mixin class will be inserted, and all included classes will copy their fields into that class. The most recently included classes will override anything that has the same time. (Note: there is no hierarchy for multiple includes, so you can't use `super` to call through multiple included classes)
+  * Methods from the class hierarchy of the included class are also copied into the mixin class.  (Note: methods are copied, and the hierarchy is flattened, meaning methods that depend on super may not work as intended)
+  * Note: The "dynamic mixin class" approach is also used for models when relation methods are generated
+* `lapis.spec.request.stub_request` no longer creates an anonymous app subclass, instead it will override the dispatch method on an instance of the class before stubbing the request
+* `lapis.spec.request.mock_action` will no longer push the `test` environment on every call, but instead will use the current environment. (Note: v1.8.2 added autodetection of busted to ensure specs are always running the test environment, so it's not necessary to manually set the environment)
+
+
+### Additions
+
+* Add support for `on_invalid_method` option to `respond_to`
+* Added support for *optional* reloations with `db.preload`. Relation names prefixed with `?` will be ignored if the object being preloaded does not contain a relation with that name.
+  * For example, trying to preload the relation `hello` when the model does not have `hello` will result in an error, but preloading `?hello` will do nothing.
+  * Optional `?` relations can have nested preloads, if the relation is not found then none of the nested preloads are loaded. This works best when combined with polymorphic relations where the objects may not all share the same relation interface.
+
+### Fixes
+
+* Lazy loaded actions work correctly when merged from sub applications
+* Before filters work correctly with lazy loaded actions
+* Lazy loaded actions work with Lua method responders
+
+### Misc
+
+* Default error page has encoding set to UTF-8
+* Simplify implmentation of `preload_relations`, deprecate it
+* Optimize concatenations `db.encode_values`
+* Improve error messages for some functions
+*  `db.encode_assigns`, `db.encode_clause`, `db.encode_values` throws error on empty table instead of generating invalid SQL from empty table
+* `sorted_pairs` spec helper
+* Additional specs (`respond_to`, widget including, lazy loaded actions)
+
 ## v1.8.3 -- February 9 2021
 
 ### Additions 
