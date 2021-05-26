@@ -24,6 +24,8 @@ $markdown{[[
 ### Additions
 
 * Add support for `on_invalid_method` option to `respond_to`
+* `fetch` relation can be set to `true` to autogenerate a `get_` method based
+on the provided `preload` function
 * Added support for *optional* reloations with `db.preload`. Relation names prefixed with `?` will be ignored if the object being preloaded does not contain a relation with that name.
   * For example, trying to preload the relation `hello` when the model does not have `hello` will result in an error, but preloading `?hello` will do nothing.
   * Optional `?` relations can have nested preloads, if the relation is not found then none of the nested preloads are loaded. This works best when combined with polymorphic relations where the objects may not all share the same relation interface.
