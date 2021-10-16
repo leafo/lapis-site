@@ -9,7 +9,8 @@ jobs:
     steps:
     - uses: actions/checkout@master
       with:
-        token: ${{ secrets.GH_ACCESS_TOKEN }}
+        submodules: true
+        # token: ${{ secrets.GH_ACCESS_TOKEN }}
 
     - run: git config --global user.name 'autoleafo'
     - run: git config --global user.email 'leafot+github@gmail.com'
