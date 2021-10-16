@@ -13,8 +13,8 @@ jobs:
         # token: ${{ secrets.GH_ACCESS_TOKEN }}
 
     - run: |
-      git config user.name 'autoleafo'
-      git config user.email 'leafot+github@gmail.com'
+        git config user.name 'autoleafo'
+        git config user.email 'leafot+github@gmail.com'
 
     - run: (cd lapis; git pull --ff-only)
     - run: git commit -m '[workflow] update lapis submodule' lapis
