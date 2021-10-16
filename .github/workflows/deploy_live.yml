@@ -1,9 +1,6 @@
-name: deploy
+name: deploy_live
 
-on:
-  push:
-    branches:
-      - master
+on: [workflow_dispatch]
 
 jobs:
   build:
@@ -47,4 +44,4 @@ jobs:
         chmod 700 ~/.ssh
         chmod 600 ~/.ssh/id_rsa
         chmod 644 ~/.ssh/known_hosts
-        rsync -arvuzL www/ leaf@leafo.net:www/lapis-test
+        rsync -arvuzL www/ leaf@leafo.net:www/lapis
