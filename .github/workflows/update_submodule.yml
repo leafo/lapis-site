@@ -3,7 +3,7 @@ name: update_submodule
 on: [workflow_dispatch]
 
 jobs:
-  build:
+  update_lapis:
     runs-on: ubuntu-latest
 
     steps:
@@ -12,10 +12,11 @@ jobs:
         submodules: true
         # token: ${{ secrets.GH_ACCESS_TOKEN }}
 
-    - run: git config --global user.name 'autoleafo'
-    - run: git config --global user.email 'leafot+github@gmail.com'
+    - run: |
+      git config user.name 'autoleafo'
+      git config user.email 'leafot+github@gmail.com'
 
-    - run: (cd lapis; git pull)
-    - run: git commit -m 'Update lapis submodule' lapis
+    - run: (cd lapis; git pull --ff-only)
+    - run: git commit -m '[workflow] update lapis submodule' lapis
     - run: git push
 
