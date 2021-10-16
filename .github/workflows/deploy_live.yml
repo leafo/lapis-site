@@ -31,7 +31,7 @@ jobs:
       run: |
         sitegen
 
-    - name: deploy to leafo.net/lapis-test
+    - name: deploy to leafo.net/lapis
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         LANGUAGE: en_US.UTF-8
