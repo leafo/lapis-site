@@ -16,7 +16,7 @@ jobs:
         git config user.name 'autoleafo'
         git config user.email 'leafot+github@gmail.com'
 
-    - run: (cd lapis; git pull --ff-only)
+    - run: git submodule update --remote
     - run: git commit -m '[workflow] update lapis submodule' lapis
     - run: git push
 
