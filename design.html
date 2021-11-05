@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+	<link rel="stylesheet" href="main.css?Fri Apr 19 09:24:38 2013" />
+</head>
+<body>
+  <div class="header">
+    <div class="inner">
+      <div class="window_frame pink">
+        <div class="window_title">Lapis</div>
+        <div class="animation" id="screencast"></div>
+      </div>
+      <h1>
+        Lapis
+      </h1>
+      <h2>A web framework for <a href="http://moonscript.org">MoonScript</a> & <a href="http://openresty.org/">OpenResty</a></h2>
+      <div class="social_buttons">Social Buttons</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="button_row">
+      <div class="button_offset">
+        <div class="line"></div>
+        <a href="#" class="button">Reference Manual</a>
+        <a href="#" class="button">Source on GitHub</a>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="install_row">
+      <div class="installer">
+        <div class="install_label">Install</div>
+        <div class="install_promp">
+          <code class="highlight">luarocks install --server<span class="o">=</span>http://rocks.moonscript.org/manifests/leafo lapis</code>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="inner">
+      <div class="box">
+        <h3>What is it? <span class="decor">❧</span></h3>
+        <p>Lapis is a framework for building web applications using <a
+        href="">MoonScript</a> (or <a href="">Lua</a>) that runs inside of a
+        customized version of <a href="">Nginx</a> called <a href="">OpenResty</a>.</p>
+      </div>
+
+      <pre class="highlight lang_moon"><code><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span>
+
+<span class="n">lapis</span><span class="o">.</span><span class="n">serve</span> <span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="n">profile_url</span> <span class="o">=</span> <span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">user_profile</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">leafo</span><span class="s2">&quot;</span>
+    <span class="vc">@html</span> <span class="nf">-&gt;</span>
+      <span class="n">h2</span> <span class="s2">&quot;</span><span class="s">Welcome!</span><span class="s2">&quot;</span>
+      <span class="n">text</span> <span class="s2">&quot;</span><span class="s">Go to my </span><span class="s2">&quot;</span>
+      <span class="n">a</span> <span class="nv">href:</span> <span class="n">profile_url</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">profile</span><span class="s2">&quot;</span>
+
+  <span class="kt">[</span><span class="nv">user_profile:</span> <span class="s2">&quot;</span><span class="s">/:name</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="vc">@html</span> <span class="nf">-&gt;</span>
+      <span class="n">div</span> <span class="nv">class:</span> <span class="s2">&quot;</span><span class="s">profile</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+        <span class="n">text</span> <span class="s2">&quot;</span><span class="s">Welcome to the profile of </span><span class="s2">&quot;</span><span class="p">,</span> <span class="vc">@params</span><span class="o">.</span><span class="n">name</span></code></pre>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="inner">
+      <div>
+        by <a href="http://leafo.net">leaf corcoran</a> 
+        <a rel="author" href="https://plus.google.com/114377626084940227656"><img src="http://www.google.com/images/icons/ui/gprofile_button-16.png" width="16" height="16"></a>
+        <span class="dot">&middot;</span>
+        licensed under MIT
+        <span class="dot">&middot;</span>
+        patterns from <a href="http://subtlepatterns.com/">subtle patterns</a>
+      </div>
+    </div>
+
+    <div class="texture"></div>
+  </div>
+
+  <script type="text/javascript" src="animations/player.js"></script>
+  <script type="text/javascript" src="animations/1/anim.js"></script>
+
+  <script type="text/javascript">
+    (function() {
+      var player = new Player(anim, "animations/1");
+      document.getElementById("screencast").appendChild(player.element);
+      player.start();
+    })();
+  </script>
+
+</body>
+</html>
