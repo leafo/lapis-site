@@ -36,7 +36,7 @@ jobs:
 
     - name: cleanup
       run: |
-        find www -iname '.gitignore' | rm
+        find www -iname '.gitignore' | xargs rm
 
     - name: deploy to github pages
       uses: JamesIves/github-pages-deploy-action@4.1.5
