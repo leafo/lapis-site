@@ -1,4 +1,4 @@
-name: deploy_test
+name: build_gh_pages
 
 on:
   push:
@@ -34,7 +34,7 @@ jobs:
       run: |
         sitegen
 
-    - name: deploy to GitHub pages
+    - name: deploy to github pages
       uses: JamesIves/github-pages-deploy-action@4.1.5
       with:
         branch: gh-pages
