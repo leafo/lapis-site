@@ -1,0 +1,1105 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Changelog - Lapis - A web framework for Lua or MoonScript powered by OpenResty</title>
+  <link rel="stylesheet" href="home.css?Fri Nov  5 23:56:45 2021" />
+  <script type="text/javascript">
+  if (window.location.hostname != "localhost") {
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-136625-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  }
+</script>
+</head>
+<body>
+  <div class="header">
+    <section class="inner">
+      <div class="window_frame pink">
+        <div class="window_title">Lapis</div>
+        <div class="animation" id="screencast"></div>
+      </div>
+      <div class="title_area">
+        <h1><a href=".">Lapis</a></h1>
+        <h2>A web framework for <a href="http://lua.org">Lua</a> or
+          <a href="http://moonscript.org">MoonScript</a></h2>
+
+        <div class="version_flag">
+          <a href="./changelog.html">
+            v1.9.0
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="button_row">
+      <a href="./reference.html" class="button">
+        <img src="./img/book.svg" alt="Reference" />
+        Reference Manual</a>
+
+      <div class="installer">
+        <div class="install_label">Install</div>
+        <div class="install_promp">
+          <code class="highlight">luarocks install lapis</code>
+        </div>
+        <div class="installer_sub">For Lua 5.1 and LuaJIT</div>
+      </div>
+
+      <a href="https://github.com/leafo/lapis" class="button">
+        <img src="./img/github.svg" alt="Github" />
+        Source on GitHub
+      </a>
+    </section>
+  </div>
+
+  <div class="sub_header">
+    <div class="inner">
+      <strong>Mar 29th, 2021:</strong> Lapis v1.9.0 &mdash; optional preload, Widget include rewrite, &amp; more: <a href="./changelog.html">changelog</a>
+    </div>
+  </div>
+
+  <div class="content">
+
+<div class="box only_box changelog">
+  <h1>Changelog</h1>
+<h2>v1.9.0 &mdash; March 29 2021</h2>
+
+<h3>Changes</h3>
+
+<ul>
+<li><code>Widget\include</code> is now implemented completely different: A dynamic mixins class is generated and inserted into the class hierarchy of the widget when <code>include</code> is first called. All fields and methods from any included classes are copied into this mixin class.
+
+<ul>
+<li>It&rsquo;s now possible to override a method that is provided by an included class. (The current class has higher precedence than the <em>mixins</em> class)</li>
+<li><code>super</code> can be used to call the method provided by the included by the class when overriding</li>
+<li>Some undocumented functionality regarding method merging was removed</li>
+<li>Only one mixin class will be inserted, and all included classes will copy their fields into that class. The most recently included classes will override anything that has the same time. (Note: there is no hierarchy for multiple includes, so you can&rsquo;t use <code>super</code> to call through multiple included classes)</li>
+<li>Methods from the class hierarchy of the included class are also copied into the mixin class.  (Note: methods are copied, and the hierarchy is flattened, meaning methods that depend on super may not work as intended)</li>
+<li>Note: The &ldquo;dynamic mixin class&rdquo; approach is also used for models when relation methods are generated</li>
+</ul>
+</li>
+<li><code>lapis.spec.request.stub_request</code> no longer creates an anonymous app subclass, instead it will override the dispatch method on an instance of the class before stubbing the request</li>
+<li><code>lapis.spec.request.mock_action</code> will no longer push the <code>test</code> environment on every call, but instead will use the current environment. (Note: v1.8.2 added autodetection of busted to ensure specs are always running the test environment, so it&rsquo;s not necessary to manually set the environment)</li>
+</ul>
+
+
+<h3>Additions</h3>
+
+<ul>
+<li>Add support for <code>on_invalid_method</code> option to <code>respond_to</code></li>
+<li><code>fetch</code> relation can be set to <code>true</code> to autogenerate a <code>get_</code> method based
+on the provided <code>preload</code> function</li>
+<li>Added support for <em>optional</em> reloations with <code>db.preload</code>. Relation names prefixed with <code>?</code> will be ignored if the object being preloaded does not contain a relation with that name.
+
+<ul>
+<li>For example, trying to preload the relation <code>hello</code> when the model does not have <code>hello</code> will result in an error, but preloading <code>?hello</code> will do nothing.</li>
+<li>Optional <code>?</code> relations can have nested preloads, if the relation is not found then none of the nested preloads are loaded. This works best when combined with polymorphic relations where the objects may not all share the same relation interface.</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Fixes</h3>
+
+<ul>
+<li>Lazy loaded actions work correctly when merged from sub applications</li>
+<li>Before filters work correctly with lazy loaded actions</li>
+<li>Lazy loaded actions work with Lua method responders</li>
+</ul>
+
+
+<h3>Misc</h3>
+
+<ul>
+<li>Default error page has encoding set to UTF-8</li>
+<li>Simplify implmentation of <code>preload_relations</code>, deprecate it</li>
+<li>Optimize concatenations <code>db.encode_values</code></li>
+<li>Improve error messages for some functions</li>
+<li><code>db.encode_assigns</code>, <code>db.encode_clause</code>, <code>db.encode_values</code> throws error on empty table instead of generating invalid SQL from empty table</li>
+<li><code>sorted_pairs</code> spec helper</li>
+<li>Additional specs (<code>respond_to</code>, widget including, lazy loaded actions)</li>
+</ul>
+
+
+<h2>v1.8.3 &mdash; February 9 2021</h2>
+
+<h3>Additions </h3>
+
+<ul>
+<li>Support lazy loading route actions from route name to module name <a href="https://github.com/leafo/lapis/issues/710">#710</a></li>
+<li>Add UTF8 helper module, <code>lapis.utf8</code>, for identifying single UTF8 chars and whitespace (lpeg patterns that can be used for trimming and sanitization)</li>
+<li>Add <code>cascade</code> option to postgres drop index schema function</li>
+</ul>
+
+
+<h3>Changes</h3>
+
+<ul>
+<li>Remove unused <code>mimetypes</code> dependency</li>
+<li>If <code>yield_error</code> or <code>assert_error</code> are not captured by a outer coroutine then a hard error will happen</li>
+<li><code>Request\add_params</code> does not need a name</li>
+<li>When searching for OpenResty installation, also accept a binary named <code>openresty</code> (for openresty install on mac with brew)</li>
+<li>pgmoon connection error messages are prefixed with &ldquo;postgres&rdquo; to make them easier to identify</li>
+<li>remove excess <code>;</code> characters in generated SQL for some postgres schema functions</li>
+<li>Postgres create index schema function <code>if_not_exists</code> option will now use the sql clause <code>if not exists</code> instead of running a query to see if the entity exists</li>
+</ul>
+
+
+<h3>Misc</h3>
+
+<ul>
+<li>Update test suite to GitHub actions, remove TravisCI. Test suite works across all versions of Lua</li>
+<li>Update docker test suite to latest postgres/mysql </li>
+</ul>
+
+
+<h2>v1.8.2 &mdash; September 21 2020</h2>
+
+<h3>Additions</h3>
+
+<ul>
+<li><code>db.delete</code> can take additional arguments for <code>RETURNING</code>, <code>Model\delete</code>
+method also supports additional arguments to control returning clause</li>
+<li><code>get_X_paginated</code> model relation method now supports passing <code>where</code> and
+<code>order</code> options to the paginator constructor</li>
+</ul>
+
+
+<h4>Fixes</h4>
+
+<ul>
+<li>Using <code>order</code> and <code>group</code> at the same time with <code>Model\include_in</code> will no
+longer generate an invalid query</li>
+<li>When running <code>lapis</code> command, the environment is immediately loaded when
+checking what commands are available for the server, fixes
+<a href="https://github.com/leafo/lapis/issues/665">#665</a></li>
+<li><code>lapis.nginx.cache</code> can correctly serialize array and boolean types that can
+result from parameter parsing, fixes
+<a href="https://github.com/leafo/lapis/issues/68">683</a></li>
+<li>The substring <code>-</code> is no longer matched by accident for route pattern filters <a href="https://github.com/leafo/lapis/issues/696">#696</a></li>
+</ul>
+
+
+<h4>Changes</h4>
+
+<ul>
+<li>When running in <code>busted</code>, the <code>test</code> environment is set as the default
+environment any tests are run. It is not longer necessary to have a <code>setup</code> or
+<code>use_test_env</code> call to configure the environment</li>
+<li>Default buffer size and timout for parsing multipart form data has been
+increased to allow for slower connections (4k bytes per 5 seconds)</li>
+<li>All logging goes stdout when not running in Nginx</li>
+<li>Compatibility patches for Lua 5.2, 5.3, 5.4</li>
+<li>Improved error message for some <code>lapis</code> commands when using an incomplete
+configuration</li>
+<li>Improved error message when file can not be written when generating app
+files</li>
+<li>(Internal) <code>default_environment</code> function moved to <code>lapis.environment</code>
+module, added <code>set_default_environment</code> function</li>
+<li>Better error message when trying to use <code>belongs_to</code> with composite key
+(<code>has_one</code> should be used instead)</li>
+<li>Better error when trying to use default composite primary key with a
+<code>has_one</code> relation</li>
+</ul>
+
+
+<h4>Misc</h4>
+
+<ul>
+<li>Test suites run across on all versions of Lua on GitHub actions</li>
+<li>Added docs for how <a href="./reference/actions.html#request-parameters">request parameters are parsed and
+merged</a></li>
+<li>Added docs for <a href="./reference/configuration.html#default-environment">how the default environment
+works</a></li>
+<li>Fixed bug in docs generator where code snippets were not appearing</li>
+<li>The <code>--trace</code> option for the <code>lapis</code> command is enabled by default when running in test</li>
+<li>Fix minor typos in docs</li>
+</ul>
+
+
+<h2>v1.8.1 &mdash; April 27 2020</h2>
+
+<h4>Fixes</h4>
+
+<ul>
+<li>Fix error when parsing <code>Model\paginated()</code> model method arguments"&ldquo;to detect if
+ordered paginator should be used</li>
+</ul>
+
+
+<h2>v1.8.0 &mdash; April 24 2020</h2>
+
+<h4>Deprecations</h4>
+
+<ul>
+<li>The <code>flip</code> and <code>local_key</code> used with <code>include_in</code> or any relations are now
+deprecated. Replacement syntax available in <a href="./reference/models.html#class-methods/include_in">documentation for
+<code>Model\include_in</code></a></li>
+</ul>
+
+
+<h4>Additions</h4>
+
+<ul>
+<li>Add support for a column mapping table when specifying the key for
+<code>include_in</code> and any relations. See more documentation for
+<a href="./reference/models.html#class-methods/include_in"><code>Model\include_in</code></a></li>
+<li>Add support for composite foreign keys with <code>include_in</code> and relations</li>
+<li><code>each_item</code> method for Paginators that will return a Lua iterator for going
+over every row but queries in batches set by <code>per_page</code></li>
+<li>An <code>ordered</code> option can be passed to <code>Model\paginated</code> an <code>get_X_paginated</code>
+to create an <code>OrderedPaginator</code> instead of a <code>OffsetPaginator</code></li>
+<li>Add <code>skip_render</code> action render option to prevent Lapis from writing
+anything (Suitable for manually writing to output buffer with something like
+<code>ngx.print</code>)</li>
+<li><code>fetch</code> relations can now specify if they return a collection of items with
+<code>many</code> so nested preloading can traverse the loaded objects</li>
+<li>add <code>serve</code> alias for the <code>lapis server</code> command line command</li>
+<li>add <code>app_only</code> code cache option for cqueues to attempt to load app on every
+dispatch</li>
+<li>A <code>resty_mysql</code> object can be included in the MySQL configuration object to
+provide additional parameters when initializng a <code>resty.mysql</code> connection</li>
+<li>Pgmoon connections will now read the <code>timeout</code> field from the PostgreSQL
+config object (Contributed by turbo <a href="https://github.com/leafo/lapis/pull/679">679</a>)</li>
+<li>Add <code>set_logger</code> and <code>get_logger</code> functions to the <code>lapis.db.mysql</code> and
+<code>lapis.db.postgres</code> module</li>
+<li>(<code>lapis.db.postgres</code>) <code>escape_identifier</code> function will now flatten <code>db.list</code>
+objects into raw SQL</li>
+<li>(<code>lapis.db.postgres.schema</code>) <code>create_index</code> support a <code>concurrently</code> option to
+create index concurrently (Contributed by Michael Ball <a href="https://github.com/leafo/lapis/pull/659">659</a>)</li>
+<li>add <code>test</code> validation for manually specifying a function to test input</li>
+</ul>
+
+
+<h4>Changes</h4>
+
+<ul>
+<li><code>assert_error</code> will now fail with <code>error</code> if the error it yielded was not
+captured and execution attempted to continue</li>
+<li>initial project templates use <code>content_by_lua_block</code> (Contributed by
+ryanford <a href="https://github.com/leafo/lapis/pull/674">674</a>)</li>
+<li><code>each_page</code> method on paginators no longer allocates a coroutine, a plain
+function iterator is used</li>
+<li>attempting to preload an object that isn&rsquo;t a class will throw an error</li>
+<li>attempting to use an invalid order with <code>OrderedPaginator</code> will throw an
+error</li>
+<li><code>measure_performance</code> now works even when outside of nginx when reporting
+query time</li>
+<li>(<code>lapis.html</code>) <code>classnames</code> ignores empty strings and will return first
+argument directly if passed a string</li>
+<li>(<code>lapis.logging</code>) <code>query</code> log function can now take a prefix and duration</li>
+<li>Removed undocumented <code>locals</code> action render option</li>
+</ul>
+
+
+<h4>Fixes</h4>
+
+<ul>
+<li>Fix bug where internal shell_escape function would strip <code>'</code> characters</li>
+<li>Returning <code>{ json = false }</code> in action render will actually render false as
+json instead of skipping json render</li>
+</ul>
+
+
+<h4>Documentation</h4>
+
+<ul>
+<li>Started rewriting how options tables are described in the documentation.
+Uses a grid layout with collapsing examples.</li>
+<li>Many parts of Models documentation have been rewritten for clarity</li>
+<li>Remove outdated references to fields that are deprecated/removed (eg.
+<code>cmd_url</code>)</li>
+<li>Add documentation for the <code>timestamp</code> option for <code>model\update</code></li>
+<li>Updated colors of site to be blue</li>
+</ul>
+
+
+<h4>Misc</h4>
+
+<ul>
+<li>Specs now run on GitHub actions with matrix for LuaJIT, OpenResty&rsquo;s LuaJIT,
+and all versions of Lua</li>
+<li>We now have a MoonScript Discord, join here: <a href="https://discord.gg/Y75ZXrD">https://discord.gg/Y75ZXrD</a></li>
+<li>Fix typo in docs from Chris Tanner <a href="https://github.com/leafo/lapis/pull/621">621</a></li>
+<li>Fix typo in docs from TangentFoxy
+<a href="https://github.com/leafo/lapis/pull/634">634</a>
+<a href="https://github.com/leafo/lapis/pull/685">685</a>
+<a href="https://github.com/leafo/lapis/pull/672">672</a></li>
+</ul>
+
+
+<h2>v1.7.0 &mdash; April 2 2018</h2>
+
+<p><strong> Changes </strong></p>
+
+<ul>
+<li>Replaced the CSRF implementation, removed the <code>key</code> parameter and replaced with it randomly generated string stored in cookie.</li>
+<li>Sessions now use the <code>lapis.encoding</code> module to encode an decode. Session loading error messages have changed to include the error from <code>encode_with_secret</code> and <code>decode_with_secret</code></li>
+<li>Remove all support for luacrypto, luaossl is required</li>
+</ul>
+
+
+<p><strong> Additions </strong></p>
+
+<ul>
+<li>Add support for chaning HMAC function, add sha256 HMAC config option</li>
+<li>Support parsing cookies when there are multiple cookie headers</li>
+<li>Add <code>enum</code> type fro MySQL</li>
+<li>Add support for encoding NULL and empty arrays for <code>to_json</code> and JSON render</li>
+<li>Add config template for cqueues/lua-http support</li>
+<li>Request object for cqueues/lua-http contains all the same fields as OpenResty counterpart</li>
+<li>Performance object is available for cqueues/lua-http</li>
+<li>Environment name is shown on server start log</li>
+<li>Add <code>bind_host</code> config option to set which interface cqueues/lua-http binds to, defaults to <code>0.0.0.0</code></li>
+</ul>
+
+
+<p><strong> Fixes </strong></p>
+
+<ul>
+<li>Fix issue with MySQL migrations where query result was not being converted to number</li>
+<li>Fix a crash when request args could not be parsed</li>
+<li>Fix a crash when the query parameter type changes when being parsed (between table and literal)</li>
+<li><code>json_params</code> works with cqueues/lua-http</li>
+<li>cqeueus/lua-http test server now works correctly, is now part of CI</li>
+<li>cqeueus/lua-http will no longer get stuck in infinite loop when port is already taken</li>
+<li>cqeueus/lua-http will only ready &amp; parse body for form encoded content type</li>
+<li>Terminal output buffering is disabled for cqeueus/lua-http so service files can read logs from stdout/stderr</li>
+</ul>
+
+
+<h2>v1.6.0 &mdash; July 20th 2017</h2>
+
+<p><strong> Additions </strong></p>
+
+<ul>
+<li>Add a new general purpose <code>preload</code> function that can preload many relations
+at once for many kinds of model instances, including recursively preloading relations</li>
+<li>Addition of <code>cqueues</code> and <code>lua-http</code> server backend</li>
+<li>Pgmoon connection status is logged to performance table for each request when
+performance measurements are enable</li>
+<li><code>fetch</code> relations can provide a method for preloading with the <code>preload</code> option</li>
+<li><code>default_url_params</code> has been added to request support object for extending the default parameters passed into <code>url_for</code></li>
+<li><code>matches_pattern</code> validation can be used to test an input against a Lua pattern</li>
+<li><code>relation_is_loaded</code> function can be used to test if a model has a relation loaded</li>
+<li><code>mock_request</code> can insert a session via a Lua table</li>
+<li><code>lapis.time</code> module with a <code>sleep</code> function that executes correct implementation for the current backend server</li>
+<li>If you use <code>when</code> instead of <code>where</code> when creating an index an error is thrown</li>
+<li><code>lapis.spec.request</code>, the <code>mock_request</code> function supports <code>cookies</code> option</li>
+<li>Add <code>render_to_file</code> method for widgets</li>
+<li>Add documentation for <code>Flow</code></li>
+</ul>
+
+
+<p><strong> Changes </strong></p>
+
+<ul>
+<li>Route precedence sorting now uses a score based approach where multiple variables or splats can affect the final order</li>
+<li>Mocked requests have <code>ngx.md5</code> implemented with <code>luacrypto</code></li>
+<li>Query logs use luasocket to measure time elapsed for a more accurate measurement</li>
+<li>URL parsing uses <code>find</code> and <code>sub</code> instead of <code>match</code> to parse very long paths faster (<a href="https://github.com/leafo/lapis/issues/498">#498</a>)</li>
+<li><code>db.NULL</code> values are always stripped when inserting a new row from a model&rsquo;s <code>create</code> method</li>
+<li>Test server can be run even if there isn&rsquo;t a database configured</li>
+<li>Refactor backend implementation to be extensible to allow for <code>cqueues</code>/<code>lua-http</code> implementation</li>
+<li>Add support for test server to run on cqueues backend</li>
+<li>Replace <code>luacrypto</code> with <code>luaossl</code></li>
+</ul>
+
+
+<p><strong> Minor changes </strong></p>
+
+<ul>
+<li>Lua and MoonScript are added as mime types in default <code>mime.types</code> file (<a href="https://github.com/leafo/lapis/issues/513">#513</a>)</li>
+<li>Various improvements to the documentation</li>
+</ul>
+
+
+<p><strong> Fixes </strong></p>
+
+<ul>
+<li>Encoding a query string with a parameter with a boolean value will no longer throw an error</li>
+<li>Fix issue where <code>*.lua</code> would be included in <code>.gitignore</code> for Lua projects (<a href="https://github.com/leafo/lapis/issues/501">#501</a>)</li>
+<li>A user set content type will no longer be overwritten when outputting with the <code>json</code> action return handler</li>
+<li>Check for <code>Content-Disposition</code> header for file uploads is no longer case sensitive</li>
+</ul>
+
+
+<p><strong> Note on <code>cqueues</code>/<code>lua-http</code> </strong></p>
+
+<p>With this release we're adding a new server backend for Lapis. Although the
+backend is functional, there are some things that aren&rsquo;t available yet.
+Database connections are shared across all requests so you have to be careful
+about leaving transactions or state open. Additionally, there&rsquo;s no way to spawn
+multiple workers. For production environments we still recommend OpenResty.</p>
+
+<h2>v1.5.1 &mdash; July 21st 2016</h2>
+
+<p><strong> Security Fixes </strong></p>
+
+<ul>
+<li>The <code>trim</code> implementation was vulnerable to high CPU usage with a specially crafted string due to how the pattern was written. (More information: <a href="https://github.com/leafo/lapis/commit/4a58f5c12582796b3c7e0ad784630fc6be56b92d">4a58f5c1</a>)</li>
+</ul>
+
+
+<p><strong> Additions </strong></p>
+
+<ul>
+<li><code>has_one</code> relations can specify a <code>local_key</code> (similar to the parameter passed to <code>include_in</code>)</li>
+<li><code>has_many</code> relations can specify a <code>local_key</code></li>
+<li>Add a generate template for flows: <code>lapis generate flow my_flow</code></li>
+</ul>
+
+
+<p><strong> Changes </strong> </p>
+
+<ul>
+<li>Flows now use <code>_</code> as the backing variable, so it&rsquo;s clear they can be used on any type of object. (Previously <code>_req</code>)</li>
+<li>Interval fields cleaned up and renamed on <code>Request</code> to make way for different server backends</li>
+<li>Nginx specific modules moved to make way for different server backends (daurnimator)</li>
+<li>Add <code>/opt/openresty/nginx/sbin/</code> to the OpenResty search path for <code>lapis server</code> (Cristian Haunsen)</li>
+</ul>
+
+
+<p><strong> Fixes </strong></p>
+
+<ul>
+<li><code>has_one</code> work correctly by default if primary key is not <code>id</code></li>
+<li>Many documentation fixes, thanks to <a href="https://github.com/leafo/lapis/pulls?q=is%253Apr%2Bis%253Aclosed">all the contributors</a></li>
+<li>Host and port correct passed to console MySQL connection (Douglas Roeder)</li>
+<li>Test environments automatically close database connections to avoid lingering connections due to Busted hiding module</li>
+</ul>
+
+
+<h2>v1.5.0 &mdash; March 25th 2016</h2>
+
+<p><strong> Additions </strong></p>
+
+<ul>
+<li>Add <code>flow</code> method to request object for invoking flows</li>
+<li>You can now pass output headers to <code>write</code> and action return values</li>
+<li><code>has_one</code> relations now work with <code>where</code> clause</li>
+<li>Better error message for missing value during query interpolation</li>
+<li>MySQL <code>db</code> now supports <code>db.list</code></li>
+</ul>
+
+
+<p><strong> Changes </strong> </p>
+
+<ul>
+<li>Error handling interface rewritten to match regular actions</li>
+<li>Any <code>db.NULL</code> passed to Model.create will be stripped</li>
+<li>Any <code>db.NULL</code> passed to Model.update will be stripped, and not assigned to updated model</li>
+<li>Flows instances inherit the <code>__call</code> metamethod</li>
+<li>Passing <code>nil</code> as an argument to truncate tables will error</li>
+<li>Request support methods no longer take up names on the request object</li>
+<li>The cookie and session loading code is now overridable</li>
+<li>Layout loading works the same everywhere: provide either module name or layout widget</li>
+</ul>
+
+
+<p><strong> Fixes </strong></p>
+
+<ul>
+<li>Fix crash when using <code>?</code> inside query value with no interpolation.  Interpolation is only performed when extra fields are passed.</li>
+<li>Empty <code>where</code> in <code>include_in</code> and <code>find_all</code> will no longer generate invalid query</li>
+</ul>
+
+
+<h2>v1.4.3 &mdash; January 23rd 2016</h2>
+
+<p><strong> Additions </strong></p>
+
+<ul>
+<li><a href="./reference/actions.html#request-object-methods/url_for"><code>url_for</code></a> will only include optional components of routes if all nested parameters are provided</li>
+<li><code>time_ago_in_words</code> is documented, add <code>date</code> module as a dependency</li>
+<li><code>validate</code> can take options, add <code>key</code> option to return errors as hash table instead of array</li>
+<li><code>layout</code> field of app can be specified as string, will be loaded as module from views directory at runtime</li>
+</ul>
+
+
+<p><strong> Fixes </strong></p>
+
+<ul>
+<li>Fix issue where <code>url_for</code> was including character class of named parameter in result</li>
+<li>Fix issue with <code>--trace</code> flag interrupting arguments of command line commands</li>
+</ul>
+
+
+<h2>v1.4.2 &mdash; January 22nd 2016</h2>
+
+<p><strong> Additions </strong></p>
+
+<p>Read about all the new route matching syntax: <a href="./reference/actions.html#routes-and-url-patterns">Routes and URL patterns</a></p>
+
+<ul>
+<li>Routes now have a precedence and are sorted. Static routes have highest precedence</li>
+<li>New syntax for optional parts of routes using parentheses</li>
+<li>Splats in routes are no longer greedy, text after splat can match</li>
+<li>Named parameters in routes are no longer greedy, text after parameter can match</li>
+<li>Named parameters can take character classes</li>
+<li><code>url_for</code> can correctly fill the splat parameter</li>
+<li>Add <code>allow_error</code> option to <code>mock_request</code> to allow 500 error to return without failing spec</li>
+<li>Add documentation for <code>OrderedPaginator</code></li>
+</ul>
+
+
+<p><strong> Changes </strong></p>
+
+<ul>
+<li>Empty <code>class</code> attributes within HTML builder do not add a blank attribute</li>
+</ul>
+
+
+<p><strong> Fixes </strong></p>
+
+<ul>
+<li><code>OrderedPaginator</code> with multiple fields now works correctly when fetching additional pages</li>
+<li>Typo in <code>time_ago_in_words</code></li>
+</ul>
+
+
+<h2>v1.4.0 &mdash; December 29th 2015</h2>
+
+<p><strong> Additions </strong></p>
+
+<ul>
+<li>Relations provide preload functions for automatically calling <code>include_in</code> with the correct parrameters</li>
+<li>Introduce <code>preload_relations</code> and <code>preload_relation</code> on models with relations</li>
+<li>Introduce <code>clear_loaded_relation</code> method on models with relations</li>
+<li>Rewrite <code>super</code> for lua classes to avoid issues with complicated hierarchies</li>
+<li><code>Model.include_in</code> can take a relation name with <code>for_relation</code> to mark it as loaded</li>
+<li><code>Model.include_in</code> can take a <code>group</code> option to add a <code>group by</code> clause to query</li>
+<li><code>Model.include_in</code> can take a <code>value</code> option to transform the fetched results before being placed on the model instances</li>
+<li><code>lapis new</code> now generates a <code>models.moon</code> file, with code to autoload from models directory</li>
+</ul>
+
+
+<p><strong> Changes </strong></p>
+
+<ul>
+<li>Relations are now implemented as intermediate class (can override their helpers and call super)</li>
+<li><code>Model.include_in</code> will now set an empty array for any <code>many</code> preloads that return no results</li>
+<li><code>Model.refresh</code> will clear relation load status when refreshing all columns</li>
+</ul>
+
+
+<p><strong> Fixes </strong></p>
+
+<ul>
+<li>Fix bug where <code>__inherited</code> callback was called twice when using Lua classes</li>
+<li>MySQL connection initialized if necessary when trying to escape value (fixes migration issue)</li>
+</ul>
+
+
+<h2>v1.3.2 &mdash; December 10rd 2015</h2>
+
+<p><strong> Additions </strong></p>
+
+<ul>
+<li>relation getters now keep track if they've fetched before with internal state to prevent fetching again on <code>nil</code> relations</li>
+<li>add <code>clear_loaded_relation</code> method to clear a cached relation&rsquo;s value to module <code>lapis.models.relations</code></li>
+<li>The <code>class</code> attribute for HTML builders <a href="./reference/html_generation.html#html-builder-syntax/special-attributes">can now take a table</a> to generate class</li>
+</ul>
+
+
+<p><strong> Fixes </strong></p>
+
+<ul>
+<li>Ordered paginator prefixes column names with table names to allow for joins with shared columns</li>
+<li><code>https</code> URLs generated with port 443 will have the port stripped from the output</li>
+<li>All json encoding now strips any keys that are not strings or numbers</li>
+<li>The <code>returning</code> option for <code>Model\create</code> can take the value <code>"*"</code> to return all fields</li>
+</ul>
+
+
+<p><strong> Misc </strong></p>
+
+<ul>
+<li>Rebuilt with latest MoonScript</li>
+</ul>
+
+
+<h2>v1.3.1 &mdash; October 23rd 2015</h2>
+
+<p><strong> Additions </strong></p>
+
+<ul>
+<li>Add <code>Model\scoped_model</code> for easily creating plugins/extensions that have their own models</li>
+<li>Add extension point to add custom <code>lapis</code> command line commands</li>
+<li><code>build_url</code> can take empty string scheme to build protocol relative URL</li>
+<li>Add <code>util.date_diff</code> function</li>
+</ul>
+
+
+<p><strong>Changes</strong></p>
+
+<ul>
+<li>Improve error messages for models with table name</li>
+<li><code>ngx</code>&rsquo;s query string escape function will be used if available</li>
+<li>Invalid enum access throw better error messages</li>
+<li>Error page will wrap exception error to avoid scrollbar</li>
+</ul>
+
+
+<h2>v1.3.0 &mdash; July 18th 2015</h2>
+
+<p><strong>Additions</strong></p>
+
+<ul>
+<li>pgmoon updated to 1.2.0</li>
+<li>Add support for Postgres array types</li>
+<li>All schema builders have new <code>array</code> property</li>
+<li>Add <code>db.postgres.array</code> and <code>db.postgres.is_array</code> for constructing and testing arrays</li>
+<li>Array types automatically deserialized and serialized</li>
+<li>update spec generator to support both model and server style specs</li>
+<li>custom generators can be created by creating modules in <code>generators.</code></li>
+<li><code>create_table</code> now fails if table already exists (Postgres, MySQL)</li>
+<li><code>create_index</code> now fails by default if index exists (Postgres, MySQL)</li>
+<li><code>create_index</code> can take <code>index_name</code> option to set specific index name (Postgres, MySQL)</li>
+<li><code>create_index</code> can take <code>if_not_exists</code> option to skip if already exixists (Postgres)</li>
+<li><code>belongs_to</code> relations now support a <code>key</code> option</li>
+<li><code>Model\select</code> now can take a <code>load</code> option to control what model the results are loaded with. Can take false to not load any model</li>
+<li>Add <code>has_items</code> method to paginator</li>
+<li>Add <code>enum</code> schema type for alias to <code>small int</code> (Postgres)</li>
+<li>Polymorphic relation preload can take <code>fields</code> option</li>
+</ul>
+
+
+<p><strong>Changes</strong></p>
+
+<ul>
+<li>Any empty table passed to URL params in <code>url_for</code> no longer leaves a <code>?</code> at
+the end of the URL</li>
+</ul>
+
+
+<p><strong>Bugs</strong></p>
+
+<ul>
+<li>Fix bug where <code>before_filter</code> would not work in Lua API</li>
+<li>Fix bug where HTTP 1.0 requests without host header would fail</li>
+<li>Fix bug where sending two content type headers would cause error</li>
+<li>Fix a bug where Model table name caching could affect subclasses</li>
+</ul>
+
+
+<h2>v1.2.0 &mdash; May 14th 2015</h2>
+
+<p><strong>Breaking changes</strong></p>
+
+<p>There are a few changes that affect backwards compatibility:</p>
+
+<ul>
+<li>The <code>default</code> Postgres backend, which utilizes <code>ngx_postgres</code>, has been entirely removed. Early users of Lapis are recommended to upgrade to <code>pgmoon</code></li>
+<li>The <code>has_many</code> relation now defines two methods: the <code>get_relation</code> method no longer returns a pager but all the associated rows. A new method, <code>get_relation_paginated</code> will return a pager</li>
+</ul>
+
+
+<h4>Database</h4>
+
+<ul>
+<li>Add support for MySQL (Thanks <a href="https://github.com/leafo/lapis/pull/250">starius</a>)</li>
+<li>Add <code>db.list</code> for automatically building SQL list syntax for <code>where x in ()</code> queries</li>
+</ul>
+
+
+<h4>Models</h4>
+
+<ul>
+<li><code>include_in</code> can now preload many associated objects when <code>many</code> option is set to true</li>
+<li>A flipped <code>include_in</code> can now specify the <code>local_key</code> to use a different key than <code>id</code></li>
+<li>Add <code>polymorphic_belongs_to</code> relation</li>
+<li><code>has_many</code> now defines two methods, one for pagination and one for fetching all the rows</li>
+<li><code>has_many</code> relation now supports the <code>order</code> option</li>
+<li>Fix all syntax errors in reference manual</li>
+</ul>
+
+
+<h4>Misc</h4>
+
+<ul>
+<li>Enhance <code>singularize</code> function, can singularize words like <em>Categories</em> to <em>Category</em></li>
+<li>Main Lapis server and spec server can now be launched in different directories from the current</li>
+<li>Fixed a bug when setting config values that would cause function blocks to override previous function blocks instead of merging</li>
+</ul>
+
+
+<h2>v1.1.1 &mdash; April 25th 2015</h2>
+
+<h4>Models</h4>
+
+<ul>
+<li>Add <code>singular_name</code> method to model classes, used when determining field name in relations and <code>inclue_in</code></li>
+<li>Add <code>clause</code> parameter to <code>find_all</code></li>
+<li><code>delete</code> method returns <code>true</code> if a row is actually removed, <code>false</code> otherwise</li>
+<li>Relation getters will no longer error if foreign key has <code>nil</code> value</li>
+<li>Fixed bug where ordered paginator with multiple keys could skip records if non-specific keys shared values</li>
+</ul>
+
+
+<h4><code>lapis.cache</code></h4>
+
+<ul>
+<li><code>cached</code> will only cache <code>GET</code> requests</li>
+<li><code>cached</code> updated to not interfere with <code>request</code> method</li>
+</ul>
+
+
+<h4>Misc</h4>
+
+<ul>
+<li><code>url_for</code> now takes a third argument, a table of query parameters</li>
+<li>A flow can be passed to a flow in place of the <code>req</code> object.</li>
+<li>New config field, <code>max_request_args</code>, controls OpenResty&rsquo;s maximum request argument truncation from <code>get_post_args</code> and <code>get_uri_args</code>.</li>
+<li>Generated config includes pid directive to ensure compile time flags don&rsquo;t interfere</li>
+<li>New <code>lapis.spec</code> module with <code>use_test_env</code> and <code>use_test_server</code> for busted</li>
+<li>Fixed a bug where <code>respond_to</code> was returning multiple arguments and interfering with Lua match API</li>
+</ul>
+
+
+<h2>v1.1.0 &mdash; February 3rd 2015</h2>
+
+<h4>Models</h4>
+
+<ul>
+<li>Added <a href="./reference/models.html#describing-relationships">support for relations to models</a></li>
+<li>Added <a href="./reference/models.html#enum"><code>enum</code> function for models</a></li>
+<li>Add <code>returning</code> option to <code>Model.create</code> to fetch initial values from database during create</li>
+<li><code>db.raw</code> values passed to <code>Model.create</code> are loaded from database after create</li>
+<li><code>db.raw</code> values passed to <code>Model.update</code> are loaded from database after update</li>
+<li>Fix bug where constraints were not working correctly for <code>Model.update</code></li>
+<li>Many minor fixes to ordered paginator</li>
+<li>Migrations table automatically created on running migrations if it doesn&rsquo;t exist</li>
+<li>Migrations are now run outside of Nginx</li>
+</ul>
+
+
+<h4>Widgets</h4>
+
+<ul>
+<li><code>content_for</code> data in widgets is prefixed to avoid conflict with user defined variables</li>
+<li>Boolean values for attributes in HTML builder will render value-less attribute</li>
+<li>Multiple <code>content_for</code> of same name will now append instead of overwrite</li>
+</ul>
+
+
+<h4>Misc</h4>
+
+<ul>
+<li><code>Flow</code> can now expose instance variable assignments to request with <code>expose_assigns</code></li>
+<li>Added new <code>lapis generate</code> command, add basic generators for model and spec</li>
+<li><code>request</code> method in <code>lapis.spec.server</code> will now send merged GET parameters passed with those in URL</li>
+</ul>
+
+
+<h2>v1.0.6 &mdash; October 27th 2014</h2>
+
+<ul>
+<li>Fix <code>http.request</code> when URL does not contain path</li>
+<li><code>json_params</code> will read body before trying to parse it</li>
+<li><code>util.autoload</code> can take multiple search prefixes</li>
+<li><code>util.slugify</code> improved to avoid generating multiple <code>-</code>, will also conver <code>_</code> to <code>-</code> now</li>
+</ul>
+
+
+<h2>v1.0.5 &mdash; October 10th 2014</h2>
+
+<ul>
+<li>Add <a href="./reference/database.html#models-refreshing-a-model-instance">refresh method to model instance</a> for reloading properties</li>
+<li><code>updated_at</code> <a href="./reference/database.html#models-timestamps">update can be disabled</a> for model <code>update</code> method now</li>
+<li><code>total_items</code> method of paginator aware of joins, bails out with <code>group by</code></li>
+<li>SQL clause parser (for paginator) is aware of joins and sub queries now, along with other assorted fixes and performance improvements</li>
+<li>Add ordered paginator, paginator can be instantiated without where clause</li>
+<li><code>@POST</code> is only parsed if <code>content-type</code> header is set to be a form</li>
+<li><code>truncate_tables</code> is only allowed to run in test environment</li>
+<li><code>mock_request</code> supports <code>expect_json</code></li>
+<li><code>mock_request</code> correctly stubs <code>ngx.now</code>, <code>ngx.update_time</code> and <code>remote_addr</code></li>
+</ul>
+
+
+<h2>v1.0.4 &mdash; August 19th 2014</h2>
+
+<ul>
+<li>Add <a href="./reference/configuration.html#performance-measurement">performance metrics API</a> with <code>measure_performance</code> config</li>
+<li>Add environment module for pushing and popping config environments</li>
+<li>Experimental support for <a href="https://github.com/sergeyzavadski/leda">Leda</a> as a server</li>
+<li>pgmoon automatically connects when executing <code>lapis.db</code> queries from command line</li>
+<li>Errors in spec server as passed back and rethrown locally with backtrace</li>
+<li>Nginx config files can be written in etlua when using <code>.etlua</code> extension</li>
+<li>Add <code>--etlua-config</code> flag to <code>lapis new</code> to create blank project with etlua config</li>
+<li>The names of cookies are correctly unescaped</li>
+</ul>
+
+
+<h2>v1.0.3 &mdash; July 23 2014</h2>
+
+<ul>
+<li>Default application structure updated, <code>lapis.serve</code> is now executed from Nginx configuration. Default application code is now a regular Lua module that can be required with no side effects</li>
+<li><code>ngx_postgres</code> is deprecated, docs removed. <a href="./reference/database.html">pgmoon documentation added</a>. (ngx_postgres support will be removed in 1.1.0)</li>
+<li>Spec server waits to shut down before starting new one when runnning non-attached (fixes timeout when executing many test files in a row)</li>
+<li>Spec server can be run on fresh checkout without running <code>lapis build</code> first</li>
+<li>Added <a href="./reference/actions.html">new documentation for request lifecycle</a></li>
+<li>Added <a href="./reference/actions.html#request-object-cookies"><code>cookie_attributes</code> extension function</a> for configuring new cookies</li>
+<li>Fix leaking objects passed to <code>lapis.serve</code> (only applies when sending many different applications)</li>
+</ul>
+
+
+<h2>v1.0.2 &mdash; July 15 2014</h2>
+
+<ul>
+<li>Add new <a href="./reference/etlua_templates.html">reference guide for etlua</a></li>
+<li>Enforce routes to be searched in order they are defined for Lua style applications</li>
+<li>Fix bug where <code>render</code>/<code>widget</code> functions in etlua template scope were shadowed</li>
+<li>Add <code>Model\columns</code> method to get list of column names and types for a table</li>
+<li><code>LAPIS_SHOW_QUERIES</code> environment variable can be used to enable printing <code>pgmoon</code> queries during specs</li>
+<li>Misc documentation updates, more specs</li>
+</ul>
+
+
+<h2>v1.0.1 &mdash; Jun 30 2014</h2>
+
+<ul>
+<li><code>LAPIS_OPENRESTY</code> environment variable can be used to set OpenResty binary location</li>
+<li>Fixed a bug with <code>lapis.serve</code> that prevented a string argument from loading correctly</li>
+<li>Deprecate old PostgreSQL configuration syntax, document <a href="./reference/database.html#establishing-a-connection">new table based syntax</a></li>
+</ul>
+
+
+<h2>v1.0.0 &mdash; Jun 16 2014</h2>
+
+<h4>General</h4>
+
+<ul>
+<li>Add a new Lua friendly API, see <a href="./reference/lua_getting_started.html">Getting Started With Lua</a></li>
+<li>Add support for <a href="http://github.com/leafo/etlua">etlua</a> as a view language, see Lua guide</li>
+<li>Overhaul to <a href="./reference.html">reference manual</a>: better organization, Lua examples, and more guides</li>
+</ul>
+
+
+<h4>Database</h4>
+
+<ul>
+<li><code>Model\include_in</code> can take a <code>where</code> option to filter results</li>
+<li>A flipped <code>Model\include_in</code> no longer throws error when not using primary key</li>
+<li><code>model\find_all</code> can take a <code>where</code> option to filter results</li>
+<li><code>model\find_all</code> can take a <code>db.raw</code> value as search key</li>
+<li><code>updated_at</code> and <code>created_at</code> aren&rsquo;t overwritten when creating a model if manually set</li>
+<li><code>db.escape_identifier</code> is aware of <code>db.raw</code> values, won&rsquo;t try to escape them</li>
+<li><code>create_index</code> can take a index method and a tablespace in options table <em>(dant4z)</em></li>
+<li>All constraints are checked on <code>Model\create</code> instead of just those for values provided</li>
+<li>Errors thrown from failed queries have query in them now</li>
+<li>Fix bug where <code>db.raw</code> values would not work in <code>create_index</code>, prevening you from creating indexes on expressions</li>
+<li>Postgres connection options can be set as table instead of connect string</li>
+<li>Add support for <a href="http://github.com/leafo/pgmoon">pgmoon</a>, documentation forthcoming</li>
+</ul>
+
+
+<h4>Util</h4>
+
+<ul>
+<li><code>util.time_ago_in_words</code> can handle dates in the future</li>
+<li><code>util.parse_query_string</code> will correctly parse empty string values</li>
+<li><code>assert_error</code> passes through all arguments passed to it instead of just first argument</li>
+<li><code>cached</code> can have a dynamically set dictionary by setting <code>dict</code> to a function</li>
+</ul>
+
+
+<h4>Misc</h4>
+
+<ul>
+<li>A class passed to <code>widget</code> within MoonScript template will automatically be instantiated</li>
+<li>Update OpenResty search path to find instalation from Brew on OSX <em>(Stefan Natchev)</em></li>
+<li>Add new <code>logging</code> config directive for fine grained control over individual logging</li>
+<li>Updated homepage, <a href="http://leafo.net/lapis">http://leafo.net/lapis</a></li>
+</ul>
+
+
+<h2>v0.0.10 &mdash; Jan 18th, 2014</h2>
+
+<ul>
+<li>Correctly detect installation of OpenResty 1.5.x</li>
+<li>Bug fix and documentation for <a href="./reference.html#html-generation-widget-methods"><code>@content_for</code></a></li>
+<li>Add <code>@has_content_for</code></li>
+</ul>
+
+
+<h2>v0.0.9 &mdash; Jan 9th, 2014</h2>
+
+<ul>
+<li>Backwards incompatible change to <a href="./reference.html#utilities-caching"><code>cached</code> API</a></li>
+<li>Cached can take expiration time, override cache key, and a function to
+determine when to cache</li>
+<li>Fixed bug where <code>NULL</code> check used <code>=</code> instead of <code>is NULL</code> in generated SQL</li>
+<li><code>include_in</code>, take take fields to select as an option</li>
+<li>Fixed bug where cache didn&rsquo;t preserve status code</li>
+<li><code>db.is_raw(val)</code> for detecting if value is created from <code>db.raw</code></li>
+<li><code>db.format_date(d)</code> for formatting time to SQL syntax</li>
+<li>More tests</li>
+</ul>
+
+
+<h2>v0.0.8 &mdash; December 7th, 2013</h2>
+
+<ul>
+<li><strong>CRITICAL:</strong> Fixed an issue where a invalid multipart upload could cause worker to loop infinitely</li>
+<li>Added new <a href="./reference.html#utilities-application-helpers"><code>json_params</code></a> function to parse JSON from request body into <code>@params</code></li>
+<li><code>@content_for</code> can now be used to set content from view widgets to be seen by layout</li>
+<li><code>respond_to</code> now provides a <a href="./reference.html#utilities-application-helpers">default HEAD action</a></li>
+<li>Added <code>lapis signal</code> command line command to send arbitrary signal to Nginx process</li>
+<li>Added <a href="./reference.html#lapis-applications-class-methods"><code>find_action</code></a> method to applications</li>
+<li>Attributes now have spaces around them when using HTML builder</li>
+<li>Test coverage improved</li>
+</ul>
+
+
+<h2>v0.0.7 &mdash; November 5th, 2013</h2>
+
+<ul>
+<li>Added <a href="./reference.html#models-pagination"><code>prepare_results</code></a> option to paginated</li>
+<li>Paginator options are passed to select, enabling you to set fields</li>
+<li>Fixed an issue where doing an async operation (eg. querying) inside of a
+widget render would cause it to lose it&rsquo;s environment and crash when handling
+concurrent requests</li>
+<li>Optimized HTML renderer to avoid creating excess tables</li>
+<li>Added application cache to <code>lapis.server</code>, will cache an instance of the class and reuse it</li>
+<li><code>@include</code> class method on widgets and applications can take a string and will load it using <code>require</code></li>
+<li>Added <a href="./reference.html#html-generation-widget-methods"><code>@include</code> class method on widgets</a> for mixing in other classes</li>
+<li><code>"lapis.spec.server"</code>&rsquo;s <code>request</code> function can be passed headers, will extract host header if passed a full URL</li>
+<li>Enhanced test coverage</li>
+</ul>
+
+
+<h2>v0.0.6 &mdash; October 17th, 2013</h2>
+
+<ul>
+<li>Added <code>"lapis.spec.server"</code> module for spawning a <a href="./reference.html#testing-using-the-test-server">test server</a></li>
+<li><code>env LAPIS_ENVIRONMENT=envname</code> is now injected on top of config to ensure
+correct environment is passed down when changing environments of a running
+server. Default config has been updated to no longer have <code>env
+LAPIS_ENVIRONMENT</code>, it&rsquo;s recommended but not required to remove that line
+from your config.</li>
+<li>When an application extends from another it will now search up the
+inheritance tree and take routes from parents</li>
+<li><code>mock_request</code> can take a previous requests headers, see <a href="./reference.html#testing-mocking-a-request">mocking a
+request</a></li>
+<li>You can now set nil to @session key to delete it</li>
+<li>Rewrote how the command line tools provision a server to execute code one,
+can now run queries directly in the console.</li>
+<li>Fix trying to save write session when it hasn&rsquo;t been loaded</li>
+<li>Fix issue where multiple cookies could not be set in a single request</li>
+<li>Fix issue where adding a third value to a single header would not show up</li>
+</ul>
+
+
+<h2>v0.0.5 &mdash; September 1st, 2013</h2>
+
+<ul>
+<li>Added request mocking for <a href="./reference.html#testing">writing tests</a></li>
+<li>Added <a href="./reference.html#utilities-caching"><code>lapis.cache</code></a> module</li>
+<li>Added <code>autoload</code> <a href="./reference.html#utilities-methods">utility method</a></li>
+<li>Added <a href="./reference.html#utilities-file-uploads">documentation for file uploads</a></li>
+<li><code>widget</code> method inside of HTML renderer will inject current helpers and set <code>@parent</code></li>
+<li>Default config has <code>code_cache</code> as a variable now</li>
+<li>Enhanced test coverage</li>
+</ul>
+
+
+<h2>v0.0.4 &mdash; August 13th, 2013</h2>
+
+<ul>
+<li><a href="./reference.html#command-line-interface-lapis-migrate"><code>lapis migrate</code></a> command will start a temporary server if it can&rsquo;t find a running one</li>
+<li>Add <a href="./reference.html#command-line-interface-lapis-term"><code>lapis term</code></a> command to stop a backgrounded server</li>
+<li>HTML void tags no longer render a closing tag</li>
+<li>Add <a href="./reference.html#models-pagination">paginator</a> for paging through queries with many results</li>
+<li>Add <code>Model\count</code> for counting items in a query</li>
+<li><code>Model\update</code> and <code>Model\delete</code> will convert primary key <code>nil</code> values to <code>db.NULL</code></li>
+<li>Small enhancements to command line tool</li>
+</ul>
+
+
+<h2>v0.0.3 &mdash; July 22th, 2013</h2>
+
+<ul>
+<li>Added ability to execute Lua from command line on server</li>
+<li><a href="./reference.html#command-line-interface">Documentation for command line interface</a></li>
+<li><code>lapis build</code> command for <a href="./reference.html#command-line-interface-lapis-build">building config and sending HUP</a></li>
+<li><code>lapis migrate</code> command for <a href="./reference.html#command-line-interface-lapis-migrate">running migrations on command line</a></li>
+<li><code>lapis new</code> can take optional <code>--git</code> and <code>--tup</code> flags</li>
+<li>Commands use <code>lapis_environment</code> module to get default environment</li>
+</ul>
+
+
+<h2>v0.0.2 &mdash; June 17th, 2013</h2>
+
+<ul>
+<li>Session secret and name are now <a href="./reference.html#request-object-session">stored in the config</a></li>
+<li><code>json</code> and <code>redirect_to</code> can also set <code>status</code></li>
+<li>Fix issue with precedence of HTML builder helpers</li>
+<li><a href="./reference.html#lapis-in-lua">Lua mode</a></li>
+<li>updated <code>trim_filter</code> helper, <a href="./reference.html#utilities-methods">reference</a></li>
+<li>Misc bug fixes</li>
+<li>Add a lot more documentation, fix typos</li>
+<li>Add test suite</li>
+</ul>
+
+
+<h2>v0.0.1 &mdash; April 24th, 2013</h2>
+
+<ul>
+<li>Initial release</li>
+</ul>
+
+
+</div>
+
+</div>
+
+  <div class="footer">
+    <div class="inner">
+      <div class="right">
+        Fri Nov  5 23:56:45 2021 PST
+      </div>
+
+      <div>
+        by <a href="https://leafo.net">leaf corcoran</a>
+        <span class="dot">&middot;</span>
+        licensed under MIT
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="animations/player.js"></script>
+  <script type="text/javascript" src="animations/1/anim_packed.js"></script>
+
+  <script type="text/javascript">
+    (function() {
+      var el = document.getElementById("screencast")
+      if (el) {
+        var player = new Player(anim_packed, "animations/1");
+        el.appendChild(player.element);
+        player.start();
+      }
+    })();
+  </script>
+
+  <a href="https://github.com/leafo/lapis" id="forkme"><img style="position: fixed; top: 0; right: 0; border: 0; z-index: 2" src="./img/fork.png" alt="Fork me on GitHub"></a>
+
+  <script src="./lib/jquery.min.js"></script>
+  <script src="./lib/react.production.min.js"></script>
+  <script src="./lib/react-dom.production.min.js"></script>
+  <script src="./lib/react-dom-factories.js"></script>
+  <script src="./lib/lunr.min.js"></script>
+  <script type="text/javascript" src="./search.js?Fri Nov  5 23:56:45 2021"></script>
+  <script type="text/javascript" src="./home.js?Fri Nov  5 23:56:45 2021"></script>
+
+  <script type="text/javascript">
+    new L.Home();
+  </script>
+</body>
+</html>
