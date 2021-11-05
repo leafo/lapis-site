@@ -1,0 +1,1258 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Requests and Actions - Lapis Reference Manual</title>
+  <link rel="stylesheet" href="../reference.css?Fri Nov  5 21:10:34 2021" />
+  <script type="text/javascript">
+  if (window.location.hostname != "localhost") {
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-136625-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  }
+</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<body>
+  <div class="header">
+    <button class="toggle_nav_btn" id="menu_toggle">Menu</button>
+    <h1>
+      <a href="..">Lapis</a>
+    </h1>
+    <div id="search_drop" data-root=".." data-index="../reference.json"></div>
+    <a href="../changelog.html" class="version_flag">
+      v1.9.0
+    </a>
+  </div>
+
+  <div class="columns">
+    <div class="nav_column">
+      <div class="scrolling_inner">
+        <div class="lang_picker">
+          <span class="lang_toggle active" data-lang="moonscript">MoonScript</span>
+          <span class="lang_toggle" data-lang="lua">Lua</span>
+        </div>
+
+        
+          <div class="nav_links">
+            <h2>Contents</h2>
+            <ul><li><a href="#routes-and-url-patterns">Routes &amp; URL Patterns</a></li>
+<ul><li><a href="#routes-and-url-patterns/optional-route-components">Optional route components</a></li>
+<li><a href="#routes-and-url-patterns/parameter-character-classes">Parameter character classes</a></li>
+<li><a href="#routes-and-url-patterns/route-precedence">Route precedence</a></li></ul>
+<li><a href="#named-routes">Named Routes</a></li>
+<li><a href="#handling-http-verbs">Handling HTTP verbs</a></li>
+<li><a href="#before-filters">Before Filters</a></li>
+<li><a href="#request-object">Request Object</a></li>
+<ul><li><a href="#request-object/req">@req</a></li>
+<li><a href="#request-object/cookies">Cookies</a></li>
+<li><a href="#request-object/session">Session</a></li></ul>
+<li><a href="#request-parameters">Request Parameters</a></li>
+<ul><li><a href="#request-parameters/boolean-parameters">Boolean parameters</a></li>
+<li><a href="#request-parameters/nested-parameters">Nested Parameters</a></li>
+<li><a href="#request-parameters/parameters-types-and-limits">Parameters Types &amp; Limits</a></li></ul>
+<li><a href="#request-object-methods">Request Object Methods</a></li>
+<ul><li><a href="#request-object-methods/write"><code>write(things...)</code></a></li>
+<li><a href="#request-object-methods/url_for"><code>url_for(name_or_obj, params, query_params=nil, ...)</code></a></li>
+<ul><li><a href="#request-object-methods/url_for/passing-an-object-to-url-for">Passing an object to <code>url_for</code></a></li>
+<li><a href="#request-object-methods/url_for/using-the-url-key-method">Using the <code>url_key</code> method</a></li></ul>
+<li><a href="#request-object-methods/build_url"><code>build_url(path, [options])</code></a></li></ul>
+<li><a href="#render-options">Render Options</a></li>
+<li><a href="#application-callbacks">Application Callbacks</a></li>
+<ul><li><a href="#application-callbacks/default-action">Default Action</a></li></ul>
+<li><a href="#error-handler">Error Handler</a></li></ul>
+          </div>
+        
+
+        <div class="nav_links">
+          <h2>All Guides</h2>
+
+<ul>
+<li><a href="../reference/getting_started.html">Getting Started</a>
+
+<ul>
+<li><a href="../reference/moon_getting_started.html">Getting Started With MoonScript</a></li>
+<li><a href="../reference/lua_getting_started.html">Getting Started With Lua</a></li>
+</ul>
+</li>
+<li><a href="../reference/actions.html">Requests and Actions</a></li>
+<li><a href="../reference/configuration.html">Writing Configurations</a>
+
+<ul>
+<li><a href="../reference/lua_creating_configurations.html">Lua configuration syntax</a></li>
+<li><a href="../reference/moon_creating_configurations.html">MoonScript configuration syntax</a></li>
+</ul>
+</li>
+<li><a href="../reference/database.html">Database Access, and Queries</a>
+
+<ul>
+<li><a href="../reference/models.html">Models</a></li>
+</ul>
+</li>
+<li><a href="../reference/exception_handling.html">Handling Exceptions</a></li>
+<li><a href="../reference/input_validation.html">Input Validation</a></li>
+<li><a href="../reference/html_generation.html">HTML Generation</a></li>
+<li><a href="../reference/etlua_templates.html">etlua Templates</a></li>
+<li><a href="../reference/testing.html">Testing</a></li>
+<li><a href="../reference/utilities.html">Utility Functions</a></li>
+<li><a href="../reference/command_line.html">Command Line Tool</a></li>
+<li><a href="../reference/lapis_console.html">Lapis Console</a></li>
+</ul>
+
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="nav_offset">
+      <div class="text_column"><h1>Requests and Actions</h1>
+
+<p>Every HTTP request that is handled by Lapis follows the same basic flow after
+being handed off from Nginx. The first step is routing. A <em>route</em> is a pattern
+that a URL must match. When you define a route you also include an <em>action</em>. An
+action is a regular Lua/MoonScript function that will be called if the
+associated route matches.</p>
+
+<p>All actions are invoked with one argument, a <a href="#request-object"><em>request
+object</em></a>. The request object is where you'll store all the
+data you want to share between your actions and views. Additionally, the
+request object is your interface to the webserver on how the result is sent to
+the client.</p>
+
+<p>The return value of the action is used to render the output. A string return
+value will be rendered to the browser directly. A table return value will be
+used as the <a href="#render-options"><em>render options</em></a>. If there is more than one
+return value, all of them are merged into the final result. You can return both
+strings and tables to control the output.</p>
+
+<p>If there is no route that matches the request then the default route handler is
+executed, read more in <a href="#application-callbacks"><em>application callbacks</em></a>.</p>
+
+<h2><a name="routes-and-url-patterns" href="#routes-and-url-patterns">Routes &amp; URL Patterns</a></h2>
+
+<p>Route patterns use a special syntax to define dynamic parameters of the URL and
+assign a name to them. The simplest routes have no parameters though:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kr">end</span><span class="p">)</span>
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/hello&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kr">end</span><span class="p">)</span>
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/users/all&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+  <span class="s2">&quot;</span><span class="s">/hello</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+  <span class="s2">&quot;</span><span class="s">/users/all</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span></code>
+</pre>
+
+
+<p>These routes match the URLs verbatim. The leading <code>/</code> is required. The route
+must match the entire path of the request. That means a request to
+<code>/hello/world</code> will not match the route <code>/hello</code>.</p>
+
+<p>You can specify a named parameter with a <code>:</code> followed immediately by the name.
+The parameter will match all characters excluding <code>/</code> (in the general case):</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/page/:page&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">page</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/post/:post_id/:post_name&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="s2">&quot;</span><span class="s">/page/:page</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span> <span class="nb">print</span> <span class="vc">@params</span><span class="o">.</span><span class="n">page</span>
+  <span class="s2">&quot;</span><span class="s">/post/:post_id/:post_name</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span></code>
+</pre>
+
+
+<blockquote><p>In the example above we called <code>print</code> to debug. When running inside
+OpenResty, the output of <code>print</code> is sent to the Nginx notice log.</p></blockquote>
+
+<p>The captured values of the route parameters are saved in the <code>params</code> field of
+the request object by their name. A named parameter must contain at least 1
+character, and will fail to match otherwise.</p>
+
+<p>A splat is another kind of pattern that will match as much as it can, including
+any <code>/</code> characters.  The splat is stored in a <code>splat</code>  named parameter in the
+<code>params</code> table of the request object. It&rsquo;s just a single <code>*</code></p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/browse/*&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">splat</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span>
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/user/:name/file/*&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">splat</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="s2">&quot;</span><span class="s">/browse/*</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="nb">print</span> <span class="vc">@params</span><span class="o">.</span><span class="n">splat</span>
+
+  <span class="s2">&quot;</span><span class="s">/user/:name/file/*</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="nb">print</span> <span class="vc">@params</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="vc">@params</span><span class="o">.</span><span class="n">splat</span></code>
+</pre>
+
+
+<p>If you put any text directly after the splat or the named parameter it will not
+be included in the named parameter. For example you can match URLs that end in
+<code>.zip</code> with <code>/files/:filename.zip</code></p>
+
+<h3><a name="routes-and-url-patterns/optional-route-components" href="#routes-and-url-patterns/optional-route-components">Optional route components</a></h3>
+
+<p>Parentheses can be used to make a section of the route optional:</p>
+
+<pre><code>/projects/:username(/:project)
+</code></pre>
+
+<p>The above would match either <code>/projects/leafo</code>  or <code>/projects/leafo/lapis</code>. Any
+parameters within optional components that don&rsquo;t match will have a value of
+<code>nil</code> from within the action.</p>
+
+<p>These optional components can be nested and chained as much as you like:</p>
+
+<pre><code>/settings(/:username(/:page))(.:format)
+</code></pre>
+
+<h3><a name="routes-and-url-patterns/parameter-character-classes" href="#routes-and-url-patterns/parameter-character-classes">Parameter character classes</a></h3>
+
+<p>A character class can be applied to a named parameter to restrict what
+characters can match. The syntax modeled after Lua&rsquo;s pattern character classes.
+This route will make sure the that <code>user_id</code> named parameter only contains
+digits:</p>
+
+<pre><code>/user/:user_id[%d]/posts
+</code></pre>
+
+<p>And this route would only match hexadecimal strings for the <code>hex</code> parameter.</p>
+
+<pre><code>/color/:hex[a-fA-F%d]
+</code></pre>
+
+<h3><a name="routes-and-url-patterns/route-precedence" href="#routes-and-url-patterns/route-precedence">Route precedence</a></h3>
+
+<p>Routes are searched first by precedence, then by the order they were defined.
+Route precedence from highest to lowest is:</p>
+
+<ul>
+<li>Literal routes <code>/hello/world</code></li>
+<li>Variable routes <code>/hello/:variable</code>
+
+<ul>
+<li>Each additional <code>:variable</code> will decrease the precedence of the route</li>
+</ul>
+</li>
+<li>Splat routes routes <code>/hello/*</code>
+
+<ul>
+<li>Each additional splat will <em>increase</em> the precedence of the route. Given the routes <code>/hello/*spat</code> and <code>/hello/*splat/world/*rest</code>, the second one will be checked before the first.</li>
+</ul>
+</li>
+</ul>
+
+
+<h2><a name="named-routes" href="#named-routes">Named Routes</a></h2>
+
+<p>It&rsquo;s useful to give names to your routes so links to other pages can be
+generated just by knowing the name of the page instead of hard-coding the
+structure of the URL.</p>
+
+<p><span class="for_moon">If the route of the action is a table with a single
+pair, then the key of that table is the name and the value is the pattern.
+MoonScript gives us convenient syntax for representing this:</span><span
+class="for_lua">Every method on the application that defines a new route has a
+second form that takes the name of the route as the first argument:</span></p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;user_profile&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;leaf&quot;</span> <span class="p">})</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;user_profile&quot;</span><span class="p">,</span> <span class="s2">&quot;/user/:name&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="s2">&quot;Hello &quot;</span> <span class="o">..</span> <span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">name</span> <span class="o">..</span> <span class="s2">&quot;, go home: &quot;</span> <span class="o">..</span> <span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="kt">[</span><span class="nv">index:</span> <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">user_profile</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">leaf</span><span class="s2">&quot;</span>
+
+  <span class="kt">[</span><span class="nv">user_profile:</span> <span class="s2">&quot;</span><span class="s">/user/:name</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="s2">&quot;</span><span class="s">Hello #{@params.name}, go home: #{@url_for </span><span class="s2">&quot;</span><span class="n">index</span><span class="s2">&quot;</span><span class="s">}</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<p>We can generate the paths to various actions using <span
+class="for_moon"><code>@url_for</code></span><span
+class="for_lua"><code>self:url_for()</code></span>. The first argument is the name of the
+route, and the second optional argument is a table of values to fill a
+parameterized route with.</p>
+
+<p><a href="#request-object-methods/url_for">Read more about <code>url_for</code></a> to see the
+different ways to generate URLs to pages.</p>
+
+<h2><a name="handling-http-verbs" href="#handling-http-verbs">Handling HTTP verbs</a></h2>
+
+<p>It&rsquo;s common to have a single action do different things depending on the HTTP
+verb. Lapis comes with some helpers to make writing these actions simple.
+<code>respond_to</code> takes a table indexed by HTTP verb with a value of the function to
+perform when the action receives that verb.</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">respond_to</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.application&quot;</span><span class="p">).</span><span class="n">respond_to</span>
+<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;create_account&quot;</span><span class="p">,</span> <span class="s2">&quot;/create-account&quot;</span><span class="p">,</span> <span class="n">respond_to</span><span class="p">({</span>
+  <span class="n">GET</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="p">{</span> <span class="n">render</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">}</span>
+  <span class="kr">end</span><span class="p">,</span>
+  <span class="n">POST</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="n">do_something</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="p">{</span> <span class="n">redirect_to</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">)</span> <span class="p">}</span>
+  <span class="kr">end</span>
+<span class="p">}))</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span>
+<span class="k">import</span> <span class="n">respond_to</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.application</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="kt">[</span><span class="nv">create_account:</span> <span class="s2">&quot;</span><span class="s">/create-account</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="n">respond_to</span> <span class="kt">{</span>
+    <span class="nv">GET:</span> <span class="nf">=&gt;</span> <span class="nv">render:</span> <span class="kc">true</span>
+
+    <span class="nv">POST:</span> <span class="nf">=&gt;</span>
+      <span class="n">do_something</span> <span class="vc">@params</span>
+      <span class="nv">redirect_to:</span> <span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">index</span><span class="s2">&quot;</span>
+  <span class="kt">}</span></code>
+</pre>
+
+
+<p><code>respond_to</code> can also take a before filter of its own that will run before the
+corresponding HTTP verb action. We do this by specifying a <code>before</code> function.
+The same semantics of <a href="#before-filters">before filters</a> apply, so if you call
+<span class="for_moon"><code>@write</code></span><span
+class="for_lua"><code>self:write()</code></span> then the rest of the action will not get
+run.</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">respond_to</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.application&quot;</span><span class="p">).</span><span class="n">respond_to</span>
+<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;edit_user&quot;</span><span class="p">,</span> <span class="s2">&quot;/edit-user/:id&quot;</span><span class="p">,</span> <span class="n">respond_to</span><span class="p">({</span>
+  <span class="n">before</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">Users</span><span class="p">:</span><span class="n">find</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">user</span> <span class="kr">then</span>
+      <span class="n">self</span><span class="p">:</span><span class="n">write</span><span class="p">({</span><span class="s2">&quot;Not Found&quot;</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="mi">404</span><span class="p">})</span>
+    <span class="kr">end</span>
+  <span class="kr">end</span><span class="p">,</span>
+  <span class="n">GET</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="s2">&quot;Edit account &quot;</span> <span class="o">..</span> <span class="n">self</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">name</span>
+  <span class="kr">end</span><span class="p">,</span>
+  <span class="n">POST</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">user</span><span class="p">:</span><span class="n">update</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="p">{</span> <span class="n">redirect_to</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">)</span> <span class="p">}</span>
+  <span class="kr">end</span>
+<span class="p">}))</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span>
+<span class="k">import</span> <span class="n">respond_to</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.application</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="s2">&quot;</span><span class="s">/edit_user/:id</span><span class="s2">&quot;</span><span class="o">:</span> <span class="n">respond_to</span> <span class="kt">{</span>
+    <span class="nv">before:</span> <span class="nf">=&gt;</span>
+      <span class="vc">@user</span> <span class="o">=</span> <span class="nc">Users</span><span class="o">\</span><span class="n">find</span> <span class="vc">@params</span><span class="o">.</span><span class="n">id</span>
+      <span class="vc">@write</span> <span class="nv">status:</span> <span class="mi">404</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">Not Found</span><span class="s2">&quot;</span> <span class="n">unless</span> <span class="vc">@user</span>
+
+    <span class="nv">GET:</span> <span class="nf">=&gt;</span>
+      <span class="s2">&quot;</span><span class="s">Edit account #{@user.name}...</span><span class="s2">&quot;</span>
+
+    <span class="nv">POST:</span> <span class="nf">=&gt;</span>
+      <span class="vc">@user</span><span class="o">\</span><span class="n">update</span> <span class="vc">@params</span><span class="o">.</span><span class="n">user</span>
+      <span class="nv">redirect_to:</span> <span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">index</span><span class="s2">&quot;</span>
+  <span class="kt">}</span></code>
+</pre>
+
+
+<p>On any <code>POST</code> request, regardless of whether <code>respond_to</code> is used or not, if
+the <code>Content-type</code> header is set to <code>application/x-www-form-urlencoded</code> then
+the body of the request will be parsed and all the parameters will be placed
+into <span class="for_moon"><code>@params</code></span><span
+class="for_lua"><code>self.params</code></span>.</p>
+
+<p><span class="for_lua">You may have also seen the <code>app:get()</code> and <code>app:post()</code>
+methods being called in previous examples. These are wrappers around
+<code>respond_to</code> that let you quickly define an action for a particular HTTP verb.
+You'll find these wrappers for the most common verbs: <code>get</code>, <code>post</code>, <code>delete</code>,
+<code>put</code>. For any others you'll need to use <code>respond_to</code>.</span></p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="n">app</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/test&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="s2">&quot;I only render for GET requests&quot;</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/delete-account&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="c1">-- do something destructive</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<h2><a name="before-filters" href="#before-filters">Before Filters</a></h2>
+
+<p>Sometimes you want a piece of code to run before every action. A good example
+of this is setting up the user session. We can declare a before filter, or a
+function that runs before every action, like so:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">before_filter</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">if</span> <span class="n">self</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="n">user</span> <span class="kr">then</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">current_user</span> <span class="o">=</span> <span class="n">load_user</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="n">user</span><span class="p">)</span>
+  <span class="kr">end</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="s2">&quot;current user is: &quot;</span> <span class="o">..</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_user</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="vc">@before_filter</span> <span class="nf">=&gt;</span>
+    <span class="k">if</span> <span class="vc">@session</span><span class="o">.</span><span class="n">user</span>
+      <span class="vc">@current_user</span> <span class="o">=</span> <span class="n">load_user</span> <span class="vc">@session</span><span class="o">.</span><span class="n">user</span>
+
+  <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="s2">&quot;</span><span class="s">current user is: #{@current_user}</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<p>You are free to add as many as you like by calling <span
+class="for_moon"><code>@before_filter</code></span><span
+class="for_lua"><code>app:before_filter</code></span> multiple times. They will be run in
+the order they are registered.</p>
+
+<p>If a before filter calls the <span class="for_moon"><code>@write</code></span><span
+class="for_lua"><code>self:write()</code></span> method then the action will be cancelled.
+For example we can cancel the action and redirect to another page if some
+condition is not met:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">before_filter</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">if</span> <span class="ow">not</span> <span class="n">user_meets_requirements</span><span class="p">()</span> <span class="kr">then</span>
+    <span class="n">self</span><span class="p">:</span><span class="n">write</span><span class="p">({</span><span class="n">redirect_to</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">)})</span>
+  <span class="kr">end</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">,</span> <span class="s2">&quot;/login&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="c1">-- ...</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="vc">@before_filter</span> <span class="nf">=&gt;</span>
+    <span class="n">unless</span> <span class="n">user_meets_requirements</span><span class="o">!</span>
+      <span class="vc">@write</span> <span class="nv">redirect_to:</span> <span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">login</span><span class="s2">&quot;</span>
+
+  <span class="kt">[</span><span class="nv">login:</span> <span class="s2">&quot;</span><span class="s">/login</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="nf">=&gt;</span> <span class="o">...</span></code>
+</pre>
+
+
+<blockquote><p><span class="for_moon"><code>@write</code></span><span
+class="for_lua"><code>self:write()</code></span> is what processes the return value of a
+regular action, so the same things you can return in an action can be passed
+to <span class="for_moon"><code>@write</code></span><span
+class="for_lua"><code>self:write()</code></span></p></blockquote>
+
+<h2><a name="request-object" href="#request-object">Request Object</a></h2>
+
+<p>Every action is passed the <em>request object</em> as its first argument when called.
+Because of the convention to call the first argument <code>self</code> we refer to the
+request object as <code>self</code> when in the context of an action.</p>
+
+<p>The request object has the following parameters:</p>
+
+<ul>
+<li><span class="for_moon"><code>@params</code></span><span class="for_lua"><code>self.params</code></span> &mdash; a table containing all request parameters merged together, including query parameters and form-encoded parameters from the body of the request. See <a href="#request_parameters">Request Parameters</a>
+
+<ul>
+<li><span class="for_moon"><code>@GET</code></span><span class="for_lua"><code>self.GET</code></span> &mdash; a table containing only the query parameters from the URL (eg. <code>?hello=world</code>). Note that this is set for any request with URL query parameters, regardless of the HTTP verb</li>
+<li><span class="for_moon"><code>@POST</code></span><span class="for_lua"><code>self.POST</code></span> &mdash; a table containing only the form encoded parameters included in the body of the request. Note this is always set when there is a body with form data, regardless of the HTTP verb</li>
+</ul>
+</li>
+<li><span class="for_moon"><code>@req</code></span><span class="for_lua"><code>self.req</code></span> &mdash; raw request table containing request information populated by the underlying server processing the request (default <code>ngx</code>)</li>
+<li><span class="for_moon"><code>@res</code></span><span class="for_lua"><code>self.res</code></span> &mdash; raw response table, used to generate a response for the client at the end of the request</li>
+<li><span class="for_moon"><code>@app</code></span><span class="for_lua"><code>self.app</code></span> &mdash; the instance of the application</li>
+<li><span class="for_moon"><code>@cookies</code></span><span class="for_lua"><code>self.cookies</code></span> &mdash; the table of cookies, can be assigned to set new cookies. Only supports strings as values</li>
+<li><span class="for_moon"><code>@session</code></span><span class="for_lua"><code>self.session</code></span> &mdash; signed session table. Can store values of any type that can be JSON encoded. Is backed by cookies</li>
+<li><span class="for_moon"><code>@route_name</code></span><span class="for_lua"><code>self.route_name</code></span> &mdash; the name of the route that matched the request if it has one</li>
+<li><span class="for_moon"><code>@options</code></span><span class="for_lua"><code>self.options</code></span> &mdash; set of options that controls how the request is rendered, set via <code>write</code></li>
+<li><span class="for_moon"><code>@buffer</code></span><span class="for_lua"><code>self.buffer</code></span> &mdash; the output buffer, typically you'll not need to touch this manually, set via <code>write</code></li>
+</ul>
+
+
+<p>Additionally the request object has the following methods:</p>
+
+<ul>
+<li><code>write(options, ...)</code> &mdash; instructs the request how to render the result</li>
+<li><code>url_for(route, params, ...)</code> &mdash; get the URL for a named route, or object</li>
+<li><code>build_url(path, params)</code> &mdash; build a fully qualified URL from a path and parameters</li>
+<li><code>html(fn)</code> &mdash; generate a string using the HTML builder syntax</li>
+</ul>
+
+
+<h3><a name="request-object/req" href="#request-object/req">@req</a></h3>
+
+<p>The raw request table <span class="for_moon"><code>@req</code></span><span
+class="for_lua"><code>self.req</code></span> wraps additional data provided by the server
+processing the request:</p>
+
+<ul>
+<li><span class="for_moon"><code>@req.headers</code></span><span class="for_lua"><code>self.req.headers</code></span> &mdash; Request headers table</li>
+<li><span class="for_moon"><code>@req.parsed_url</code></span><span class="for_lua"><code>self.req.parsed_url</code></span> &mdash; Request parsed url. A table containing <code>scheme</code>, <code>path</code>, <code>host</code>, <code>port</code>, and <code>query</code> properties.</li>
+<li><span class="for_moon"><code>@req.params_post</code></span><span class="for_lua"><code>self.req.params_post</code></span> &mdash; Request POST parameters table</li>
+<li><span class="for_moon"><code>@req.params_get</code></span><span class="for_lua"><code>self.req.params_get</code></span> &mdash; Request GET parameters table</li>
+</ul>
+
+
+<h3><a name="request-object/cookies" href="#request-object/cookies">Cookies</a></h3>
+
+<p>The <span class="for_moon"><code>@cookies</code></span><span
+class="for_lua"><code>self.cookies</code></span> table in the request lets you read and
+write cookies. If you try to iterate over the table to print the cookies you
+might notice it&rsquo;s empty:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/my-cookies&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cookies</span><span class="p">)</span> <span class="kr">do</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+  <span class="kr">end</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="s2">&quot;</span><span class="s">/my-cookies</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+  <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="k">in</span> <span class="nb">pairs</span><span class="kt">(</span><span class="vc">@cookies</span><span class="kt">)</span>
+    <span class="nb">print</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span></code>
+</pre>
+
+
+<p>The existing cookies are stored in the <code>__index</code> of the metatable. This is done
+so we can tell what cookies have been assigned to during the action
+because they will be directly in the <span
+class="for_moon"><code>@cookies</code></span><span class="for_lua"><code>self.cookies</code></span>
+table.</p>
+
+<p>Thus, to set a cookie we just need to assign into the <span
+class="for_moon"><code>@cookies</code></span><span class="for_lua"><code>self.cookies</code></span>
+table:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/sets-cookie&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="n">self</span><span class="p">.</span><span class="n">cookies</span><span class="p">.</span><span class="n">foo</span> <span class="o">=</span> <span class="s2">&quot;bar&quot;</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="s2">&quot;</span><span class="s">/sets-cookie</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="vc">@cookies</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">bar</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<p>By default all cookies are given the additional attributes <code>Path=/; HttpOnly</code>
+(which creates a <a href="http://en.wikipedia.org/wiki/HTTP_cookie#Terminology"><em>session
+cookie</em></a>). You can
+configure a cookie&rsquo;s settings by overriding the the <code>cookie_attributes</code>
+function on your application. Here&rsquo;s an example that adds an expiration date to
+cookies to make them persist:</p>
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">date</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">date</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="nv">cookie_attributes:</span> <span class="kt">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="kt">)</span> <span class="nf">=&gt;</span>
+    <span class="n">expires</span> <span class="o">=</span> <span class="n">date</span><span class="kt">(</span><span class="kc">true</span><span class="kt">)</span><span class="o">\</span><span class="n">adddays</span><span class="kt">(</span><span class="mi">365</span><span class="kt">)</span><span class="o">\</span><span class="n">fmt</span> <span class="s2">&quot;</span><span class="s">${http}</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;</span><span class="s">Expires=#{expires}; Path=/; HttpOnly</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">date</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">.</span><span class="n">cookie_attributes</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kd">local</span> <span class="n">expires</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="kc">true</span><span class="p">):</span><span class="n">adddays</span><span class="p">(</span><span class="mi">365</span><span class="p">):</span><span class="n">fmt</span><span class="p">(</span><span class="s2">&quot;${http}&quot;</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="s2">&quot;Expires=&quot;</span> <span class="o">..</span> <span class="n">expires</span> <span class="o">..</span> <span class="s2">&quot;; Path=/; HttpOnly&quot;</span>
+<span class="kr">end</span></code>
+</pre>
+
+
+<p>The <code>cookie_attributes</code> method takes the request object as the first argument
+(<code>self</code>) and then the name and value of the cookie being processed.</p>
+
+<h3><a name="request-object/session" href="#request-object/session">Session</a></h3>
+
+<p>The <span class="for_moon"><code>@session</code></span><span
+class="for_lua"><code>self.session</code></span> is a more advanced way to persist data
+over requests. The content of the session is serialized to JSON and stored in
+a specially named cookie. The serialized cookie is also signed with
+your application secret so it can&rsquo;t be tampered with. Because it&rsquo;s serialized
+with JSON you can store nested tables and other primitive values.</p>
+
+<p>The session can be set and read the same way as cookies:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="n">app</span><span class="p">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="n">current_user</span> <span class="kr">then</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="n">current_user</span> <span class="o">=</span> <span class="s2">&quot;Adam&quot;</span>
+  <span class="kr">end</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+  <span class="n">unless</span> <span class="vc">@session</span><span class="o">.</span><span class="n">current_user</span>
+    <span class="vc">@session</span><span class="o">.</span><span class="n">current_user</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">Adam</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<p>By default the session is stored in a cookie called <code>lapis_session</code>. You can
+overwrite the name of the session using the <code>session_name</code> <a href="configuration.html">configuration
+variable</a>. Sessions are signed with your
+application secret, which is stored in the configuration value <code>secret</code>. It is
+highly recommended to change this from the default.</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="c1">-- config.lua</span>
+<span class="kd">local</span> <span class="n">config</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.config&quot;</span><span class="p">).</span><span class="n">config</span>
+
+<span class="n">config</span><span class="p">(</span><span class="s2">&quot;development&quot;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="n">session_name</span> <span class="o">=</span> <span class="s2">&quot;my_app_session&quot;</span><span class="p">,</span>
+  <span class="n">secret</span> <span class="o">=</span> <span class="s2">&quot;this is my secret string 123456&quot;</span>
+<span class="p">})</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="c1">-- config.moon</span>
+<span class="k">import</span> <span class="n">config</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.config</span><span class="s2">&quot;</span>
+
+<span class="n">config</span> <span class="s2">&quot;</span><span class="s">development</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+  <span class="n">session_name</span> <span class="s2">&quot;</span><span class="s">my_app_session</span><span class="s2">&quot;</span>
+  <span class="n">secret</span> <span class="s2">&quot;</span><span class="s">this is my secret string 123456</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<h2><a name="request-parameters" href="#request-parameters">Request Parameters</a></h2>
+
+<p>The request object contains a few fields to help you access the user-supplies
+parameters sent with the request. Parameters are loaded by default from the
+following sources:</p>
+
+<ul>
+<li>URL parameters &mdash; When using a route that has a named variable. A route <code>/users/:id</code> will create a parameters named <code>id</code></li>
+<li>Body parameters &mdash; For request methods that support a body, like <code>POST</code> and <code>PUT</code>, the body will automatically be parsed if the content type is <code>application/x-www-form-urlencoded</code> or <code>multipart/form-data</code></li>
+<li>Query parameters &mdash; Parameters included at the end of a request URL following the <code>?</code>. <code>/users?filter=blue</code> will create a parameter called filter with the value <code>"blue"</code></li>
+</ul>
+
+
+<p>The <code>@params</code> object is a concatenation of all the default loaded parameters
+listed above. URL parameters have the highest precedence, followed by body
+parameters, then query parameters. This means that an <code>:id</code> URL parameters will
+not be overwritten by an <code>?id=</code> query parameter.</p>
+
+<blockquote><p>Headers and cookies are also accessible on the request object but they are
+not included in the parameters object.</p></blockquote>
+
+<p>The body of the request is only parsed if the content type is
+<code>application/x-www-form-urlencoded</code> or <code>multipart/form-data</code>. For requests that
+use another content type, like <code>json</code>, you can use the <code>json_params</code> helper
+function to parse the body.</p>
+
+<p>See <a href="../reference/quick_reference.html#how-can-i-read-json-http-body">How can I read JSON HTTP body?</a>.</p>
+
+<h3><a name="request-parameters/boolean-parameters" href="#request-parameters/boolean-parameters">Boolean parameters</a></h3>
+
+<p>A query parameter without a value is treated as a boolean parameter and will
+have the value <code>true</code>.</p>
+
+<p><code>/hello?hide_description&amp;color=blue</code> → <code>{ hide_description = true, color = "blue"}</code></p>
+
+<h3><a name="request-parameters/nested-parameters" href="#request-parameters/nested-parameters">Nested Parameters</a></h3>
+
+<p>It is common to use the <code>[]</code> syntax within a parameter name to represent nested
+data within parameters. Lapis supports expanding this syntax for simple
+key, value objects:</p>
+
+<pre><code>/hello?upload[1][name]=test.txt&amp;upload[2][name]=file.png →
+
+{
+  upload = {
+    ["1"] = { name = "test.txt" }, -- note that strings are not converted to numbers!
+    ["2"] = { name = "file.png"}
+  }
+}
+</code></pre>
+
+<blockquote><p>Lapis does not support the empty <code>[]</code> syntax that you may have seen in other
+frameworks for creating arrays. Only simple object expansion is supported.
+Generally we encourage the application developer to do the parsing since
+advanced parameter can unknowingly introduce bugs.</p></blockquote>
+
+<h3><a name="request-parameters/parameters-types-and-limits" href="#request-parameters/parameters-types-and-limits">Parameters Types &amp; Limits</a></h3>
+
+<p>The value of a parameter can either be a string, <code>true</code>, or a simple table. No complex
+parsing or validation is done on parameters, it&rsquo;s the responsibility of the
+application creator to verify and sanitize any parameters. For example, if you're
+expecting a number, you will need to convert the value to a number using
+something like the Lua builtin <code>tonumber</code>.</p>
+
+<p>Lapis provides a <a href="../reference/input_validation.html">validation module</a> to
+help with verifying that user supplied data matches a set of constraints that
+you provide.</p>
+
+<p>Duplicate parameter names are overwritten by subsequent values. Note that due
+to hash table ordering, the final value may not be consistent so we recommend
+avoid setting the same parameters multiple times.</p>
+
+<p>When using Nginx, a default limit of 100 parameters are parsed by default from
+the body and query. This is to prevent malicious users from overloading your
+server with a large amount of data.</p>
+
+<blockquote><p>Storing or processing user input as a string? We highly recommend adding
+limits on the max length of the string and trimming whitespace from the
+sides. Additionally, verifying that the data is a valid Unicode string can
+prevent any processing errors by your database.</p></blockquote>
+
+<h2><a name="request-object-methods" href="#request-object-methods">Request Object Methods</a></h2>
+
+<h3><a name="request-object-methods/write" href="#request-object-methods/write"><code>write(things...)</code></a></h3>
+
+<p>Writes all of the arguments. A different action is done depending on the type
+of each argument.</p>
+
+<ul>
+<li><code>string</code> &mdash; String is appended to output buffer</li>
+<li><code>function</code> (or callable table) &mdash; Function is called with the output buffer, result is recursively passed to <code>write</code></li>
+<li><code>table</code> &mdash; key/value pairs are assigned into <span class="for_moon"><code>@options</code></span><span class="for_lua"><code>self.options</code></span>, all other values are recursively passed to <code>write</code></li>
+</ul>
+
+
+<p>In most circumstances it is unnecessary to call write as the return value of an
+action is automatically passed to write. In before filters, write has the dual
+purpose of writing to the output and cancelling any further actions from
+running.</p>
+
+<h3><a name="request-object-methods/url_for" href="#request-object-methods/url_for"><code>url_for(name_or_obj, params, query_params=nil, ...)</code></a></h3>
+
+<p>Generates a URL for <code>name_or_obj</code>.</p>
+
+<blockquote><p><code>url_for</code> is a bit of a misnomer since it typically generates a path to the
+requested page. If you want to get the entire URL you can combine this
+function with <code>build_url</code>.</p></blockquote>
+
+<p>If <code>name_or_obj</code> is a string, then the route of that name is looked up and
+filled using the values in params. If no route exists then an error is thrown.</p>
+
+<p>Given the following routes:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">()</span>
+  <span class="c1">-- ...</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;user_data&quot;</span><span class="p">,</span> <span class="s2">&quot;/data/:user_id/:data_field&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">()</span>
+  <span class="c1">-- ...</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="kt">[</span><span class="nv">index:</span> <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="nf">=&gt;</span> <span class="c1">-- ..</span>
+  <span class="kt">[</span><span class="nv">user_data:</span> <span class="s2">&quot;</span><span class="s">/data/:user_id/:data_field</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="nf">=&gt;</span> <span class="c1">-- ...</span></code>
+</pre>
+
+
+<p>URLs to the pages can be generated like this:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="c1">-- returns: /</span>
+<span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
+
+<span class="c1">-- returns: /data/123/height</span>
+<span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;user_data&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="n">user_id</span> <span class="o">=</span> <span class="mi">123</span><span class="p">,</span> <span class="n">data_field</span> <span class="o">=</span> <span class="s2">&quot;height&quot;</span><span class="p">})</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="c1">-- returns: /</span>
+<span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">index</span><span class="s2">&quot;</span>
+
+<span class="c1">-- returns: /data/123/height</span>
+<span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">user_data</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">user_id:</span> <span class="mi">123</span><span class="p">,</span> <span class="nv">data_field:</span> <span class="s2">&quot;</span><span class="s">height</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<p>If the third argument, <code>query_params</code>, is supplied, it will be converted into
+query parameters and appended to the end of the generated URL. If the route
+doesn&rsquo;t take  any parameters in the URL then <code>nil</code>, or empty object, must be
+passed as the second argument:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="c1">-- returns: /data/123/height?sort=asc</span>
+<span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;user_data&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="n">user_id</span> <span class="o">=</span> <span class="mi">123</span><span class="p">,</span> <span class="n">data_field</span> <span class="o">=</span> <span class="s2">&quot;height&quot;</span><span class="p">},</span> <span class="p">{</span> <span class="n">sort</span> <span class="o">=</span> <span class="s2">&quot;asc&quot;</span> <span class="p">})</span>
+
+<span class="c1">-- returns: /?layout=new</span>
+<span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">,</span> <span class="p">{</span><span class="n">layout</span> <span class="o">=</span> <span class="s2">&quot;new&quot;</span><span class="p">})</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="c1">-- returns: /data/123/height?sort=asc</span>
+<span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">user_data</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kt">{</span> <span class="nv">user_id:</span> <span class="mi">123</span><span class="p">,</span> <span class="nv">data_field:</span> <span class="s2">&quot;</span><span class="s">height</span><span class="s2">&quot;</span><span class="kt">}</span><span class="p">,</span> <span class="nv">sort:</span> <span class="s2">&quot;</span><span class="s">asc</span><span class="s2">&quot;</span>
+
+<span class="c1">-- returns: /?layout=new</span>
+<span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">index</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">layout:</span> <span class="s2">&quot;</span><span class="s">new</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<p>Any optional components of the route will only be included if all of the
+enclosed params are provided. If the optinal component does not have any
+parameters then it will never be included.</p>
+
+<p>Given the following route:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;user_page&quot;</span><span class="p">,</span> <span class="s2">&quot;/user/:username(/:page)(.:format)&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="c1">-- ...</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="kt">[</span><span class="nv">user_page:</span> <span class="s2">&quot;</span><span class="s">/user/:username(/:page)(.:format)</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="nf">=&gt;</span> <span class="c1">-- ...</span></code>
+</pre>
+
+
+<p>The following URLs can be generated:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="c1">-- returns: /user/leafo</span>
+<span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;user_page&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;leafo&quot;</span> <span class="p">})</span>
+
+<span class="c1">-- returns: /user/leafo/projects</span>
+<span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;user_page&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;leafo&quot;</span><span class="p">,</span> <span class="n">page</span> <span class="o">=</span> <span class="s2">&quot;projects&quot;</span> <span class="p">})</span>
+
+<span class="c1">-- returns: /user/leafo.json</span>
+<span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;user_page&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;leafo&quot;</span><span class="p">,</span> <span class="n">format</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span> <span class="p">})</span>
+
+<span class="c1">-- returns: /user/leafo/code.json</span>
+<span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;user_page&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;leafo&quot;</span><span class="p">,</span> <span class="n">page</span> <span class="o">=</span> <span class="s2">&quot;code&quot;</span><span class="p">,</span> <span class="n">format</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span> <span class="p">})</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="c1">-- returns: /user/leafo</span>
+<span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">user_page</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">username:</span> <span class="s2">&quot;</span><span class="s">leafo</span><span class="s2">&quot;</span>
+
+<span class="c1">-- returns: /user/leafo/projects</span>
+<span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">user_page</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">username:</span> <span class="s2">&quot;</span><span class="s">leafo</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">page:</span> <span class="s2">&quot;</span><span class="s">projects</span><span class="s2">&quot;</span>
+
+<span class="c1">-- returns: /user/leafo.json</span>
+<span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">user_page</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">username:</span> <span class="s2">&quot;</span><span class="s">leafo</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">format:</span> <span class="s2">&quot;</span><span class="s">json</span><span class="s2">&quot;</span>
+
+<span class="c1">-- returns: /user/leafo/code.json</span>
+<span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">user_page</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">username:</span> <span class="s2">&quot;</span><span class="s">leafo</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">page:</span> <span class="s2">&quot;</span><span class="s">code</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">format:</span> <span class="s2">&quot;</span><span class="s">json</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<p>If a route contains a splat, the value can be provided via the parameter named
+<code>splat</code>:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;browse&quot;</span><span class="p">,</span> <span class="s2">&quot;/browse(/*)&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="c1">-- ...</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="kt">[</span><span class="nv">browse:</span> <span class="s2">&quot;</span><span class="s">/browse(/*)</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="nf">=&gt;</span> <span class="c1">-- ...</span></code>
+</pre>
+
+
+<pre class="highlight lang_lua"><code><span></span><span class="c1">-- returns: /browse</span>
+<span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;browse&quot;</span><span class="p">)</span>
+
+<span class="c1">-- returns: /browse/games/recent</span>
+<span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;browse&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="n">splat</span> <span class="o">=</span> <span class="s2">&quot;games/recent&quot;</span> <span class="p">})</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="c1">-- returns: /browse</span>
+<span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">browse</span><span class="s2">&quot;</span>
+
+<span class="c1">-- returns: /browse/games/recent</span>
+<span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">browse</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">splat:</span> <span class="s2">&quot;</span><span class="s">games/recent</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<h4><a name="request-object-methods/url_for/passing-an-object-to-url-for" href="#request-object-methods/url_for/passing-an-object-to-url-for">Passing an object to <code>url_for</code></a></h4>
+
+<p>If <code>name_or_obj</code> is a table, then the <code>url_params</code> method is called on that
+table, and the return values are passed to <code>url_for</code>.</p>
+
+<p>The <code>url_params</code> method takes as arguments the <code>request</code> object, followed by
+anything else passed to <code>url_for</code> originally.</p>
+
+<p>It&rsquo;s common to implement <code>url_params</code> on models, giving them the ability to
+define what page they represent. For example, consider a <code>Users</code> model that
+defines a <code>url_params</code> method, which goes to the profile page of the user:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">Users</span> <span class="o">=</span> <span class="n">Model</span><span class="p">:</span><span class="n">extend</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="n">url_params</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="p">...)</span>
+    <span class="kr">return</span> <span class="s2">&quot;user_profile&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="n">id</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">id</span> <span class="p">},</span> <span class="p">...</span>
+  <span class="kr">end</span>
+<span class="p">})</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">class</span> <span class="nc">Users</span> <span class="k">extends</span> <span class="nc">Model</span>
+  <span class="nv">url_params:</span> <span class="kt">(</span><span class="n">req</span><span class="p">,</span> <span class="o">...</span><span class="kt">)</span> <span class="nf">=&gt;</span>
+    <span class="s2">&quot;</span><span class="s">user_profile</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kt">{</span> <span class="nv">id:</span> <span class="vc">@id</span> <span class="kt">}</span><span class="p">,</span> <span class="o">...</span></code>
+</pre>
+
+
+<p>We can now just pass an instance of <code>Users</code> directly to <code>url_for</code> and the path
+for the <code>user_profile</code> route is returned:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">user</span> <span class="o">=</span> <span class="n">Users</span><span class="p">:</span><span class="n">find</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+<span class="c1">-- could return: /user-profile/100</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">user</span> <span class="o">=</span> <span class="nc">Users</span><span class="o">\</span><span class="n">find</span> <span class="mi">100</span>
+<span class="vc">@url_for</span> <span class="n">user</span>
+<span class="c1">-- could return: /user-profile/100</span></code>
+</pre>
+
+
+<p>You might notice we passed <code>...</code> through the <code>url_params</code> method to the return
+value. This allows the third <code>query_params</code> argument to still function:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">user</span> <span class="o">=</span> <span class="n">Users</span><span class="p">:</span><span class="n">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="p">{</span> <span class="n">page</span> <span class="o">=</span> <span class="s2">&quot;likes&quot;</span> <span class="p">})</span>
+<span class="c1">-- could return: /user-profile/100?page=likes</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">user</span> <span class="o">=</span> <span class="nc">Users</span><span class="o">\</span><span class="n">find</span> <span class="mi">1</span>
+<span class="vc">@url_for</span> <span class="n">user</span><span class="p">,</span> <span class="nv">page:</span> <span class="s2">&quot;</span><span class="s">likes</span><span class="s2">&quot;</span>
+<span class="c1">-- could return: /user-profile/100?page=likes</span></code>
+</pre>
+
+
+<h4><a name="request-object-methods/url_for/using-the-url-key-method" href="#request-object-methods/url_for/using-the-url-key-method">Using the <code>url_key</code> method</a></h4>
+
+<p>The value of any parameter in <code>params</code> is a string then it is inserted into the
+generated path as is. If the value is a table, then the <code>url_key</code> method is
+called on it, and the return value is inserted into the path.</p>
+
+<p>For example, consider a <code>Users</code> model which we've generated a <code>url_key</code> method
+for:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">Users</span> <span class="o">=</span> <span class="n">Model</span><span class="p">:</span><span class="n">extend</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="n">url_key</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">route_name</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="n">self</span><span class="p">.</span><span class="n">id</span>
+  <span class="kr">end</span>
+<span class="p">})</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">class</span> <span class="nc">Users</span> <span class="k">extends</span> <span class="nc">Model</span>
+  <span class="nv">url_key:</span> <span class="kt">(</span><span class="n">route_name</span><span class="kt">)</span> <span class="nf">=&gt;</span> <span class="vc">@id</span></code>
+</pre>
+
+
+<p>If we wanted to generate a path to the user profile we might normally write
+something like this:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">user</span> <span class="o">=</span> <span class="n">Users</span><span class="p">:</span><span class="n">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;user_profile&quot;</span><span class="p">,</span> <span class="p">{</span><span class="n">id</span> <span class="o">=</span> <span class="n">user</span><span class="p">.</span><span class="n">id</span><span class="p">})</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">user</span> <span class="o">=</span> <span class="nc">Users</span><span class="o">\</span><span class="n">find</span> <span class="mi">1</span>
+<span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">user_profile</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">id:</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span></code>
+</pre>
+
+
+<p>The <code>url_key</code> method we've defined lets us pass the <code>User</code> object directly as
+the <code>id</code> parameter and it will be converted to the id:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">user</span> <span class="o">=</span> <span class="n">Users</span><span class="p">:</span><span class="n">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;user_profile&quot;</span><span class="p">,</span> <span class="p">{</span><span class="n">id</span> <span class="o">=</span> <span class="n">user</span><span class="p">})</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">user</span> <span class="o">=</span> <span class="nc">Users</span><span class="o">\</span><span class="n">find</span> <span class="mi">1</span>
+<span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">user_profile</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">id:</span> <span class="n">user</span></code>
+</pre>
+
+
+<blockquote><p>The <code>url_key</code> method takes the name of the path as the first argument, so we
+could change what we return based on which route is being handled.</p></blockquote>
+
+<h3><a name="request-object-methods/build_url" href="#request-object-methods/build_url"><code>build_url(path, [options])</code></a></h3>
+
+<p>Builds an absolute URL for the path. The current request&rsquo;s URI is used to build
+the URL.</p>
+
+<p>For example, if we are running our server on <code>localhost:8080</code>:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="n">self</span><span class="p">:</span><span class="n">build_url</span><span class="p">()</span> <span class="c1">--&gt; http://localhost:8080</span>
+<span class="n">self</span><span class="p">:</span><span class="n">build_url</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span> <span class="c1">--&gt; http://localhost:8080/hello</span>
+
+<span class="n">self</span><span class="p">:</span><span class="n">build_url</span><span class="p">(</span><span class="s2">&quot;world&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="n">host</span> <span class="o">=</span> <span class="s2">&quot;leafo.net&quot;</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="mi">2000</span> <span class="p">})</span> <span class="c1">--&gt; http://leafo.net:2000/world</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="vc">@build_url</span><span class="o">!</span> <span class="c1">--&gt; http://localhost:8080</span>
+<span class="vc">@build_url</span> <span class="s2">&quot;</span><span class="s">hello</span><span class="s2">&quot;</span> <span class="c1">--&gt; http://localhost:8080/hello</span>
+
+<span class="vc">@build_url</span> <span class="s2">&quot;</span><span class="s">world</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">host:</span> <span class="s2">&quot;</span><span class="s">leafo.net</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">port:</span> <span class="mi">2000</span> <span class="c1">--&gt; http://leafo.net:2000/world</span></code>
+</pre>
+
+
+<h2><a name="render-options" href="#render-options">Render Options</a></h2>
+
+<p>Whenever a table is written, the key/value pairs (for keys that are strings)
+are copied into <span class="for_moon"><code>@options</code></span><span
+class="for_lua"><code>self.options</code></span>. For example, in the following action the
+<code>render</code> and <code>status</code> properties are copied. The options table is used at
+the end of the action lifecycle to create the appropriate response.</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="p">{</span> <span class="n">render</span> <span class="o">=</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="mi">404</span><span class="p">}</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span> <span class="nv">render:</span> <span class="s2">&quot;</span><span class="s">error</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">status:</span> <span class="mi">404</span></code>
+</pre>
+
+
+<p>Here is the list of options that can be written</p>
+
+<ul>
+<li><code>status</code> &mdash; sets HTTP status code (eg. 200, 404, 500, &hellip;)</li>
+<li><code>render</code> &mdash; causes a view to be rendered with the request. If the value is
+<code>true</code> then the name of the route is used as the view name. Otherwise the value must be a string or a view class.</li>
+<li><code>content_type</code> &mdash; sets the <code>Content-type</code> header</li>
+<li><code>headers</code> &mdash; a table of headers to add to the response</li>
+<li><code>json</code> &mdash; causes the request to return the JSON encoded value of the property. The content type is set to <code>application/json</code> as well.</li>
+<li><code>layout</code> &mdash; changes the layout from the default defined by the application</li>
+<li><code>redirect_to</code> &mdash; sets status to 302 and sets <code>Location</code> header to value. Supports both relative and absolute URLs. (Combine with <code>status</code> to perform 301 redirect)</li>
+<li><code>skip_render</code> &mdash; set to <code>true</code> to cause Lapis to skip all output writing (including content, headers, cookies, sessions, etc.). Use this if you manually write the request response in the action method (using low level <code>ngx.print</code>, <code>ngx.header</code> or equivalent). This can be used to implement streaming output, as opposed to Lapis' regular buffered output.</li>
+</ul>
+
+
+<p>When rendering JSON make sure to use the <code>json</code> render option. It will
+automatically set the correct content type and disable the layout:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/hello&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="p">{</span> <span class="n">json</span> <span class="o">=</span> <span class="p">{</span> <span class="n">hello</span> <span class="o">=</span> <span class="s2">&quot;world&quot;</span> <span class="p">}</span> <span class="p">}</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="s2">&quot;</span><span class="s">/hello</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="nv">json:</span> <span class="kt">{</span> <span class="nv">hello:</span> <span class="s2">&quot;</span><span class="s">world!</span><span class="s2">&quot;</span> <span class="kt">}</span></code>
+</pre>
+
+
+<h2><a name="application-callbacks" href="#application-callbacks">Application Callbacks</a></h2>
+
+<p>Application callbacks are special methods that can be overridden in an
+application that get called when certain kinds of requests needs to be handled.
+Although they are functions stored on the application, they are called as if
+they were regular actions, this means that the first argument to the function
+is an instance of a request object.</p>
+
+<h3><a name="application-callbacks/default-action" href="#application-callbacks/default-action">Default Action</a></h3>
+
+<p>When a request does not match any of the routes you've defined it will fall
+back on running the default action. Lapis comes with a default action
+pre-defined that looks like this:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kr">function</span> <span class="nc">app</span><span class="p">:</span><span class="nf">default_route</span><span class="p">()</span>
+  <span class="c1">-- strip trailing /</span>
+  <span class="kr">if</span> <span class="n">self</span><span class="p">.</span><span class="n">req</span><span class="p">.</span><span class="n">parsed_url</span><span class="p">.</span><span class="n">path</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;./$&quot;</span><span class="p">)</span> <span class="kr">then</span>
+    <span class="kd">local</span> <span class="n">stripped</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">req</span><span class="p">.</span><span class="n">parsed_url</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;^(.+)/+$&quot;</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="p">{</span>
+      <span class="n">redirect_to</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">build_url</span><span class="p">(</span><span class="n">stripped</span><span class="p">,</span> <span class="p">{</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="mi">301</span><span class="p">,</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">req</span><span class="p">.</span><span class="n">parsed_url</span><span class="p">.</span><span class="n">query</span><span class="p">,</span>
+      <span class="p">})</span>
+    <span class="p">}</span>
+  <span class="kr">else</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">app</span><span class="p">.</span><span class="n">handle_404</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">end</span>
+<span class="kr">end</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="nv">default_route:</span> <span class="nf">=&gt;</span>
+  <span class="c1">-- strip trailing /</span>
+  <span class="k">if</span> <span class="vc">@req</span><span class="o">.</span><span class="n">parsed_url</span><span class="o">.</span><span class="n">path</span><span class="o">\</span><span class="n">match</span> <span class="s2">&quot;</span><span class="s">./$</span><span class="s2">&quot;</span>
+    <span class="n">stripped</span> <span class="o">=</span> <span class="vc">@req</span><span class="o">.</span><span class="n">parsed_url</span><span class="o">.</span><span class="n">path</span><span class="o">\</span><span class="n">match</span> <span class="s2">&quot;</span><span class="s">^(.+)/+$</span><span class="s2">&quot;</span>
+    <span class="nv">redirect_to:</span> <span class="vc">@build_url</span><span class="kt">(</span><span class="n">stripped</span><span class="p">,</span> <span class="nv">query:</span> <span class="vc">@req</span><span class="o">.</span><span class="n">parsed_url</span><span class="o">.</span><span class="n">query</span><span class="kt">)</span><span class="p">,</span> <span class="nv">status:</span> <span class="mi">301</span>
+  <span class="k">else</span>
+    <span class="vc">@app</span><span class="o">.</span><span class="n">handle_404</span> <span class="vc">@</span></code>
+</pre>
+
+
+<p>If it notices a trailing <code>/</code> on the end of the URL it will attempt to redirect
+to a version without the trailing slash. Otherwise it will call the
+<code>handle_404</code> method on the application.</p>
+
+<p>This method, <code>default_route</code>, is just a normal method of your application. You
+can override it to do whatever you like. For example, this adds logging:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kr">function</span> <span class="nc">app</span><span class="p">:</span><span class="nf">default_route</span><span class="p">()</span>
+  <span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">NOTICE</span><span class="p">,</span> <span class="s2">&quot;User hit unknown path &quot;</span> <span class="o">..</span> <span class="n">self</span><span class="p">.</span><span class="n">req</span><span class="p">.</span><span class="n">parsed_url</span><span class="p">.</span><span class="n">path</span><span class="p">)</span>
+
+  <span class="c1">-- call the original implementaiton to preserve the functionality it provides</span>
+  <span class="kr">return</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">.</span><span class="n">default_route</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+<span class="kr">end</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="nv">default_route:</span> <span class="nf">=&gt;</span>
+    <span class="n">ngx</span><span class="o">.</span><span class="n">log</span> <span class="n">ngx</span><span class="o">.</span><span class="n">NOTICE</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">User hit unknown path #{@req.parsed_url.path}</span><span class="s2">&quot;</span>
+    <span class="vc">@super</span><span class="o">!</span></code>
+</pre>
+
+
+<p>You'll notice in the pre-defined version of <code>default_route</code> another method,
+<code>handle_404</code>, is referenced. This is also pre-defined and looks like this:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kr">function</span> <span class="nc">app</span><span class="p">:</span><span class="nf">handle_404</span><span class="p">()</span>
+  <span class="nb">error</span><span class="p">(</span><span class="s2">&quot;Failed to find route: &quot;</span> <span class="o">..</span> <span class="n">self</span><span class="p">.</span><span class="n">req</span><span class="p">.</span><span class="n">request_uri</span><span class="p">)</span>
+<span class="kr">end</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="nv">handle_404:</span> <span class="nf">=&gt;</span>
+  <span class="nb">error</span> <span class="s2">&quot;</span><span class="s">Failed to find route: #{@req.request_uri}</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<p>This will trigger a 500 error and a stack trace on every invalid request. If
+you want to make a proper 404 page this is where you would do it.</p>
+
+<p>Overriding the <code>handle_404</code> method instead of <code>default_route</code> allows us to
+create a custom 404 page while still keeping the trailing slash removal code.</p>
+
+<p>Here&rsquo;s a simple 404 handler that just prints the text <code>"Not Found!"</code></p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kr">function</span> <span class="nc">app</span><span class="p">:</span><span class="nf">handle_404</span><span class="p">()</span>
+  <span class="kr">return</span> <span class="p">{</span> <span class="n">status</span> <span class="o">=</span> <span class="mi">404</span><span class="p">,</span> <span class="n">layout</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="s2">&quot;Not Found!&quot;</span> <span class="p">}</span>
+<span class="kr">end</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="nv">handle_404:</span> <span class="nf">=&gt;</span>
+    <span class="nv">status:</span> <span class="mi">404</span><span class="p">,</span> <span class="nv">layout:</span> <span class="kc">false</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">Not Found!</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<h2><a name="error-handler" href="#error-handler">Error Handler</a></h2>
+
+<p>Every action executed by Lapis is wrapped by <a href="http://www.lua.org/manual/5.1/manual.html#pdf-xpcall"><code>xpcall</code></a>. This ensures fatal
+errors can be captured and a meaningful error page can be generated instead of
+Nginx&rsquo;s default which is unaware of Lua code.</p>
+
+<p>The error handler should only be used to capture fatal and unexpected errors,
+expected errors are discussed in the <a href="../reference/exception_handling.html">Exception Handling
+guide</a></p>
+
+<p>Lapis comes with an error handler pre-defined that extracts information about
+the error and renders the template <code>"lapis.views.error"</code>. This error page
+contains a stack trace and the error message.</p>
+
+<p>If you want to have your own error handling logic you can override the method
+<code>handle_error</code>:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="c1">-- config.custom_error_page is made up for this example</span>
+<span class="kr">function</span> <span class="nc">app</span><span class="p">:</span><span class="nf">handle_error</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span>
+  <span class="kr">if</span> <span class="n">config</span><span class="p">.</span><span class="n">custom_error_page</span> <span class="kr">then</span>
+    <span class="kr">return</span> <span class="p">{</span> <span class="n">render</span> <span class="o">=</span> <span class="s2">&quot;my_custom_error_page&quot;</span> <span class="p">}</span>
+  <span class="kr">else</span>
+    <span class="kr">return</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">.</span><span class="n">handle_error</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span>
+  <span class="kr">end</span>
+<span class="kr">end</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="c1">-- config.custom_error_page is made up for this example</span>
+<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="nv">handle_error:</span> <span class="kt">(</span><span class="n">err</span><span class="p">,</span> <span class="n">trace</span><span class="kt">)</span> <span class="nf">=&gt;</span>
+    <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">custom_error_page</span>
+      <span class="kt">{</span> <span class="nv">render:</span> <span class="s2">&quot;</span><span class="s">my_custom_error_page</span><span class="s2">&quot;</span> <span class="kt">}</span>
+    <span class="k">else</span>
+      <span class="k">super</span> <span class="n">err</span><span class="p">,</span> <span class="n">trace</span></code>
+</pre>
+
+
+<p>The request object, or <code>self</code>, passed to the error handler is not the one that
+was created for the request that failed. Lapis provides a new one since the
+existing one maybe have been partially written to when it failed.</p>
+
+<p>You can access the original request object with <span
+class="for_moon"><code>@original_request</code></span><span
+class="for_lua"><code>self.original_request</code></span></p>
+
+<p>Lapis' default error page shows an entire stack trace, so it&rsquo;s recommended to
+replace it with a custom one in your production envrionments, and log the
+exception in the background.</p>
+
+<p>The <a href="https://github.com/leafo/lapis-exceptions"><code>lapis-exceptions</code></a> module augments the error handler to records errors
+in a database. It can also email you when there&rsquo;s an exception.</p>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../lib/jquery.min.js"></script>
+  <script src="../lib/react.production.min.js"></script>
+  <script src="../lib/react-dom.production.min.js"></script>
+  <script src="../lib/react-dom-factories.js"></script>
+  <script src="../lib/lunr.min.js"></script>
+  <script type="text/javascript" src="../search.js?Fri Nov  5 21:10:34 2021"></script>
+  <script type="text/javascript" src="../reference.js?Fri Nov  5 21:10:34 2021"></script>
+  <script type="text/javascript">
+    new L.Reference();
+  </script>
+</body>
+</html>
