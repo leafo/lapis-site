@@ -1,0 +1,575 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lapis - A web framework for Lua or MoonScript powered by OpenResty</title>
+  <link rel="stylesheet" href="home.css?Fri Mar  4 03:59:08 2022" />
+  <script type="text/javascript">
+  if (window.location.hostname != "localhost") {
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-136625-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  }
+</script>
+</head>
+<body>
+  <div class="header">
+    <section class="inner">
+      <div class="window_frame pink">
+        <div class="window_title">Lapis</div>
+        <div class="animation" id="screencast"></div>
+      </div>
+      <div class="title_area">
+        <h1><a href=".">Lapis</a></h1>
+        <h2>A web framework for <a href="http://lua.org">Lua</a> or
+          <a href="http://moonscript.org">MoonScript</a></h2>
+
+        <div class="version_flag">
+          <a href="./changelog.html">
+            v1.9.0
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="button_row">
+      <a href="./reference.html" class="button">
+        <img src="./img/book.svg" alt="Reference" />
+        Reference Manual</a>
+
+      <div class="installer">
+        <div class="install_label">Install</div>
+        <div class="install_promp">
+          <code class="highlight">luarocks install lapis</code>
+        </div>
+        <div class="installer_sub">For Lua 5.1 and LuaJIT</div>
+      </div>
+
+      <a href="https://github.com/leafo/lapis" class="button">
+        <img src="./img/github.svg" alt="Github" />
+        Source on GitHub
+      </a>
+    </section>
+  </div>
+
+  <div class="sub_header">
+    <div class="inner">
+      <strong>Mar 29th, 2021:</strong> Lapis v1.9.0 &mdash; optional preload, Widget include rewrite, &amp; more: <a href="./changelog.html">changelog</a>
+    </div>
+  </div>
+
+  <div class="content"><div id="search_drop" data-root="." data-index="./reference.json"></div>
+
+<div class="box">
+  <h1>What is it?</h1>
+<p>Lapis is a framework for building web applications using <a href="https://moonscript.org">MoonScript</a> or <a href="https://lua.org">Lua</a> that runs inside of a customized version of <a href="https://nginx.org">Nginx</a> called <a href="https://openresty.org">OpenResty</a>.</p>
+
+
+<div class="chat_banner">
+  <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+  <p>
+    Want to talk Lapis?  <a href="https://discord.gg/Y75ZXrD">Join our Discord</a>
+  </p>
+</div>
+
+</div>
+
+<div class="lang_headers">
+  <h2 class="lang_header lua_header">
+    <span class="label">Lua</span>
+    <span class="lang_toggle" data-hash="lang=moonscript">View examples in MoonScript</span>
+  </h2>
+  <h2 class="lang_header moon_header">
+    <span class="label">MoonScript</span>
+    <span class="lang_toggle" data-hash="lang=lua">View examples in Lua</span>
+  </h2>
+</div>
+
+<div class="split_columns">
+  <div class="lua_column left_column content_column">
+    <div class="column_inner">
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;lapis&quot;</span>
+<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="s2">&quot;Hello world!&quot;</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="kr">return</span> <span class="n">app</span></code>
+</pre>
+
+
+    </div>
+  </div>
+
+  <div class="moon_column right_column content_column">
+    <div class="column_inner">
+<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="s2">&quot;</span><span class="s">Hello world!</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+
+    </div>
+  </div>
+</div>
+
+<!-- <iframe style="display: none" width="800" height="450" class="video_embed" src="//www.youtube.com/embed/Eo67iTY1Yf8" frameborder="0" allowfullscreen></iframe> -->
+
+<div class="box">
+  <h1>How does it work?</h1>
+<p>Lua is run directly inside of the Nginx worker, giving you the smallest barrier
+between the webserver and your code. OpenResty executes your Lua/MoonScript
+with LuaJIT, so it&rsquo;s blazing fast. Have a look at <a href="http://www.techempower.com/benchmarks">Web Framework
+Benchmarks</a> just to see
+how OpenResty stacks up against other platforms.</p>
+
+<p>Nginx&rsquo;s event loop is used for all asynchronous actions, including HTTP
+requests and database queries. With the power of Lua coroutines code is written
+synchronously but runs asynchronously, without all that callback spaghetti seen
+in other asynchronous platforms. It&rsquo;s fast, easy to read, and easy to write.</p>
+
+<p>Perform HTTP requests and other asynchronous operations freely without being
+concerned about blocking your application and killing your throughput.</p>
+
+
+</div>
+
+<div class="dotdotdot">&times;</div>
+
+
+<div class="box">
+  <h1>What does it come with?</h1>
+<p>Lapis includes URL routing, <a href="./reference/html_generation.html">HTML Templating</a>, <a href="./reference/utilities.html#csrf-protection">CSRF Protection</a> and <a href="./reference/actions.html#request-object-session">Session</a>
+support, <a href="./reference/database.html#models">PostgreSQL/MySQL backed models</a>, <a href="./reference/database.html#database-schemas">schema generation</a> and
+<a href="./reference/database.html#database-migrations">migrations</a> in addition to a <a href="./reference/utilities.html">collection of useful functions</a> needed
+when developing a website.</p>
+
+</div>
+
+
+<div class="split_columns">
+  <div class="lua_column left_column content_column">
+    <div class="column_inner">
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;lapis&quot;</span>
+<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="c1">-- Define a basic pattern that matches /</span>
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kd">local</span> <span class="n">profile_url</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;leafo&quot;</span><span class="p">})</span>
+  <span class="c1">-- Use inline HTML helper to quickly write a template</span>
+  <span class="kr">return</span> <span class="n">self</span><span class="p">:</span><span class="n">html</span><span class="p">(</span><span class="kr">function</span><span class="p">()</span>
+    <span class="n">h2</span><span class="p">(</span><span class="s2">&quot;Welcome!&quot;</span><span class="p">)</span>
+    <span class="n">text</span><span class="p">(</span><span class="s2">&quot;Go to my &quot;</span><span class="p">)</span>
+    <span class="n">a</span><span class="p">({</span><span class="n">href</span> <span class="o">=</span> <span class="n">profile_url</span><span class="p">},</span> <span class="s2">&quot;profile&quot;</span><span class="p">)</span>
+  <span class="kr">end</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="c1">-- Define a named route pattern with a variable called name</span>
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="s2">&quot;/:name&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="n">self</span><span class="p">:</span><span class="n">html</span><span class="p">(</span><span class="kr">function</span><span class="p">()</span>
+    <span class="n">div</span><span class="p">({</span><span class="n">class</span> <span class="o">=</span> <span class="s2">&quot;profile&quot;</span><span class="p">},</span>
+      <span class="s2">&quot;Welcome to the profile of &quot;</span> <span class="o">..</span> <span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+  <span class="kr">end</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="kr">return</span> <span class="n">app</span></code>
+</pre>
+
+
+    </div>
+  </div>
+
+  <div class="moon_column right_column content_column">
+    <div class="column_inner">
+<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="c1">-- Define a basic pattern that matches /</span>
+  <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="n">profile_url</span> <span class="o">=</span> <span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">profile</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">leafo</span><span class="s2">&quot;</span>
+    <span class="c1">-- Use inline HTML helper to quickly write a template</span>
+    <span class="vc">@html</span> <span class="nf">-&gt;</span>
+      <span class="n">h2</span> <span class="s2">&quot;</span><span class="s">Welcome!</span><span class="s2">&quot;</span>
+      <span class="n">text</span> <span class="s2">&quot;</span><span class="s">Go to my </span><span class="s2">&quot;</span>
+      <span class="n">a</span> <span class="nv">href:</span> <span class="n">profile_url</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">profile</span><span class="s2">&quot;</span>
+
+  <span class="c1">-- Define a named route pattern with a variable called name</span>
+  <span class="kt">[</span><span class="nv">profile:</span> <span class="s2">&quot;</span><span class="s">/:name</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="vc">@html</span> <span class="nf">-&gt;</span>
+      <span class="n">div</span> <span class="nv">class:</span> <span class="s2">&quot;</span><span class="s">profile</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+        <span class="n">text</span> <span class="s2">&quot;</span><span class="s">Welcome to the profile of </span><span class="s2">&quot;</span><span class="p">,</span> <span class="vc">@params</span><span class="o">.</span><span class="n">name</span></code>
+</pre>
+
+
+
+
+    </div>
+  </div>
+</div>
+
+<div class="box">
+<h2>Models</h2>
+
+<p>Get a powerful abstraction layer over your database tables just by
+sub-classing <code>Model</code>:</p>
+
+</div>
+
+
+
+
+<div class="split_columns">
+  <div class="lua_column left_column content_column">
+    <div class="column_inner">
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">Model</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.db.model&quot;</span><span class="p">).</span><span class="n">Model</span>
+
+<span class="c1">-- Create a model, backed by the table `users`</span>
+<span class="kd">local</span> <span class="n">Users</span> <span class="o">=</span> <span class="n">Model</span><span class="p">:</span><span class="n">extend</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="p">)</span>
+
+<span class="c1">-- fetch some rows from the table</span>
+<span class="kd">local</span> <span class="n">elderly_users</span> <span class="o">=</span> <span class="n">Users</span><span class="p">:</span><span class="nb">select</span><span class="p">(</span><span class="s2">&quot;where age &gt; ? limit 5&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">random_user</span> <span class="o">=</span> <span class="n">Users</span><span class="p">:</span><span class="n">find</span><span class="p">(</span><span class="mi">1233</span><span class="p">)</span> <span class="c1">-- find by primary key</span>
+
+<span class="kd">local</span> <span class="n">lee</span> <span class="o">=</span> <span class="n">Users</span><span class="p">:</span><span class="n">find</span><span class="p">({</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Lee&quot;</span><span class="p">,</span>
+  <span class="n">email</span> <span class="o">=</span> <span class="s2">&quot;leemiller@example.com&quot;</span>
+<span class="p">})</span>
+
+<span class="c1">-- create a new row and edit it</span>
+<span class="kd">local</span> <span class="n">user</span> <span class="o">=</span> <span class="n">Users</span><span class="p">:</span><span class="n">create</span><span class="p">({</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Leaf&quot;</span><span class="p">,</span>
+  <span class="n">email</span> <span class="o">=</span> <span class="s2">&quot;leaf@example.com&quot;</span><span class="p">,</span>
+  <span class="n">age</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="p">})</span>
+
+<span class="n">user</span><span class="p">:</span><span class="n">update</span><span class="p">({</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">10</span> <span class="p">})</span>
+
+<span class="n">user</span><span class="p">:</span><span class="n">delete</span><span class="p">()</span></code>
+</pre>
+
+
+    </div>
+  </div>
+
+  <div class="moon_column right_column content_column">
+    <div class="column_inner">
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">import</span> <span class="nc">Model</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.db.model</span><span class="s2">&quot;</span>
+
+<span class="c1">-- Create a model, automatically backed by the table `users`</span>
+<span class="k">class</span> <span class="nc">Users</span> <span class="k">extends</span> <span class="nc">Model</span>
+
+<span class="c1">-- fetch some rows from the table</span>
+<span class="n">elderly_users</span> <span class="o">=</span> <span class="nc">Users</span><span class="o">\</span><span class="nb">select</span> <span class="s2">&quot;</span><span class="s">where age &gt; ? limit 5</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">10</span>
+
+<span class="n">random_user</span> <span class="o">=</span> <span class="nc">Users</span><span class="o">\</span><span class="n">find</span> <span class="mi">1233</span> <span class="c1">-- find by primary key</span>
+
+<span class="n">lee</span> <span class="o">=</span> <span class="nc">Users</span><span class="o">\</span><span class="n">find</span> <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">Lee</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">email:</span> <span class="s2">&quot;</span><span class="s">leemiller@example.com</span><span class="s2">&quot;</span>
+
+<span class="c1">-- create a new row and edit it</span>
+<span class="n">user</span> <span class="o">=</span> <span class="nc">Users</span><span class="o">\</span><span class="n">create</span> <span class="kt">{</span>
+  <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">Leaf</span><span class="s2">&quot;</span>
+  <span class="nv">email:</span> <span class="s2">&quot;</span><span class="s">leaf@example.com</span><span class="s2">&quot;</span>
+  <span class="nv">age:</span> <span class="mi">6</span>
+<span class="kt">}</span>
+
+<span class="n">user</span><span class="o">\</span><span class="n">update</span> <span class="nv">age:</span> <span class="mi">10</span>
+
+<span class="n">user</span><span class="o">\</span><span class="n">delete</span><span class="o">!</span></code>
+</pre>
+
+
+
+    </div>
+  </div>
+</div>
+
+<div class="box">
+<h2>Templates</h2>
+
+<p>Write your templates either in <a href="https://github.com/leafo/etlua">etlua</a> or in
+pure Lua/MoonScript.</p>
+
+<p>The template builder syntax works well in MoonScript and lets your organize
+your templates as classes, allowing you to use inheritance to mix and match
+methods as you see fit.</p>
+
+</div>
+
+
+<div class="split_columns">
+  <div class="lua_column left_column content_column">
+    <div class="column_inner">
+
+<pre class="highlight lang_erb"><code><span></span><span class="x">&lt;h1 class=&quot;header&quot;&gt;</span><span class="cp">&lt;%=</span> <span class="s2">&quot;Hello&quot;</span> <span class="cp">%&gt;</span><span class="x">&lt;/h1&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">if</span> <span class="n">current_user</span> <span class="k">then</span> <span class="cp">%&gt;</span><span class="x"></span>
+<span class="x">  &lt;div class=&quot;user_panel&quot;&gt;</span>
+<span class="x">    Welcome back </span><span class="cp">&lt;%=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">name</span> <span class="cp">%&gt;</span><span class="x"></span>
+<span class="x">  &lt;/div&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+
+<span class="x">&lt;div class=&quot;body&quot;&gt;</span>
+<span class="x">  Welcome to my site</span>
+<span class="x">&lt;/div&gt;</span></code>
+</pre>
+
+
+    </div>
+  </div>
+
+  <div class="moon_column right_column content_column">
+    <div class="column_inner">
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">import</span> <span class="nc">Widget</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.html</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="nc">Index</span> <span class="k">extends</span> <span class="nc">Widget</span>
+  <span class="nv">content:</span> <span class="nf">=&gt;</span>
+    <span class="n">h1</span> <span class="nv">class:</span> <span class="s2">&quot;</span><span class="s">header</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">Hello</span><span class="s2">&quot;</span>
+
+    <span class="vc">@user_panel</span><span class="o">!</span>
+    <span class="n">div</span> <span class="nv">class:</span> <span class="s2">&quot;</span><span class="s">body</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+      <span class="n">text</span> <span class="s2">&quot;</span><span class="s">Welcome to my site!</span><span class="s2">&quot;</span>
+
+  <span class="nv">user_panel:</span> <span class="nf">=&gt;</span>
+    <span class="k">return</span> <span class="n">unless</span> <span class="vc">@current_user</span>
+    <span class="n">div</span> <span class="nv">class:</span> <span class="s2">&quot;</span><span class="s">user_panel</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">Welcome back </span><span class="s2">&quot;</span> <span class="o">..</span> <span class="vc">@current_user</span><span class="o">.</span><span class="n">name</span></code>
+</pre>
+
+
+
+    </div>
+  </div>
+</div>
+
+
+<div class="box">
+<h2>Example</h2>
+
+<p>Using all the provided tools we can quickly and logically construct high
+performance and low memory web applications. Here&rsquo;s a more complicated example
+complete with forms, CSRF protection, and various database queries.</p>
+
+</div>
+
+<div class="split_columns">
+  <div class="lua_column left_column content_column">
+    <div class="column_inner">
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;lapis&quot;</span>
+<span class="kd">local</span> <span class="n">Model</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.db.model&quot;</span><span class="p">).</span><span class="n">Model</span>
+<span class="kd">local</span> <span class="n">capture_errors</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.application&quot;</span><span class="p">).</span><span class="n">capture_errors</span>
+<span class="kd">local</span> <span class="n">csrf</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;lapis.csrf&quot;</span>
+
+<span class="kd">local</span> <span class="n">Users</span> <span class="o">=</span> <span class="n">Model</span><span class="p">:</span><span class="n">extend</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">before_filter</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="n">self</span><span class="p">.</span><span class="n">csrf_token</span> <span class="o">=</span> <span class="n">csrf</span><span class="p">.</span><span class="n">generate_token</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;list_users&quot;</span><span class="p">,</span> <span class="s2">&quot;/users&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="n">self</span><span class="p">.</span><span class="n">users</span> <span class="o">=</span> <span class="n">Users</span><span class="p">:</span><span class="nb">select</span><span class="p">()</span> <span class="c1">-- `select` all users</span>
+  <span class="kr">return</span> <span class="p">{</span> <span class="n">render</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">}</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;/profile/:id&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kd">local</span> <span class="n">user</span> <span class="o">=</span> <span class="n">Users</span><span class="p">:</span><span class="n">find</span><span class="p">({</span> <span class="n">id</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">id</span> <span class="p">})</span>
+  <span class="kr">if</span> <span class="ow">not</span> <span class="n">user</span> <span class="kr">then</span>
+    <span class="kr">return</span> <span class="p">{</span> <span class="n">status</span> <span class="o">=</span> <span class="mi">404</span> <span class="p">}</span>
+  <span class="kr">end</span>
+
+  <span class="kr">return</span> <span class="p">{</span> <span class="n">render</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">}</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/user/new&quot;</span><span class="p">,</span> <span class="n">capture_errors</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="n">csrf</span><span class="p">.</span><span class="n">assert_token</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="n">Users</span><span class="p">:</span><span class="n">create</span><span class="p">({</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">username</span>
+  <span class="p">})</span>
+
+  <span class="kr">return</span> <span class="p">{</span> <span class="n">redirect_to</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;list_users&quot;</span><span class="p">)</span> <span class="p">}</span>
+<span class="kr">end</span><span class="p">))</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;new_user&quot;</span><span class="p">,</span> <span class="s2">&quot;/user/new&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="p">{</span> <span class="n">render</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">}</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="kr">return</span> <span class="n">app</span></code>
+</pre>
+
+
+    </div>
+  </div>
+
+  <div class="moon_column right_column content_column">
+    <div class="column_inner">
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span>
+<span class="k">import</span> <span class="nc">Model</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.db.model</span><span class="s2">&quot;</span>
+<span class="k">import</span> <span class="n">respond_to</span><span class="p">,</span> <span class="n">capture_errors</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.application</span><span class="s2">&quot;</span>
+<span class="n">csrf</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.csrf</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="nc">Users</span> <span class="k">extends</span> <span class="nc">Model</span>
+
+<span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="c1">-- Execute code before every action</span>
+  <span class="vc">@before_filter</span> <span class="nf">=&gt;</span>
+    <span class="vc">@csrf_token</span> <span class="o">=</span> <span class="n">csrf</span><span class="o">.</span><span class="n">generate_token</span> <span class="vc">@</span>
+
+  <span class="kt">[</span><span class="nv">list_users:</span> <span class="s2">&quot;</span><span class="s">/users</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="nc">Users</span><span class="o">\</span><span class="nb">select</span><span class="o">!</span> <span class="c1">-- `select` all the users</span>
+
+    <span class="c1">-- Render HTML inline for simplicity</span>
+    <span class="vc">@html</span> <span class="nf">-&gt;</span>
+      <span class="n">ul</span> <span class="nf">-&gt;</span>
+        <span class="k">for</span> <span class="n">user</span> <span class="k">in</span> <span class="o">*</span><span class="n">users</span>
+          <span class="n">li</span> <span class="nf">-&gt;</span>
+            <span class="n">a</span> <span class="nv">href:</span> <span class="vc">@url_for</span><span class="kt">(</span><span class="s2">&quot;</span><span class="s">user</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="kt">)</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span>
+
+  <span class="kt">[</span><span class="nv">user:</span> <span class="s2">&quot;</span><span class="s">/profile/:id</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="nc">Users</span><span class="o">\</span><span class="n">find</span> <span class="nv">id:</span> <span class="vc">@params</span><span class="o">.</span><span class="n">id</span>
+    <span class="k">return</span> <span class="nv">status:</span> <span class="mi">404</span> <span class="n">unless</span> <span class="n">user</span>
+    <span class="vc">@html</span> <span class="nf">-&gt;</span> <span class="n">h2</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span>
+
+  <span class="c1">-- Respond to different HTTP actions to do the right thing</span>
+  <span class="kt">[</span><span class="nv">new_user:</span> <span class="s2">&quot;</span><span class="s">/user/new</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="n">respond_to</span> <span class="kt">{</span>
+    <span class="nv">POST:</span> <span class="n">capture_errors</span> <span class="nf">=&gt;</span>
+      <span class="n">csrf</span><span class="o">.</span><span class="n">assert_token</span> <span class="vc">@</span>
+      <span class="nc">Users</span><span class="o">\</span><span class="n">create</span> <span class="nv">name:</span> <span class="vc">@params</span><span class="o">.</span><span class="n">username</span>
+      <span class="nv">redirect_to:</span> <span class="vc">@url_for</span> <span class="s2">&quot;</span><span class="s">list_users</span><span class="s2">&quot;</span>
+
+    <span class="nv">GET:</span> <span class="nf">=&gt;</span>
+      <span class="vc">@html</span> <span class="nf">-&gt;</span>
+        <span class="n">form</span> <span class="nv">method:</span> <span class="s2">&quot;</span><span class="s">POST</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">action:</span> <span class="vc">@url_for</span><span class="kt">(</span><span class="s2">&quot;</span><span class="s">new_user</span><span class="s2">&quot;</span><span class="kt">)</span><span class="p">,</span> <span class="nf">-&gt;</span>
+          <span class="n">input</span> <span class="nv">type:</span> <span class="s2">&quot;</span><span class="s">hidden</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">csrf_token</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">value:</span> <span class="vc">@csrf_token</span>
+          <span class="n">input</span> <span class="nv">type:</span> <span class="s2">&quot;</span><span class="s">text</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">username</span><span class="s2">&quot;</span>
+  <span class="kt">}</span></code>
+</pre>
+
+
+
+    </div>
+  </div>
+</div>
+
+<div class="box">
+  <h1>Where can I learn more?</h1>
+<p>For a guide and tutorial to Lapis, consult the <a href="./reference.html"> manual</a>.</p>
+
+<p>The source of Lapis can be <a href="https://github.com/leafo/lapis">found on Github</a>
+and issues can be reported on the <a href="https://github.com/leafo/lapis/issues">issues
+tracker</a>.</p>
+
+<p><a href="http://rocks.moonscript.org">MoonRocks</a> is an open source application written
+in Lapis. It is a public Lua Rock repository and the <a href="https://github.com/leafo/moonrocks-site">source can be found on
+GitHub</a>.</p>
+
+</div>
+
+<div class="box">
+  <h1>Anything else I should know?</h1>
+<p>You can use most existing Lua libraries with Lapis with no problems.
+Here are some libraries you might find useful:</p>
+
+<ul>
+<li><a href="https://github.com/leafo/web_sanitize"><code>web_sanitize</code></a> &mdash; HTML sanitization</li>
+<li><a href="https://github.com/leafo/tableshape"><code>tableshape</code></a> &mdash; Robus input validation and verification</li>
+<li><a href="https://github.com/leafo/magick"><code>magick</code></a> &mdash; ImageMagick bindings</li>
+<li><a href="https://github.com/leafo/cloud_storage"><code>cloud_storage</code></a> &mdash; Support for Google Cloud Storage</li>
+<li><a href="https://github.com/leafo/lapis-console"><code>lapis-console</code></a> &mdash; Interactive MoonScript console for Lapis that runs inside of your browser</li>
+<li><a href="https://github.com/leafo/lapis-exceptions"><code>lapis-exceptions</code></a> &mdash; Exception tracking and reporting</li>
+<li><a href="https://github.com/leafo/lapis-bayes"><code>lapis-bayes</code></a> &mdash; General purpose Bayes classification for Spam, Fraud, etc.</li>
+</ul>
+
+
+</div>
+
+
+<div class="box">
+  <h1>About</h1>
+<p>Lapis would not be possible without the following projects:</p>
+
+<ul>
+<li><a href="http://lua.org">Lua</a></li>
+<li><a href="http://www.inf.puc-rio.br/%7Eroberto/lpeg/">LPeg</a></li>
+<li><a href="http://openresty.org">OpenResty</a></li>
+</ul>
+
+
+<p>Lapis is licensed under the <a href="http://opensource.org/licenses/MIT">MIT license</a>.</p>
+
+<p>Lapis is written by <a href="http://twitter.com/moonscript">@moonscript</a>.</p>
+
+</div>
+
+<div class="has_buttons bottom_buttons">
+  <a href="./reference.html" class="button">Reference Manual</a>
+  &middot;
+  <a href="https://github.com/leafo/lapis" class="button">Source on GitHub</a>
+</div>
+
+<div class="top_row">
+  <a href="#" class="top_link">&uarr; Top</a>
+</div>
+
+</div>
+
+  <div class="footer">
+    <div class="inner">
+      <div class="right">
+        Fri Mar  4 03:59:08 2022 PST
+      </div>
+
+      <div>
+        by <a href="https://leafo.net">leaf corcoran</a>
+        <span class="dot">&middot;</span>
+        licensed under MIT
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="animations/player.js"></script>
+  <script type="text/javascript" src="animations/1/anim_packed.js"></script>
+
+  <script type="text/javascript">
+    (function() {
+      var el = document.getElementById("screencast")
+      if (el) {
+        var player = new Player(anim_packed, "animations/1");
+        el.appendChild(player.element);
+        player.start();
+      }
+    })();
+  </script>
+
+  <a href="https://github.com/leafo/lapis" id="forkme"><img style="position: fixed; top: 0; right: 0; border: 0; z-index: 2" src="./img/fork.png" alt="Fork me on GitHub"></a>
+
+  <script src="./lib/jquery.min.js"></script>
+  <script src="./lib/react.production.min.js"></script>
+  <script src="./lib/react-dom.production.min.js"></script>
+  <script src="./lib/react-dom-factories.js"></script>
+  <script src="./lib/lunr.min.js"></script>
+  <script type="text/javascript" src="./search.js?Fri Mar  4 03:59:08 2022"></script>
+  <script type="text/javascript" src="./home.js?Fri Mar  4 03:59:08 2022"></script>
+
+  <script type="text/javascript">
+    new L.Home();
+  </script>
+</body>
+</html>

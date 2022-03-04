@@ -1,0 +1,958 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Utilities - Lapis Reference Manual</title>
+  <link rel="stylesheet" href="../reference.css?Fri Mar  4 03:59:00 2022" />
+  <script type="text/javascript">
+  if (window.location.hostname != "localhost") {
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-136625-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  }
+</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<body>
+  <div class="header">
+    <button class="toggle_nav_btn" id="menu_toggle">Menu</button>
+    <h1>
+      <a href="..">Lapis</a>
+    </h1>
+    <div id="search_drop" data-root=".." data-index="../reference.json"></div>
+    <a href="../changelog.html" class="version_flag">
+      v1.9.0
+    </a>
+  </div>
+
+  <div class="columns">
+    <div class="nav_column">
+      <div class="scrolling_inner">
+        <div class="lang_picker">
+          <span class="lang_toggle active" data-lang="moonscript">MoonScript</span>
+          <span class="lang_toggle" data-lang="lua">Lua</span>
+        </div>
+
+        
+          <div class="nav_links">
+            <h2>Contents</h2>
+            <ul><li><a href="#functions">Functions</a></li>
+<ul><li><a href="#functions/unescape"><code>unescape(str)</code></a></li>
+<li><a href="#functions/escape"><code>escape(str)</code></a></li>
+<li><a href="#functions/escape_pattern"><code>escape_pattern(str)</code></a></li>
+<li><a href="#functions/parse_query_string"><code>parse_query_string(str)</code></a></li>
+<li><a href="#functions/encode_query_string"><code>encode_query_string(tbl)</code></a></li>
+<li><a href="#functions/underscore"><code>underscore(str)</code></a></li>
+<li><a href="#functions/slugify"><code>slugify(str)</code></a></li>
+<li><a href="#functions/uniquify"><code>uniquify(tbl)</code></a></li>
+<li><a href="#functions/trim"><code>trim(str)</code></a></li>
+<li><a href="#functions/trim_all"><code>trim_all(tbl)</code></a></li>
+<li><a href="#functions/trim_filter"><code>trim_filter(tbl, [{keys ...}], [empty_val=nil])</code></a></li>
+<li><a href="#functions/to_json"><code>to_json(obj)</code></a></li>
+<li><a href="#functions/from_json"><code>from_json(str)</code></a></li>
+<li><a href="#functions/time_ago_in_words"><code>time_ago_in_words(date, [parts=1], [suffix="ago"])</code></a></li>
+<li><a href="#functions/encoding-methods">Encoding Methods</a></li>
+<li><a href="#functions/encode_base64"><code>encode_base64(str)</code></a></li>
+<li><a href="#functions/decode_base64"><code>decode_base64(str)</code></a></li>
+<li><a href="#functions/hmac_sha1"><code>hmac_sha1(secret, str)</code></a></li>
+<li><a href="#functions/encode_with_secret"><code>encode_with_secret(object, secret=config.secret)</code></a></li>
+<li><a href="#functions/decode_with_secret"><code>decode_with_secret(msg_and_sig, secret=config.secret)</code></a></li>
+<li><a href="#functions/autoload"><code>autoload(prefix, tbl={})</code></a></li></ul>
+<li><a href="#csrf-protection">CSRF Protection</a></li>
+<ul><li><a href="#csrf-protection/generate_token"><code>generate_token(req, data=nil)</code></a></li>
+<li><a href="#csrf-protection/validate_token"><code>validate_token(req, callback=nil)</code></a></li>
+<li><a href="#csrf-protection/assert_token"><code>assert_token(...)</code></a></li></ul>
+<li><a href="#making-http-requests">Making HTTP Requests</a></li>
+<ul><li><a href="#making-http-requests/simple"><code>simple(req, body)</code></a></li>
+<li><a href="#making-http-requests/request"><code>request(url_or_table, body)</code></a></li></ul>
+<li><a href="#caching">Caching</a></li>
+<ul><li><a href="#caching/cached"><code>cached(fn_or_tbl)</code></a></li>
+<li><a href="#caching/delete"><code>delete(key, [dict_name="page_cache"])</code></a></li>
+<li><a href="#caching/delete_all"><code>delete_all([dict_name="page_cache"])</code></a></li>
+<li><a href="#caching/delete_path"><code>delete_path(path, [dict_name="page_cache"])</code></a></li></ul>
+<li><a href="#file-uploads">File Uploads</a></li>
+<li><a href="#application-helpers">Application Helpers</a></li>
+<ul><li><a href="#application-helpers/respond_to"><code>fn = respond_to(verbs_to_fn={})</code></a></li>
+<li><a href="#application-helpers/capture_errors"><code>safe_fn = capture_errors(fn_or_tbl)</code></a></li>
+<li><a href="#application-helpers/capture_errors_json"><code>safe_fn = capture_errors_json(fn)</code></a></li>
+<li><a href="#application-helpers/yield_error"><code>yield_error(error_message)</code></a></li>
+<li><a href="#application-helpers/assert_error"><code>obj, msg, ... = assert_error(obj, msg, ...)</code></a></li>
+<li><a href="#application-helpers/json_params"><code>wrapped_fn = json_params(fn)</code></a></li></ul></ul>
+          </div>
+        
+
+        <div class="nav_links">
+          <h2>All Guides</h2>
+
+<ul>
+<li><a href="../reference/getting_started.html">Getting Started</a>
+
+<ul>
+<li><a href="../reference/moon_getting_started.html">Getting Started With MoonScript</a></li>
+<li><a href="../reference/lua_getting_started.html">Getting Started With Lua</a></li>
+</ul>
+</li>
+<li><a href="../reference/actions.html">Requests and Actions</a></li>
+<li><a href="../reference/configuration.html">Writing Configurations</a>
+
+<ul>
+<li><a href="../reference/lua_creating_configurations.html">Lua configuration syntax</a></li>
+<li><a href="../reference/moon_creating_configurations.html">MoonScript configuration syntax</a></li>
+</ul>
+</li>
+<li><a href="../reference/database.html">Database Access, and Queries</a>
+
+<ul>
+<li><a href="../reference/models.html">Models</a></li>
+</ul>
+</li>
+<li><a href="../reference/exception_handling.html">Handling Exceptions</a></li>
+<li><a href="../reference/input_validation.html">Input Validation</a></li>
+<li><a href="../reference/html_generation.html">HTML Generation</a></li>
+<li><a href="../reference/etlua_templates.html">etlua Templates</a></li>
+<li><a href="../reference/testing.html">Testing</a></li>
+<li><a href="../reference/utilities.html">Utility Functions</a></li>
+<li><a href="../reference/command_line.html">Command Line Tool</a></li>
+<li><a href="../reference/lapis_console.html">Lapis Console</a></li>
+</ul>
+
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="nav_offset">
+      <div class="text_column"><h1>Utilities</h1>
+
+<h2><a name="functions" href="#functions">Functions</a></h2>
+
+<p>Utility functions are found in:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">util</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.util&quot;</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">util</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.util</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<h3><a name="functions/unescape" href="#functions/unescape"><code>unescape(str)</code></a></h3>
+
+<p>URL unescapes string</p>
+
+<h3><a name="functions/escape" href="#functions/escape"><code>escape(str)</code></a></h3>
+
+<p>URL escapes string</p>
+
+<h3><a name="functions/escape_pattern" href="#functions/escape_pattern"><code>escape_pattern(str)</code></a></h3>
+
+<p>Escapes string for use in Lua pattern</p>
+
+<h3><a name="functions/parse_query_string" href="#functions/parse_query_string"><code>parse_query_string(str)</code></a></h3>
+
+<p>Parses query string into a table</p>
+
+<h3><a name="functions/encode_query_string" href="#functions/encode_query_string"><code>encode_query_string(tbl)</code></a></h3>
+
+<p>Converts a key,value table into a query string</p>
+
+<h3><a name="functions/underscore" href="#functions/underscore"><code>underscore(str)</code></a></h3>
+
+<p>Convert CamelCase to camel_case.</p>
+
+<h3><a name="functions/slugify" href="#functions/slugify"><code>slugify(str)</code></a></h3>
+
+<p>Converts a string to a slug suitable for a URL. Removes all whitespace and
+symbols and replaces them with <code>-</code>.</p>
+
+<h3><a name="functions/uniquify" href="#functions/uniquify"><code>uniquify(tbl)</code></a></h3>
+
+<p>Iterates over array table <code>tbl</code> appending all unique values into a new array
+table, then returns the new one.</p>
+
+<h3><a name="functions/trim" href="#functions/trim"><code>trim(str)</code></a></h3>
+
+<p>Trims the whitespace off of both sides of a string.</p>
+
+<h3><a name="functions/trim_all" href="#functions/trim_all"><code>trim_all(tbl)</code></a></h3>
+
+<p>Trims the whitespace off of all values in a table. Uses <code>pairs</code> to traverse
+every key in the table.</p>
+
+<p>The table is modified in place.</p>
+
+<h3><a name="functions/trim_filter" href="#functions/trim_filter"><code>trim_filter(tbl, [{keys ...}], [empty_val=nil])</code></a></h3>
+
+<p>Trims the whitespace off of all values in a table. The entry is removed from
+the table if the result is an empty string.</p>
+
+<p>If an array table <code>keys</code> is supplied then any other keys not in that list are
+removed (with <code>nil</code>, not the <code>empty_val</code>)</p>
+
+<p>If <code>empty_val</code> is provided then the whitespace only values are replaced with
+that value instead of <code>nil</code></p>
+
+<p>The table is modified in place.</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">db</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.db&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">trim_filter</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.util&quot;</span><span class="p">).</span><span class="n">trim_filter</span>
+
+<span class="n">unknown_input</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;     hello    &quot;</span><span class="p">,</span>
+  <span class="n">level</span> <span class="o">=</span> <span class="s2">&quot;admin&quot;</span><span class="p">,</span>
+  <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
+<span class="p">}</span>
+
+<span class="n">trim_filter</span><span class="p">(</span><span class="n">unknown_input</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">},</span> <span class="n">db</span><span class="p">.</span><span class="n">NULL</span><span class="p">)</span>
+
+<span class="c1">-- unknown input is now:</span>
+<span class="c1">-- {</span>
+<span class="c1">--   username = &quot;hello&quot;,</span>
+<span class="c1">--   description = db.NULL</span>
+<span class="c1">-- }</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">db</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.db</span><span class="s2">&quot;</span>
+<span class="k">import</span> <span class="n">trim_filter</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.util</span><span class="s2">&quot;</span>
+
+<span class="n">unknown_input</span> <span class="o">=</span> <span class="kt">{</span>
+  <span class="nv">username:</span> <span class="s2">&quot;</span><span class="s">  hello  </span><span class="s2">&quot;</span>
+  <span class="nv">level:</span> <span class="s2">&quot;</span><span class="s">admin</span><span class="s2">&quot;</span>
+  <span class="nv">description:</span> <span class="s2">&quot;</span><span class="s"> </span><span class="s2">&quot;</span>
+<span class="kt">}</span>
+
+<span class="n">trim_filter</span> <span class="n">unknown_input</span><span class="p">,</span> <span class="kt">{</span><span class="s2">&quot;</span><span class="s">username</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">description</span><span class="s2">&quot;</span><span class="kt">}</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">NULL</span>
+
+<span class="c1">-- unknown input is now:</span>
+<span class="c1">-- {</span>
+<span class="c1">--   username: &quot;hello&quot;</span>
+<span class="c1">--   description: db.NULL</span>
+<span class="c1">-- }</span></code>
+</pre>
+
+
+<h3><a name="functions/to_json" href="#functions/to_json"><code>to_json(obj)</code></a></h3>
+
+<p>Converts <code>obj</code> to JSON. Will strip recursion and things that can not be encoded.</p>
+
+<h3><a name="functions/from_json" href="#functions/from_json"><code>from_json(str)</code></a></h3>
+
+<p>Converts JSON to table, a direct wrapper around Lua CJSON&rsquo;s <code>decode</code>.</p>
+
+<h3><a name="functions/time_ago_in_words" href="#functions/time_ago_in_words"><code>time_ago_in_words(date, [parts=1], [suffix="ago"])</code></a></h3>
+
+<p>Returns a string in the format &ldquo;1 day ago&rdquo;.</p>
+
+<p><code>parts</code> allows you to add more words. With <code>parts=2</code>, the string
+returned would be in the format <code>1 day, 4 hours ago</code>.</p>
+
+<h3><a name="functions/encoding-methods" href="#functions/encoding-methods">Encoding Methods</a></h3>
+
+<p>Encoding functions are found in:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">encoding</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.util.encoding&quot;</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">encoding</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.util.encoding</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<h3><a name="functions/encode_base64" href="#functions/encode_base64"><code>encode_base64(str)</code></a></h3>
+
+<p>Base64 encodes a string.</p>
+
+<h3><a name="functions/decode_base64" href="#functions/decode_base64"><code>decode_base64(str)</code></a></h3>
+
+<p>Base64 decodes a string.</p>
+
+<h3><a name="functions/hmac_sha1" href="#functions/hmac_sha1"><code>hmac_sha1(secret, str)</code></a></h3>
+
+<p>Calculates the hmac-sha1 digest of <code>str</code> using <code>secret</code>. Returns a binary
+string.</p>
+
+<h3><a name="functions/encode_with_secret" href="#functions/encode_with_secret"><code>encode_with_secret(object, secret=config.secret)</code></a></h3>
+
+<p>Encodes a Lua object and generates a signature for it. Returns a single string
+that contains the encoded object and signature.</p>
+
+<h3><a name="functions/decode_with_secret" href="#functions/decode_with_secret"><code>decode_with_secret(msg_and_sig, secret=config.secret)</code></a></h3>
+
+<p>Decodes a string created by <code>encode_with_secret</code>. The decoded object is only
+returned if the signature is correct. Otherwise returns <code>nil</code> and an error
+message. The secret must match what was used with <code>encode_with_secret</code>.</p>
+
+<h3><a name="functions/autoload" href="#functions/autoload"><code>autoload(prefix, tbl={})</code></a></h3>
+
+<p>Makes it so accessing an unset value in <code>tbl</code> will run a <code>require</code> to search
+for the value. Useful for autoloading components split across many files.
+Overwrites <code>__index</code> metamethod. The result of the require is stored in the
+table.</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">models</span> <span class="o">=</span> <span class="n">autoload</span><span class="p">(</span><span class="s2">&quot;models&quot;</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">_</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">HelloWorld</span> <span class="c1">--&gt; will require &quot;models.hello_world&quot;</span>
+<span class="kd">local</span> <span class="n">_</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">foo_bar</span> <span class="c1">--&gt; will require &quot;models.foo_bar&quot;</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">models</span> <span class="o">=</span> <span class="n">autoload</span><span class="kt">(</span><span class="s2">&quot;</span><span class="s">models</span><span class="s2">&quot;</span><span class="kt">)</span>
+
+<span class="n">models</span><span class="o">.</span><span class="n">HelloWorld</span> <span class="c1">--&gt; will require &quot;models.hello_world&quot;</span>
+<span class="n">models</span><span class="o">.</span><span class="n">foo_bar</span> <span class="c1">--&gt; will require &quot;models.foo_bar&quot;</span></code>
+</pre>
+
+
+<h2><a name="csrf-protection" href="#csrf-protection">CSRF Protection</a></h2>
+
+<p>CSRF protection provides a way to prevent unauthorized requests that originate
+from other sites that are not your application. The common approach is to
+generate a special token that is placed on pages that make need to make calls
+with HTTP methods that are not <em>safe</em> (POST, PUT, DELETE, etc.). This token
+must be sent back to the server on the requests to verify the request came from
+a page generated by your application.</p>
+
+<p>The default CSRF implementation generates a random string on the server and
+stores it in the cookie. (The cookie&rsquo;s name is your session name followed by
+<code>_token</code>.) The CSRF token is a cryptographically signed string that contains
+the random string. You can optionally attach data to the CSRF token to control
+how it can expire.</p>
+
+<p>Before using any of the cryptographic functions it&rsquo;s important to set your
+application&rsquo;s secret. This is a string that only the application knows about.
+If your application is open source it&rsquo;s worthwhile to not commit this secret.
+The secret is set in <a href="#configuration-and-environments">your configuration</a> like so:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">config</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.config&quot;</span><span class="p">)</span>
+
+<span class="n">config</span><span class="p">(</span><span class="s2">&quot;development&quot;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="n">secret</span> <span class="o">=</span> <span class="s2">&quot;this is my secret string 123456&quot;</span>
+<span class="p">})</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">config</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.config</span><span class="s2">&quot;</span>
+
+<span class="n">config</span> <span class="s2">&quot;</span><span class="s">development</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+  <span class="n">secret</span> <span class="s2">&quot;</span><span class="s">this is my secret string 123456</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<p>Now that you have the secret configured, we might create a CSRF protected form
+like so:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">csrf</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.csrf&quot;</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">capture_errors</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.application&quot;</span><span class="p">).</span><span class="n">capture_errors</span>
+
+<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">,</span> <span class="s2">&quot;/form&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kd">local</span> <span class="n">csrf_token</span> <span class="o">=</span> <span class="n">csrf</span><span class="p">.</span><span class="n">generate_token</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="n">self</span><span class="p">:</span><span class="n">html</span><span class="p">(</span><span class="kr">function</span><span class="p">()</span>
+    <span class="n">form</span><span class="p">({</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">)</span> <span class="p">},</span> <span class="kr">function</span><span class="p">()</span>
+      <span class="n">input</span><span class="p">({</span> <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;hidden&quot;</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;csrf_token&quot;</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">csrf_token</span> <span class="p">})</span>
+      <span class="n">input</span><span class="p">({</span> <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;submit&quot;</span> <span class="p">})</span>
+    <span class="kr">end</span><span class="p">)</span>
+  <span class="kr">end</span><span class="p">)</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">,</span> <span class="s2">&quot;/form&quot;</span><span class="p">,</span> <span class="n">capture_errors</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="n">csrf</span><span class="p">.</span><span class="n">assert_token</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="s2">&quot;The form is valid!&quot;</span>
+<span class="kr">end</span><span class="p">))</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">csrf</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.csrf</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="kt">[</span><span class="nv">form:</span> <span class="s2">&quot;</span><span class="s">/form</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="n">respond_to</span> <span class="kt">{</span>
+    <span class="nv">GET:</span> <span class="nf">=&gt;</span>
+      <span class="n">csrf_token</span> <span class="o">=</span> <span class="n">csrf</span><span class="o">.</span><span class="n">generate_token</span> <span class="vc">@</span>
+      <span class="vc">@html</span> <span class="nf">=&gt;</span>
+        <span class="n">form</span> <span class="nv">method:</span> <span class="s2">&quot;</span><span class="s">POST</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">action:</span> <span class="vc">@url_for</span><span class="kt">(</span><span class="s2">&quot;</span><span class="s">form</span><span class="s2">&quot;</span><span class="kt">)</span><span class="p">,</span> <span class="nf">-&gt;</span>
+          <span class="n">input</span> <span class="nv">type:</span> <span class="s2">&quot;</span><span class="s">hidden</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">csrf_token</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">value:</span> <span class="n">csrf_token</span>
+          <span class="n">input</span> <span class="nv">type:</span> <span class="s2">&quot;</span><span class="s">submit</span><span class="s2">&quot;</span>
+
+    <span class="nv">POST:</span> <span class="n">capture_errors</span> <span class="nf">=&gt;</span>
+      <span class="n">csrf</span><span class="o">.</span><span class="n">assert_token</span> <span class="vc">@</span>
+      <span class="s2">&quot;</span><span class="s">The form is valid!</span><span class="s2">&quot;</span>
+  <span class="kt">}</span></code>
+</pre>
+
+
+<blockquote><p>If you're using CSRF protection in a lot of actions then it might be helpful
+to create a before filter that generates the token automatically.</p></blockquote>
+
+<p>The following functions are part of the CSRF module:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">csrf</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.csrf&quot;</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">csrf</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.csrf</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<h3><a name="csrf-protection/generate_token" href="#csrf-protection/generate_token"><code>generate_token(req, data=nil)</code></a></h3>
+
+<p>Generates a token for the current session. If a random string has not been set
+in the cookie yet, then it will be generated. You can optionally pass in data
+to have it encoded into the token. You can then use the <code>callback</code> parameter of
+<code>validate_token</code> to verify data&rsquo;s value.</p>
+
+<p>The random string is stored in a cookie named as your session name with
+<code>_token</code> appended to the end.</p>
+
+<h3><a name="csrf-protection/validate_token" href="#csrf-protection/validate_token"><code>validate_token(req, callback=nil)</code></a></h3>
+
+<p>Validates the CSRF token located in <code>req.params.csrf_token</code>. For any endpoints
+you validation the token on you must pass the query or form parameter
+<code>csrf_token</code> with the value of the token returned by <code>generate_token</code>.</p>
+
+<p>If the validation fails then <code>nil</code> and an error message are returned. A
+callback function can be provided as the second argument. It&rsquo;s a function that
+will be called with the data payload stored in the token. You can specify the
+data with the second argument of <code>generate_token</code>.</p>
+
+<p>Here&rsquo;s an example of adding an expiration date using the token data:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">csrf</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.csrf&quot;</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">capture_errors</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.application&quot;</span><span class="p">).</span><span class="n">capture_errors</span>
+
+<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">,</span> <span class="s2">&quot;/form&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kd">local</span> <span class="n">csrf_token</span> <span class="o">=</span> <span class="n">csrf</span><span class="p">.</span><span class="n">generate_token</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="p">{</span>
+    <span class="c1">-- expire in 4 hours</span>
+    <span class="n">expires</span> <span class="o">=</span> <span class="nb">os.time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">4</span>
+  <span class="p">})</span>
+  <span class="c1">-- render a form using csrf_token...</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">,</span> <span class="s2">&quot;/form&quot;</span><span class="p">,</span> <span class="n">capture_errors</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="n">csrf</span><span class="p">.</span><span class="n">assert_token</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="nb">os.time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">expires</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span> <span class="kr">then</span>
+      <span class="kr">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="s2">&quot;token is expired&quot;</span>
+    <span class="kr">end</span>
+
+    <span class="kr">return</span> <span class="kc">true</span>
+  <span class="kr">end</span><span class="p">)</span>
+
+  <span class="kr">return</span> <span class="s2">&quot;The request is valid!&quot;</span>
+<span class="kr">end</span><span class="p">))</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">csrf</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.csrf</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="kt">[</span><span class="nv">form:</span> <span class="s2">&quot;</span><span class="s">/form</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="n">respond_to</span> <span class="kt">{</span>
+    <span class="nv">GET:</span> <span class="nf">=&gt;</span>
+      <span class="n">csrf_token</span> <span class="o">=</span> <span class="n">csrf</span><span class="o">.</span><span class="n">generate_token</span> <span class="vc">@</span><span class="p">,</span> <span class="kt">{</span>
+        <span class="c1">-- expire in 4 hours</span>
+        <span class="nv">expires:</span> <span class="nb">os.time</span><span class="o">!</span> <span class="o">+</span> <span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">4</span>
+      <span class="kt">}</span>
+      <span class="c1">-- render a form using csrf_token...</span>
+
+    <span class="nv">POST:</span> <span class="n">capture_errors</span> <span class="nf">=&gt;</span>
+      <span class="n">csrf</span><span class="o">.</span><span class="n">assert_token</span> <span class="vc">@</span><span class="p">,</span> <span class="kt">(</span><span class="n">d</span><span class="kt">)</span> <span class="nf">-&gt;</span>
+        <span class="k">if</span> <span class="nb">os.time</span><span class="kt">()</span> <span class="o">&gt;</span> <span class="kt">(</span><span class="n">d</span><span class="o">.</span><span class="n">expires</span> <span class="k">or</span> <span class="mi">0</span><span class="kt">)</span> <span class="k">then</span>
+          <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">token is expired</span><span class="s2">&quot;</span>
+        <span class="kc">true</span>
+
+      <span class="s2">&quot;</span><span class="s">The form is valid!</span><span class="s2">&quot;</span>
+  <span class="kt">}</span></code>
+</pre>
+
+
+<h3><a name="csrf-protection/assert_token" href="#csrf-protection/assert_token"><code>assert_token(...)</code></a></h3>
+
+<p>First calls <code>validate_token</code> with same arguments, then calls <code>assert_error</code> if
+validation fails.</p>
+
+<h2><a name="making-http-requests" href="#making-http-requests">Making HTTP Requests</a></h2>
+
+<p>Lapis comes with a built-in module for making asynchronous HTTP requests. The
+way it works is by using the Nginx <code>proxy_pass</code> directive on an internal
+action. Because of this, before you can make any requests you need to modify
+your Nginx configuration.</p>
+
+<p>Add the following to your server block:</p>
+
+<pre class="highlight lang_nginx"><code><span></span><span class="k">location</span> <span class="s">/proxy</span> <span class="p">{</span>
+    <span class="kn">internal</span><span class="p">;</span>
+    <span class="kn">rewrite_by_lua</span> <span class="s">&quot;</span>
+      <span class="s">local</span> <span class="s">req</span> <span class="p">=</span> <span class="s">ngx.req</span>
+
+      <span class="s">for</span> <span class="s">k,v</span> <span class="s">in</span> <span class="s">pairs(req.get_headers())</span> <span class="s">do</span>
+        <span class="s">if</span> <span class="s">k</span> <span class="p">~</span><span class="sr">=</span> <span class="s">&#39;content-length&#39;</span> <span class="s">then</span>
+          <span class="s">req.clear_header(k)</span>
+        <span class="s">end</span>
+      <span class="s">end</span>
+
+      <span class="s">if</span> <span class="s">ngx.ctx.headers</span> <span class="s">then</span>
+        <span class="s">for</span> <span class="s">k,v</span> <span class="s">in</span> <span class="s">pairs(ngx.ctx.headers)</span> <span class="s">do</span>
+          <span class="s">req.set_header(k,</span> <span class="s">v)</span>
+        <span class="s">end</span>
+      <span class="s">end</span>
+    <span class="s">&quot;</span><span class="p">;</span>
+
+    <span class="kn">resolver</span> <span class="mi">8</span><span class="s">.8.8.8</span><span class="p">;</span>
+    <span class="kn">proxy_http_version</span> <span class="mi">1</span><span class="s">.1</span><span class="p">;</span>
+    <span class="kn">proxy_pass</span> <span class="nv">$_url</span><span class="p">;</span>
+<span class="p">}</span></code>
+</pre>
+
+
+<blockquote><p>This code ensures that the correct headers are set for the new request. The
+<code>$_url</code> variable is used to store the target URL. It must be defined using
+<code>set $_url ""</code> directive in your default location.</p></blockquote>
+
+<p>Now we can use the <code>lapis.nginx.http</code> module. There are two methods. <code>request</code>
+and <code>simple</code>. <code>request</code> implements the Lua Socket HTTP request API (complete
+with LTN12).</p>
+
+<p><code>simple</code> is a simplified API with no LTN12:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">http</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.nginx.http&quot;</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="c1">-- a simple GET request</span>
+  <span class="kd">local</span> <span class="n">body</span><span class="p">,</span> <span class="n">status_code</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">simple</span><span class="p">(</span><span class="s2">&quot;http://leafo.net&quot;</span><span class="p">)</span>
+
+  <span class="c1">-- a post request, data table is form encoded and content-type is set to</span>
+  <span class="c1">-- application/x-www-form-urlencoded</span>
+  <span class="n">http</span><span class="p">.</span><span class="n">simple</span><span class="p">(</span><span class="s2">&quot;http://leafo.net/&quot;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;leafo&quot;</span>
+  <span class="p">})</span>
+
+  <span class="c1">-- manual invocation of the above request</span>
+  <span class="n">http</span><span class="p">.</span><span class="n">simple</span><span class="p">({</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;http://leafo.net&quot;</span><span class="p">,</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="p">[</span><span class="s2">&quot;content-type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;application/x-www-form-urlencoded&quot;</span>
+    <span class="p">},</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;leafo&quot;</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">http</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.nginx.http</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="c1">-- a simple GET request</span>
+    <span class="n">body</span><span class="p">,</span> <span class="n">status_code</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">simple</span> <span class="s2">&quot;</span><span class="s">http://leafo.net</span><span class="s2">&quot;</span>
+
+    <span class="c1">-- a post request, data table is form encoded and content-type is set to</span>
+    <span class="c1">-- application/x-www-form-urlencoded</span>
+    <span class="n">http</span><span class="o">.</span><span class="n">simple</span> <span class="s2">&quot;</span><span class="s">http://leafo.net/</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kt">{</span>
+      <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">leafo</span><span class="s2">&quot;</span>
+    <span class="kt">}</span>
+
+    <span class="c1">-- manual invocation of the above request</span>
+    <span class="n">http</span><span class="o">.</span><span class="n">simple</span> <span class="kt">{</span>
+      <span class="nv">url:</span> <span class="s2">&quot;</span><span class="s">http://leafo.net</span><span class="s2">&quot;</span>
+      <span class="nv">method:</span> <span class="s2">&quot;</span><span class="s">POST</span><span class="s2">&quot;</span>
+      <span class="nv">headers:</span> <span class="kt">{</span>
+        <span class="s2">&quot;</span><span class="s">content-type</span><span class="s2">&quot;</span><span class="o">:</span> <span class="s2">&quot;</span><span class="s">application/x-www-form-urlencoded</span><span class="s2">&quot;</span>
+      <span class="kt">}</span>
+      <span class="nv">body:</span> <span class="kt">{</span>
+        <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">leafo</span><span class="s2">&quot;</span>
+      <span class="kt">}</span>
+    <span class="kt">}</span></code>
+</pre>
+
+
+<h3><a name="making-http-requests/simple" href="#making-http-requests/simple"><code>simple(req, body)</code></a></h3>
+
+<p>Performs an HTTP request using the internal <code>/proxy</code> location.</p>
+
+<p>Returns 3 values, the string result of the request, http status code, and a
+table of headers.</p>
+
+<p>If there is only one argument and it is a string then that argument is treated
+as a URL for a GET request.</p>
+
+<p>If there is a second argument it is set as the body of a POST request. If
+the body is a table it is encoded with <code>encode_query_string</code> and the
+<code>Content-type</code> header is set to <code>application/x-www-form-urlencoded</code></p>
+
+<p>If the first argument is a table then it is used to manually set request
+parameters. It takes the following keys:</p>
+
+<ul>
+<li><code>url</code> &mdash; the URL to request</li>
+<li><code>method</code> &mdash; <code>"GET"</code>, <code>"POST"</code>, <code>"PUT"</code>, etc&hellip;</li>
+<li><code>body</code> &mdash; string or table which is encoded</li>
+<li><code>headers</code> &mdash; a table of request headers to set</li>
+</ul>
+
+
+<h3><a name="making-http-requests/request" href="#making-http-requests/request"><code>request(url_or_table, body)</code></a></h3>
+
+<p>Implements a subset of <a href="http://w3.impa.br/%7Ediego/software/luasocket/http.html#request">Lua Socket&rsquo;s
+<code>http.request</code></a>.</p>
+
+<p>Does not support <code>proxy</code>, <code>create</code>, <code>step</code>, or <code>redirect</code>.</p>
+
+<h2><a name="caching" href="#caching">Caching</a></h2>
+
+<p>Lapis comes with a simple memory cache for caching the entire result of an
+action keyed on the parameters it receives. This is useful for speeding up the
+rendering of rarely changing pages because all database calls and HTML methods
+can be skipped.</p>
+
+<p>The Lapis cache uses the <a href="http://wiki.nginx.org/HttpLuaModule#lua_shared_dict">shared dictionary
+API</a> from HttpLuaModule.
+The first thing you'll need to do is create a shared dictionary in your Nginx
+configuration.</p>
+
+<p>Add the following to your <code>http</code> block to create a 15mb cache:</p>
+
+<pre class="highlight lang_nginx"><code><span></span><span class="k">lua_shared_dict</span> <span class="s">page_cache</span> <span class="mi">15m</span><span class="p">;</span></code>
+</pre>
+
+
+<p>Now we are ready to start using the caching module, <code>lapis.cache</code>.</p>
+
+<h3><a name="caching/cached" href="#caching/cached"><code>cached(fn_or_tbl)</code></a></h3>
+
+<p>Wraps an action to use the cache.</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">cached</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.cache&quot;</span><span class="p">).</span><span class="n">cached</span>
+
+<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;my_page&quot;</span><span class="p">,</span> <span class="s2">&quot;/hello/world&quot;</span><span class="p">,</span> <span class="n">cached</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="s2">&quot;hello world!&quot;</span>
+<span class="kr">end</span><span class="p">))</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">import</span> <span class="n">cached</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.cache</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="kt">[</span><span class="nv">my_page:</span> <span class="s2">&quot;</span><span class="s">/hello/world</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="n">cached</span> <span class="nf">=&gt;</span>
+    <span class="s2">&quot;</span><span class="s">hello world!</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<p>The first request to <code>/hello/world</code> will run the action and store the result in
+the cache, all subsequent requests will skip the action and return the text
+stored in the cache.</p>
+
+<p>The cache will remember not only the raw text output, but also the content
+type and status code.</p>
+
+<p>The cache key also takes into account any GET parameters, so a request to
+<code>/hello/world?one=two</code> is stored in a separate cache slot. Multiple parameters
+are sorted so they can come in any order and still match the same cache key.</p>
+
+<p>When the cache is hit, a special response header is set to 1,
+<code>x-memory-cache-hit</code>. This is useful for debugging your application to make
+sure the cache is working.</p>
+
+<p>Instead of passing a function as the action of the cache you can also pass in a
+table. When passing in a table the function must be the first numerically
+indexed item in the table.</p>
+
+<p>The table supports the following options:</p>
+
+<ul>
+<li><code>dict_name</code> &mdash; override the name of the shared dictionary used (defaults to <code>"page_cache"</code>)</li>
+<li><code>exptime</code> &mdash; how long in seconds the cache should stay alive, 0 is forever (defaults to <code>0</code>)</li>
+<li><code>cache_key</code> &mdash; set a custom function for generating the cache key (default is described above)</li>
+<li><code>when</code> &mdash; a function that should return truthy a value if the page should be cached. Receives the request object as first argument (defaults to <code>nil</code>)</li>
+</ul>
+
+
+<p>For example, you could implement microcaching, where the page is cached for a
+short period of time, like so:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">cached</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.cache&quot;</span><span class="p">).</span><span class="n">cached</span>
+
+<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/microcached&quot;</span><span class="p">,</span> <span class="n">cached</span><span class="p">({</span>
+  <span class="n">exptime</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="s2">&quot;hello world!&quot;</span>
+  <span class="kr">end</span>
+<span class="p">}))</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">import</span> <span class="n">cached</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.cache</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="s2">&quot;</span><span class="s">/microcached</span><span class="s2">&quot;</span><span class="o">:</span> <span class="n">cached</span> <span class="kt">{</span>
+    <span class="nv">exptime:</span> <span class="mi">1</span>
+    <span class="nf">=&gt;</span> <span class="s2">&quot;</span><span class="s">hello world!</span><span class="s2">&quot;</span>
+  <span class="kt">}</span></code>
+</pre>
+
+
+<h3><a name="caching/delete" href="#caching/delete"><code>delete(key, [dict_name="page_cache"])</code></a></h3>
+
+<p>Deletes an entry from the cache. Key can either be a plain string, or a tuple
+of <code>{path, params}</code> that will be encoded as the key.</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">cache</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.cache&quot;</span><span class="p">)</span>
+<span class="n">cache</span><span class="p">.</span><span class="n">delete</span><span class="p">({</span> <span class="s2">&quot;/hello&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="n">thing</span> <span class="o">=</span> <span class="s2">&quot;world&quot;</span> <span class="p">}</span> <span class="p">})</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">cache</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.cache</span><span class="s2">&quot;</span>
+<span class="n">cache</span><span class="o">.</span><span class="n">delete</span> <span class="kt">{</span> <span class="s2">&quot;</span><span class="s">/hello</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kt">{</span> <span class="nv">thing:</span> <span class="s2">&quot;</span><span class="s">world</span><span class="s2">&quot;</span> <span class="kt">}</span> <span class="kt">}</span></code>
+</pre>
+
+
+<h3><a name="caching/delete_all" href="#caching/delete_all"><code>delete_all([dict_name="page_cache"])</code></a></h3>
+
+<p>Deletes all entries from the cache.</p>
+
+<h3><a name="caching/delete_path" href="#caching/delete_path"><code>delete_path(path, [dict_name="page_cache"])</code></a></h3>
+
+<p>Deletes all entries for a specific path.</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">cache</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.cache&quot;</span><span class="p">)</span>
+<span class="n">cache</span><span class="p">.</span><span class="n">delete_path</span><span class="p">(</span><span class="s2">&quot;/hello&quot;</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">cache</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.cache</span><span class="s2">&quot;</span>
+<span class="n">cache</span><span class="o">.</span><span class="n">delete_path</span> <span class="s2">&quot;</span><span class="s">/hello</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<h2><a name="file-uploads" href="#file-uploads">File Uploads</a></h2>
+
+<p>File uploads can be handled with a multipart form and accessing the file from
+the <span class="for_moon"><code>@params</code></span><span
+class="for_lua"><code>self.params</code></span> of the request.</p>
+
+<p>For example, let&rsquo;s create the following form:</p>
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">import</span> <span class="nc">Widget</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.html</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="nc">MyForm</span> <span class="k">extends</span> <span class="nc">Widget</span>
+  <span class="nv">content:</span> <span class="nf">=&gt;</span>
+    <span class="n">form</span> <span class="kt">{</span>
+      <span class="nv">action:</span> <span class="s2">&quot;</span><span class="s">/my_action</span><span class="s2">&quot;</span>
+      <span class="nv">method:</span> <span class="s2">&quot;</span><span class="s">POST</span><span class="s2">&quot;</span>
+      <span class="nv">enctype:</span> <span class="s2">&quot;</span><span class="s">multipart/form-data</span><span class="s2">&quot;</span>
+    <span class="kt">}</span><span class="p">,</span> <span class="nf">-&gt;</span>
+      <span class="n">input</span> <span class="nv">type:</span> <span class="s2">&quot;</span><span class="s">file</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">uploaded_file</span><span class="s2">&quot;</span>
+      <span class="n">input</span> <span class="nv">type:</span> <span class="s2">&quot;</span><span class="s">submit</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<p>When the form is submitted, the file is stored as a table with <code>filename</code> and
+<code>content</code> properties in <span class="for_moon"><code>@params</code></span><span
+class="for_lua"><code>self.params</code></span> under the name of the form input:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/my_action&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kd">local</span> <span class="n">file</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">uploaded_file</span>
+  <span class="kr">if</span> <span class="n">file</span> <span class="kr">then</span>
+    <span class="kr">return</span> <span class="s2">&quot;Uploaded: &quot;</span> <span class="o">..</span> <span class="n">file</span><span class="p">.</span><span class="n">filename</span> <span class="o">..</span> <span class="s2">&quot;, &quot;</span> <span class="o">..</span> <span class="o">#</span><span class="n">file</span><span class="p">.</span><span class="n">content</span> <span class="o">..</span> <span class="s2">&quot;bytes&quot;</span>
+  <span class="kr">end</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="s2">&quot;</span><span class="s">/my_action</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span>
+    <span class="k">if</span> <span class="n">file</span> <span class="o">=</span> <span class="vc">@params</span><span class="o">.</span><span class="n">uploaded_file</span>
+      <span class="s2">&quot;</span><span class="s">Uploaded #{file.filename}, #{#file.content}bytes</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<p>A validation exists for ensuring that a param is an uploaded file, it&rsquo;s called
+<code>is_file</code>:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/my_action&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="n">assert_valid</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">,</span> <span class="p">{</span>
+    <span class="p">{</span> <span class="s2">&quot;uploaded_file&quot;</span><span class="p">,</span> <span class="n">is_file</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">}</span>
+  <span class="p">})</span>
+
+  <span class="c1">-- file is ready to be used</span>
+<span class="kr">end</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="s2">&quot;</span><span class="s">/my_action</span><span class="s2">&quot;</span><span class="o">:</span> <span class="n">capture_errors</span> <span class="nf">=&gt;</span>
+    <span class="n">assert_valid</span> <span class="vc">@params</span><span class="p">,</span> <span class="kt">{</span>
+      <span class="kt">{</span> <span class="s2">&quot;</span><span class="s">uploaded_file</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">is_file:</span> <span class="kc">true</span> <span class="kt">}</span>
+    <span class="kt">}</span>
+
+    <span class="c1">-- file is ready to be used...</span></code>
+</pre>
+
+
+<p>An uploaded file is loaded entirely into memory, so you should be careful about
+the memory requirements of your application. Nginx limits the size of uploads
+through the
+<a href="http://wiki.nginx.org/HttpCoreModule#client_max_body_size"><code>client_max_body_size</code></a>
+directive. It&rsquo;s only 1 megabyte by default, so if you plan to allow uploads
+greater than that you should set a new value in your Nginx configuration.</p>
+
+<h2><a name="application-helpers" href="#application-helpers">Application Helpers</a></h2>
+
+<p>The following functions are part of the <code>lapis.application</code> module:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">app_helpers</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.application&quot;</span><span class="p">)</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="n">application</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.application</span><span class="s2">&quot;</span></code>
+</pre>
+
+
+<h3><a name="application-helpers/respond_to" href="#application-helpers/respond_to"><code>fn = respond_to(verbs_to_fn={})</code></a></h3>
+
+<p><code>verbs_to_fn</code> is a table of functions that maps a HTTP verb to a corresponding
+function. Returns a new function that dispatches to the correct function in the
+table based on the verb of the request. See
+<a href="actions.html#handling-http-verbs">Handling HTTP verbs</a></p>
+
+<p>If an action for <code>HEAD</code> does not exist Lapis inserts the following function to
+render nothing:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kr">function</span><span class="p">()</span> <span class="kr">return</span> <span class="p">{</span> <span class="n">layout</span> <span class="o">=</span> <span class="kc">false</span> <span class="p">}</span> <span class="kr">end</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="nf">-&gt;</span> <span class="kt">{</span> <span class="nv">layout:</span> <span class="kc">false</span> <span class="kt">}</span></code>
+</pre>
+
+
+<p>If the request is a verb that is not handled then the Lua <code>error</code> function
+is called and a 500 page is generated.</p>
+
+<p>A special <code>before</code> key can be set to a function that should run before any
+other action. If <span class="for_moon"><code>@write</code></span><span
+class="for_lua"><code>self.write</code></span> is called inside the before function then
+the regular handler will not be called.</p>
+
+<h3><a name="application-helpers/capture_errors" href="#application-helpers/capture_errors"><code>safe_fn = capture_errors(fn_or_tbl)</code></a></h3>
+
+<p>Wraps a function to catch errors sent by <code>yield_error</code> or <code>assert_error</code>. See
+<a href="exception_handling.html">Exception Handling</a> for more information.</p>
+
+<p>If the first argument is a function then that function is called on request and
+the following default error handler is used:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kr">function</span><span class="p">()</span> <span class="kr">return</span> <span class="p">{</span> <span class="n">render</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">}</span> <span class="kr">end</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="nf">-&gt;</span> <span class="kt">{</span> <span class="nv">render:</span> <span class="kc">true</span> <span class="kt">}</span></code>
+</pre>
+
+
+<p>If a table is the first argument then the <code>1</code>st element of the table is used as
+the action and value of <code>on_error</code> is used as the error handler.</p>
+
+<p>When an error is yielded then the <span class="for_moon"><code>@errors</code></span><span
+class="for_lua"><code>self.errors</code></span> variable is set on the current request and
+the error handler is called.</p>
+
+<h3><a name="application-helpers/capture_errors_json" href="#application-helpers/capture_errors_json"><code>safe_fn = capture_errors_json(fn)</code></a></h3>
+
+<p>A wrapper for <code>capture_errors</code> that passes in the following error handler:</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kr">return</span> <span class="p">{</span> <span class="n">json</span> <span class="o">=</span> <span class="p">{</span> <span class="n">errors</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">errors</span> <span class="p">}</span> <span class="p">}</span> <span class="kr">end</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="nf">=&gt;</span> <span class="kt">{</span> <span class="nv">json:</span> <span class="kt">{</span> <span class="nv">errors:</span> <span class="vc">@errors</span> <span class="kt">}</span> <span class="kt">}</span></code>
+</pre>
+
+
+<h3><a name="application-helpers/yield_error" href="#application-helpers/yield_error"><code>yield_error(error_message)</code></a></h3>
+
+<p>Yields a single error message to be captured by <code>capture_errors</code></p>
+
+<h3><a name="application-helpers/assert_error" href="#application-helpers/assert_error"><code>obj, msg, ... = assert_error(obj, msg, ...)</code></a></h3>
+
+<p>Works like Lua&rsquo;s <code>assert</code> but instead of triggering a Lua error it triggers an
+error to be captured by <code>capture_errors</code></p>
+
+<h3><a name="application-helpers/json_params" href="#application-helpers/json_params"><code>wrapped_fn = json_params(fn)</code></a></h3>
+
+<p>Return a new function that will parse the body of the request as JSON and
+inject it into <code>@params</code> if the <code>content-type</code> is set to <code>application/json</code>.</p>
+
+<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">json_params</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.application&quot;</span><span class="p">).</span><span class="n">json_params</span>
+
+<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/json&quot;</span><span class="p">,</span> <span class="n">json_params</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">value</span>
+<span class="kr">end</span><span class="p">))</span></code>
+</pre>
+
+
+<pre class="highlight lang_moon"><code><span></span><span class="k">import</span> <span class="n">json_params</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.application</span><span class="s2">&quot;</span>
+
+<span class="k">class</span> <span class="nc">JsonApp</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span>
+  <span class="s2">&quot;</span><span class="s">/json</span><span class="s2">&quot;</span><span class="o">:</span> <span class="n">json_params</span> <span class="nf">=&gt;</span>
+    <span class="vc">@params</span><span class="o">.</span><span class="n">value</span></code>
+</pre>
+
+
+<pre class="highlight lang_bash"><code><span></span>$ curl <span class="se">\</span>
+  -H <span class="s2">&quot;Content-type: application/json&quot;</span> <span class="se">\</span>
+  -d <span class="s1">&#39;{&quot;value&quot;: &quot;hello&quot;}&#39;</span> <span class="se">\</span>
+  <span class="s1">&#39;https://localhost:8080/json&#39;</span></code>
+</pre>
+
+
+<p>The unmerged params can also be accessed from <span
+class="for_moon"><code>@json</code></span><span class="for_lua"><code>self.json</code></span>. If
+there was an error parsing the JSON then <span
+class="for_moon"><code>@json</code></span><span class="for_lua"><code>self.json</code></span> will be
+<code>nil</code> and the request will continue.</p>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../lib/jquery.min.js"></script>
+  <script src="../lib/react.production.min.js"></script>
+  <script src="../lib/react-dom.production.min.js"></script>
+  <script src="../lib/react-dom-factories.js"></script>
+  <script src="../lib/lunr.min.js"></script>
+  <script type="text/javascript" src="../search.js?Fri Mar  4 03:59:00 2022"></script>
+  <script type="text/javascript" src="../reference.js?Fri Mar  4 03:59:00 2022"></script>
+  <script type="text/javascript">
+    new L.Reference();
+  </script>
+</body>
+</html>
