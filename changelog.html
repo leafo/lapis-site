@@ -6,6 +6,40 @@
   <h1>Changelog</h1>
 $markdown{[[
 
+## v1.10.0 -- Oct 31 2022
+
+## Additions
+
+* `Model:include_in` supports a new  `{ load = false }` option to disable the conversion of query results to model instances
+* You can now specify `{ order = false }` when creating a paginator from a model relation to strip the default order that may have been specified in the relation definition
+* `lapis.util.utf8`: Add a UTF8 aware trim LPeg pattern, called `trim`) (Note: the utility function `trim` located `lapis.util` still only operates on ascii whitespace)
+
+**Postgres**
+* `model:update` method can take a `where` clause to apply a conditional update
+* The return value of `model:update` is now well defined, and works similar to `model:delete`. Will return boolean `true`/`false` depending on if the update was able complete, and the resulting object from the update query. (**Warning:** Previously `model:update` would return the result object regardless of success as the first return value, but this functionality was undocumented.)
+* `db.insert` can now take options as a table, and supports receiving `returning` columns as a option
+* Add the `{ on_conflict = "do_nothing" }` option to `db.insert` to not throw an error if insertion is canceled due to a unique key constraint conflict (using the `ON CONFLICT DO NOTHING` query syntax introduced in Postgres 9.5)
+
+**MySQL**
+* `model:update` will return `true` if the number of affected rows is greater than 0, followed by the result object
+
+## Changes
+* `lapis.html`: All element helper methods (eg. `div`, `b`, `span`, etc.) now return `nil` instead of the previously undocumented behavior of returning the buffer object. This is to prevent accidentally leaking data when writing malformed syntax such as `div div!` (instead of the correct (`div -> div!`)
+* `lapis.util.utf8`: whitespace pattern is aware of invalid use of direction markers
+* `lapis.db.postgres.model`: On model creation, if a `returning *` clause is provided then unnecessary extra returning fields are not included in the query
+* `lapis.db.postgres`: Nginx environment detection is more accurate to allow pgmoon connections to be created without error in more stages of the Nginx worker/request lifecycle
+* `lapis.db.postgres`: OpenResty specific performance metrics about socket reuse are only written when an nginx socket is in use 
+* `lapis.db.postgres`: Add connection specific performance metric for when any socket type other than nginx is used
+
+## Bugs
+* `lapis.validate`: Fixed bug where the input options table passed into validate would get mutated, removing the `optional` field
+
+
+## Misc
+* Assorted updates to docs
+* Expanded test suite, refactors to tests
+* Documentation typo fixes by  @tommy-mor in <https://github.com/leafo/lapis/pull/734> <https://github.com/leafo/lapis/pull/746>
+
 ## v1.9.0 -- March 29 2021
 
 ### Changes
