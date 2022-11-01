@@ -15,12 +15,14 @@ $markdown{[[
 * `lapis.util.utf8`: Add a UTF8 aware trim LPeg pattern, called `trim`) (Note: the utility function `trim` located `lapis.util` still only operates on ascii whitespace)
 
 **Postgres**
+
 * `model:update` method can take a `where` clause to apply a conditional update
 * The return value of `model:update` is now well defined, and works similar to `model:delete`. Will return boolean `true`/`false` depending on if the update was able complete, and the resulting object from the update query. (**Warning:** Previously `model:update` would return the result object regardless of success as the first return value, but this functionality was undocumented.)
 * `db.insert` can now take options as a table, and supports receiving `returning` columns as a option
 * Add the `{ on_conflict = "do_nothing" }` option to `db.insert` to not throw an error if insertion is canceled due to a unique key constraint conflict (using the `ON CONFLICT DO NOTHING` query syntax introduced in Postgres 9.5)
 
 **MySQL**
+
 * `model:update` will return `true` if the number of affected rows is greater than 0, followed by the result object
 
 ## Changes
@@ -38,7 +40,7 @@ $markdown{[[
 ## Misc
 * Assorted updates to docs
 * Expanded test suite, refactors to tests
-* Documentation typo fixes by  @tommy-mor in <https://github.com/leafo/lapis/pull/734> <https://github.com/leafo/lapis/pull/746>
+* Documentation typo fixes by  @tommy-mor in [#734](https://github.com/leafo/lapis/pull/734) [#746](https://github.com/leafo/lapis/pull/746)
 
 ## v1.9.0 -- March 29 2021
 
