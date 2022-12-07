@@ -16,7 +16,7 @@ L.setup_search = (el, opts={}) ->
 
   $.get(opts.index).done (res) =>
     index = lunr ->
-      @field "title"
+      @field "title", boost: 2
       @field "keywords"
       @ref "id"
 
@@ -47,8 +47,8 @@ RDF = ReactDOMFactories
 R.DocumentationSearchResults = React.memo DocumentationSearchResults = (props) ->
   results = props.results.map (result, i) ->
     title = result.page.title
-    # starts with lowercase letter
-    is_code = title.match(/^\s*[^A-Z]/)
+    # starts with lowercase letter, or of format Hello:World
+    is_code = title.match(/^\s*[^A-Z]/) || title.match /^[\w]+:[\w]+/
 
     if is_code
       # remove the return values

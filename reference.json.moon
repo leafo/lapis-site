@@ -37,8 +37,9 @@ should_index = (page) ->
 -- attempt to extract keywords out of header title
 -- eg. db.query -> {"db", "query"}
 extract_keywords = (title) ->
-  if func = title\match "%f[%a]db%.(%w+)"
-    return {"db", func}
+  -- there's a bug with fronteir patters where you can't follow it by a ()
+  if title\match "%f[%a]%w+[:.][%w_]+"
+    return { title\match "(%w+)[:.]([%w_]+)" }
 
 out = {
   pages: {}
