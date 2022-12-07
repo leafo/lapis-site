@@ -34,12 +34,24 @@ should_index = (page) ->
   false
 
 
--- attempt to extract keywords out of header title
--- eg. db.query -> {"db", "query"}
-extract_keywords = (title) ->
+extract_keywords = (title, parents) ->
+  -- attempt to extract keywords out of title
+  -- eg. db.query -> {"db", "query"}
   -- there's a bug with fronteir patters where you can't follow it by a ()
-  if title\match "%f[%a]%w+[:.][%w_]+"
-    return { title\match "(%w+)[:.]([%w_]+)" }
+  keywords = if title\match "%f[%a]%w+[:.][%w_]+"
+    { title\match "(%w+)[:.]([%w_]+)" }
+  else
+    {}
+
+  -- see if parents have a tag with data-keywords
+  if parents
+    for parent in *parents
+      continue unless parent.html_content
+      if keyword = parent.html_content\match [[data%-keywords="([^"]+)"]]
+        table.insert keywords, keyword
+
+  if next keywords
+    keywords
 
 out = {
   pages: {}
@@ -66,7 +78,7 @@ for page in *site\query_pages {}
       table.insert out.pages, {
         id: #out.pages
         title: flat.header.title
-        keywords: extract_keywords flat.header.title
+        keywords: extract_keywords flat.header.title, flat.trail
         subtitle: table.concat subtitle, " « "
         url: "#{url}##{flat.header.slug}"
       }
