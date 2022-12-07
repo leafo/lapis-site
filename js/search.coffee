@@ -47,7 +47,8 @@ RDF = ReactDOMFactories
 R.DocumentationSearchResults = React.memo DocumentationSearchResults = (props) ->
   results = props.results.map (result, i) ->
     title = result.page.title
-    is_code = title.match(/^[^A-Z.]*$/) || title.match /_/
+    # starts with lowercase letter
+    is_code = title.match(/^\s*[^A-Z]/)
 
     if is_code
       # remove the return values
