@@ -33,6 +33,13 @@ should_index = (page) ->
   return true if source == "changelog.html"
   false
 
+
+-- attempt to extract keywords out of header title
+-- eg. db.query -> {"db", "query"}
+extract_keywords = (title) ->
+  if func = title\match "%f[%a]db%.(%w+)"
+    return {"db", func}
+
 out = {
   pages: {}
 }
@@ -58,6 +65,7 @@ for page in *site\query_pages {}
       table.insert out.pages, {
         id: #out.pages
         title: flat.header.title
+        keywords: extract_keywords flat.header.title
         subtitle: table.concat subtitle, " « "
         url: "#{url}##{flat.header.slug}"
       }

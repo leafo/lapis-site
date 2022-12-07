@@ -17,6 +17,7 @@ L.setup_search = (el, opts={}) ->
   $.get(opts.index).done (res) =>
     index = lunr ->
       @field "title"
+      @field "keywords"
       @ref "id"
 
     for page in res.pages
@@ -46,7 +47,7 @@ RDF = ReactDOMFactories
 R.DocumentationSearchResults = React.memo DocumentationSearchResults = (props) ->
   results = props.results.map (result, i) ->
     title = result.page.title
-    is_code = title.match(/^[^A-Z]*$/) || title.match /_/
+    is_code = title.match(/^[^A-Z.]*$/) || title.match /_/
 
     if is_code
       # remove the return values
