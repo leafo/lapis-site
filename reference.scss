@@ -340,10 +340,12 @@ a {
 
             li {
                 list-style: none;
+                display: flex;
+                gap: 5px;
 
                 &:before {
                     content: "└ ";
-                    margin-right: 5px;
+                    margin-top: 2px;
                 }
             }
         }
