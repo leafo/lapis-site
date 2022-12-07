@@ -302,8 +302,6 @@ a {
     }
 
     a {
-        display: block;
-        padding: 4px 8px;
         color: rgba($text_color, 0.8);
 
         text-decoration: none;
@@ -319,33 +317,35 @@ a {
         }
     }
 
-    // indented
-    a.sub, ul ul a {
-        padding-left: 16px + 8px;
-
-        margin-right: 8px;
-
-        text-indent: -16px;
-        position: relative;
-        left: 8px;
-
-        &:before {
-            content: "└ ";
-            margin-right: 4px;
-        }
+    // edge case since the index and the global nav lists use slightly different markup
+    li > ul {
+        margin-top: 10px;
     }
 
-    ul {
+    > ul {
         margin: 0;
         padding: 0;
         list-style: none;
-    }
 
-    li {
-        margin: 5px 0 0 0;
-        padding: 0;
-        &:first-child {
-            margin-bottom: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        ul {
+            padding-left: 10px;
+
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            li {
+                list-style: none;
+
+                &:before {
+                    content: "└ ";
+                    margin-right: 5px;
+                }
+            }
         }
     }
 }
