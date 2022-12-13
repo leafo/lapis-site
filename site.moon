@@ -71,9 +71,8 @@ sitegen.create =>
         min_depth: 2
         slugify: (header) ->
           -- just use the name of the method/function as the slug
-          if header.html_content\match "^<code>"
-            if method = header.title\match "([%w_]+)%("
-              return method
+          if method = header.html_content\match "^<code>([%w_:.]+)"
+            return method
 
           import slugify from require "sitegen.common"
           slugify header.title
@@ -84,6 +83,14 @@ sitegen.create =>
   add "index.html", template: "home"
   add "changelog.html", template: "home"
   add "reference.json.moon", template: false, target_fname: "reference.json"
+
+  @self_ref = (page, opts) ->
+    import render_html from require "lapis.html"
+
+    render_html ->
+      name = assert opts[1]
+      code class: "for_moon", "@#{name}"
+      code class: "for_lua", "self.#{name}"
 
   @dual_code = (page, opts) ->
     md = page.site\get_renderer "sitegen.renderers.markdown"
@@ -119,7 +126,8 @@ sitegen.create =>
           tr ->
             td "Name"
             td "Description"
-            td "Default"
+            unless items.show_default == false
+              td "Default"
 
         tbody ->
           for row in *items
@@ -130,6 +138,8 @@ sitegen.create =>
               td ->
                 if row.name == "..."
                   em "…"
+                elseif row.name\match "^<"
+                  raw row.name -- it's already html
                 else
                   code row.name
 
@@ -141,12 +151,14 @@ sitegen.create =>
                     summary "Show Example"
                     raw render_markdown row.example
 
-              td ->
-                if row.default
-                  raw render_markdown row.default
-                else if row.name != "..."
-                  em class: "default_value", ->
-                    code "nil"
+
+              unless items.show_default == false
+                td ->
+                  if row.default
+                    raw render_markdown row.default
+                  else if row.name != "..."
+                    em class: "default_value", ->
+                      code "nil"
 
 
   @config_table = (page, items) ->
