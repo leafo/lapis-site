@@ -3,7 +3,7 @@
 <div class="box">
   <h1>What is it?</h1>
 $markdown{[[
-Lapis is a framework for building web applications using [MoonScript](https://moonscript.org) or [Lua](https://lua.org) that runs inside of a customized version of [Nginx](https://nginx.org) called [OpenResty](https://openresty.org).
+Lapis is a framework for building web applications in [Lua](https://lua.org) (or [MoonScript](https://moonscript.org)) that primarily targets [OpenResty](https://openresty.org), a high performance web platform that runs on a customized version of [Nginx](https://nginx.org). Lapis can also be used in other server environments, being compatible with any modern version of Lua.
 ]]}
 
 <div class="chat_banner">
@@ -67,19 +67,18 @@ class extends lapis.Application
 <div class="box">
   <h1>How does it work?</h1>
 $markdown{[[
-Lua is run directly inside of the Nginx worker, giving you the smallest barrier
-between the webserver and your code. OpenResty executes your Lua/MoonScript
-with LuaJIT, so it's blazing fast. Have a look at [Web Framework
-Benchmarks](http://www.techempower.com/benchmarks) just to see
-how OpenResty stacks up against other platforms.
+With OpenResty, Lua is run directly inside of the Nginx worker using LuaJIT, giving you the
+smallest barrier between the webserver and your code. Have a look at [Web Framework
+Benchmarks](http://www.techempower.com/benchmarks) just to see how OpenResty
+stacks up against other platforms.
 
-Nginx's event loop is used for all asynchronous actions, including HTTP
-requests and database queries. With the power of Lua coroutines code is written
-synchronously but runs asynchronously, without all that callback spaghetti seen
-in other asynchronous platforms. It's fast, easy to read, and easy to write.
-
-Perform HTTP requests and other asynchronous operations freely without being
-concerned about blocking your application and killing your throughput.
+Utilizing the power of [Lua
+coroutines](https://leafo.net/posts/itchio-and-coroutines.html), you can write
+clean code that looks synchronous but can achieve high throughput by
+automatically running asynchronously without blocking. Networking operations
+like database queries and HTTP requests will automatically yield to allow for
+handling concurrent requests, all without all that callback spaghetti seen in
+other asynchronous platforms. It's fast, easy to read, and easy to write.
 ]]}
 
 </div>

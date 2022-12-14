@@ -29,18 +29,32 @@ body {
     margin: 0;
     font-family: Lato, sans-serif;
 
-
-    &.show_lua {
-        .lang_moon, .for_moon {
-            display: none
-        }
-    }
-
-    &:not(.show_lua) {
+    // lua default
+    &.show_moonscript {
         .lang_lua, .for_lua {
-            display: none
+            display: none;
+        }
+
+    }
+
+    &:not(.show_moonscript) {
+        .lang_moon, .for_moon {
+            display: none;
         }
     }
+
+    // moonscript default
+    // &.show_lua {
+    //     .lang_moon, .for_moon {
+    //         display: none
+    //     }
+    // }
+
+    // &:not(.show_lua) {
+    //     .lang_lua, .for_lua {
+    //         display: none
+    //     }
+    // }
 
 }
 

@@ -70,13 +70,13 @@ a {
         border-radius: 4px;
 
         &:hover {
-            background: #667777;
-            border-color: #667777;
+            background: #707BBD;
+            border-color: #70B6BD;
             color: white;
         }
 
         &:active {
-            background: darken(#667777, 20%);
+            background: darken(#707BBD, 20%);
         }
     }
 
@@ -402,8 +402,8 @@ code, pre {
 
 .footer {
     margin-top: 20px;
-    background: #667777;
-    color: lighten(#677, 20%);
+    background: #707BBD;
+    color: lighten(#707BBD, 30%);
     font-size: 18px;
     line-height: 52px;
 

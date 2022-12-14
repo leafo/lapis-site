@@ -1,3 +1,14 @@
+
+
+Site = require "sitegen.site"
+
+Site.default_plugins = for plugin in *Site.default_plugins
+  if plugin == "sitegen.plugins.pygments"
+    "sitegen.plugins.syntaxhighlight"
+  else
+    plugin
+
+
 sitegen = require "sitegen"
 
 tools = require "sitegen.tools"
