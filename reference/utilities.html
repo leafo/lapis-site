@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Utilities - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Wed Dec 14 00:31:58 2022" />
+  <link rel="stylesheet" href="../reference.css?Wed Dec 14 21:17:37 2022" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     var _gaq = _gaq || [];
@@ -35,8 +35,8 @@
     <div class="nav_column">
       <div class="scrolling_inner">
         <div class="lang_picker">
-          <span class="lang_toggle active" data-lang="moonscript">MoonScript</span>
-          <span class="lang_toggle" data-lang="lua">Lua</span>
+          <span class="lang_toggle active" data-lang="lua">Lua</span>
+          <span class="lang_toggle" data-lang="moonscript">MoonScript</span>
         </div>
 
         
@@ -98,8 +98,8 @@
 <li><a href="../reference/getting_started.html">Getting Started</a>
 
 <ul>
-<li><a href="../reference/moon_getting_started.html">Getting Started With MoonScript</a></li>
 <li><a href="../reference/lua_getting_started.html">Getting Started With Lua</a></li>
+<li><a href="../reference/moon_getting_started.html">Getting Started With MoonScript</a></li>
 </ul>
 </li>
 <li><a href="../reference/actions.html">Requests and Actions</a></li>
@@ -139,11 +139,11 @@
 
 <p>Utility functions are found in:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">util</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.util&quot;</span><span class="p">)</span></code>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">)</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">util</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.util</span><span class="s2">&quot;</span><span class="w"></span></code>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">util</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span></code>
 </pre>
 
 
@@ -207,41 +207,42 @@ that value instead of <code>nil</code></p>
 
 <p>The table is modified in place.</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">db</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.db&quot;</span><span class="p">)</span>
-<span class="kd">local</span> <span class="n">trim_filter</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.util&quot;</span><span class="p">).</span><span class="n">trim_filter</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.db&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">trim_filter</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">trim_filter</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">unknown_input</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;     hello    &quot;</span><span class="p">,</span>
-  <span class="n">level</span> <span class="o">=</span> <span class="s2">&quot;admin&quot;</span><span class="p">,</span>
-  <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
-<span class="p">}</span>
+</span><span class="sh_identifier">unknown_input</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">username</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;     hello    &quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">level</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;admin&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">description</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot; &quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">trim_filter</span><span class="p">(</span><span class="n">unknown_input</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">},</span> <span class="n">db</span><span class="p">.</span><span class="n">NULL</span><span class="p">)</span>
+</span><span class="sh_identifier">trim_filter</span><span class="sh_operator">(</span><span class="sh_identifier">unknown_input</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_string">&quot;username&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;description&quot;</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">NULL</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="c1">-- unknown input is now:</span>
-<span class="c1">-- {</span>
-<span class="c1">--   username = &quot;hello&quot;,</span>
-<span class="c1">--   description = db.NULL</span>
-<span class="c1">-- }</span></code>
+</span><span class="sh_comment">-- unknown input is now:</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_comment">-- {</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_comment">--   username = &quot;hello&quot;,</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_comment">--   description = db.NULL</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_comment">-- }</span><span class="sh_lua_whitespace sh_whitespace">
+</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">db</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.db</span><span class="s2">&quot;</span><span class="w"></span>
-<span class="k">import</span> <span class="n">trim_filter</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.util</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">db</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.db&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">trim_filter</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="n">unknown_input</span> <span class="o">=</span> <span class="kt">{</span><span class="w"></span>
-  <span class="nv">username:</span> <span class="s2">&quot;</span><span class="s">  hello  </span><span class="s2">&quot;</span><span class="w"></span>
-  <span class="nv">level:</span> <span class="s2">&quot;</span><span class="s">admin</span><span class="s2">&quot;</span><span class="w"></span>
-  <span class="nv">description:</span> <span class="s2">&quot;</span><span class="s"> </span><span class="s2">&quot;</span><span class="w"></span>
-<span class="kt">}</span><span class="w"></span>
+</span><span class="sh_identifier">unknown_input</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_tbl_key sh_regex">username:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;  hello  &quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_tbl_key sh_regex">level:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;admin&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_tbl_key sh_regex">description:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot; &quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="n">trim_filter</span> <span class="n">unknown_input</span><span class="p">,</span> <span class="kt">{</span><span class="s2">&quot;</span><span class="s">username</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">description</span><span class="s2">&quot;</span><span class="kt">}</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">NULL</span><span class="w"></span>
+</span><span class="sh_identifier">trim_filter</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">unknown_input</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_string">&quot;username&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;description&quot;</span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">NULL</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="c1">-- unknown input is now:</span><span class="w"></span>
-<span class="c1">-- {</span><span class="w"></span>
-<span class="c1">--   username: &quot;hello&quot;</span><span class="w"></span>
-<span class="c1">--   description: db.NULL</span><span class="w"></span>
-<span class="c1">-- }</span><span class="w"></span></code>
+</span><span class="sh_comment">-- unknown input is now:</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_comment">-- {</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_comment">--   username: &quot;hello&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_comment">--   description: db.NULL</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_comment">-- }</span></code>
 </pre>
 
 
@@ -264,11 +265,11 @@ returned would be in the format <code>1 day, 4 hours ago</code>.</p>
 
 <p>Encoding functions are found in:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">encoding</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.util.encoding&quot;</span><span class="p">)</span></code>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">encoding</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util.encoding&quot;</span><span class="sh_operator">)</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">encoding</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.util.encoding</span><span class="s2">&quot;</span><span class="w"></span></code>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">encoding</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util.encoding&quot;</span></code>
 </pre>
 
 
@@ -303,17 +304,17 @@ for the value. Useful for autoloading components split across many files.
 Overwrites <code>__index</code> metamethod. The result of the require is stored in the
 table.</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">models</span> <span class="o">=</span> <span class="n">autoload</span><span class="p">(</span><span class="s2">&quot;models&quot;</span><span class="p">)</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">models</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">autoload</span><span class="sh_operator">(</span><span class="sh_string">&quot;models&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="kd">local</span> <span class="n">_</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">HelloWorld</span> <span class="c1">--&gt; will require &quot;models.hello_world&quot;</span>
-<span class="kd">local</span> <span class="n">_</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">foo_bar</span> <span class="c1">--&gt; will require &quot;models.foo_bar&quot;</span></code>
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">_</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">models</span><span class="sh_operator">.</span><span class="sh_identifier">HelloWorld</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; will require &quot;models.hello_world&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">_</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">models</span><span class="sh_operator">.</span><span class="sh_identifier">foo_bar</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; will require &quot;models.foo_bar&quot;</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">models</span> <span class="o">=</span> <span class="n">autoload</span><span class="kt">(</span><span class="s2">&quot;</span><span class="s">models</span><span class="s2">&quot;</span><span class="kt">)</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">models</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">autoload</span><span class="sh_symbol sh_embedded">(</span><span class="sh_string">&quot;models&quot;</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="n">models</span><span class="o">.</span><span class="n">HelloWorld</span> <span class="c1">--&gt; will require &quot;models.hello_world&quot;</span><span class="w"></span>
-<span class="n">models</span><span class="o">.</span><span class="n">foo_bar</span> <span class="c1">--&gt; will require &quot;models.foo_bar&quot;</span><span class="w"></span></code>
+</span><span class="sh_identifier">models</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">HelloWorld</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; will require &quot;models.hello_world&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">models</span><span class="sh_operator">.</span><span class="sh_identifier">foo_bar</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; will require &quot;models.foo_bar&quot;</span></code>
 </pre>
 
 
@@ -337,63 +338,64 @@ application&rsquo;s secret. This is a string that only the application knows abo
 If your application is open source it&rsquo;s worthwhile to not commit this secret.
 The secret is set in <a href="#configuration-and-environments">your configuration</a> like so:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">config</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.config&quot;</span><span class="p">)</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">config</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">config</span><span class="p">(</span><span class="s2">&quot;development&quot;</span><span class="p">,</span> <span class="p">{</span>
-  <span class="n">secret</span> <span class="o">=</span> <span class="s2">&quot;this is my secret string 123456&quot;</span>
-<span class="p">})</span></code>
+</span><span class="sh_identifier">config</span><span class="sh_operator">(</span><span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">secret</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;this is my secret string 123456&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">config</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.config</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">config</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="n">config</span> <span class="s2">&quot;</span><span class="s">development</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nf">-&gt;</span><span class="w"></span>
-  <span class="n">secret</span> <span class="s2">&quot;</span><span class="s">this is my secret string 123456</span><span class="s2">&quot;</span><span class="w"></span></code>
+</span><span class="sh_identifier">config</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_identifier">secret</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;this is my secret string 123456&quot;</span></code>
 </pre>
 
 
 <p>Now that you have the secret configured, we might create a CSRF protected form
 like so:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
-<span class="kd">local</span> <span class="n">csrf</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.csrf&quot;</span><span class="p">)</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">csrf</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.csrf&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="kd">local</span> <span class="n">capture_errors</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.application&quot;</span><span class="p">).</span><span class="n">capture_errors</span>
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">capture_errors</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">,</span> <span class="s2">&quot;/form&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="kd">local</span> <span class="n">csrf_token</span> <span class="o">=</span> <span class="n">csrf</span><span class="p">.</span><span class="n">generate_token</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="n">self</span><span class="p">:</span><span class="n">html</span><span class="p">(</span><span class="kr">function</span><span class="p">()</span>
-    <span class="n">form</span><span class="p">({</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">)</span> <span class="p">},</span> <span class="kr">function</span><span class="p">()</span>
-      <span class="n">input</span><span class="p">({</span> <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;hidden&quot;</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;csrf_token&quot;</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">csrf_token</span> <span class="p">})</span>
-      <span class="n">input</span><span class="p">({</span> <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;submit&quot;</span> <span class="p">})</span>
-    <span class="kr">end</span><span class="p">)</span>
-  <span class="kr">end</span><span class="p">)</span>
-<span class="kr">end</span><span class="p">)</span>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">get</span><span class="sh_operator">(</span><span class="sh_string">&quot;form&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/form&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">csrf_token</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">csrf</span><span class="sh_operator">.</span><span class="sh_identifier">generate_token</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">html</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">form</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">method</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;POST&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">action</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_string">&quot;form&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+      </span><span class="sh_identifier">input</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">type</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;hidden&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">name</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;csrf_token&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">value</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">csrf_token</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+      </span><span class="sh_identifier">input</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">type</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;submit&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">,</span> <span class="s2">&quot;/form&quot;</span><span class="p">,</span> <span class="n">capture_errors</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="n">csrf</span><span class="p">.</span><span class="n">assert_token</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="kr">return</span> <span class="s2">&quot;The form is valid!&quot;</span>
-<span class="kr">end</span><span class="p">))</span></code>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">post</span><span class="sh_operator">(</span><span class="sh_string">&quot;form&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/form&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">csrf</span><span class="sh_operator">.</span><span class="sh_identifier">assert_token</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;The form is valid!&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">))</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">csrf</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.csrf</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">csrf</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.csrf&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="kt">[</span><span class="nv">form:</span> <span class="s2">&quot;</span><span class="s">/form</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="n">respond_to</span> <span class="kt">{</span><span class="w"></span>
-    <span class="nv">GET:</span> <span class="nf">=&gt;</span><span class="w"></span>
-      <span class="n">csrf_token</span> <span class="o">=</span> <span class="n">csrf</span><span class="o">.</span><span class="n">generate_token</span> <span class="vc">@</span><span class="w"></span>
-      <span class="vc">@html</span> <span class="nf">=&gt;</span><span class="w"></span>
-        <span class="n">form</span> <span class="nv">method:</span> <span class="s2">&quot;</span><span class="s">POST</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">action:</span> <span class="vc">@url_for</span><span class="kt">(</span><span class="s2">&quot;</span><span class="s">form</span><span class="s2">&quot;</span><span class="kt">)</span><span class="p">,</span> <span class="nf">-&gt;</span><span class="w"></span>
-          <span class="n">input</span> <span class="nv">type:</span> <span class="s2">&quot;</span><span class="s">hidden</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">csrf_token</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">value:</span> <span class="n">csrf_token</span><span class="w"></span>
-          <span class="n">input</span> <span class="nv">type:</span> <span class="s2">&quot;</span><span class="s">submit</span><span class="s2">&quot;</span><span class="w"></span>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">form:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/form&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">respond_to</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_tbl_key sh_regex">GET:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_identifier">csrf_token</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">csrf</span><span class="sh_operator">.</span><span class="sh_identifier">generate_token</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_self_ref sh_label">@html</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+        </span><span class="sh_identifier">form</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">method:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;POST&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">action:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_symbol sh_embedded">(</span><span class="sh_string">&quot;form&quot;</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+          </span><span class="sh_identifier">input</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">type:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;hidden&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">name:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;csrf_token&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">value:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">csrf_token</span><span class="sh_moonscript_whitespace sh_whitespace">
+          </span><span class="sh_identifier">input</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">type:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;submit&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-    <span class="nv">POST:</span> <span class="n">capture_errors</span> <span class="nf">=&gt;</span><span class="w"></span>
-      <span class="n">csrf</span><span class="o">.</span><span class="n">assert_token</span> <span class="vc">@</span><span class="w"></span>
-      <span class="s2">&quot;</span><span class="s">The form is valid!</span><span class="s2">&quot;</span><span class="w"></span>
-  <span class="kt">}</span><span class="w"></span></code>
+    </span><span class="sh_tbl_key sh_regex">POST:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_identifier">csrf</span><span class="sh_operator">.</span><span class="sh_identifier">assert_token</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_string">&quot;The form is valid!&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
 
 
@@ -402,11 +404,11 @@ to create a before filter that generates the token automatically.</p></blockquot
 
 <p>The following functions are part of the CSRF module:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">csrf</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.csrf&quot;</span><span class="p">)</span></code>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">csrf</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.csrf&quot;</span><span class="sh_operator">)</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">csrf</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.csrf</span><span class="s2">&quot;</span><span class="w"></span></code>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">csrf</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.csrf&quot;</span></code>
 </pre>
 
 
@@ -433,54 +435,54 @@ data with the second argument of <code>generate_token</code>.</p>
 
 <p>Here&rsquo;s an example of adding an expiration date using the token data:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
-<span class="kd">local</span> <span class="n">csrf</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.csrf&quot;</span><span class="p">)</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">csrf</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.csrf&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="kd">local</span> <span class="n">capture_errors</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.application&quot;</span><span class="p">).</span><span class="n">capture_errors</span>
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">capture_errors</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">,</span> <span class="s2">&quot;/form&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="kd">local</span> <span class="n">csrf_token</span> <span class="o">=</span> <span class="n">csrf</span><span class="p">.</span><span class="n">generate_token</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="p">{</span>
-    <span class="c1">-- expire in 4 hours</span>
-    <span class="n">expires</span> <span class="o">=</span> <span class="nb">os.time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">4</span>
-  <span class="p">})</span>
-  <span class="c1">-- render a form using csrf_token...</span>
-<span class="kr">end</span><span class="p">)</span>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">get</span><span class="sh_operator">(</span><span class="sh_string">&quot;form&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/form&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">csrf_token</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">csrf</span><span class="sh_operator">.</span><span class="sh_identifier">generate_token</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_comment">-- expire in 4 hours</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">expires</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_library sh_type">os.time</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">+</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">60</span><span class="sh_operator">*</span><span class="sh_number">60</span><span class="sh_operator">*</span><span class="sh_number">4</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_comment">-- render a form using csrf_token...</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">,</span> <span class="s2">&quot;/form&quot;</span><span class="p">,</span> <span class="n">capture_errors</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="n">csrf</span><span class="p">.</span><span class="n">assert_token</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="kr">if</span> <span class="nb">os.time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">expires</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span> <span class="kr">then</span>
-      <span class="kr">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="s2">&quot;token is expired&quot;</span>
-    <span class="kr">end</span>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">post</span><span class="sh_operator">(</span><span class="sh_string">&quot;form&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/form&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">csrf</span><span class="sh_operator">.</span><span class="sh_identifier">assert_token</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">data</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_keyword">if</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_library sh_type">os.time</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">&gt;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">(</span><span class="sh_identifier">data</span><span class="sh_operator">.</span><span class="sh_identifier">expires</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">or</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">0</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">then</span><span class="sh_lua_whitespace sh_whitespace">
+      </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">nil</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;token is expired&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
 
-    <span class="kr">return</span> <span class="kc">true</span>
-  <span class="kr">end</span><span class="p">)</span>
+    </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
-  <span class="kr">return</span> <span class="s2">&quot;The request is valid!&quot;</span>
-<span class="kr">end</span><span class="p">))</span></code>
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;The request is valid!&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">))</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">csrf</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.csrf</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">csrf</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.csrf&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="kt">[</span><span class="nv">form:</span> <span class="s2">&quot;</span><span class="s">/form</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="n">respond_to</span> <span class="kt">{</span><span class="w"></span>
-    <span class="nv">GET:</span> <span class="nf">=&gt;</span><span class="w"></span>
-      <span class="n">csrf_token</span> <span class="o">=</span> <span class="n">csrf</span><span class="o">.</span><span class="n">generate_token</span> <span class="vc">@</span><span class="p">,</span> <span class="kt">{</span><span class="w"></span>
-        <span class="c1">-- expire in 4 hours</span><span class="w"></span>
-        <span class="nv">expires:</span> <span class="nb">os.time</span><span class="o">!</span> <span class="o">+</span> <span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">4</span><span class="w"></span>
-      <span class="kt">}</span><span class="w"></span>
-      <span class="c1">-- render a form using csrf_token...</span><span class="w"></span>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">form:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/form&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">respond_to</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_tbl_key sh_regex">GET:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_identifier">csrf_token</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">csrf</span><span class="sh_operator">.</span><span class="sh_identifier">generate_token</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+        </span><span class="sh_comment">-- expire in 4 hours</span><span class="sh_moonscript_whitespace sh_whitespace">
+        </span><span class="sh_tbl_key sh_regex">expires:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_library sh_type">os.time</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">+</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">60</span><span class="sh_operator">*</span><span class="sh_number">60</span><span class="sh_operator">*</span><span class="sh_number">4</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_comment">-- render a form using csrf_token...</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-    <span class="nv">POST:</span> <span class="n">capture_errors</span> <span class="nf">=&gt;</span><span class="w"></span>
-      <span class="n">csrf</span><span class="o">.</span><span class="n">assert_token</span> <span class="vc">@</span><span class="p">,</span> <span class="kt">(</span><span class="n">d</span><span class="kt">)</span> <span class="nf">-&gt;</span><span class="w"></span>
-        <span class="k">if</span> <span class="nb">os.time</span><span class="kt">()</span> <span class="o">&gt;</span> <span class="kt">(</span><span class="n">d</span><span class="o">.</span><span class="n">expires</span> <span class="k">or</span> <span class="mi">0</span><span class="kt">)</span> <span class="k">then</span><span class="w"></span>
-          <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s">token is expired</span><span class="s2">&quot;</span><span class="w"></span>
-        <span class="kc">true</span><span class="w"></span>
+    </span><span class="sh_tbl_key sh_regex">POST:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_identifier">csrf</span><span class="sh_operator">.</span><span class="sh_identifier">assert_token</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">d</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+        </span><span class="sh_keyword">if</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_library sh_type">os.time</span><span class="sh_symbol sh_embedded">()</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">d</span><span class="sh_operator">.</span><span class="sh_identifier">expires</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">or</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">0</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">then</span><span class="sh_moonscript_whitespace sh_whitespace">
+          </span><span class="sh_keyword">return</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">nil</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;token is expired&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+        </span><span class="sh_keyword">true</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-      <span class="s2">&quot;</span><span class="s">The form is valid!</span><span class="s2">&quot;</span><span class="w"></span>
-  <span class="kt">}</span><span class="w"></span></code>
+      </span><span class="sh_string">&quot;The form is valid!&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
 
 
@@ -498,28 +500,28 @@ your Nginx configuration.</p>
 
 <p>Add the following to your server block:</p>
 
-<pre class="highlight lang_nginx"><code><span></span><span class="k">location</span><span class="w"> </span><span class="s">/proxy</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kn">internal</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="kn">rewrite_by_lua</span><span class="w"> </span><span class="s">&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="s">local</span><span class="w"> </span><span class="s">req</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">ngx.req</span><span class="w"></span>
+<pre class="highlight lang_nginx"><code><span class="sh_keyword">location</span><span class="sh_string"> /proxy</span><span class="sh_default"> {
+    internal;
+    </span><span class="sh_function">rewrite_by_lua</span><span class="sh_default"> </span><span class="sh_string">&quot;
+      local req = ngx.req
 
-<span class="w">      </span><span class="s">for</span><span class="w"> </span><span class="s">k,v</span><span class="w"> </span><span class="s">in</span><span class="w"> </span><span class="s">pairs(req.get_headers())</span><span class="w"> </span><span class="s">do</span><span class="w"></span>
-<span class="w">        </span><span class="s">if</span><span class="w"> </span><span class="s">k</span><span class="w"> </span><span class="p">~</span><span class="sr">=</span><span class="w"> </span><span class="s">&#39;content-length&#39;</span><span class="w"> </span><span class="s">then</span><span class="w"></span>
-<span class="w">          </span><span class="s">req.clear_header(k)</span><span class="w"></span>
-<span class="w">        </span><span class="s">end</span><span class="w"></span>
-<span class="w">      </span><span class="s">end</span><span class="w"></span>
+      for k,v in pairs(req.get_headers()) do
+        if k ~= &#x27;content-length&#x27; then
+          req.clear_header(k)
+        end
+      end
 
-<span class="w">      </span><span class="s">if</span><span class="w"> </span><span class="s">ngx.ctx.headers</span><span class="w"> </span><span class="s">then</span><span class="w"></span>
-<span class="w">        </span><span class="s">for</span><span class="w"> </span><span class="s">k,v</span><span class="w"> </span><span class="s">in</span><span class="w"> </span><span class="s">pairs(ngx.ctx.headers)</span><span class="w"> </span><span class="s">do</span><span class="w"></span>
-<span class="w">          </span><span class="s">req.set_header(k,</span><span class="w"> </span><span class="s">v)</span><span class="w"></span>
-<span class="w">        </span><span class="s">end</span><span class="w"></span>
-<span class="w">      </span><span class="s">end</span><span class="w"></span>
-<span class="w">    </span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
+      if ngx.ctx.headers then
+        for k,v in pairs(ngx.ctx.headers) do
+          req.set_header(k, v)
+        end
+      end
+    &quot;</span><span class="sh_default">;
 
-<span class="w">    </span><span class="kn">resolver</span><span class="w"> </span><span class="mi">8</span><span class="s">.8.8.8</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="kn">proxy_http_version</span><span class="w"> </span><span class="mi">1</span><span class="s">.1</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="kn">proxy_pass</span><span class="w"> </span><span class="nv">$_url</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code>
+    resolver </span><span class="sh_number">8.8.8.8</span><span class="sh_default">;
+    proxy_http_versi</span><span class="sh_keyword">on</span><span class="sh_default"> </span><span class="sh_number">1.1</span><span class="sh_default">;
+    </span><span class="sh_function">proxy_pass</span><span class="sh_default"> </span><span class="sh_variable sh_label">$_url;</span><span class="sh_default">
+}</span></code>
 </pre>
 
 
@@ -533,59 +535,59 @@ with LTN12).</p>
 
 <p><code>simple</code> is a simplified API with no LTN12:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">http</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.nginx.http&quot;</span><span class="p">)</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">http</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.nginx.http&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="c1">-- a simple GET request</span>
-  <span class="kd">local</span> <span class="n">body</span><span class="p">,</span> <span class="n">status_code</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">simple</span><span class="p">(</span><span class="s2">&quot;http://leafo.net&quot;</span><span class="p">)</span>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">get</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_comment">-- a simple GET request</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">body</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">status_code</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">headers</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">http</span><span class="sh_operator">.</span><span class="sh_identifier">simple</span><span class="sh_operator">(</span><span class="sh_string">&quot;http://leafo.net&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
-  <span class="c1">-- a post request, data table is form encoded and content-type is set to</span>
-  <span class="c1">-- application/x-www-form-urlencoded</span>
-  <span class="n">http</span><span class="p">.</span><span class="n">simple</span><span class="p">(</span><span class="s2">&quot;http://leafo.net/&quot;</span><span class="p">,</span> <span class="p">{</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;leafo&quot;</span>
-  <span class="p">})</span>
+  </span><span class="sh_comment">-- a post request, data table is form encoded and content-type is set to</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_comment">-- application/x-www-form-urlencoded</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">http</span><span class="sh_operator">.</span><span class="sh_identifier">simple</span><span class="sh_operator">(</span><span class="sh_string">&quot;http://leafo.net/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">name</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;leafo&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 
-  <span class="c1">-- manual invocation of the above request</span>
-  <span class="n">http</span><span class="p">.</span><span class="n">simple</span><span class="p">({</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;http://leafo.net&quot;</span><span class="p">,</span>
-    <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
-    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="p">[</span><span class="s2">&quot;content-type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;application/x-www-form-urlencoded&quot;</span>
-    <span class="p">},</span>
-    <span class="n">body</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;leafo&quot;</span>
-    <span class="p">}</span>
-  <span class="p">})</span>
-<span class="kr">end</span><span class="p">)</span></code>
+  </span><span class="sh_comment">-- manual invocation of the above request</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">http</span><span class="sh_operator">.</span><span class="sh_identifier">simple</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">url</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;http://leafo.net&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">method</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;POST&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">headers</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+      </span><span class="sh_operator">[</span><span class="sh_string">&quot;content-type&quot;</span><span class="sh_operator">]</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;application/x-www-form-urlencoded&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">body</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+      </span><span class="sh_identifier">name</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;leafo&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">http</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.nginx.http</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">http</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.nginx.http&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span><span class="w"></span>
-    <span class="c1">-- a simple GET request</span><span class="w"></span>
-    <span class="n">body</span><span class="p">,</span> <span class="n">status_code</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">simple</span> <span class="s2">&quot;</span><span class="s">http://leafo.net</span><span class="s2">&quot;</span><span class="w"></span>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_comment">-- a simple GET request</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_identifier">body</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">status_code</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">headers</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">http</span><span class="sh_operator">.</span><span class="sh_identifier">simple</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;http://leafo.net&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-    <span class="c1">-- a post request, data table is form encoded and content-type is set to</span><span class="w"></span>
-    <span class="c1">-- application/x-www-form-urlencoded</span><span class="w"></span>
-    <span class="n">http</span><span class="o">.</span><span class="n">simple</span> <span class="s2">&quot;</span><span class="s">http://leafo.net/</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kt">{</span><span class="w"></span>
-      <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">leafo</span><span class="s2">&quot;</span><span class="w"></span>
-    <span class="kt">}</span><span class="w"></span>
+    </span><span class="sh_comment">-- a post request, data table is form encoded and content-type is set to</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_comment">-- application/x-www-form-urlencoded</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_identifier">http</span><span class="sh_operator">.</span><span class="sh_identifier">simple</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;http://leafo.net/&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_tbl_key sh_regex">name:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;leafo&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-    <span class="c1">-- manual invocation of the above request</span><span class="w"></span>
-    <span class="n">http</span><span class="o">.</span><span class="n">simple</span> <span class="kt">{</span><span class="w"></span>
-      <span class="nv">url:</span> <span class="s2">&quot;</span><span class="s">http://leafo.net</span><span class="s2">&quot;</span><span class="w"></span>
-      <span class="nv">method:</span> <span class="s2">&quot;</span><span class="s">POST</span><span class="s2">&quot;</span><span class="w"></span>
-      <span class="nv">headers:</span> <span class="kt">{</span><span class="w"></span>
-        <span class="s2">&quot;</span><span class="s">content-type</span><span class="s2">&quot;</span><span class="o">:</span> <span class="s2">&quot;</span><span class="s">application/x-www-form-urlencoded</span><span class="s2">&quot;</span><span class="w"></span>
-      <span class="kt">}</span><span class="w"></span>
-      <span class="nv">body:</span> <span class="kt">{</span><span class="w"></span>
-        <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">leafo</span><span class="s2">&quot;</span><span class="w"></span>
-      <span class="kt">}</span><span class="w"></span>
-    <span class="kt">}</span><span class="w"></span></code>
+    </span><span class="sh_comment">-- manual invocation of the above request</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_identifier">http</span><span class="sh_operator">.</span><span class="sh_identifier">simple</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_tbl_key sh_regex">url:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;http://leafo.net&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_tbl_key sh_regex">method:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;POST&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_tbl_key sh_regex">headers:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+        </span><span class="sh_string">&quot;content-type&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;application/x-www-form-urlencoded&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_tbl_key sh_regex">body:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+        </span><span class="sh_tbl_key sh_regex">name:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;leafo&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
 
 
@@ -635,7 +637,7 @@ configuration.</p>
 
 <p>Add the following to your <code>http</code> block to create a 15mb cache:</p>
 
-<pre class="highlight lang_nginx"><code><span></span><span class="k">lua_shared_dict</span><span class="w"> </span><span class="s">page_cache</span><span class="w"> </span><span class="mi">15m</span><span class="p">;</span><span class="w"></span></code>
+<pre class="highlight lang_nginx"><code><span class="sh_function">lua_shared_dict</span><span class="sh_default"> page_cache </span><span class="sh_number">15</span><span class="sh_default">m;</span></code>
 </pre>
 
 
@@ -645,22 +647,22 @@ configuration.</p>
 
 <p>Wraps an action to use the cache.</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
-<span class="kd">local</span> <span class="n">cached</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.cache&quot;</span><span class="p">).</span><span class="n">cached</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">cached</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.cache&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">cached</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;my_page&quot;</span><span class="p">,</span> <span class="s2">&quot;/hello/world&quot;</span><span class="p">,</span> <span class="n">cached</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="kr">return</span> <span class="s2">&quot;hello world!&quot;</span>
-<span class="kr">end</span><span class="p">))</span></code>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;my_page&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/hello/world&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">cached</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;hello world!&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">))</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="k">import</span> <span class="n">cached</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.cache</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">cached</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.cache&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="kt">[</span><span class="nv">my_page:</span> <span class="s2">&quot;</span><span class="s">/hello/world</span><span class="s2">&quot;</span><span class="kt">]</span><span class="o">:</span> <span class="n">cached</span> <span class="nf">=&gt;</span><span class="w"></span>
-    <span class="s2">&quot;</span><span class="s">hello world!</span><span class="s2">&quot;</span><span class="w"></span></code>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">my_page:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/hello/world&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">cached</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_string">&quot;hello world!&quot;</span></code>
 </pre>
 
 
@@ -696,27 +698,28 @@ indexed item in the table.</p>
 <p>For example, you could implement microcaching, where the page is cached for a
 short period of time, like so:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
-<span class="kd">local</span> <span class="n">cached</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.cache&quot;</span><span class="p">).</span><span class="n">cached</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">cached</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.cache&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">cached</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/microcached&quot;</span><span class="p">,</span> <span class="n">cached</span><span class="p">({</span>
-  <span class="n">exptime</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-  <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-    <span class="kr">return</span> <span class="s2">&quot;hello world!&quot;</span>
-  <span class="kr">end</span>
-<span class="p">}))</span></code>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/microcached&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">cached</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">exptime</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;hello world!&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_operator">}))</span><span class="sh_lua_whitespace sh_whitespace">
+</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="k">import</span> <span class="n">cached</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.cache</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">cached</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.cache&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="s2">&quot;</span><span class="s">/microcached</span><span class="s2">&quot;</span><span class="o">:</span> <span class="n">cached</span> <span class="kt">{</span><span class="w"></span>
-    <span class="nv">exptime:</span> <span class="mi">1</span><span class="w"></span>
-    <span class="nf">=&gt;</span> <span class="s2">&quot;</span><span class="s">hello world!</span><span class="s2">&quot;</span><span class="w"></span>
-  <span class="kt">}</span><span class="w"></span></code>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_string">&quot;/microcached&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">cached</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_tbl_key sh_regex">exptime:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;hello world!&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
 
 
@@ -725,13 +728,13 @@ short period of time, like so:</p>
 <p>Deletes an entry from the cache. Key can either be a plain string, or a tuple
 of <code>{path, params}</code> that will be encoded as the key.</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">cache</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.cache&quot;</span><span class="p">)</span>
-<span class="n">cache</span><span class="p">.</span><span class="n">delete</span><span class="p">({</span> <span class="s2">&quot;/hello&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="n">thing</span> <span class="o">=</span> <span class="s2">&quot;world&quot;</span> <span class="p">}</span> <span class="p">})</span></code>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">cache</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.cache&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_identifier">cache</span><span class="sh_operator">.</span><span class="sh_identifier">delete</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/hello&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">thing</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;world&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">})</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">cache</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.cache</span><span class="s2">&quot;</span><span class="w"></span>
-<span class="n">cache</span><span class="o">.</span><span class="n">delete</span> <span class="kt">{</span> <span class="s2">&quot;</span><span class="s">/hello</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kt">{</span> <span class="nv">thing:</span> <span class="s2">&quot;</span><span class="s">world</span><span class="s2">&quot;</span> <span class="kt">}</span> <span class="kt">}</span><span class="w"></span></code>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">cache</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.cache&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">cache</span><span class="sh_operator">.</span><span class="sh_identifier">delete</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/hello&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">thing:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;world&quot;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
 
 
@@ -743,13 +746,13 @@ of <code>{path, params}</code> that will be encoded as the key.</p>
 
 <p>Deletes all entries for a specific path.</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">cache</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.cache&quot;</span><span class="p">)</span>
-<span class="n">cache</span><span class="p">.</span><span class="n">delete_path</span><span class="p">(</span><span class="s2">&quot;/hello&quot;</span><span class="p">)</span></code>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">cache</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.cache&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_identifier">cache</span><span class="sh_operator">.</span><span class="sh_identifier">delete_path</span><span class="sh_operator">(</span><span class="sh_string">&quot;/hello&quot;</span><span class="sh_operator">)</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">cache</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.cache</span><span class="s2">&quot;</span><span class="w"></span>
-<span class="n">cache</span><span class="o">.</span><span class="n">delete_path</span> <span class="s2">&quot;</span><span class="s">/hello</span><span class="s2">&quot;</span><span class="w"></span></code>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">cache</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.cache&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">cache</span><span class="sh_operator">.</span><span class="sh_identifier">delete_path</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/hello&quot;</span></code>
 </pre>
 
 
@@ -761,17 +764,17 @@ class="for_lua"><code>self.params</code></span> of the request.</p>
 
 <p>For example, let&rsquo;s create the following form:</p>
 
-<pre class="highlight lang_moon"><code><span></span><span class="k">import</span> <span class="nc">Widget</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.html</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Widget</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.html&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="nc">MyForm</span> <span class="k">extends</span> <span class="nc">Widget</span><span class="w"></span>
-  <span class="nv">content:</span> <span class="nf">=&gt;</span><span class="w"></span>
-    <span class="n">form</span> <span class="kt">{</span><span class="w"></span>
-      <span class="nv">action:</span> <span class="s2">&quot;</span><span class="s">/my_action</span><span class="s2">&quot;</span><span class="w"></span>
-      <span class="nv">method:</span> <span class="s2">&quot;</span><span class="s">POST</span><span class="s2">&quot;</span><span class="w"></span>
-      <span class="nv">enctype:</span> <span class="s2">&quot;</span><span class="s">multipart/form-data</span><span class="s2">&quot;</span><span class="w"></span>
-    <span class="kt">}</span><span class="p">,</span> <span class="nf">-&gt;</span><span class="w"></span>
-      <span class="n">input</span> <span class="nv">type:</span> <span class="s2">&quot;</span><span class="s">file</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">name:</span> <span class="s2">&quot;</span><span class="s">uploaded_file</span><span class="s2">&quot;</span><span class="w"></span>
-      <span class="n">input</span> <span class="nv">type:</span> <span class="s2">&quot;</span><span class="s">submit</span><span class="s2">&quot;</span><span class="w"></span></code>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">MyForm</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Widget</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_tbl_key sh_regex">content:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_identifier">form</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_tbl_key sh_regex">action:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/my_action&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_tbl_key sh_regex">method:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;POST&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_tbl_key sh_regex">enctype:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;multipart/form-data&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_identifier">input</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">type:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;file&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">name:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;uploaded_file&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_identifier">input</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">type:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;submit&quot;</span></code>
 </pre>
 
 
@@ -779,46 +782,47 @@ class="for_lua"><code>self.params</code></span> of the request.</p>
 <code>content</code> properties in <span class="for_moon"><code>@params</code></span><span
 class="for_lua"><code>self.params</code></span> under the name of the form input:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/my_action&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="kd">local</span> <span class="n">file</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">uploaded_file</span>
-  <span class="kr">if</span> <span class="n">file</span> <span class="kr">then</span>
-    <span class="kr">return</span> <span class="s2">&quot;Uploaded: &quot;</span> <span class="o">..</span> <span class="n">file</span><span class="p">.</span><span class="n">filename</span> <span class="o">..</span> <span class="s2">&quot;, &quot;</span> <span class="o">..</span> <span class="o">#</span><span class="n">file</span><span class="p">.</span><span class="n">content</span> <span class="o">..</span> <span class="s2">&quot;bytes&quot;</span>
-  <span class="kr">end</span>
-<span class="kr">end</span><span class="p">)</span></code>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">post</span><span class="sh_operator">(</span><span class="sh_string">&quot;/my_action&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">file</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">params</span><span class="sh_operator">.</span><span class="sh_identifier">uploaded_file</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">if</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">file</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">then</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Uploaded: &quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">..</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">file</span><span class="sh_operator">.</span><span class="sh_identifier">filename</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">..</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;, &quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">..</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">#</span><span class="sh_identifier">file</span><span class="sh_operator">.</span><span class="sh_identifier">content</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">..</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;bytes&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="s2">&quot;</span><span class="s">/my_action</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span><span class="w"></span>
-    <span class="k">if</span> <span class="n">file</span> <span class="o">=</span> <span class="vc">@params</span><span class="o">.</span><span class="n">uploaded_file</span><span class="w"></span>
-      <span class="s2">&quot;</span><span class="s">Uploaded #{file.filename}, #{#file.content}bytes</span><span class="s2">&quot;</span><span class="w"></span></code>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_string">&quot;/my_action&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_keyword">if</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">file</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@params</span><span class="sh_operator">.</span><span class="sh_identifier">uploaded_file</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_string">&quot;Uploaded #{file.filename}, #{#file.content}bytes&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span></code>
 </pre>
 
 
 <p>A validation exists for ensuring that a param is an uploaded file, it&rsquo;s called
 <code>is_file</code>:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/my_action&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="n">assert_valid</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">,</span> <span class="p">{</span>
-    <span class="p">{</span> <span class="s2">&quot;uploaded_file&quot;</span><span class="p">,</span> <span class="n">is_file</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">}</span>
-  <span class="p">})</span>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">post</span><span class="sh_operator">(</span><span class="sh_string">&quot;/my_action&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">assert_valid</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">params</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;uploaded_file&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">is_file</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 
-  <span class="c1">-- file is ready to be used</span>
-<span class="kr">end</span><span class="p">)</span></code>
+  </span><span class="sh_comment">-- file is ready to be used</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="k">class</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="s2">&quot;</span><span class="s">/my_action</span><span class="s2">&quot;</span><span class="o">:</span> <span class="n">capture_errors</span> <span class="nf">=&gt;</span><span class="w"></span>
-    <span class="n">assert_valid</span> <span class="vc">@params</span><span class="p">,</span> <span class="kt">{</span><span class="w"></span>
-      <span class="kt">{</span> <span class="s2">&quot;</span><span class="s">uploaded_file</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">is_file:</span> <span class="kc">true</span> <span class="kt">}</span><span class="w"></span>
-    <span class="kt">}</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_string">&quot;/my_action&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_identifier">assert_valid</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@params</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;uploaded_file&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">is_file:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-    <span class="c1">-- file is ready to be used...</span><span class="w"></span></code>
+    </span><span class="sh_comment">-- file is ready to be used...</span></code>
 </pre>
 
 
@@ -833,11 +837,11 @@ greater than that you should set a new value in your Nginx configuration.</p>
 
 <p>The following functions are part of the <code>lapis.application</code> module:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">app_helpers</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.application&quot;</span><span class="p">)</span></code>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app_helpers</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">)</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">application</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.application</span><span class="s2">&quot;</span><span class="w"></span></code>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">application</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.application&quot;</span></code>
 </pre>
 
 
@@ -851,11 +855,11 @@ table based on the verb of the request. See
 <p>If an action for <code>HEAD</code> does not exist Lapis inserts the following function to
 render nothing:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kr">function</span><span class="p">()</span> <span class="kr">return</span> <span class="p">{</span> <span class="n">layout</span> <span class="o">=</span> <span class="kc">false</span> <span class="p">}</span> <span class="kr">end</span></code>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">layout</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">end</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="nf">-&gt;</span> <span class="kt">{</span> <span class="nv">layout:</span> <span class="kc">false</span> <span class="kt">}</span><span class="w"></span></code>
+<pre class="highlight lang_moon"><code><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">layout:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
 
 
@@ -875,11 +879,11 @@ the regular handler will not be called.</p>
 <p>If the first argument is a function then that function is called on request and
 the following default error handler is used:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kr">function</span><span class="p">()</span> <span class="kr">return</span> <span class="p">{</span> <span class="n">render</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">}</span> <span class="kr">end</span></code>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">render</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">end</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="nf">-&gt;</span> <span class="kt">{</span> <span class="nv">render:</span> <span class="kc">true</span> <span class="kt">}</span><span class="w"></span></code>
+<pre class="highlight lang_moon"><code><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">render:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
 
 
@@ -894,11 +898,11 @@ the error handler is called.</p>
 
 <p>A wrapper for <code>capture_errors</code> that passes in the following error handler:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kr">return</span> <span class="p">{</span> <span class="n">json</span> <span class="o">=</span> <span class="p">{</span> <span class="n">errors</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">errors</span> <span class="p">}</span> <span class="p">}</span> <span class="kr">end</span></code>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">json</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">errors</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">errors</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">end</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="nf">=&gt;</span> <span class="kt">{</span> <span class="nv">json:</span> <span class="kt">{</span> <span class="nv">errors:</span> <span class="vc">@errors</span> <span class="kt">}</span> <span class="kt">}</span><span class="w"></span></code>
+<pre class="highlight lang_moon"><code><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">json:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">errors:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@errors</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
 
 
@@ -918,26 +922,26 @@ inject it into <code class="for_moon">@params</code><code class="for_lua">self.p
 <code>application/json</code>. Suitable for wrapping an action handler to make it aware of
 JSON encoded requests.</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">json_params</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.application&quot;</span><span class="p">).</span><span class="n">json_params</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">json_params</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">json_params</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/json&quot;</span><span class="p">,</span> <span class="n">json_params</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="kr">return</span> <span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">value</span>
-<span class="kr">end</span><span class="p">))</span></code>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/json&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">json_params</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">params</span><span class="sh_operator">.</span><span class="sh_identifier">value</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">))</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="k">import</span> <span class="n">json_params</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.application</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">json_params</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="nc">JsonApp</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="s2">&quot;</span><span class="s">/json</span><span class="s2">&quot;</span><span class="o">:</span> <span class="n">json_params</span> <span class="nf">=&gt;</span><span class="w"></span>
-    <span class="vc">@params</span><span class="o">.</span><span class="n">value</span><span class="w"></span></code>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">JsonApp</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_string">&quot;/json&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">json_params</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_self_ref sh_label">@params</span><span class="sh_operator">.</span><span class="sh_identifier">value</span></code>
 </pre>
 
 
-<pre class="highlight lang_bash"><code><span></span>$ curl <span class="se">\</span>
-  -H <span class="s2">&quot;Content-type: application/json&quot;</span> <span class="se">\</span>
-  -d <span class="s1">&#39;{&quot;value&quot;: &quot;hello&quot;}&#39;</span> <span class="se">\</span>
-  <span class="s1">&#39;https://localhost:8080/json&#39;</span></code>
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">curl</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_default">\</span><span class="sh_bash_whitespace sh_whitespace">
+  </span><span class="sh_operator">-</span><span class="sh_identifier">H</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Content-type: application/json&quot;</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_default">\</span><span class="sh_bash_whitespace sh_whitespace">
+  </span><span class="sh_keyword">-d</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_string">&#x27;{&quot;value&quot;: &quot;hello&quot;}&#x27;</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_default">\</span><span class="sh_bash_whitespace sh_whitespace">
+  </span><span class="sh_string">&#x27;https://localhost:8080/json&#x27;</span></code>
 </pre>
 
 
@@ -949,11 +953,11 @@ request will continue without error.</p>
 
 <p>This module includes a collection of LPeg patterns for working with UTF8 text.</p>
 
-<p><pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">utf8</span> <span class="o">=</span> <span class="n">requrie</span><span class="p">(</span><span class="s2">&quot;lapis.util.utf8&quot;</span><span class="p">)</span></code>
+<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_library sh_type">utf8</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">requrie</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util.utf8&quot;</span><span class="sh_operator">)</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">utf8</span> <span class="o">=</span> <span class="n">requrie</span><span class="kt">(</span><span class="s2">&quot;</span><span class="s">lapis.util.utf8</span><span class="s2">&quot;</span><span class="kt">)</span><span class="w"></span></code>
+<pre class="highlight lang_moon"><code><span class="sh_library sh_type">utf8</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">requrie</span><span class="sh_symbol sh_embedded">(</span><span class="sh_string">&quot;lapis.util.utf8&quot;</span><span class="sh_symbol sh_embedded">)</span></code>
 </pre>
 
 </p>
@@ -984,8 +988,8 @@ whitespace.</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Wed Dec 14 00:31:58 2022"></script>
-  <script type="text/javascript" src="../reference.js?Wed Dec 14 00:31:58 2022"></script>
+  <script type="text/javascript" src="../search.js?Wed Dec 14 21:17:37 2022"></script>
+  <script type="text/javascript" src="../reference.js?Wed Dec 14 21:17:37 2022"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>

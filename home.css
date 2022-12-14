@@ -164,11 +164,11 @@ a {
     border: 1px solid #70b6bd;
     border-radius: 4px; }
     .lang_headers .lang_toggle:hover {
-      background: #667777;
-      border-color: #667777;
+      background: #707BBD;
+      border-color: #70B6BD;
       color: white; }
     .lang_headers .lang_toggle:active {
-      background: #374040; }
+      background: #3f4988; }
   .lang_headers .lang_header {
     display: flex;
     align-items: center;
@@ -401,8 +401,8 @@ code, pre {
 
 .footer {
   margin-top: 20px;
-  background: #667777;
-  color: #9aa9a9;
+  background: #707BBD;
+  color: #d9dced;
   font-size: 18px;
   line-height: 52px; }
   .footer .right {

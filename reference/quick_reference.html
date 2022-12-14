@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Quick Reference - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Wed Dec 14 00:32:02 2022" />
+  <link rel="stylesheet" href="../reference.css?Wed Dec 14 21:17:37 2022" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     var _gaq = _gaq || [];
@@ -35,8 +35,8 @@
     <div class="nav_column">
       <div class="scrolling_inner">
         <div class="lang_picker">
-          <span class="lang_toggle active" data-lang="moonscript">MoonScript</span>
-          <span class="lang_toggle" data-lang="lua">Lua</span>
+          <span class="lang_toggle active" data-lang="lua">Lua</span>
+          <span class="lang_toggle" data-lang="moonscript">MoonScript</span>
         </div>
 
         
@@ -63,8 +63,8 @@
 <li><a href="../reference/getting_started.html">Getting Started</a>
 
 <ul>
-<li><a href="../reference/moon_getting_started.html">Getting Started With MoonScript</a></li>
 <li><a href="../reference/lua_getting_started.html">Getting Started With Lua</a></li>
+<li><a href="../reference/moon_getting_started.html">Getting Started With MoonScript</a></li>
 </ul>
 </li>
 <li><a href="../reference/actions.html">Requests and Actions</a></li>
@@ -114,20 +114,20 @@ search bar</p></blockquote>
 the request headers. They are normalized so you don&rsquo;t have to be concerned
 about capitalization.</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
-<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="kr">return</span> <span class="n">self</span><span class="p">.</span><span class="n">req</span><span class="p">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;referrer&quot;</span><span class="p">]</span>
-<span class="kr">end</span><span class="p">)</span></code>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">req</span><span class="sh_operator">.</span><span class="sh_identifier">headers</span><span class="sh_operator">[</span><span class="sh_string">&quot;referrer&quot;</span><span class="sh_operator">]</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span><span class="w"></span>
-    <span class="vc">@req</span><span class="o">.</span><span class="n">headers</span><span class="kt">[</span><span class="s2">&quot;</span><span class="s">referrer</span><span class="s2">&quot;</span><span class="kt">]</span><span class="w"></span></code>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_self_ref sh_label">@req</span><span class="sh_operator">.</span><span class="sh_identifier">headers</span><span class="sh_symbol sh_embedded">[</span><span class="sh_string">&quot;referrer&quot;</span><span class="sh_symbol sh_embedded">]</span></code>
 </pre>
 
 
@@ -138,51 +138,51 @@ about capitalization.</p>
 
 <p>You can return a headers field (or pass it to <code>write</code>) from an action:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
-<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="kr">return</span> <span class="p">{</span>
-    <span class="s2">&quot;OK&quot;</span><span class="p">,</span>
-    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="p">[</span><span class="s2">&quot;Access-Control-Allow-Origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;*&quot;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="kr">end</span><span class="p">)</span></code>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_string">&quot;OK&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">headers</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+      </span><span class="sh_operator">[</span><span class="sh_string">&quot;Access-Control-Allow-Origin&quot;</span><span class="sh_operator">]</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;*&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span><span class="w"></span>
-    <span class="s2">&quot;</span><span class="s">ok</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kt">{</span><span class="w"></span>
-      <span class="nv">headers:</span> <span class="kt">{</span><span class="w"></span>
-        <span class="s2">&quot;</span><span class="s">Access-Control-Allow-Origin</span><span class="s2">&quot;</span><span class="o">:</span> <span class="s2">&quot;</span><span class="s">*</span><span class="s2">&quot;</span><span class="w"></span>
-      <span class="kt">}</span><span class="w"></span>
-    <span class="kt">}</span><span class="w"></span></code>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_string">&quot;ok&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_tbl_key sh_regex">headers:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+        </span><span class="sh_string">&quot;Access-Control-Allow-Origin&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;*&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
 
 
 <p>Alternatively, the <code>res</code> field of the <code>self</code> has a <code>headers</code> field that lets
 you set headers.</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
-<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="n">self</span><span class="p">.</span><span class="n">res</span><span class="p">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Access-Control-Allow-Origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;*&quot;</span>
-  <span class="kr">return</span> <span class="s2">&quot;ok&quot;</span>
-<span class="kr">end</span><span class="p">)</span></code>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">res</span><span class="sh_operator">.</span><span class="sh_identifier">headers</span><span class="sh_operator">[</span><span class="sh_string">&quot;Access-Control-Allow-Origin&quot;</span><span class="sh_operator">]</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;*&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;ok&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span><span class="w"></span>
-    <span class="vc">@res</span><span class="o">.</span><span class="n">headers</span><span class="kt">[</span><span class="s2">&quot;</span><span class="s">Access-Control-Allow-Origin</span><span class="s2">&quot;</span><span class="kt">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">*</span><span class="s2">&quot;</span><span class="w"></span>
-    <span class="s2">&quot;</span><span class="s">ok</span><span class="s2">&quot;</span><span class="w"></span></code>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_self_ref sh_label">@res</span><span class="sh_operator">.</span><span class="sh_identifier">headers</span><span class="sh_symbol sh_embedded">[</span><span class="sh_string">&quot;Access-Control-Allow-Origin&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;*&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_string">&quot;ok&quot;</span></code>
 </pre>
 
 
@@ -193,20 +193,20 @@ you set headers.</p>
 <p>Either manually set the header as described above, or use the <code>content_type</code>
 option of the <code>write</code> method, or action return value:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
-<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="kr">return</span> <span class="p">{</span> <span class="n">content_type</span> <span class="o">=</span> <span class="s2">&quot;text/rss&quot;</span><span class="p">,</span> <span class="s">[[&lt;rss version=&quot;2.0&quot;&gt;&lt;/rss&gt;]]</span> <span class="p">}</span>
-<span class="kr">end</span><span class="p">)</span></code>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">content_type</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;text/rss&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_longstring sh_string">[[&lt;rss version=&quot;2.0&quot;&gt;&lt;/rss&gt;]]</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span><span class="w"></span>
-    <span class="s">[[&lt;rss version=&quot;2.0&quot;&gt;&lt;/rss&gt;]]</span><span class="p">,</span> <span class="nv">content_type:</span> <span class="s2">&quot;</span><span class="s">text/rss</span><span class="s2">&quot;</span><span class="w"></span></code>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_longstring sh_string">[[&lt;rss version=&quot;2.0&quot;&gt;&lt;/rss&gt;]]</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">content_type:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;text/rss&quot;</span></code>
 </pre>
 
 
@@ -214,30 +214,30 @@ option of the <code>write</code> method, or action return value:</p>
 
 <p>Use the <code>json</code> option of the <code>write</code> method, or the action&rsquo;s return value:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
-<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="kr">return</span> <span class="p">{</span>
-    <span class="n">json</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="n">success</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
-      <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;hello world&quot;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="kr">end</span><span class="p">)</span></code>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">json</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+      </span><span class="sh_identifier">success</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
+      </span><span class="sh_identifier">message</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;hello world&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="nf">=&gt;</span><span class="w"></span>
-    <span class="kt">{</span><span class="w"></span>
-      <span class="nv">json:</span> <span class="kt">{</span><span class="w"></span>
-        <span class="nv">success:</span> <span class="kc">true</span><span class="w"></span>
-        <span class="nv">message:</span> <span class="s2">&quot;</span><span class="s">hello world</span><span class="s2">&quot;</span><span class="w"></span>
-      <span class="kt">}</span><span class="w"></span>
-    <span class="kt">}</span><span class="w"></span></code>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_tbl_key sh_regex">json:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+        </span><span class="sh_tbl_key sh_regex">success:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_moonscript_whitespace sh_whitespace">
+        </span><span class="sh_tbl_key sh_regex">message:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;hello world&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
 
 
@@ -247,30 +247,30 @@ option of the <code>write</code> method, or action return value:</p>
 json encoded request body by using the <code>json_params</code> action decorator function.
 The values are placed into <code>params</code>.</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">json_params</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.application&quot;</span><span class="p">).</span><span class="n">json_params</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">json_params</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">json_params</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/json&quot;</span><span class="p">,</span> <span class="n">json_params</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="kr">return</span> <span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">value</span>
-<span class="kr">end</span><span class="p">))</span></code>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/json&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">json_params</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">params</span><span class="sh_operator">.</span><span class="sh_identifier">value</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">))</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span><span class="w"></span>
-<span class="k">import</span> <span class="n">json_params</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.application</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">json_params</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="o">:</span> <span class="n">json_params</span> <span class="nf">=&gt;</span><span class="w"></span>
-    <span class="vc">@params</span><span class="o">.</span><span class="n">value</span><span class="w"></span></code>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">json_params</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_self_ref sh_label">@params</span><span class="sh_operator">.</span><span class="sh_identifier">value</span></code>
 </pre>
 
 
 <p>The <code>application/json</code> content type must be included in order for the data to
 be extracted.</p>
 
-<pre class="highlight lang_bash"><code><span></span>$ curl <span class="se">\</span>
-  -H <span class="s2">&quot;Content-type: application/json&quot;</span> <span class="se">\</span>
-  -d <span class="s1">&#39;{&quot;value&quot;: &quot;hello&quot;}&#39;</span> <span class="se">\</span>
-  <span class="s1">&#39;https://localhost:8080/json&#39;</span></code>
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">curl</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_default">\</span><span class="sh_bash_whitespace sh_whitespace">
+  </span><span class="sh_operator">-</span><span class="sh_identifier">H</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Content-type: application/json&quot;</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_default">\</span><span class="sh_bash_whitespace sh_whitespace">
+  </span><span class="sh_keyword">-d</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_string">&#x27;{&quot;value&quot;: &quot;hello&quot;}&#x27;</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_default">\</span><span class="sh_bash_whitespace sh_whitespace">
+  </span><span class="sh_string">&#x27;https://localhost:8080/json&#x27;</span></code>
 </pre>
 
 
@@ -282,51 +282,51 @@ different code depending on the HTTP method.</p>
 <blockquote><p><code>try_to_login</code> is a hypothetical function, and not regularly globally
 available</p></blockquote>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
-<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
-<span class="kd">local</span> <span class="n">respond_to</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis.application&quot;</span><span class="p">).</span><span class="n">respond_to</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">respond_to</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">respond_to</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="n">app</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">respond_to</span><span class="p">({</span>
-  <span class="c1">-- do common setup</span>
-  <span class="n">before</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-    <span class="kr">if</span> <span class="n">self</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="n">current_user</span> <span class="kr">then</span>
-      <span class="n">self</span><span class="p">:</span><span class="n">write</span><span class="p">({</span> <span class="n">redirect_to</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="p">})</span>
-    <span class="kr">end</span>
-  <span class="kr">end</span><span class="p">,</span>
-  <span class="c1">-- render the view</span>
-  <span class="n">GET</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-    <span class="kr">return</span> <span class="p">{</span> <span class="n">render</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">}</span>
-  <span class="kr">end</span><span class="p">,</span>
-  <span class="c1">-- handle the form submission</span>
-  <span class="n">POST</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-    <span class="n">self</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="n">current_user</span> <span class="o">=</span>
-      <span class="n">try_to_login</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">username</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="n">password</span><span class="p">)</span>
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">respond_to</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_comment">-- do common setup</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">before</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_keyword">if</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">session</span><span class="sh_operator">.</span><span class="sh_identifier">current_user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">then</span><span class="sh_lua_whitespace sh_whitespace">
+      </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">write</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">redirect_to</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">end</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_comment">-- render the view</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">GET</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">render</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">end</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_comment">-- handle the form submission</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">POST</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">session</span><span class="sh_operator">.</span><span class="sh_identifier">current_user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace">
+      </span><span class="sh_identifier">try_to_login</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">params</span><span class="sh_operator">.</span><span class="sh_identifier">username</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">params</span><span class="sh_operator">.</span><span class="sh_identifier">password</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
-    <span class="kr">return</span> <span class="p">{</span> <span class="n">redirect_to</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="p">}</span>
-  <span class="kr">end</span>
-<span class="p">}))</span></code>
+    </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">redirect_to</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_operator">}))</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span><span class="w"></span>
-<span class="k">import</span> <span class="n">respond_to</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.application</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">respond_to</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="s2">&quot;</span><span class="s">/login</span><span class="s2">&quot;</span><span class="o">:</span> <span class="n">respond_to</span> <span class="kt">{</span><span class="w"></span>
-    <span class="nv">before:</span> <span class="nf">=&gt;</span><span class="w"></span>
-      <span class="c1">-- do common setup</span><span class="w"></span>
-      <span class="k">if</span> <span class="vc">@session</span><span class="o">.</span><span class="n">current_user</span><span class="w"></span>
-        <span class="vc">@write</span> <span class="nv">redirect_to:</span> <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="w"></span>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_string">&quot;/login&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">respond_to</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_tbl_key sh_regex">before:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_comment">-- do common setup</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_keyword">if</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@session</span><span class="sh_operator">.</span><span class="sh_identifier">current_user</span><span class="sh_moonscript_whitespace sh_whitespace">
+        </span><span class="sh_self_ref sh_label">@write</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">redirect_to:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-    <span class="nv">GET:</span> <span class="nf">=&gt;</span><span class="w"></span>
-      <span class="c1">-- render the view</span><span class="w"></span>
-      <span class="nv">render:</span> <span class="kc">true</span><span class="w"></span>
+    </span><span class="sh_tbl_key sh_regex">GET:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_comment">-- render the view</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_tbl_key sh_regex">render:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-    <span class="nv">POST:</span> <span class="nf">=&gt;</span><span class="w"></span>
-      <span class="c1">-- handle the form submission</span><span class="w"></span>
-      <span class="vc">@session</span><span class="o">.</span><span class="n">current_user</span> <span class="o">=</span> <span class="n">try_to_login</span><span class="kt">(</span><span class="vc">@params</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="vc">@params</span><span class="o">.</span><span class="n">password</span><span class="kt">)</span><span class="w"></span>
-      <span class="nv">redirect_to:</span> <span class="s2">&quot;</span><span class="s">/</span><span class="s2">&quot;</span><span class="w"></span>
-  <span class="kt">}</span><span class="w"></span></code>
+    </span><span class="sh_tbl_key sh_regex">POST:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_comment">-- handle the form submission</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_self_ref sh_label">@session</span><span class="sh_operator">.</span><span class="sh_identifier">current_user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">try_to_login</span><span class="sh_symbol sh_embedded">(</span><span class="sh_self_ref sh_label">@params</span><span class="sh_operator">.</span><span class="sh_identifier">username</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@params</span><span class="sh_operator">.</span><span class="sh_identifier">password</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace">
+      </span><span class="sh_tbl_key sh_regex">redirect_to:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
 
 
@@ -344,43 +344,46 @@ downtime using the <code>lapis build</code> command.</p>
 prevent this from happening by overriding the <code>handle_error</code> method on your
 application:</p>
 
-<pre class="highlight lang_lua"><code><span></span><span class="kd">local</span> <span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;lapis&quot;</span><span class="p">)</span>
-<span class="kd">local</span> <span class="n">app</span> <span class="o">=</span> <span class="n">lapis</span><span class="p">.</span><span class="n">Application</span><span class="p">()</span>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
-<span class="kr">function</span> <span class="nc">app</span><span class="p">:</span><span class="nf">handle_error</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span>
-  <span class="kr">return</span> <span class="s2">&quot;There was an error&quot;</span>
-<span class="kr">end</span></code>
+</span><span class="sh_keyword">function</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">handle_error</span><span class="sh_operator">(</span><span class="sh_identifier">err</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">trace</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;There was an error&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span></span><span class="n">lapis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis</span><span class="s2">&quot;</span><span class="w"></span>
-<span class="k">import</span> <span class="n">respond_to</span> <span class="k">from</span> <span class="nb">require</span> <span class="s2">&quot;</span><span class="s">lapis.application</span><span class="s2">&quot;</span><span class="w"></span>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">respond_to</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
-<span class="k">class</span> <span class="nc">App</span> <span class="k">extends</span> <span class="n">lapis</span><span class="o">.</span><span class="n">Application</span><span class="w"></span>
-  <span class="nv">handle_error:</span> <span class="kt">(</span><span class="n">err</span><span class="p">,</span> <span class="n">trace</span><span class="kt">)</span> <span class="nf">=&gt;</span><span class="w"></span>
-    <span class="s2">&quot;</span><span class="s">There was an error</span><span class="s2">&quot;</span><span class="w"></span></code>
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_tbl_key sh_regex">handle_error:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">err</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">trace</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_string">&quot;There was an error&quot;</span></code>
 </pre>
 
 
 <h2><a name="what-versions-of-lua-are-supported" href="#what-versions-of-lua-are-supported">What versions of Lua are supported?</a></h2>
 
-<p>Lapis is designed to work with LuaJIT. You can use Lua 5.1 to run Lapis from
-the command line as well. You can use modules installed for Lua 5.1 with
-LuaJIT.</p>
+<p>Lapis is tested against all versions of Lua (5.4 as of this guide). The default
+server is OpenResty, which is tied to LuaJIT (which is a hybrid version of
+Lua5.1)</p>
 
 <h2><a name="how-do-i-handle-multiple-domains-and-subdomains" href="#how-do-i-handle-multiple-domains-and-subdomains">How do I handle multiple domains and subdomains?</a></h2>
 
-<p>Lapis doesn&rsquo;t make any distinction between domains and subdomains. You can use
-Nginx configuration <code>location</code> blocks to identify different domains. Within the
-matched block you can execute the desired Lapis application.</p>
+<p>Lapis doesn&rsquo;t make any distinction between domains and subdomains. With
+OpenResty you can use Nginx configuration <code>location</code> blocks to identify
+different domains. Within the matched block you can execute the desired Lapis
+application.</p>
 
 <h2><a name="how-can-i-read-the-entire-body-of-the-request" href="#how-can-i-read-the-entire-body-of-the-request">How can I read the entire body of the request?</a></h2>
 
-<p>Lapis currently doesn&rsquo;t provide an interface for reading the raw body. You have
-to use the interface provided by <code>ngx_lua</code>.</p>
+<p>Lapis currently doesn&rsquo;t provide a generalized interface for reading the raw
+body or working with streaming large bodies. You will have to use the server
+specific interface.</p>
 
-<p>First load the body into memory by calling <code>ngx.req.read_body()</code>. Next call
-<code>ngx.req.get_body_data()</code> to get the contents of the body.</p>
+<p>For OpenResty and <code>ngx_lua</code>: Load the body into memory by calling
+<code>ngx.req.read_body()</code>. Next call <code>ngx.req.get_body_data()</code> to get the contents
+of the body.</p>
 
 <p>If the body does not fit in to the size set by the Nginx configuration
 directive <code>client_max_body_size</code> then these functions will fail and return
@@ -396,8 +399,8 @@ directive <code>client_max_body_size</code> then these functions will fail and r
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Wed Dec 14 00:32:02 2022"></script>
-  <script type="text/javascript" src="../reference.js?Wed Dec 14 00:32:02 2022"></script>
+  <script type="text/javascript" src="../search.js?Wed Dec 14 21:17:37 2022"></script>
+  <script type="text/javascript" src="../reference.js?Wed Dec 14 21:17:37 2022"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>

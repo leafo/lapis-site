@@ -114,9 +114,9 @@ body {
   color: #333334;
   margin: 0;
   font-family: Lato, sans-serif; }
-  body.show_lua .lang_moon, body.show_lua .for_moon {
+  body.show_moonscript .lang_lua, body.show_moonscript .for_lua {
     display: none; }
-  body:not(.show_lua) .lang_lua, body:not(.show_lua) .for_lua {
+  body:not(.show_moonscript) .lang_moon, body:not(.show_moonscript) .for_moon {
     display: none; }
 
 .header {
