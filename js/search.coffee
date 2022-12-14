@@ -22,9 +22,9 @@ L.setup_search = (el, opts={}) ->
       @field "keywords"
       @ref "id"
 
-    for page in res.pages
-      pages_by_id[page.id] = page
-      index.add page
+      for page in res.pages
+        pages_by_id[page.id] = page
+        @add page
 
     render {
       root: opts.root
