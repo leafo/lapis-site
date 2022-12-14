@@ -26,29 +26,31 @@
     });
     return $.get(opts.index).done((function(_this) {
       return function(res) {
-        var j, len1, page, ref;
         index = lunr(function() {
+          var j, len1, page, ref, results1;
           this.pipeline.remove(lunr.stopWordFilter);
           this.field("title", {
             boost: 2
           });
           this.field("keywords");
-          return this.ref("id");
+          this.ref("id");
+          ref = res.pages;
+          results1 = [];
+          for (j = 0, len1 = ref.length; j < len1; j++) {
+            page = ref[j];
+            pages_by_id[page.id] = page;
+            results1.push(this.add(page));
+          }
+          return results1;
         });
-        ref = res.pages;
-        for (j = 0, len1 = ref.length; j < len1; j++) {
-          page = ref[j];
-          pages_by_id[page.id] = page;
-          index.add(page);
-        }
         return render({
           root: opts.root,
           search: function(query) {
-            var k, len2, results, results1;
+            var j, len1, page, results, results1;
             results = index.search(query);
             results1 = [];
-            for (k = 0, len2 = results.length; k < len2; k++) {
-              res = results[k];
+            for (j = 0, len1 = results.length; j < len1; j++) {
+              res = results[j];
               page = pages_by_id[res.ref];
               results1.push({
                 score: res.score,
