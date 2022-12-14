@@ -28,6 +28,7 @@
       return function(res) {
         var j, len1, page, ref;
         index = lunr(function() {
+          this.pipeline.remove(lunr.stopWordFilter);
           this.field("title", {
             boost: 2
           });
