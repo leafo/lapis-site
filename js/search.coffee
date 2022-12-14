@@ -16,6 +16,8 @@ L.setup_search = (el, opts={}) ->
 
   $.get(opts.index).done (res) =>
     index = lunr ->
+      @pipeline.remove lunr.stopWordFilter
+
       @field "title", boost: 2
       @field "keywords"
       @ref "id"
