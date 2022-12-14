@@ -314,8 +314,6 @@ a {
     text-decoration: none;
     color: #333; }
   .nav_links a {
-    display: block;
-    padding: 4px 8px;
     color: rgba(51, 51, 52, 0.8);
     text-decoration: none; }
     .nav_links a:hover {
@@ -327,24 +325,27 @@ a {
     .nav_links a code {
       font-size: 14px;
       word-wrap: break-word; }
-  .nav_links a.sub, .nav_links ul ul a {
-    padding-left: 24px;
-    margin-right: 8px;
-    text-indent: -16px;
-    position: relative;
-    left: 8px; }
-    .nav_links a.sub:before, .nav_links ul ul a:before {
-      content: "└ ";
-      margin-right: 4px; }
-  .nav_links ul {
+  .nav_links li > ul {
+    margin-top: 10px; }
+  .nav_links > ul {
     margin: 0;
     padding: 0;
-    list-style: none; }
-  .nav_links li {
-    margin: 5px 0 0 0;
-    padding: 0; }
-    .nav_links li:first-child {
-      margin-bottom: 0; }
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; }
+    .nav_links > ul ul {
+      padding-left: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px; }
+      .nav_links > ul ul li {
+        list-style: none;
+        display: flex;
+        gap: 5px; }
+        .nav_links > ul ul li:before {
+          content: "└ ";
+          margin-top: 2px; }
 
 .nav_offset {
   position: fixed;
@@ -488,7 +489,8 @@ pre {
   font-size: 18px;
   line-height: 22px;
   padding: 12px 10px;
-  border-radius: 2px; }
+  border-radius: 2px;
+  white-space: pre-wrap; }
   @media (max-width: 600px) {
     pre {
       overflow: auto;

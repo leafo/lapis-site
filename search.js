@@ -28,7 +28,10 @@
       return function(res) {
         var j, len1, page, ref;
         index = lunr(function() {
-          this.field("title");
+          this.field("title", {
+            boost: 2
+          });
+          this.field("keywords");
           return this.ref("id");
         });
         ref = res.pages;
@@ -69,7 +72,7 @@
     results = props.results.map(function(result, i) {
       var classes, is_code, link, title;
       title = result.page.title;
-      is_code = title.match(/^[^A-Z]*$/) || title.match(/_/);
+      is_code = title.match(/^\s*[^A-Z]/) || title.match(/^[\w]+:[\w]+/);
       if (is_code) {
         title = title.replace(/[^=]+=\s+/, "");
       }
