@@ -10,30 +10,38 @@ Site.default_plugins = for plugin in *Site.default_plugins
 
 
 sitegen = require "sitegen"
-
 tools = require "sitegen.tools"
 
--- TODO: this code checking needs to be upgraded for new syntax highlighter
-PygmentsPlugin = require "sitegen.plugins.pygments"
+trim_snippet = (code_text) ->
+  import trim_leading_white from require "sitegen.common"
+  code_text = code_text\gsub "^\n", ""
+  trim_leading_white code_text
 
-PygmentsPlugin.custom_highlighters.lua = (code_text, page) =>
+verify_lua_code = (code_text, page) ->
   _, err = loadstring(code_text)
 
   if err
     -- try again, make valid if it's just an expression
     _, err2 = loadstring("_ = " .. code_text)
     if err2
-      error "[#{page.source}] failed to compile: #{err}: #{code_text}"
+      error "[#{page and page.source}] failed to compile: #{err}: #{code_text}"
 
-  @pre_tag @highlight("lua", code_text), "lua"
-
-PygmentsPlugin.custom_highlighters.moon = (code_text, page) =>
+verify_moon_code = (code_text, page) ->
   parse = require "moonscript.parse"
   _, err =  parse.string code_text
 
   if err
-    error "[#{page.source}] failed to compile: #{err}: #{code_text}"
+    error "[#{page and page.source}] failed to compile: #{err}: #{code_text}"
 
+-- TODO: this code checking needs to be upgraded for new syntax highlighter
+-- since we aren't going to be using pygments anymore
+PygmentsPlugin = require "sitegen.plugins.pygments"
+PygmentsPlugin.custom_highlighters.lua = (code_text, page) =>
+  verify_lua_code code_text, page
+  @pre_tag @highlight("lua", code_text), "lua"
+
+PygmentsPlugin.custom_highlighters.moon = (code_text, page) =>
+  verify_moon_code code_text, page
   @pre_tag @highlight("moon", code_text), "moon"
 
 sitegen.create =>
@@ -109,14 +117,26 @@ sitegen.create =>
     render_markdown = (str) ->
       md\render page, assert str, "missing string for markdown render"
 
-    {moon_code} = opts
+    {moon_code, lua_code} = opts
 
-    import trim_leading_white from require "sitegen.common"
-    moon_code = moon_code\gsub "^\n", ""
-    moon_code = trim_leading_white moon_code
+    if opts.moon
+      moon_code = opts.moon
+
+    if opts.lua
+      lua_code = opts.lua
+
+    assert type(moon_code) == "string", "At least moonscript code must be provided"
+
+    moon_code = trim_snippet moon_code
+
     moonscript = require "moonscript.base"
 
-    lua_code = assert moonscript.to_lua moon_code, implicitly_return_root: false
+    if type(lua_code) == "string"
+      lua_code = trim_snippet lua_code
+      verify_lua_code lua_code, page
+    else
+      -- this will also verify moon code
+      lua_code = assert moonscript.to_lua moon_code, implicitly_return_root: false
 
     assert render_markdown table.concat {
       "```lua", lua_code, "```"
