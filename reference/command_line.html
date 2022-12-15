@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Command Line Interface - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Thu Dec 15 21:25:40 2022" />
+  <link rel="stylesheet" href="../reference.css?Thu Dec 15 21:32:35 2022" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     var _gaq = _gaq || [];
@@ -41,13 +41,13 @@
 
         
           <div class="nav_links">
-            <h2>Contents</h2>
+            <h2>Command Line Interface</h2>
             <ul><li><a href="#command-reference">Command Reference</a></li>
-<ul><li><a href="#command-reference/lapis"><code>lapis new</code></a></li>
-<li><a href="#command-reference/lapis"><code>lapis server</code></a></li>
-<li><a href="#command-reference/lapis"><code>lapis build</code></a></li>
-<li><a href="#command-reference/lapis"><code>lapis migrate</code></a></li>
-<li><a href="#command-reference/lapis"><code>lapis term</code></a></li></ul></ul>
+<ul><li><a href="#command-reference/lapis-new"><code>lapis new</code></a></li>
+<li><a href="#command-reference/lapis-server"><code>lapis server</code></a></li>
+<li><a href="#command-reference/lapis-build"><code>lapis build</code></a></li>
+<li><a href="#command-reference/lapis-migrate"><code>lapis migrate</code></a></li>
+<li><a href="#command-reference/lapis-term"><code>lapis term</code></a></li></ul></ul>
           </div>
         
 
@@ -120,7 +120,7 @@ file will be used, otherwise it is <code>development</code>.</p>
 </pre>
 
 
-<h3><a name="command-reference/lapis" href="#command-reference/lapis"><code>lapis new</code></a></h3>
+<h3><a name="command-reference/lapis-new" href="#command-reference/lapis-new"><code>lapis new</code></a></h3>
 
 <pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">new</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">[--</span><span class="sh_identifier">git</span><span class="sh_operator">]</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">[--</span><span class="sh_identifier">tup</span><span class="sh_operator">]</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">[--</span><span class="sh_identifier">lua</span><span class="sh_operator">]</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">[--</span><span class="sh_identifier">cqueues</span><span class="sh_operator">|--</span><span class="sh_identifier">nginx</span><span class="sh_operator">]</span></code>
 </pre>
@@ -154,7 +154,7 @@ building MoonScript files to Lua.</p>
 
 <p><code>--lua</code> &mdash; generates a skeleton Lua app instead of MoonScript.</p>
 
-<h3><a name="command-reference/lapis" href="#command-reference/lapis"><code>lapis server</code></a></h3>
+<h3><a name="command-reference/lapis-server" href="#command-reference/lapis-server"><code>lapis server</code></a></h3>
 
 <pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">server</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">[</span><span class="sh_identifier">environment</span><span class="sh_operator">]</span></code>
 </pre>
@@ -188,7 +188,7 @@ the server (where <code>nginx</code> is the path to the located OpenResty instal
 </pre>
 
 
-<h3><a name="command-reference/lapis" href="#command-reference/lapis"><code>lapis build</code></a></h3>
+<h3><a name="command-reference/lapis-build" href="#command-reference/lapis-build"><code>lapis build</code></a></h3>
 
 <pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">build</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">[</span><span class="sh_identifier">environment</span><span class="sh_operator">]</span></code>
 </pre>
@@ -208,7 +208,7 @@ production. You'll be able to reload everything without dropping any requests.</
 
 <p>You can read more in the <a href="http://wiki.nginx.org/CommandLine#Loading_a_New_Configuration_Using_Signals">Nginx manual</a>.</p>
 
-<h3><a name="command-reference/lapis" href="#command-reference/lapis"><code>lapis migrate</code></a></h3>
+<h3><a name="command-reference/lapis-migrate" href="#command-reference/lapis-migrate"><code>lapis migrate</code></a></h3>
 
 <pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">migrate</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">[</span><span class="sh_identifier">environment</span><span class="sh_operator">]</span></code>
 </pre>
@@ -222,17 +222,28 @@ Migrations</a>.</p>
 
 <p>It executes on the server approximately this code:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">migrations</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;migrations&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.db.migrations&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">run_migrations</span><span class="sh_operator">(</span><span class="sh_identifier">migrations</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">run_migrations</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.db.migrations&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">run_migrations</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;migrations&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
-<h3><a name="command-reference/lapis" href="#command-reference/lapis"><code>lapis term</code></a></h3>
+<p>You can instruct the migrations to be run in a transaction by providng the
+<code>--transaction</code> flag.</p>
+
+<p>To wrap each individual migration in a transaction use:
+<code>--transaction=individual</code></p>
+
+<h3><a name="command-reference/lapis-term" href="#command-reference/lapis-term"><code>lapis term</code></a></h3>
 
 <p>This will shut down a running server. This is useful if you've instructed Lapis
 to start Nginx as a daemon. If you are running the server in the foreground you
@@ -250,8 +261,8 @@ can stop it using Ctrl-C.</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Thu Dec 15 21:25:40 2022"></script>
-  <script type="text/javascript" src="../reference.js?Thu Dec 15 21:25:40 2022"></script>
+  <script type="text/javascript" src="../search.js?Thu Dec 15 21:32:35 2022"></script>
+  <script type="text/javascript" src="../reference.js?Thu Dec 15 21:32:35 2022"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>
