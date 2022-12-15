@@ -287,6 +287,17 @@ code, pre {
 }
 
 .content {
+    max-width: $site_width;
+    margin: 20px auto;
+
+    > section {
+        margin-bottom: 40px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
     p, ul {
         margin: 0 0 27px 0;
         line-height: 27px;
@@ -305,15 +316,6 @@ code, pre {
                 font-size: 14px;
             }
         }
-    }
-
-    .box {
-        max-width: $site_width;
-        margin: 60px auto;
-    }
-
-    .video_embed {
-        margin-bottom: 20px;
     }
 
     .dotdotdot {
@@ -393,8 +395,6 @@ pre {
         color: white;
     }
 
-
-
     &.show_moonscript {
         button[data-lang=moonscript] {
             @include active_tab;
@@ -405,13 +405,13 @@ pre {
             display: block;
         }
 
-        pre.lang_lua {
+        pre.lang_lua, pre.lang_erb {
             display: none;
         }
     }
 
     &:not(.show_moonscript) {
-        pre.lang_lua {
+        pre.lang_lua, pre.lang_erb {
             display: block;
         }
 
@@ -466,8 +466,6 @@ pre {
 
 .searcher {
     margin: 20px auto 0 auto;
-    width: $site_width;
-
     .search_input {
         box-shadow: 0 1px 4px rgba(60, 60, 60, 0.17);
     }

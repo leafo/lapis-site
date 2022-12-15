@@ -2,13 +2,12 @@
 
 class L.Home
   constructor: ->
-    @setup_lang_picker()
+    @setup_dual_code()
 
     $(document.body).on "click", ".top_link", (e) =>
       $(window).scrollTop 0
       false
 
-    @update_lang()
     @setup_search()
 
   setup_search: ->
@@ -19,15 +18,13 @@ class L.Home
         root: drop.data "root"
       }
 
-  update_lang: ->
-    if m = window.location.hash.match /\blang=(\w+)\b/
-      lang = m[1]
-      $(document.body).toggleClass "show_lua", lang == "lua"
+  setup_dual_code: ->
+    body = $(document.body)
+    body.on "click", ".dual_code button[data-lang]", (e) =>
+      button = $(e.currentTarget)
 
-  setup_lang_picker: ->
-    $(document.body).on "click", ".lang_toggle", (e) =>
-      window.location.hash = $(e.currentTarget).data "hash"
-      setTimeout =>
-        @update_lang()
-      , 1
+      language = button.data "lang"
+      dual_code = button.closest(".dual_code")
+      dual_code.removeClass("show_moonscript show_lua")
+      dual_code.addClass("show_#{language}")
 

@@ -118,12 +118,17 @@ sitegen.create =>
       md\render page, assert str, "missing string for markdown render"
 
     {moon_code, lua_code} = opts
+    lua_format = "lua"
 
     if opts.moon
       moon_code = opts.moon
 
     if opts.lua
       lua_code = opts.lua
+
+    if opts.etlua -- for writing etlua templates
+      lua_code = opts.etlua
+      lua_format = "erb"
 
     assert type(moon_code) == "string", "At least moonscript code must be provided"
 
@@ -133,7 +138,8 @@ sitegen.create =>
 
     if type(lua_code) == "string"
       lua_code = trim_snippet lua_code
-      verify_lua_code lua_code, page
+      if lua_format == "lua"
+        verify_lua_code lua_code, page
     else
       -- this will also verify moon code
       lua_code = assert moonscript.to_lua moon_code, implicitly_return_root: false
@@ -144,7 +150,7 @@ sitegen.create =>
         <button type="button" data-lang="lua" class="set_language">Lua</button>
         <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
       </div>]]
-      "```lua", lua_code, "```"
+      "```#{lua_format}", lua_code, "```"
       "```moon", moon_code, "```"
       [[</div>]]
     }, "\n"

@@ -1,5 +1,3 @@
-@import "common";
-
 // syntaxhighlight
 .highlight {
     .sh_keyword {
@@ -18,7 +16,7 @@
         color: #B0D89C;
     }
 
-    .sh_class, .sh_self_ref, .sh_label {
+    .sh_class, .sh_self_ref, .sh_label, .sh_attribute {
         color: #99CBCA;
     }
 

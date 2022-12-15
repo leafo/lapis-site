@@ -1,6 +1,6 @@
 <div id="search_drop" data-root="$root" data-index="$root/reference.json"></div>
 
-<div class="box">
+<section>
 
 <h1>What is it?</h1>
 $markdown{[[
@@ -33,6 +33,10 @@ end)
 return app
 ]]}
 
+</section>
+
+<section>
+
 <h1>How does it work?</h1>
 $markdown{[[
 With OpenResty, Lua is run directly inside of the Nginx worker using LuaJIT, giving you the
@@ -49,20 +53,26 @@ handling concurrent requests, all without all that callback spaghetti seen in
 other asynchronous platforms. It's fast, easy to read, and easy to write.
 ]]}
 
+</section>
+
+
+<section>
+
 <h1>What does it come with?</h1>
 $markdown{[[
-Lapis includes URL routing, [HTML Templating][1], [CSRF Protection][2] and [Session][3]
+Lapis includes [URL routing][8], [HTML Templating][1], [CSRF Protection][2] and [Session][3]
 support, [PostgreSQL/MySQL backed models][4], [schema generation][5] and
 [migrations][6] in addition to a [collection of useful functions][7] needed
 when developing a website.
 
   [1]: $root/reference/html_generation.html
   [2]: $root/reference/utilities.html#csrf-protection
-  [3]: $root/reference/actions.html#request-object-session
-  [4]: $root/reference/database.html#models
+  [3]: $root/reference/actions.html#request-object/session
+  [4]: $root/reference/models.html
   [5]: $root/reference/database.html#database-schemas
   [6]: $root/reference/database.html#database-migrations
   [7]: $root/reference/utilities.html
+  [8]: $root/reference/actions.html#routes-and-url-patterns
 ]]}
 
 
@@ -112,10 +122,11 @@ end)
 return app
 ]]}
 
+<h2>Models</h2>
+
 $markdown{[[
-## Models
 Get a powerful abstraction layer over your database tables just by
-sub-classing `Model`:
+sub-classing [`Model`]($root/reference/models.html):
 ]]}
 
 $dual_code{
@@ -171,14 +182,16 @@ user:update({ age = 10 })
 user:delete()
 ]]}
 
+<h2>Templates</h2>
+
 $markdown{[[
-## Templates
 Write your templates either in [etlua](https://github.com/leafo/etlua) or in
 pure Lua/MoonScript.
 
-The template builder syntax works well in MoonScript and lets your organize
-your templates as classes, allowing you to use inheritance to mix and match
-methods as you see fit.
+The `Widget` base class allows you to organize your templates as modules,
+enabling you to use inheritance and mixins to mix and match methods combined
+with the HTML builder syntax that lets you express HTML with the full power of
+the language you're already using.
 ]]}
 
 $dual_code{
@@ -197,7 +210,8 @@ class Index extends Widget
     return unless @current_user
     div class: "user_panel", "Welcome back " .. @current_user.name
 ]],
-erb = [[
+etlua = [[
+<!-- views/index.etlua -->
 <h1 class="header"><%= "Hello" %></h1>
 <% if current_user then %>
   <div class="user_panel">
@@ -211,13 +225,14 @@ erb = [[
 ]] }
 
 
-$markdown{[[
-## Example
-Using all the provided tools we can quickly and logically construct high
-performance and low memory web applications. Here's a more complicated example
-complete with forms, CSRF protection, and various database queries.
-]]}
+</section>
+<section>
 
+<h1>Full Example</h1>
+
+<p>Using all the provided tools we can quickly and logically construct high
+performance and low memory web applications. Here's a more complicated example
+complete with forms, CSRF protection, and various database queries.</p>
 
 $dual_code{
 moon = [[
@@ -307,34 +322,46 @@ end)
 return app
 ]]}
 
+</section>
+
+<section>
 
 <h1>Where can I learn more?</h1>
 $markdown{[[
-For a guide and tutorial to Lapis, consult the [$reference manual]($root/reference.html).
+
+The [Reference Manual]($root/reference.html) is both a complete guide and a tutorial to using Lapis.
 
 The source of Lapis can be [found on Github](https://github.com/leafo/lapis)
 and issues can be reported on the [issues
 tracker](https://github.com/leafo/lapis/issues).
 
-[MoonRocks](http://rocks.moonscript.org) is an open source application written
-in Lapis. It is a public Lua Rock repository and the [source can be found on
-GitHub](https://github.com/leafo/moonrocks-site).
+[LuaRocks.org](https://luarocks.org) is an open source application written in
+Lapis. It is the public host for all Lua Rocks and the [source can be found on
+GitHub](https://github.com/luarocks/luarocks-site).
 ]]}
 
+</section>
+
+<section>
 
 <h1>Anything else I should know?</h1>
 $markdown{[[
 You can use most existing Lua libraries with Lapis with no problems.
 Here are some libraries you might find useful:
 
+* [`lapis-eswidget`](https://github.com/leafo/lapis-eswidget) -- Base widget class for aggregating front-end assets with esbuild
+* [`lapis-console`](https://github.com/leafo/lapis-console) -- Interactive MoonScript console for Lapis that runs inside of your browser
+* [`lapis-exceptions`](https://github.com/leafo/lapis-exceptions) -- Exception tracking and reporting
+* [`lapis-bayes`](https://github.com/leafo/lapis-bayes) -- General purpose Bayes classification for Spam, Fraud, etc.
 * [`web_sanitize`](https://github.com/leafo/web_sanitize) -- HTML sanitization
 * [`tableshape`](https://github.com/leafo/tableshape) -- Robus input validation and verification
 * [`magick`](https://github.com/leafo/magick) -- ImageMagick bindings
 * [`cloud_storage`](https://github.com/leafo/cloud_storage) -- Support for Google Cloud Storage
-* [`lapis-console`](https://github.com/leafo/lapis-console) -- Interactive MoonScript console for Lapis that runs inside of your browser
-* [`lapis-exceptions`](https://github.com/leafo/lapis-exceptions) -- Exception tracking and reporting
-* [`lapis-bayes`](https://github.com/leafo/lapis-bayes) -- General purpose Bayes classification for Spam, Fraud, etc.
 ]]}
+
+</section>
+
+<section>
 
 <h1>About</h1>
 $markdown{[[
@@ -349,7 +376,7 @@ Lapis is licensed under the [MIT license](http://opensource.org/licenses/MIT).
 Lapis is written by [@moonscript](http://twitter.com/moonscript).
 ]]}
 
-</div>
+</section>
 
 <div class="has_buttons bottom_buttons">
   <a href="$root/reference.html" class="button">Reference Manual</a>
