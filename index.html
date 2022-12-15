@@ -306,10 +306,10 @@ app:get("user", "/profile/:id", function(self)
   return { render = true }
 end)
 
-app:post("/user/new", capture_errors(function(self)
+app:post("new_user", "/user/new", capture_errors(function(self)
   csrf.assert_token(self)
   Users:create({
-    name = self.params.username
+    name = assert_error(self.params.username, "Missing username")
   })
 
   return { redirect_to = self:url_for("list_users") }
