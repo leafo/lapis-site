@@ -4,14 +4,13 @@
 
   L.Home = (function() {
     function Home() {
-      this.setup_lang_picker();
+      this.setup_dual_code();
       $(document.body).on("click", ".top_link", (function(_this) {
         return function(e) {
           $(window).scrollTop(0);
           return false;
         };
       })(this));
-      this.update_lang();
       this.setup_search();
     }
 
@@ -26,21 +25,17 @@
       }
     };
 
-    Home.prototype.update_lang = function() {
-      var lang, m;
-      if (m = window.location.hash.match(/\blang=(\w+)\b/)) {
-        lang = m[1];
-        return $(document.body).toggleClass("show_lua", lang === "lua");
-      }
-    };
-
-    Home.prototype.setup_lang_picker = function() {
-      return $(document.body).on("click", ".lang_toggle", (function(_this) {
+    Home.prototype.setup_dual_code = function() {
+      var body;
+      body = $(document.body);
+      return body.on("click", ".dual_code button[data-lang]", (function(_this) {
         return function(e) {
-          window.location.hash = $(e.currentTarget).data("hash");
-          return setTimeout(function() {
-            return _this.update_lang();
-          }, 1);
+          var button, dual_code, language;
+          button = $(e.currentTarget);
+          language = button.data("lang");
+          dual_code = button.closest(".dual_code");
+          dual_code.removeClass("show_moonscript show_lua");
+          return dual_code.addClass("show_" + language);
         };
       })(this));
     };
