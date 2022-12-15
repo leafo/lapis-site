@@ -8,10 +8,13 @@ $site_width: 800px;
 $link_color: #a55f64;
 $text_color: #333334;
 
-$grad_left: #7079bd;
-$grad_right: #70b6bd;
+$theme_color: #7079bd; // common color
+$border_color: #70b6bd; // highlight color
 
-$border_color: $grad_right;
+$grad_left: $theme_color;
+$grad_right: $border_color;
+
+$code_bg: mix(#2C2C2C, $theme_color, 90%);
 
 @mixin single_line {
     white-space: nowrap;
@@ -28,29 +31,13 @@ $border_color: $grad_right;
 @mixin grad($top, $bottom) {
     background-color: mix($top, $bottom);
     background-image: linear-gradient(bottom, $bottom 0%, $top 100%);
-    background-image: -webkit-linear-gradient(bottom, $bottom 0%, $top 100%);
-    background-image: -moz-linear-gradient(bottom, $bottom 0%, $top 100%);
-    background-image: -o-linear-gradient(bottom, $bottom 0%, $top 100%);
-    background-image: -ms-linear-gradient(bottom, $bottom 0%, $top 100%);
-}
-
-@mixin autograd($color, $amount: 10%, $flip: false) {
-    @if ($flip) {
-        @include grad(darken($color, $amount), $color);
-    } @else {
-        @include grad($color, darken($color, $amount));
-    }
 }
 
 @mixin transition($args...) {
-    -webkit-transition: $args;
-    -moz-transition: $args;
-    -ms-transition: $args;
     transition: $args;
 }
 
 @mixin border_box {
     box-sizing: border-box;
-    -moz-box-sizing: border-box;
 }
 

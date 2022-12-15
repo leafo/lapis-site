@@ -4,6 +4,7 @@ class L.Reference
   constructor: ->
     @setup_captions()
     @setup_lang_picker()
+    @setup_dual_code()
     @setup_search()
     @setup_menu()
 
@@ -33,6 +34,24 @@ class L.Reference
     $(".text_column img[title]").replaceWith ->
       elm = $(@)
       tpl elm.attr("src"), elm.attr("title"), elm.attr("alt")
+
+  setup_dual_code: ->
+    body = $(document.body)
+    body.on "click", ".dual_code button[data-lang]", (e) =>
+      button = $(e.currentTarget)
+
+      language = button.data "lang"
+      global_language = if body.filter(".show_moonscript").length
+        "moonscript"
+      else
+        "lua"
+
+      dual_code = button.closest(".dual_code")
+
+      dual_code.removeClass("show_moonscript show_lua")
+
+      if language != global_language
+        dual_code.addClass("show_#{language}")
 
   setup_lang_picker: ->
     body = $(document.body)

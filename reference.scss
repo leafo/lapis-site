@@ -563,8 +563,6 @@ a {
             border-radius: 2px;
             border-bottom: 2px solid rgba(0,0,0,0.3);
 
-            -webkit-transition: all 0.1s ease-in-out;
-            -moz-transition: all 0.1s ease-in-out;
             transition: all 0.1s ease-in-out;
         }
 
@@ -588,13 +586,82 @@ a {
     }
 }
 
+
+.dual_code {
+    margin: 1em 0;
+
+    @mixin active_tab {
+        background: $code_bg;
+        color: white;
+    }
+
+    body.show_moonscript &:not(.show_lua) button[data-lang=moonscript] {
+        @include active_tab;
+    }
+
+    body:not(.show_moonscript) &:not(.show_moonscript) button[data-lang=lua] {
+        @include active_tab;
+    }
+
+    &.show_moonscript button[data-lang=moonscript] {
+        @include active_tab;
+    }
+
+    &.show_lua button[data-lang=lua] {
+        @include active_tab;
+    }
+
+    &.show_moonscript {
+        pre.lang_moon {
+            display: block;
+        }
+
+        pre.lang_lua {
+            display: none;
+        }
+    }
+
+    &.show_lua {
+        pre.lang_lua {
+            display: block;
+        }
+
+        pre.lang_moon {
+            display: none;
+        }
+    }
+
+    .dual_code_tabs {
+        background: rgba($code_bg, 0.1);
+        border-radius: 2px 2px 0 0;
+        overflow: hidden;
+        display: flex;
+
+
+        button {
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 14px;
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+
+        }
+    }
+
+
+    > pre {
+        margin: 0;
+    }
+}
+
 pre {
-    background: #3C3C3C;
+    background: $code_bg;
     color: white;
     font-size: 18px;
     line-height: 22px;
     padding: 12px 10px;
-    border-radius: 2px;
+    border-radius: 0 2px 2px 2px;
     white-space: pre-wrap;
 
     @include mobile_width {

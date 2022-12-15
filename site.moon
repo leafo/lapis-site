@@ -139,8 +139,14 @@ sitegen.create =>
       lua_code = assert moonscript.to_lua moon_code, implicitly_return_root: false
 
     assert render_markdown table.concat {
+      [[<div class="dual_code">]]
+      [[<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>]]
       "```lua", lua_code, "```"
       "```moon", moon_code, "```"
+      [[</div>]]
     }, "\n"
 
   @options_table = (page, items) ->
