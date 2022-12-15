@@ -10,6 +10,7 @@
       this.setup_menu = bind(this.setup_menu, this);
       this.setup_captions();
       this.setup_lang_picker();
+      this.setup_dual_code();
       this.setup_search();
       this.setup_menu();
     }
@@ -44,6 +45,24 @@
         elm = $(this);
         return tpl(elm.attr("src"), elm.attr("title"), elm.attr("alt"));
       });
+    };
+
+    Reference.prototype.setup_dual_code = function() {
+      var body;
+      body = $(document.body);
+      return body.on("click", ".dual_code button[data-lang]", (function(_this) {
+        return function(e) {
+          var button, dual_code, global_language, language;
+          button = $(e.currentTarget);
+          language = button.data("lang");
+          global_language = body.filter(".show_moonscript").length ? "moonscript" : "lua";
+          dual_code = button.closest(".dual_code");
+          dual_code.removeClass("show_moonscript show_lua");
+          if (language !== global_language) {
+            return dual_code.addClass("show_" + language);
+          }
+        };
+      })(this));
     };
 
     Reference.prototype.setup_lang_picker = function() {

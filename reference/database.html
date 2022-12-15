@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Database Access - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Wed Dec 14 21:17:53 2022" />
+  <link rel="stylesheet" href="../reference.css?Thu Dec 15 19:55:49 2022" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     var _gaq = _gaq || [];
@@ -345,16 +345,20 @@ they are replaced in the order they appear with the remaining arguments. The
 remaining arguments are escaped with <code>escape_literal</code> before being
 interpolated, making SQL injection impossible.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res1</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span><span class="sh_operator">(</span><span class="sh_string">&quot;SELECT * FROM hello&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res1</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span><span class="sh_operator">(</span><span class="sh_string">&quot;SELECT * FROM hello&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res2</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span><span class="sh_operator">(</span><span class="sh_string">&quot;UPDATE things SET color = ?&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;blue&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res3</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span><span class="sh_operator">(</span><span class="sh_string">&quot;INSERT INTO cats (age, name, alive) VALUES (?, ?, ?)&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">25</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;dogman&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">res1</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;SELECT * FROM hello&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">res2</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;UPDATE things SET color = ?&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;blue&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">res3</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;INSERT INTO cats (age, name, alive) VALUES (?, ?, ?)&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">25</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;dogman&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -376,12 +380,16 @@ Lapis does.</p>
 
 <p>Similar to <code>db.query</code>, but it appends <code>"SELECT"</code> to the front of the query.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_function">select</span><span class="sh_operator">(</span><span class="sh_string">&quot;* from hello where active = ?&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_operator">)</span></code>
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_function">select</span><span class="sh_operator">(</span><span class="sh_string">&quot;* from hello where active = ?&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">res</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_function">select</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;* from hello where active = ?&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -393,18 +401,22 @@ Lapis does.</p>
 
 <p>Inserts a row into <code>table</code>. <code>values</code> is a Lua table of column names and values.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_operator">(</span><span class="sh_string">&quot;my_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_operator">(</span><span class="sh_string">&quot;my_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">age</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">10</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">name</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello World&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;my_table&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">age:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">10</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">name:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello World&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -414,16 +426,20 @@ Lapis does.</p>
 
 <p>A list of column names to be returned can be given after the value table:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_operator">(</span><span class="sh_string">&quot;some_other_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_operator">(</span><span class="sh_string">&quot;some_other_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">name</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello World&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;id&quot;</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">res</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;some_other_table&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">name:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello World&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;id&quot;</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -438,7 +454,12 @@ for the following fields: (When providing an options table, all other arguments
 are ignored)</p>
 
 <p><table class="configuration_table" cellspacing="0" cellpadding="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>returning</code></td><td><p>An array table of column names or the string <code>'*'</code> to represent all column names. Their values will be return from the insertion query using <code>RETURNING</code> clause to initially populate the model object. <code>db.raw</code> can be used for more advanced expressions</p>
-<details class="option_example"><summary>Show Example</summary><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_operator">(</span><span class="sh_string">&quot;my_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<details class="option_example"><summary>Show Example</summary><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_operator">(</span><span class="sh_string">&quot;my_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">color</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;blue&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">returning</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;*&quot;</span><span class="sh_lua_whitespace sh_whitespace">
@@ -451,8 +472,6 @@ are ignored)</p>
   </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">res</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;my_table&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">color:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;blue&quot;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">returning:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;*&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">res</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;my_table&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">created_at:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;2021-4-11 6:6:20&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -460,18 +479,23 @@ are ignored)</p>
   </span><span class="sh_tbl_key sh_regex">returning:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;date_trunc(&#x27;year&#x27;, created_at) as create_year&quot;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
 </details></td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><code>on_conflict</code></td><td><p>Control the <code>ON CONFLICT</code> clause for the insertion query. Currently only supports the string value <code>"do_nothing"</code> to do nothing when the query has a conflict</p>
-<details class="option_example"><summary>Show Example</summary><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_operator">(</span><span class="sh_string">&quot;my_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<details class="option_example"><summary>Show Example</summary><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_operator">(</span><span class="sh_string">&quot;my_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">color</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;blue&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">on_conflict</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;do_nothing&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">res</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_symbol sh_embedded">(</span><span class="sh_string">&quot;my_table&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">color:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;blue&quot;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">on_conflict:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;do_nothing&quot;</span><span class="sh_symbol sh_embedded">)</span></code>
 </pre>
+</div>
 
 </details></td><td><em class="default_value"><code>nil</code></em></td></tr></tbody></table></p>
 
@@ -481,7 +505,12 @@ are ignored)</p>
 conditions is a plain table or a <code>db.clause</code> object, then it will be converted
 to SQL using <code>db.encode_clause</code>.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_operator">(</span><span class="sh_string">&quot;the_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_operator">(</span><span class="sh_string">&quot;the_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">name</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Dogbert 2.0&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">active</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
@@ -489,8 +518,6 @@ to SQL using <code>db.encode_clause</code>.</p>
   </span><span class="sh_identifier">active</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">NULL</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;the_table&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">name:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Dogbert 2.0&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">active:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -499,6 +526,7 @@ to SQL using <code>db.encode_clause</code>.</p>
   </span><span class="sh_tbl_key sh_regex">active:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">NULL</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -513,16 +541,20 @@ table.</p>
 <p><code>conditions</code> can also be a string, the remaining arguments will be interpolated
 into the query as if you called <code>db.interpolate_query</code>.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_operator">(</span><span class="sh_string">&quot;the_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_operator">(</span><span class="sh_string">&quot;the_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">count</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_operator">(</span><span class="sh_string">&quot;count + 1&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;count &gt; ?&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">10</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;the_table&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">count:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_string">&quot;count + 1&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;count &gt; ?&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">10</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -533,20 +565,24 @@ into the query as if you called <code>db.interpolate_query</code>.</p>
 <p>When using a table or <code>db.clause</code> argument for conditions, all the extra
 arguments are escaped as identifiers and appended as a <code>RETURNING</code> clause:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_operator">(</span><span class="sh_string">&quot;cats&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_operator">(</span><span class="sh_string">&quot;cats&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">count</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_operator">(</span><span class="sh_string">&quot;count + 1&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">1200</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;count&quot;</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;cats&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">count:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;count + 1&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1200</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;count&quot;</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -576,16 +612,20 @@ called <code>db.interpolate_query</code>.</p>
 rows deleted can be determined by the <code>affected_rows</code> field of the returned
 table.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">delete</span><span class="sh_operator">(</span><span class="sh_string">&quot;cats&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">delete</span><span class="sh_operator">(</span><span class="sh_string">&quot;cats&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">name</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Roo&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">delete</span><span class="sh_operator">(</span><span class="sh_string">&quot;cats&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;name = ? and age is null&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Gato&quot;</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">delete</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;cats&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">name:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Roo&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">delete</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;cats&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;name = ? and age is null&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Gato&quot;</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -597,16 +637,20 @@ table.</p>
 <p>When using a table argument for conditions, all the extra arguments are
 escaped as identifiers and appended as a <code>RETURNING</code> clause:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">delete</span><span class="sh_operator">(</span><span class="sh_string">&quot;cats&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">delete</span><span class="sh_operator">(</span><span class="sh_string">&quot;cats&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">1200</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;last_updated_at&quot;</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">delete</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;cats&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1200</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;last_updated_at&quot;</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -664,15 +708,19 @@ or table name.</p>
 escaped via <code>escape_literal</code>. If a <code>db.clause</code> is passed as one of the
 arguments, then it will be encoded using <code>db.encode_clause</code>.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">q</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">interpolate_query</span><span class="sh_operator">(</span><span class="sh_string">&quot;select * from table where value = ?&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">42</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">q</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">interpolate_query</span><span class="sh_operator">(</span><span class="sh_string">&quot;select * from table where value = ?&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">42</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span><span class="sh_operator">(</span><span class="sh_identifier">q</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">q</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">interpolate_query</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;select * from table where value = ?&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">42</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">res</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">q</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span></code>
 </pre>
+</div>
 
 </p>
 
@@ -687,7 +735,12 @@ using <code>pairs</code>,and converted to an SQL fragment similar to
 <code>db.escape_identifier(key) = db.escape_literal(value)</code>, then concatenated with
 the <code>AND</code> SQL operator.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">encode_clause</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">encode_clause</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">name</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Garf&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">color</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">list</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
     </span><span class="sh_string">&quot;orange&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
@@ -696,14 +749,13 @@ the <code>AND</code> SQL operator.</p>
   </span><span class="sh_identifier">processed_at</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">NULL</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">}))</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">encode_clause</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">name:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Garf&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">color:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">list</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_string">&quot;orange&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;ginger&quot;</span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">processed_at:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">NULL</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &quot;color&quot; IN (&#x27;orange&#x27;, &#x27;ginger&#x27;) AND &quot;processed_at&quot; IS NULL AND &quot;name&quot; = &#x27;Garf&#x27;</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -726,12 +778,16 @@ injection attacks when values aren&rsquo;t properly encoded.</p>
 <p>All database primitives constructors and values can be found on the <code>db</code>
 module:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.db&quot;</span><span class="sh_operator">)</span></code>
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.db&quot;</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">db</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.db&quot;</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -748,19 +804,23 @@ pass the string through unchanged. It can also be used in <code>db.encode_clause
 for both keys and values. You can use it where things like column names or
 table names are also requested (eg. <code>db.update</code>)</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_operator">(</span><span class="sh_string">&quot;the_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_operator">(</span><span class="sh_string">&quot;the_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">count</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_operator">(</span><span class="sh_string">&quot;count + 1&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_function">select</span><span class="sh_operator">(</span><span class="sh_string">&quot;* from another_table where x = ?&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_operator">(</span><span class="sh_string">&quot;now()&quot;</span><span class="sh_operator">))</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;the_table&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">count:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_string">&quot;count + 1&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_function">select</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;* from another_table where x = ?&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_string">&quot;now()&quot;</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -787,7 +847,12 @@ into the query.</p>
 <p>Note how when it is used as a value for an SQL clause object, the <code>IN</code> syntax
 is used.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">ids</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">list</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">ids</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">list</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_number">3</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_number">2</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_number">1</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
@@ -800,8 +865,6 @@ is used.</p>
   </span><span class="sh_identifier">ids</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">ids</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">ids</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">list</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_number">3</span><span class="sh_operator">,</span><span class="sh_number">2</span><span class="sh_operator">,</span><span class="sh_number">1</span><span class="sh_operator">,</span><span class="sh_number">5</span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">res</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_function">select</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;* from another table where id in ?&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">ids</span><span class="sh_moonscript_whitespace sh_whitespace">
 
@@ -809,6 +872,7 @@ is used.</p>
   </span><span class="sh_tbl_key sh_regex">height:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">55</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">:ids</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -848,7 +912,12 @@ entries in the table:</p>
 
 <p>Here is an example demonstrating all the different ways of building out a clause:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">filter</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">clause</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">filter</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">clause</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">12</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;username like &#x27;%admin&#x27;&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">deleted</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
@@ -869,8 +938,6 @@ entries in the table:</p>
 </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span><span class="sh_operator">(</span><span class="sh_string">&quot;SELECT * FROM profiles WHERE ?&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">filter</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">filter</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">clause</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">12</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;username like &#x27;%admin&#x27;&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -886,6 +953,7 @@ entries in the table:</p>
 
 </span><span class="sh_identifier">res</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;SELECT * FROM profiles WHERE ?&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">filter</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -899,7 +967,12 @@ entries in the table:</p>
 supported:</p>
 
 <p><table class="configuration_table" cellspacing="0" cellpadding="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>operator</code></td><td><p>Change the operator used to join the clause components. eg. <code>AND</code>, <code>OR</code></p>
-<details class="option_example"><summary>Show Example</summary><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">filter</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">clause</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+<details class="option_example"><summary>Show Example</summary><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">filter</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">clause</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">status</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;deleted&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">deleted</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
@@ -907,8 +980,6 @@ supported:</p>
 </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">encode_clause</span><span class="sh_operator">(</span><span class="sh_identifier">filter</span><span class="sh_operator">))</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">filter</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">clause</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
    </span><span class="sh_tbl_key sh_regex">status:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;deleted&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
    </span><span class="sh_tbl_key sh_regex">deleted:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -916,12 +987,18 @@ supported:</p>
 
 </span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">encode_clause</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">filter</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &quot;deleted&quot; OR &quot;status&quot; = &#x27;deleted&#x27;</span></code>
 </pre>
+</div>
 
 </details></td><td><p><code>"AND"</code></p>
 </td></tr><tr><td><code>table_name</code></td><td><p>Prefixes each named field with the escaped table name. Note that this
 does not apply to SQL fragments in the clause. Sub-clauses are also not
 affected.</p>
-<details class="option_example"><summary>Show Example</summary><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">filter</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">clause</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+<details class="option_example"><summary>Show Example</summary><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">filter</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">clause</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">color</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;green&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">published</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
@@ -929,8 +1006,6 @@ affected.</p>
 </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">encode_clause</span><span class="sh_operator">(</span><span class="sh_identifier">filter</span><span class="sh_operator">))</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">filter</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">clause</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">color:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;green&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">published:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -938,21 +1013,25 @@ affected.</p>
 
 </span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">encode_clause</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">filter</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &quot;posts&quot;.&quot;color&quot; = &#x27;green&#x27; AND &quot;posts&quot;.&quot;published&quot;</span></code>
 </pre>
+</div>
 
 </details></td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><code>allow_empty</code></td><td><p>By default, an empty clause will throw an error when it is attampted to
 be encoded. This is to prevent you from accidentally filtering on
 something that has a nil value that should actually be provided. You must
 set this field to <code>true</code> in order to allow for the empty clause to be
 encoded into a query.</p>
-<details class="option_example"><summary>Show Example</summary><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">some_object</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<details class="option_example"><summary>Show Example</summary><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">some_object</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">the_id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">delete</span><span class="sh_operator">(</span><span class="sh_string">&quot;users&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">clause</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">user_id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">something</span><span class="sh_operator">.</span><span class="sh_identifier">id</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">}))</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">some_object</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">the_id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_comment">-- This will throw an error to prevent you from accidentally deleting all</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -961,6 +1040,7 @@ encoded into a query.</p>
   </span><span class="sh_tbl_key sh_regex">user_id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">something</span><span class="sh_operator">.</span><span class="sh_identifier">id</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">-- oops, used the wrong field name and set this to nil</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
 </details></td><td><em class="default_value"><code>nil</code></em></td></tr></tbody></table></p>
 
@@ -985,19 +1065,23 @@ the argument, you must make a copy before passing it in.</p>
 <p>Additionally, when a query returns an array from the database, it is
 automatically converted into a <code>db.array</code>.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_operator">(</span><span class="sh_string">&quot;some_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_operator">(</span><span class="sh_string">&quot;some_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">tags</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">array</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
     </span><span class="sh_string">&quot;hello&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
     </span><span class="sh_string">&quot;world&quot;</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">insert</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;some_table&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">tags:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">array</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_string">&quot;hello&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;world&quot;</span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -1016,16 +1100,20 @@ value created by <code>db.array</code>)</p>
 <code>db.NULL</code> object can be used to provide <code>NULL</code> as a value. When used with
 <code>encode_clause</code>, the <code>IS NULL</code> syntax is automatically used.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_operator">(</span><span class="sh_string">&quot;the_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_operator">(</span><span class="sh_string">&quot;the_table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">name</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">NULL</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">update</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;the_table&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">name:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">NULL</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -1501,14 +1589,18 @@ aren&rsquo;t directly related to the query interface.</p>
 
 <p>The <code>time</code> argument is optional, will default to the current UTC time.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">date</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">format_date</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">date</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">format_date</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span><span class="sh_operator">(</span><span class="sh_string">&quot;update things set published_at = ?&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">date</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">date</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">format_date</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;update things set published_at = ?&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">date</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -1522,8 +1614,8 @@ aren&rsquo;t directly related to the query interface.</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Wed Dec 14 21:17:53 2022"></script>
-  <script type="text/javascript" src="../reference.js?Wed Dec 14 21:17:53 2022"></script>
+  <script type="text/javascript" src="../search.js?Thu Dec 15 19:55:49 2022"></script>
+  <script type="text/javascript" src="../reference.js?Thu Dec 15 19:55:49 2022"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>

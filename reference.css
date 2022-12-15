@@ -221,9 +221,6 @@ a {
   white-space: nowrap;
   display: flex; }
   .lang_picker .lang_toggle {
-    -webkit-transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    -ms-transition: all 0.2s ease;
     transition: all 0.2s ease;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -264,9 +261,6 @@ a {
   @media (max-width: 1200px) {
     .nav_column {
       width: 40px;
-      -webkit-transition: left 0.2s ease;
-      -moz-transition: left 0.2s ease;
-      -ms-transition: left 0.2s ease;
       transition: left 0.2s ease;
       left: -260px; }
       .nav_column:hover {
@@ -293,7 +287,6 @@ a {
     color: #3f4788; }
   .nav_column .scrolling_inner {
     box-sizing: border-box;
-    -moz-box-sizing: border-box;
     width: 300px;
     position: absolute;
     top: 0;
@@ -318,9 +311,6 @@ a {
     text-decoration: none; }
     .nav_links a:hover {
       background: rgba(112, 182, 189, 0.3);
-      -webkit-transition: all 0.1s ease-in-out;
-      -moz-transition: all 0.1s ease-in-out;
-      -ms-transition: all 0.1s ease-in-out;
       transition: all 0.1s ease-in-out; }
     .nav_links a code {
       font-size: 14px;
@@ -468,8 +458,6 @@ a {
       background: rgba(0, 0, 0, 0.6);
       border-radius: 2px;
       border-bottom: 2px solid rgba(0, 0, 0, 0.3);
-      -webkit-transition: all 0.1s ease-in-out;
-      -moz-transition: all 0.1s ease-in-out;
       transition: all 0.1s ease-in-out; }
     .text_column .image img {
       display: block; }
@@ -483,13 +471,50 @@ a {
       .text_column .footer a:hover {
         text-decoration: underline; }
 
+.dual_code {
+  margin: 1em 0; }
+  body.show_moonscript .dual_code:not(.show_lua) button[data-lang=moonscript] {
+    background: #33343b;
+    color: white; }
+  body:not(.show_moonscript) .dual_code:not(.show_moonscript) button[data-lang=lua] {
+    background: #33343b;
+    color: white; }
+  .dual_code.show_moonscript button[data-lang=moonscript] {
+    background: #33343b;
+    color: white; }
+  .dual_code.show_lua button[data-lang=lua] {
+    background: #33343b;
+    color: white; }
+  .dual_code.show_moonscript pre.lang_moon {
+    display: block; }
+  .dual_code.show_moonscript pre.lang_lua {
+    display: none; }
+  .dual_code.show_lua pre.lang_lua {
+    display: block; }
+  .dual_code.show_lua pre.lang_moon {
+    display: none; }
+  .dual_code .dual_code_tabs {
+    background: rgba(51, 52, 59, 0.1);
+    border-radius: 2px 2px 0 0;
+    overflow: hidden;
+    display: flex; }
+    .dual_code .dual_code_tabs button {
+      font-family: inherit;
+      font-weight: bold;
+      font-size: 14px;
+      border: 0;
+      background: transparent;
+      cursor: pointer; }
+  .dual_code > pre {
+    margin: 0; }
+
 pre {
-  background: #3C3C3C;
+  background: #33343b;
   color: white;
   font-size: 18px;
   line-height: 22px;
   padding: 12px 10px;
-  border-radius: 2px;
+  border-radius: 0 2px 2px 2px;
   white-space: pre-wrap; }
   @media (max-width: 600px) {
     pre {

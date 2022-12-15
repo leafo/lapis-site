@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>HTML Generation - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Wed Dec 14 21:17:53 2022" />
+  <link rel="stylesheet" href="../reference.css?Thu Dec 15 19:55:50 2022" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     var _gaq = _gaq || [];
@@ -52,7 +52,8 @@
 <li><a href="#html-widgets/rendering-widgets-manually">Rendering Widgets Manually</a></li></ul>
 <li><a href="#layouts">Layouts</a></li>
 <li><a href="#widget-methods">Widget Methods</a></li>
-<ul><li><a href="#widget-methods/Widget"><code>Widget([opts])</code></a></li>
+<ul><li><a href="#widget-methods/Widget:extend"><code>Widget:extend([name], fields={}, [setup_fn])</code></a></li>
+<li><a href="#widget-methods/Widget"><code>Widget([opts])</code></a></li>
 <li><a href="#widget-methods/Widget:include"><code>Widget:include(other_class)</code></a></li>
 <li><a href="#widget-methods/widget:render_to_string"><code>widget:render_to_string()</code></a></li>
 <li><a href="#widget-methods/widget:render"><code>widget:render(buffer, ...)</code></a></li>
@@ -109,10 +110,7 @@
     </div>
 
     <div class="nav_offset">
-      <div class="text_column"><div class="override_lang"></div>
-
-
-<h1>HTML Generation</h1>
+      <div class="text_column"><h1>HTML Generation</h1>
 
 <p>This guide is focused on using builder syntax in Lua/MoonScript to generate
 HTML. If you're interested in a more traditional templating system see the
@@ -135,6 +133,42 @@ written into a buffer that is compiled in the end and returned as the result</p>
 
 <p>Here are some examples of the HTML generation:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">div</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">                     </span><span class="sh_comment">-- &lt;div&gt;&lt;/div&gt;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_identifier">b</span><span class="sh_operator">(</span><span class="sh_string">&quot;Hello World&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">          </span><span class="sh_comment">-- &lt;b&gt;Hello World&lt;/b&gt;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_identifier">div</span><span class="sh_operator">(</span><span class="sh_string">&quot;hi&lt;br/&gt;&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">            </span><span class="sh_comment">-- &lt;div&gt;hi&amp;lt;br/&amp;gt;&lt;/div&gt;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_identifier">text</span><span class="sh_operator">(</span><span class="sh_string">&quot;Hi!&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">               </span><span class="sh_comment">-- Hi!</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_identifier">raw</span><span class="sh_operator">(</span><span class="sh_string">&quot;&lt;br/&gt;&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">              </span><span class="sh_comment">-- &lt;br/&gt;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_identifier">br</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">                      </span><span class="sh_comment">-- &lt;br/&gt;</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">element</span><span class="sh_operator">(</span><span class="sh_string">&quot;table&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">width</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;100%&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">                        </span><span class="sh_comment">-- &lt;table width=&quot;100%&quot;&gt;&lt;/table&gt;</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">div</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">class</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;footer&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;The Foot&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">            </span><span class="sh_comment">-- &lt;div class=&quot;footer&quot;&gt;The Foot&lt;/div&gt;</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">input</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">required</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">                        </span><span class="sh_comment">-- &lt;input required /&gt;</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">div</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">text</span><span class="sh_operator">(</span><span class="sh_string">&quot;Hey&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">                      </span><span class="sh_comment">-- &lt;div&gt;Hey&lt;/div&gt;</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">div</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">class</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;header&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">h2</span><span class="sh_operator">(</span><span class="sh_string">&quot;My Site&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">p</span><span class="sh_operator">(</span><span class="sh_string">&quot;Welcome!&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">                      </span><span class="sh_comment">-- &lt;div class=&quot;header&quot;&gt;&lt;h2&gt;My Site&lt;/h2&gt;</span><span class="sh_lua_whitespace sh_whitespace">
+                          </span><span class="sh_comment">--    &lt;p&gt;Welcome!&lt;/p&gt;&lt;/div&gt;</span></code>
+</pre>
 <pre class="highlight lang_moon"><code><span class="sh_identifier">div</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace">                </span><span class="sh_comment">-- &lt;div&gt;&lt;/div&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">b</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello World&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">     </span><span class="sh_comment">-- &lt;b&gt;Hello World&lt;/b&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">div</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;hi&lt;br/&gt;&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">       </span><span class="sh_comment">-- &lt;div&gt;hi&amp;lt;br/&amp;gt;&lt;/div&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -154,7 +188,9 @@ written into a buffer that is compiled in the end and returned as the result</p>
   </span><span class="sh_identifier">h2</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;My Site&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">                      </span><span class="sh_comment">--    &lt;p&gt;Welcome!&lt;/p&gt;&lt;/div&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_library sh_type">p</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Welcome!&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>The <code>element</code> function is a special builder that takes the name of tag to
 generate as the first argument followed by any attributes and content.</p>
@@ -176,11 +212,27 @@ introducing any cross site scripting vulnerabilities.</p>
 constructed from it. The table can contain either array element, or hash
 elements:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">div</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">class</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_string">&quot;one&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_string">&quot;two&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">three</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">four</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello world!&quot;</span><span class="sh_operator">)</span></code>
+</pre>
 <pre class="highlight lang_moon"><code><span class="sh_identifier">div</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">class:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_string">&quot;one&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;two&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">three:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">four:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello world!&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>Will generate:</p>
 
@@ -206,9 +258,25 @@ functions for writing HTML tags, the following functions are also available:</p>
 
 <h2><a name="html-in-actions" href="#html-in-actions">HTML In Actions</a></h2>
 
-<p>If we want to generate HTML directly in our action we can use the <code>@html</code>
-method:</p>
+<p>If we want to generate HTML directly in our action we can use the
+<code class="for_moon">@html</code><code class="for_lua">self.html</code> method:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">MyApp</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">MyApp</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">html</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">h1</span><span class="sh_operator">({</span><span class="sh_identifier">class</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;header&quot;</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">div</span><span class="sh_operator">({</span><span class="sh_identifier">class</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;body&quot;</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+      </span><span class="sh_identifier">text</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Welcome to my site!&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
+</pre>
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">MyApp</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_self_ref sh_label">@html</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -216,12 +284,14 @@ method:</p>
       </span><span class="sh_identifier">div</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">class:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;body&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
         </span><span class="sh_identifier">text</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Welcome to my site!&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
-<p>The environment of the function passed to <code>@html</code> is set to one that support
-the HTML builder functions described above. The return value of the <code>@html</code>
-method is the generated HTML as a string. Returning this from the action allows
-us to render send it right to the browser</p>
+<p>The environment of the function passed to <code class="for_moon">@html</code><code class="for_lua">self.html</code> is set to one that
+support the HTML builder functions described above. The return value of the
+<code class="for_moon">@html</code><code class="for_lua">self.html</code> method is the generated HTML as a string. Returning this from
+the action allows us to render send it right to the browser</p>
 
 <h2><a name="html-widgets" href="#html-widgets">HTML Widgets</a></h2>
 
@@ -237,6 +307,25 @@ widget.</p>
 
 <p>This is what a widget looks like:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_comment">-- views/index.lua</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Widget</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.html&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">Widget</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Index</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Index_mt</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Widget</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;Index&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_keyword">function</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Index_mt</span><span class="sh_operator">:</span><span class="sh_identifier">content</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">h1</span><span class="sh_operator">({</span><span class="sh_identifier">class</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;header&quot;</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">div</span><span class="sh_operator">({</span><span class="sh_identifier">class</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;body&quot;</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">text</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Welcome to my site!&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Index</span></code>
+</pre>
 <pre class="highlight lang_moon"><code><span class="sh_comment">-- views/index.moon</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Widget</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.html&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
@@ -246,7 +335,9 @@ widget.</p>
     </span><span class="sh_identifier">div</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">class:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;body&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
       </span><span class="sh_identifier">text</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Welcome to my site!&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <blockquote><p>The name of the widget class is insignificant, but it&rsquo;s worth making one
 because some systems can auto-generate encapsulating HTML named after the
@@ -258,44 +349,117 @@ class.</p></blockquote>
 the <code>"index"</code> widget from our action by returning a table with render set to
 the name of the widget:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_identifier">render</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;index&quot;</span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
+</pre>
 <pre class="highlight lang_moon"><code><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">render:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;index&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>If the action has a name, then we can set render to <code>true</code> to load the widget
 with the same name as the action:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;index&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_identifier">render</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;index&quot;</span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
+</pre>
 <pre class="highlight lang_moon"><code><span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">index:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">render:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>By default <code>views.</code> is prepended to the widget name and then loaded
 using Lua&rsquo;s <code>require</code> function. The <code>views</code> prefix can be customized by
 overwriting the <code>views_prefix</code> member of your application subclass:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_identifier">app</span><span class="sh_operator">.</span><span class="sh_identifier">views_prefix</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;app_views&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;home&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> 
+  </span><span class="sh_comment">-- will load &quot;app_views.home&quot; as the view</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_identifier">render</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/profile&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> 
+  </span><span class="sh_comment">-- will load &quot;app_views.profile&quot; as the view</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_identifier">render</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;profile&quot;</span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
+</pre>
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">views_prefix:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;app_views&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
   </span><span class="sh_comment">-- will use &quot;app_views.home&quot; as the view</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">home:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/home&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">render:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span></code>
 </pre>
+</div>
 
+</p>
 
 <h3><a name="html-widgets/passing-data-to-a-widget" href="#html-widgets/passing-data-to-a-widget">Passing Data To A Widget</a></h3>
 
-<p>Any <code>@</code> variables set in the action can be accessed in the widget. Additionally
-any of the helper functions like <code>@url_for</code> are also accessible.</p>
+<p>Any <code class="for_moon">@</code><code class="for_lua">self.</code> variables set in the action can be accessed in the widget. Additionally
+any of the helper functions like <code class="for_moon">@url_for</code><code class="for_lua">self.url_for</code> are also accessible.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_comment">-- app.lua</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;index&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">page_title</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Welcome To My Page&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_identifier">render</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_keyword">true</span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
+</pre>
 <pre class="highlight lang_moon"><code><span class="sh_comment">-- app.moon</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">index:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_self_ref sh_label">@page_title</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Welcome To My Page&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_tbl_key sh_regex">render:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span></code>
 </pre>
+</div>
 
+</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Widget</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.html&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">Widget</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Widget</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;Index&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">content</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">h1</span><span class="sh_operator">({</span><span class="sh_identifier">class</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;header&quot;</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">page_title</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">div</span><span class="sh_operator">({</span><span class="sh_identifier">class</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;body&quot;</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+      </span><span class="sh_identifier">text</span><span class="sh_operator">(</span><span class="sh_string">&quot;Welcome to my site!&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_operator">})</span></code>
+</pre>
 <pre class="highlight lang_moon"><code><span class="sh_comment">-- views/index.moon</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Widget</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.html&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
@@ -305,23 +469,38 @@ any of the helper functions like <code>@url_for</code> are also accessible.</p>
     </span><span class="sh_identifier">div</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">class:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;body&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
       </span><span class="sh_identifier">text</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Welcome to my site!&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <h3><a name="html-widgets/rendering-widgets-manually" href="#html-widgets/rendering-widgets-manually">Rendering Widgets Manually</a></h3>
 
 <p>Widgets can also be rendered manually by instantiating them and calling the
 <code>render_to_string</code> method.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Index</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;views.index&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">widget</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Index</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">page_title</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello World&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">widget</span><span class="sh_operator">:</span><span class="sh_identifier">render_to_string</span><span class="sh_operator">())</span></code>
+</pre>
 <pre class="highlight lang_moon"><code><span class="sh_proper_ident sh_class">Index</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;views.index&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_identifier">widget</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Index</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">page_title:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello World&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">widget</span><span class="sh_operator">\</span><span class="sh_identifier">render_to_string</span><span class="sh_operator">!</span></code>
 </pre>
+</div>
 
+</p>
 
-<p>If you want to use helpers like <code>@url_for</code> you also need to include them in the
-widget instance. Any object can be included as a helper, and its methods will
-be made available inside of the widget.</p>
+<p>If you want to use helpers like <code class="for_moon">@url_for</code><code class="for_lua">self.url_for</code> you also need to include
+them in the widget instance. Any object can be included as a helper, and its
+methods will be made available inside of the widget.</p>
 
 <pre class="highlight lang_moon"><code><span class="sh_identifier">html</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.html&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">SomeWidget</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">html</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Widget</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -366,16 +545,53 @@ page will be injected in the location of the call to <code>@content_for "inner"<
 <p>We can specify the layout for an entire application or specify it for a
 specific action. For example, if we have our new layout in <code>views/my_layout.moon</code></p>
 
-<pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_tbl_key sh_regex">layout:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;views.my_layout&quot;</span></code>
-</pre>
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_identifier">app</span><span class="sh_operator">.</span><span class="sh_identifier">layout</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;views.my_layout&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
+</span><span class="sh_comment">-- you can also write this, and it will prepend app.views_prefix</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_comment">-- app.layout = &quot;my_layout&quot;</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_tbl_key sh_regex">layout:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;views.my_layout&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+
+  </span><span class="sh_comment">-- you can also write this, and it will prepend app.views_prefix</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_comment">-- layout: = &quot;my_layout&quot;</span></code>
+</pre>
+</div>
+
+</p>
 
 <p>If we want to set the layout for a specific action we can provide it as part of
 the action&rsquo;s return value.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_comment">-- the following two have the same effect with the default views_prefix</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/home1&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">layout</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;my_layout&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/home2&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">layout</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;views.my_layout&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_comment">-- this doesn&#x27;t use a layout at all</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/no_layout&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">layout</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;No layout rendered!&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
+</pre>
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_comment">-- the following two have the same effect</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_comment">-- the following two have the same effect with the default views_prefix</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;/home1&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_tbl_key sh_regex">layout:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;my_layout&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
@@ -384,22 +600,54 @@ the action&rsquo;s return value.</p>
 
   </span><span class="sh_comment">-- this doesn&#x27;t use a layout at all</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;/no_layout&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-    </span><span class="sh_tbl_key sh_regex">layout:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;No layout rendered!&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-</span></code>
+    </span><span class="sh_tbl_key sh_regex">layout:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;No layout rendered!&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>As demonstrated in the example, passing false will prevent any layout from
 being rendered.</p>
 
 <h2><a name="widget-methods" href="#widget-methods">Widget Methods</a></h2>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Widget</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.html&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">Widget</span></code>
+</pre>
 <pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Widget</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.html&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>When sub-classing a widget, take care not to override these methods if you don&rsquo;t
 intend to change the default behavior.</p>
+
+<h3><a name="widget-methods/Widget:extend" href="#widget-methods/Widget:extend"><code>Widget:extend([name], fields={}, [setup_fn])</code></a></h3>
+
+<p>Creates a new subclass of the <code>Widget</code> base class. The <code>fields</code> argument is a
+table of properties that will be copied into the instance metatable of the
+newly created class, or it can be a function and it willl be set as the
+<code>content</code> field.</p>
+
+<p><code>name</code> is not directly used by Lapis but it can be helpful to provide it for
+debugging and for implementing systems that derive details about the rendred
+output based on the name of the widget (eg. automatically generated a class
+based on the widget&rsquo;s name)</p>
+
+<p><code>setup_fn</code> is an optional function that will be called with the class object as
+the only argument. This function is called after properties have been set but
+before any <code>__inherited</code> callbacks are called. The default <code>Widget</code> class does
+not have any <code>__inherited</code> callbacks so it is not necessary to use this
+function unless you specifically need that behavior for a subclass you have
+created.</p>
+
+<p>This method returns the newly created class object, followed by the instance
+metatable.</p>
 
 <h3><a name="widget-methods/Widget" href="#widget-methods/Widget"><code>Widget([opts])</code></a></h3>
 
@@ -407,6 +655,22 @@ intend to change the default behavior.</p>
 <code>opts</code> argument to <code>self</code>, if the <code>opts</code> argument is provided. You can use this
 to set render-time parameters or override methods.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Widget</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.html&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">Widget</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">SomeWidget</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Widget</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">content</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">div</span><span class="sh_operator">(</span><span class="sh_string">&quot;Hello &quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">name</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">w</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">SomeWidget</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">name</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Garf&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">widget</span><span class="sh_operator">:</span><span class="sh_identifier">render_to_string</span><span class="sh_operator">())</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &lt;div&gt;Hello Garf&lt;/div&gt;</span></code>
+</pre>
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">SomeWidget</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">html</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Widget</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">content:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_identifier">div</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello &quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@name</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -414,7 +678,9 @@ to set render-time parameters or override methods.</p>
 </span><span class="sh_identifier">widget</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">SomeWidget</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">name:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Garf&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">widget</span><span class="sh_operator">\</span><span class="sh_identifier">render_to_string</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &lt;div&gt;Hello Garf&lt;/div&gt;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>It is safe to override the constructor and not call <code>super</code> if you want to change
 the initialization conditions of your widget.</p>
@@ -573,30 +839,47 @@ use a builder function in conjunction with the <code>raw</code> function:</p>
 <p>The Widget base class for creating templates in code as a class. See the <a href="#html-widgets">HTML
 Widgets</a> for a full guide on using the Widget class.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">html</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.html&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">class</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.lua&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">class</span><span class="sh_lua_whitespace sh_whitespace">
 
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">IndexPage</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">class</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;IndexPage&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">IndexPage</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">html</span><span class="sh_operator">.</span><span class="sh_identifier">Widget</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;IndexPage&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">content</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
     </span><span class="sh_identifier">div</span><span class="sh_operator">(</span><span class="sh_string">&quot;Hello!&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">html</span><span class="sh_operator">.</span><span class="sh_identifier">Widget</span></code>
+</span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Widget</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.html&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">IndexPage</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Widget</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">content:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_identifier">div</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello!&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <h3><a name="html-module/html.render_html" href="#html-module/html.render_html"><code>html.render_html(fn)</code></a></h3>
 
 <p>Runs the function, <code>fn</code> in the HTML rendering context as described above.
 Returns the resulting HTML as a string.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">html</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.html&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">html</span><span class="sh_operator">.</span><span class="sh_identifier">render_html</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_identifier">div</span><span class="sh_operator">({</span><span class="sh_identifier">class</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;item&quot;</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_identifier">strong</span><span class="sh_operator">(</span><span class="sh_string">&quot;Hello!&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+  </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">end</span><span class="sh_operator">))</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &lt;div class=&quot;item&quot;&gt;&lt;strong&gt;Hello!&lt;/strong&gt;&lt;/div&gt;</span></code>
+</pre>
 <pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">render_html</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.html&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">render_html</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -605,7 +888,9 @@ Returns the resulting HTML as a string.</p>
 
 </span><span class="sh_comment">--&gt; &lt;div class=&quot;item&quot;&gt;&lt;strong&gt;Hello!&lt;/strong&gt;&lt;/div&gt;</span></code>
 </pre>
+</div>
 
+</p>
 
 <h3><a name="html-module/html.escape" href="#html-module/html.escape"><code>html.escape(str)</code></a></h3>
 
@@ -628,7 +913,12 @@ string to this function will return the string unmodified.</p>
 <p>This function is applied to the value of the class attribute when using the
 HTML builder syntax.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_identifier">classnames</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">classnames</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;one&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;two&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">yes</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
@@ -638,10 +928,8 @@ HTML builder syntax.</p>
     </span><span class="sh_string">&quot;&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
     </span><span class="sh_string">&quot;last&quot;</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_operator">})</span></code>
+</span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &quot;one two yes haveit last&quot;</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">classnames</span><span class="sh_symbol sh_embedded">({</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;one&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;two&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -649,6 +937,7 @@ HTML builder syntax.</p>
   </span><span class="sh_symbol sh_embedded">{</span><span class="sh_tbl_key sh_regex">skipped:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">haveit:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;last&quot;</span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">})</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &quot;one two yes haveit last&quot;</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -682,8 +971,8 @@ called.</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Wed Dec 14 21:17:53 2022"></script>
-  <script type="text/javascript" src="../reference.js?Wed Dec 14 21:17:53 2022"></script>
+  <script type="text/javascript" src="../search.js?Thu Dec 15 19:55:50 2022"></script>
+  <script type="text/javascript" src="../reference.js?Thu Dec 15 19:55:50 2022"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>

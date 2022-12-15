@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Models - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Wed Dec 14 21:17:53 2022" />
+  <link rel="stylesheet" href="../reference.css?Thu Dec 15 19:55:49 2022" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     var _gaq = _gaq || [];
@@ -55,7 +55,8 @@
 <li><a href="#class-methods/Model:singular_name"><code>Model:singular_name()</code></a></li>
 <li><a href="#class-methods/Model:include_in"><code>Model:include_in(objects, key, opts={})</code></a></li>
 <li><a href="#class-methods/Model:paginated"><code>Model:paginated(query, ...)</code></a></li>
-<li><a href="#class-methods/Model:get_relation_model"><code>Model:get_relation_model(name)</code></a></li></ul>
+<li><a href="#class-methods/Model:get_relation_model"><code>Model:get_relation_model(name)</code></a></li>
+<li><a href="#class-methods/Model:extend"><code>Model:extend(table_name, fields={})</code></a></li></ul>
 <li><a href="#instance-methods">Instance Methods</a></li>
 <ul><li><a href="#instance-methods/model:update"><code>model:update(..., opts={})</code></a></li>
 <li><a href="#instance-methods/model:delete"><code>model:delete(...)</code></a></li>
@@ -537,18 +538,22 @@ from the <code>create</code> function.</p>
 <p><code>create_opts</code> is an optional table supporting the following fields:</p>
 
 <p><table class="configuration_table" cellspacing="0" cellpadding="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>returning</code></td><td><p>An array table of column names or the string <code>"*"</code> to represent all column names. Their values will be return from the insertion query using <code>RETURNING</code> clause to initially populate the model object</p>
-<details class="option_example"><summary>Show Example</summary><pre class="highlight lang_lua"><code><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">create</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+<details class="option_example"><summary>Show Example</summary><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">create</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">profile_color</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;blue&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">returning</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;*&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">create</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">profile_color:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;blue&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">returning:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;*&quot;</span></code>
 </pre>
+</div>
 
 </details></td><td><p>Automatically calculated to include any columns that have <code>db.raw</code> values, and the primary keys</p>
 </td></tr></tbody></table></p>
@@ -559,12 +564,16 @@ from the <code>create</code> function.</p>
 array is a table with the name, <code>column_name</code>, and the column type,
 <code>data_type</code>.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">cols</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">columns</span><span class="sh_operator">()</span></code>
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">cols</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">columns</span><span class="sh_operator">()</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">cols</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">columns</span><span class="sh_operator">!</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -689,32 +698,40 @@ automatically chosen.</p>
 <p><table class="configuration_table" cellspacing="0" cellpadding="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>as</code></td><td><p>The name of the field the loaded associated model is stored into</p>
 </td><td><p>generated from table name (eg. <code>Posts</code> → <code>post</code>)</p>
 </td></tr><tr><td><code>where</code></td><td><p>A table of additional conditionals to limit the query by</p>
-<details class="option_example"><summary>Show Example</summary><pre class="highlight lang_lua"><code><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">posts</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<details class="option_example"><summary>Show Example</summary><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">posts</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">where</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
     </span><span class="sh_identifier">deleted</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">include_in</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">posts</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">where:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_tbl_key sh_regex">deleted:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
 </details></td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><code>fields</code></td><td><p>Raw SQL fragment to control which columns are returned by the query. <code>db.escape_identifier</code> can be used to sanitize column names</p>
-<details class="option_example"><summary>Show Example</summary><pre class="highlight lang_lua"><code><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">posts</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<details class="option_example"><summary>Show Example</summary><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">posts</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">fields</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;id, name as display_name, created_at&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">include_in</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">posts</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">fields:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;id, name as display_name, created_at&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
 </details></td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><code>many</code></td><td><p>set to <code>true</code> to fetch many records for each input model instance. The fetched models will be stored as an array on each preloaded object. An empty array is assigned when no rows are found</p>
 </td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><code>value</code></td><td><p>a function called for each fetched row where the return value is used in place of the row object when filling <code>objects</code></p>
@@ -738,24 +755,33 @@ replacement calls to <code>include_in</code> that do not use flip.</p>
 
 <p>The following are equivalent:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_identifier">UserData</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">users</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">UserData</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">users</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">flip</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">UserData</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">users</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">user_id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;id&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_proper_ident sh_class">UserData</span><span class="sh_operator">\</span><span class="sh_identifier">include_in</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">flip:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_proper_ident sh_class">UserData</span><span class="sh_operator">\</span><span class="sh_identifier">include_in</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">user_id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;id&quot;</span></code>
 </pre>
+</div>
 
 </p>
 
 <p>The following use <code>local_key</code> and are equivalent:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_identifier">UserData</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">users</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">UserData</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">users</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">flip</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">local_key</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;internal_id&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
@@ -763,11 +789,10 @@ replacement calls to <code>include_in</code> that do not use flip.</p>
   </span><span class="sh_identifier">user_id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;internal_id&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_proper_ident sh_class">UserData</span><span class="sh_operator">\</span><span class="sh_identifier">include_in</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">flip:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">local_key:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;internal_id&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_proper_ident sh_class">UserData</span><span class="sh_operator">\</span><span class="sh_identifier">include_in</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">user_id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;internal_id&quot;</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -830,14 +855,18 @@ key of the model that is being loaded.</p>
 In this case, <code>user</code> was derived from the foreign key <code>user_id</code>. If we want to
 manually specify the name the <code>as</code> option can be used:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">posts</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">posts</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">as</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;author&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">include_in</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">posts</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">as:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;author&quot;</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -872,19 +901,23 @@ relevant models:</p>
 <p>Now let&rsquo;s say we have an array of users and we want to fetch the associated
 user data.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_function">select</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_function">select</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">UserData</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">users</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">user_id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;id&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">users</span><span class="sh_operator">[</span><span class="sh_number">1</span><span class="sh_operator">].</span><span class="sh_identifier">user_data</span><span class="sh_operator">.</span><span class="sh_identifier">twitter_account</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">users</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_function">select</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_proper_ident sh_class">UserData</span><span class="sh_operator">\</span><span class="sh_identifier">include_in</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">user_id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;id&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_symbol sh_embedded">[</span><span class="sh_number">1</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">.</span><span class="sh_identifier">user_data</span><span class="sh_operator">.</span><span class="sh_identifier">twitter_account</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -910,18 +943,22 @@ for each input object into an array. (The derived field name will be plural)</p>
 
 <p>For example, we might load all the posts for each user:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_function">select</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_function">select</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">Posts</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">users</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">user_id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;id&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">many</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">users</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_function">select</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_proper_ident sh_class">Posts</span><span class="sh_operator">\</span><span class="sh_identifier">include_in</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">user_id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;id&quot;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">many:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -942,22 +979,42 @@ derived field name when <code>many</code> is true.)</p>
 <p>This method is used to look up the model for a relation by the name specified
 in the relation. By default the following function is provided:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">get_relation_model</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">get_relation_model</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">get_relation_model</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">name</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;models&quot;</span><span class="sh_operator">)[</span><span class="sh_identifier">name</span><span class="sh_operator">]</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">get_relation_model</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">name</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_function">require</span><span class="sh_symbol sh_embedded">(</span><span class="sh_string">&quot;models&quot;</span><span class="sh_symbol sh_embedded">)[</span><span class="sh_identifier">name</span><span class="sh_symbol sh_embedded">]</span></code>
 </pre>
+</div>
 
 </p>
 
 <p>If your model has relations that are pulled from other sources than the
 <code>models</code> module, then you can overwrite this method to handle loading the
 models for those relations.</p>
+
+<h3><a name="class-methods/Model:extend" href="#class-methods/Model:extend"><code>Model:extend(table_name, fields={})</code></a></h3>
+
+<p>Creates a new subclass of the <code>Model</code> base class. The <code>fields</code> argument is a
+table of properties that will be copied into the instance metatable of the
+newly created class.</p>
+
+<p>The fields named &ldquo;primary_key&rdquo;, &ldquo;timestamp&rdquo;, &ldquo;constraints&rdquo;, &ldquo;relations&rdquo; will be
+copied into the model class object instead of the instance. Relations must be
+set in <code>fields</code> in order for the auto-generated methods to be created.</p>
+
+<p>This method returns the newly created class object, followed by the instance
+metatable.</p>
+
+<p>The instance metatable can be used as an alternative syntax to add new methods
+to model instances.</p>
 
 <h2><a name="instance-methods" href="#instance-methods">Instance Methods</a></h2>
 
@@ -996,15 +1053,18 @@ take place</p></blockquote>
 values. The values in the table will be merged into the instance of the model
 to reflect the update:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">update</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">login</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;uberuser&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">email</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;admin@example.com&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_function">assert</span><span class="sh_operator">(</span><span class="sh_identifier">user</span><span class="sh_operator">.</span><span class="sh_identifier">login</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">==</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;uberuser&quot;</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">find</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">user</span><span class="sh_operator">\</span><span class="sh_identifier">update</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">login:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;uberuser&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -1014,6 +1074,7 @@ to reflect the update:</p>
 </span><span class="sh_comment">-- both the database row and model instance will have the updated value:</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_function">assert</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">.</span><span class="sh_identifier">login</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">==</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;uberuser&quot;</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -1025,19 +1086,23 @@ to reflect the update:</p>
 model instance to the database. With this approach first edit the model
 instance with updated values, then issue the <code>update</code> call to save the changes:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">user</span><span class="sh_operator">.</span><span class="sh_identifier">login</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;uberuser&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">user</span><span class="sh_operator">.</span><span class="sh_identifier">email</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;admin@example.com&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">update</span><span class="sh_operator">(</span><span class="sh_string">&quot;login&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;email&quot;</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">find</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">user</span><span class="sh_operator">.</span><span class="sh_identifier">login</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;uberuser&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">user</span><span class="sh_operator">.</span><span class="sh_identifier">email</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;admin@example.com&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_identifier">user</span><span class="sh_operator">\</span><span class="sh_identifier">update</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;login&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;email&quot;</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -1054,7 +1119,12 @@ like <code>db.raw</code>, then a <code>RETURNING</code> clause will be used to d
 value from the database to store on the model instance, similar to the
 <a href="#class-methods-createopts"><code>create</code> class method</a>.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">crate</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">crate</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">10</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">views</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
@@ -1063,8 +1133,6 @@ value from the database to store on the model instance, similar to the
 </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_function">assert</span><span class="sh_operator">(</span><span class="sh_identifier">count</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">==</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">13</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">crate</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">10</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">views:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -1077,28 +1145,38 @@ value from the database to store on the model instance, similar to the
 </span><span class="sh_comment">-- the result of the query is assigned to the model:</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_function">assert</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">count</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">==</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">13</span></code>
 </pre>
+</div>
 
 </p>
 
 <p><strong>Options</strong></p>
 
 <p><table class="configuration_table" cellspacing="0" cellpadding="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>timestamp</code></td><td><p>The <code>updated_at</code> field will be updated to the current time if the model has timestamps. Note that if the update itself contains <code>updated_at</code> then that will take precedence over the auto-update.</p>
-<details class="option_example"><summary>Show Example</summary><pre class="highlight lang_lua"><code><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">update</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+<details class="option_example"><summary>Show Example</summary><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">update</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">views_count</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_operator">(</span><span class="sh_string">&quot;views_count + 1&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">timestamp</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_operator">\</span><span class="sh_identifier">update</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">views_count:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;views_count + 1&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">timestamp:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span></code>
 </pre>
+</div>
 
 </details></td><td><p><code>true</code></p>
 </td></tr><tr><td><code>where</code></td><td><p>A table of additional conditions to add to the <code>WHERE</code> clause of the updated query. This can be used to have an atomic conditional update. The return value should be checked to see if the update succeeeded or not.</p>
-<details class="option_example"><summary>Show Example</summary><pre class="highlight lang_lua"><code><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">update</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+<details class="option_example"><summary>Show Example</summary><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">update</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">views_count</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_operator">(</span><span class="sh_string">&quot;views_count + 1&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">where</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
@@ -1106,12 +1184,11 @@ value from the database to store on the model instance, similar to the
   </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_operator">\</span><span class="sh_identifier">update</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">views_count:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;views_count + 1&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">where:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">public:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
 </details></td><td><p><code>nil</code></p>
 </td></tr></tbody></table></p>
@@ -1121,14 +1198,18 @@ value from the database to store on the model instance, similar to the
 <p>Attempts to delete the row backed by the model instance based on the primary
 key.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">delete</span><span class="sh_operator">()</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">find</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">user</span><span class="sh_operator">\</span><span class="sh_identifier">delete</span><span class="sh_operator">!</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -1139,18 +1220,22 @@ key.</p>
 <p>The first argument can be a <code>db.clause</code> object to cause the deletion be
 contingent on another set of conditions:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">delete</span><span class="sh_operator">(</span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">clause</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">active</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">}))</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">find</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">user</span><span class="sh_operator">\</span><span class="sh_identifier">delete</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">clause</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">active:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -1164,19 +1249,23 @@ row contained at the time of deletion, as the model instance that delete was
 called on may be out of date if two requests are processing the same request at
 the same time.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">success</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">res</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">delete</span><span class="sh_operator">(</span><span class="sh_string">&quot;status&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">res</span><span class="sh_operator">.</span><span class="sh_identifier">affected_rows</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">res</span><span class="sh_operator">[</span><span class="sh_number">1</span><span class="sh_operator">].</span><span class="sh_identifier">status</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">find</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">success</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">res</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">\</span><span class="sh_identifier">delete</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;status&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">res</span><span class="sh_operator">.</span><span class="sh_identifier">affected_rows</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; will be 1 when delete succeeded, and success = true</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">res</span><span class="sh_symbol sh_embedded">[</span><span class="sh_number">1</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">.</span><span class="sh_identifier">status</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; the status field of the row when it was deleted</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -1192,33 +1281,41 @@ running code in response to a delete.</p>
 effects. It&rsquo;s possible that the delete did not if another thread processed the
 request first.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">assert</span><span class="sh_operator">(</span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">))</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">assert</span><span class="sh_operator">(</span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">))</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">delete</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">decrement_total_user_count</span><span class="sh_operator">()</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_comment">-- This is incorrect!</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">assert</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">find</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">user</span><span class="sh_operator">\</span><span class="sh_identifier">delete</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">decrement_total_user_count</span><span class="sh_operator">!</span></code>
 </pre>
+</div>
 
 </p>
 
 <p>This is the correct way to write a deletion side effect:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">assert</span><span class="sh_operator">(</span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">))</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">assert</span><span class="sh_operator">(</span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">))</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">if</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">delete</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">then</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">decrement_total_user_count</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">assert</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">find</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_keyword">if</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">\</span><span class="sh_identifier">delete</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_identifier">decrement_total_user_count</span><span class="sh_operator">!</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -1494,20 +1591,29 @@ returned by the paginator may not be consistent.</p></blockquote>
 following options are available for all types of paginators:</p>
 
 <p><table class="configuration_table" cellspacing="0" cellpadding="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>per_page</code></td><td><p>The number of items fetched per page</p>
-<details class="option_example"><summary>Show Example</summary><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">pager</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">paginated</span><span class="sh_operator">(</span><span class="sh_string">&quot;where group_id = ?&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">4</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<details class="option_example"><summary>Show Example</summary><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">pager</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">paginated</span><span class="sh_operator">(</span><span class="sh_string">&quot;where group_id = ?&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">4</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">per_page</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">100</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">pager</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">paginated</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;where group_id = ?&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">4</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">per_page:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">100</span></code>
 </pre>
+</div>
 
 </details></td><td><p><code>10</code></p>
 </td></tr><tr><td><code>prepare_results</code></td><td><p>A function that is passed the results of any fetched page to prepare the objects before being retuned from methods like <code>get_page</code>, <code>get_all</code>, and <code>each_item</code>. It should return the results after they have been prepared or updated.</p>
 
 <p>This is useful for preloading related data automatically when fetching results to avoid the <a href="https://leafo.net/guides/postgresql-preloading.html">n+1 queries problem</a>.</p>
-<details class="option_example"><summary>Show Example</summary><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">items</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Posts</span><span class="sh_operator">:</span><span class="sh_identifier">paginated</span><span class="sh_operator">(</span><span class="sh_string">&quot;where category = ?&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;big_cats&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<details class="option_example"><summary>Show Example</summary><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">items</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Posts</span><span class="sh_operator">:</span><span class="sh_identifier">paginated</span><span class="sh_operator">(</span><span class="sh_string">&quot;where category = ?&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;big_cats&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">per_page</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">10</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">prepare_results</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">posts</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
     </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">posts</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
@@ -1515,8 +1621,6 @@ following options are available for all types of paginators:</p>
   </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">items</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Posts</span><span class="sh_operator">\</span><span class="sh_identifier">paginated</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;where category = ?&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;big_cats&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">per_page:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">10</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">prepare_results:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">posts</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -1524,6 +1628,7 @@ following options are available for all types of paginators:</p>
     </span><span class="sh_identifier">posts</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
 </details></td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><em>…</em></td><td><p>Any additional options are passed directly to the <code>select</code> class method to control the query. For example, <code>fields</code> can be used to restrict what columns are fetched</p>
 </td><td></td></tr></tbody></table></p>
@@ -1536,14 +1641,18 @@ following options are available for all types of paginators:</p>
 is controlled by the <code>per_page</code> option, and defaults to 10. Returns an array
 table of model instances.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">page1</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">paginated</span><span class="sh_operator">:</span><span class="sh_identifier">get_page</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">page1</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">paginated</span><span class="sh_operator">:</span><span class="sh_identifier">get_page</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">page6</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">paginated</span><span class="sh_operator">:</span><span class="sh_identifier">get_page</span><span class="sh_operator">(</span><span class="sh_number">6</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">page1</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">paginated</span><span class="sh_operator">\</span><span class="sh_identifier">get_page</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">page6</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">paginated</span><span class="sh_operator">\</span><span class="sh_identifier">get_page</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">6</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -1611,15 +1720,19 @@ incrementally it&rsquo;s suitable for iterating over large data sets.</p>
 <blockquote><p>Iteration order can change if the table is modified during iteration, see the
 warning on <code>each_page</code>.</p></blockquote>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">for</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">item</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">in</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">pager</span><span class="sh_operator">:</span><span class="sh_identifier">each_item</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">do</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">for</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">item</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">in</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">pager</span><span class="sh_operator">:</span><span class="sh_identifier">each_item</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">do</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">item</span><span class="sh_operator">.</span><span class="sh_identifier">name</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">item</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">in</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">pager</span><span class="sh_operator">\</span><span class="sh_identifier">each_item</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">item</span><span class="sh_operator">.</span><span class="sh_identifier">name</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -1652,12 +1765,16 @@ If you have a large dataset you want to iterate over, consider using
 
 <p>Each item is preloaded with the <code>prepare_results</code> function if provided.</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">paginated</span><span class="sh_operator">:</span><span class="sh_identifier">get_all</span><span class="sh_operator">()</span></code>
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">paginated</span><span class="sh_operator">:</span><span class="sh_identifier">get_all</span><span class="sh_operator">()</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">users</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">paginated</span><span class="sh_operator">\</span><span class="sh_identifier">get_all</span><span class="sh_operator">!</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -1914,12 +2031,16 @@ named <code>user</code> in the model with an autogenerated method named <code>ge
 
 <p>A <code>get_</code> method is added to the model to fetch the associated row:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">post</span><span class="sh_operator">:</span><span class="sh_identifier">get_user</span><span class="sh_operator">()</span></code>
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">post</span><span class="sh_operator">:</span><span class="sh_identifier">get_user</span><span class="sh_operator">()</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">post</span><span class="sh_operator">\</span><span class="sh_identifier">get_user</span><span class="sh_operator">!</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -2043,7 +2164,7 @@ an array table to specify composite foreign keys, or a key-value table to
 specify cross-table column mapping.</p>
 
 <p>Defaults a singular foreign key by appending <code>_id</code> to the singular form of the table name, eg. <code>Users</code> → <code>user_id</code></p>
-</td><td><p><code>#{singular(table_name)}_id</code></p>
+</td><td><p><code>{singular(table_name)}_id</code></p>
 </td></tr><tr><td><code>where</code></td><td><p>Set additional constraints on the things returned, as a table</p>
 <details class="option_example"><summary>Show Example</summary><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Model</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.db.model&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">Model</span><span class="sh_lua_whitespace sh_whitespace">
 
@@ -2120,14 +2241,18 @@ duplicate items or skip items entirely.</p></blockquote>
 paginator&rsquo;s constructor, so you can specify things like <code>fields</code>,
 <code>prepare_results</code>, and <code>per_page</code>:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">posts</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">get_posts_paginated</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">posts</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">get_posts_paginated</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">per_page</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">20</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">}):</span><span class="sh_identifier">get_page</span><span class="sh_operator">(</span><span class="sh_number">3</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">posts</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">\</span><span class="sh_identifier">get_posts_paginated</span><span class="sh_symbol sh_embedded">(</span><span class="sh_tbl_key sh_regex">per_page:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">20</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">\</span><span class="sh_identifier">get_page</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">3</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -2139,7 +2264,12 @@ paginator&rsquo;s constructor, so you can specify things like <code>fields</code
 created. If you want to use the <a href="#ordered-paginator">OrderedPaginator</a> you can
 specify an <code>ordered</code> option to the method with a list:</p>
 
-<p><pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">pager</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">get_posts_paginated</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">pager</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">:</span><span class="sh_identifier">get_posts_paginated</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">per_page</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">20</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">ordered</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
     </span><span class="sh_string">&quot;id&quot;</span><span class="sh_lua_whitespace sh_whitespace">
@@ -2148,13 +2278,12 @@ specify an <code>ordered</code> option to the method with a list:</p>
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">posts</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">next_page</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">pager</span><span class="sh_operator">:</span><span class="sh_identifier">get_page</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">posts2</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">pager</span><span class="sh_operator">:</span><span class="sh_identifier">get_page</span><span class="sh_operator">(</span><span class="sh_identifier">next_page</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">pager</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">\</span><span class="sh_identifier">get_posts_paginated</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">per_page:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">20</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">ordered:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_string">&quot;id&quot;</span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_identifier">posts</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">next_page</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">pager</span><span class="sh_operator">\</span><span class="sh_identifier">get_page</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_identifier">posts2</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">pager</span><span class="sh_operator">\</span><span class="sh_identifier">get_page</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">next_page</span></code>
 </pre>
+</div>
 
 </p>
 
@@ -2318,6 +2447,11 @@ Just like <code>enum</code>, it&rsquo;s recommended to explicitly write the inte
 it clear that they can&rsquo;t be reordered without changing the meaning of the
 relation.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Model</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.db.model&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">Model</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Purchases</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Model</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;purchases&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
@@ -2325,12 +2459,10 @@ relation.</p>
     </span><span class="sh_operator">{</span><span class="sh_string">&quot;object&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">polymorphic_belongs_to</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
       </span><span class="sh_operator">[</span><span class="sh_number">1</span><span class="sh_operator">]</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Users&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
       </span><span class="sh_operator">[</span><span class="sh_number">2</span><span class="sh_operator">]</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Books&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
-    </span><span class="sh_operator">}},</span><span class="sh_lua_whitespace sh_whitespace">
+    </span><span class="sh_operator">}}</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.db.model&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Posts</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -2341,39 +2473,46 @@ relation.</p>
     </span><span class="sh_symbol sh_embedded">}}</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>In the example above, an <code>enum</code> named <code>object_types</code> is created. Note that is
 uses the table names, instead of the class names. It is equivalent to:</p>
 
-<pre class="highlight lang_lua"><code><span class="sh_identifier">Purchases</span><span class="sh_operator">.</span><span class="sh_identifier">object_types</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">enum</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">Purchases</span><span class="sh_operator">.</span><span class="sh_identifier">object_types</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">enum</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">users</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">books</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">2</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_operator">}</span></code>
+</span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_proper_ident sh_class">Purchases</span><span class="sh_operator">.</span><span class="sh_identifier">object_types</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">enum</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">users:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">books:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">2</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>The following methods are automatically generated on the model class with the
-polymorphic relation: (where <code>#{name}</code> is the name of the relation)</p>
+polymorphic relation: (where <code>{name}</code> is the name of the relation)</p>
 
 <ul>
-<li><code>model_for_#{name}_type(type)</code> &mdash; Takes the integer or name from type <code>enum</code> and returns the model class associated to that type. If the class could not be found an error is raised</li>
-<li><code>#{name}_type_for_model(model)</code> &mdash; Takes a model and returns the <code>enum</code> type for it (as integer)</li>
-<li><code>#{name}_type_for_object(obj)</code> &mdash; Takes an instances of an object and returns the <code>enum</code> type for it (as integer)</li>
+<li><code>model_for_{name}_type(type)</code> &mdash; Takes the integer or name from type <code>enum</code> and returns the model class associated to that type. If the class could not be found an error is raised</li>
+<li><code>{name}_type_for_model(model)</code> &mdash; Takes a model and returns the <code>enum</code> type for it (as integer)</li>
+<li><code>{name}_type_for_object(obj)</code> &mdash; Takes an instances of an object and returns the <code>enum</code> type for it (as integer)</li>
 </ul>
 
 
 <p>A <em>getter</em> instance method is added to the model:</p>
 
 <ul>
-<li><code>get_#{name}</code> &mdash; Will fetch and return the associated object. This will only perform a query if the relation has not already been fetched or preloaded. <code>nil</code> will be returned if no object could be found, or the foreign key is <code>nil</code></li>
+<li><code>get_{name}</code> &mdash; Will fetch and return the associated object. This will only perform a query if the relation has not already been fetched or preloaded. <code>nil</code> will be returned if no object could be found, or the foreign key is <code>nil</code></li>
 </ul>
 
 
@@ -2602,8 +2741,8 @@ your database rows by using integers to represent a state.</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Wed Dec 14 21:17:53 2022"></script>
-  <script type="text/javascript" src="../reference.js?Wed Dec 14 21:17:53 2022"></script>
+  <script type="text/javascript" src="../search.js?Thu Dec 15 19:55:49 2022"></script>
+  <script type="text/javascript" src="../reference.js?Thu Dec 15 19:55:49 2022"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>
