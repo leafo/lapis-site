@@ -5,27 +5,27 @@
   <title>$if{"title"}[[$title - ]]Lapis - A web framework for Lua</title>
   <link rel="stylesheet" href="home.css?$generate_date" />
   $analytics{"UA-136625-1"}
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
 </head>
 <body>
   <div class="header">
-    <section class="inner">
+    <section class="inner center_column">
       <div class="window_frame pink">
         <div class="window_title">Lapis</div>
         <div class="animation" id="screencast"></div>
       </div>
+
       <div class="title_area">
         <h1><a href="$root">Lapis</a></h1>
-        <h2>A web framework for <a href="http://lua.org">Lua</a>
+        <h2>A web framework for <a href="http://lua.org">Lua</a></h2>
+      </div>
 
-        <div class="version_flag">
-          <a href="$root/changelog.html">
-            v$current_version
-          </a>
-        </div>
+      <div class="version_flag">
+        <a href="$root/changelog.html">v$current_version</a>
       </div>
     </section>
 
-    <section class="button_row">
+    <section class="button_row center_column">
       <a href="$root/reference.html" class="button">
         <img src="$root/img/book.svg" alt="Reference" />
         Reference Manual</a>
@@ -46,23 +46,23 @@
   </div>
 
   <div class="sub_header">
-    <div class="inner">
+    <div class="center_column">
       <strong>Oct 31th, 2022:</strong> Lapis v1.10.0 &mdash; conditional updates and inserts, &amp; more: <a href="$root/changelog.html">changelog</a>
     </div>
   </div>
 
-  <div class="content">$body</div>
+  <div class="content center_column">$body</div>
 
   <div class="footer">
-    <div class="inner">
-      <div class="right">
-        $generate_date PST
-      </div>
-
+    <div class="center_column">
       <div>
         by <a href="https://leafo.net">leaf corcoran</a>
         <span class="dot">&middot;</span>
         licensed under MIT
+      </div>
+
+      <div>
+        $generate_date PST
       </div>
     </div>
   </div>

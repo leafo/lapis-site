@@ -27,6 +27,15 @@ a {
     }
 }
 
+.center_column {
+    max-width: $site_width + 20px;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 .content .chat_banner {
     display: flex;
     align-items: center;
@@ -48,12 +57,9 @@ code, pre {
 
 .sub_header {
     background: $background_sub;
-    padding: 10px 20px;
-
-    .inner {
-        width: $site_width;
-        margin: 0 auto;
-    }
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: 1.5em;
 }
 
 .header {
@@ -61,15 +67,22 @@ code, pre {
     background: linear-gradient(45deg, $grad_left, $grad_right);
     padding: 40px 0 45px 0;
 
+    @media (max-width: $site_width) {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
     .inner {
-        width: $site_width;
-        margin: 0 auto 20px auto;
+        margin-bottom: 20px;
         position: relative;
         display: flex;
+        align-items: start;
+        gap: 30px;
 
-        .title_area {
-            flex: 1;
-            margin-left: 30px;
+        @media (max-width: $site_width) {
+            .window_frame {
+                display: none;
+            }
         }
     }
 
@@ -77,12 +90,7 @@ code, pre {
         @include unselectable;
         @include border_box;
         display: inline-block;
-        margin-right: 10px;
         text-align: center;
-
-        &:last-child {
-            margin-right: 0;
-        }
 
         color: white;
         text-decoration: none;
@@ -112,15 +120,19 @@ code, pre {
     }
 
     .version_flag {
-        position: absolute;
         background: white;
         font-weight: bold;
         font-size: 16px;
         color: $grad_left;
         padding: 10px;
         border-radius: 4px;
-        right: 90px;
+        position: relative;
         top: 38px;
+        left: -20px;
+
+        @media (max-width: $site_width) {
+            top: 28px;
+        }
 
         a {
             color: inherit;
@@ -201,6 +213,11 @@ code, pre {
             color: inherit;
             text-decoration: none;
         }
+
+        @media (max-width: $site_width) {
+            font-size: 100px;
+        }
+
     }
 
     h2 {
@@ -217,12 +234,19 @@ code, pre {
     }
 
     .button_row {
-        width: $site_width;
-        margin: 0 auto;
         display: flex;
+        gap: 10px;
 
         > .button {
             flex: 1;
+        }
+
+        @media (max-width: $site_width) {
+            flex-direction: column;
+
+            .installer_sub {
+                display: none;
+            }
         }
     }
 }
@@ -240,9 +264,8 @@ code, pre {
 .installer {
     $installer_height: 48px;
 
-    display: flex;;
+    display: flex;
     text-align: left;
-    margin-right: 10px;
     position: relative;
     min-width: 320px;
 
@@ -296,11 +319,14 @@ code, pre {
 
     h1 {
         font-size: 2em;
+        @media (max-width: $site_width) {
+            font-size: 1.5em;
+        }
     }
 
     p, ul {
         margin: 0 0 27px 0;
-        line-height: 27px;
+        line-height: 1.5em;
     }
 
     p, li {
@@ -346,19 +372,23 @@ code, pre {
 
 .footer {
     margin-top: 20px;
-    background: #707BBD;
-    color: lighten(#707BBD, 30%);
-    font-size: 18px;
-    line-height: 52px;
+    background: $theme_color;
+    color: lighten($theme_color, 30%);
+    font-size: 16px;
 
-    .right {
-        font-size: 14px;
-        float: right;
+    .center_column {
+        display: flex;
+        height: 52px;
+        align-items: center;
+
+        > :last-child {
+            margin-left: auto;
+            font-size: 80%;
+        }
     }
 
     a {
-        color: lighten(#677, 40%);
-        text-decoration: none;
+        color: inherit;
 
         &:hover {
             color: white;
@@ -366,12 +396,7 @@ code, pre {
     }
 
     .dot {
-        color: lighten(#677, 40%);
-    }
-
-    .inner {
-        width: $site_width;
-        margin: 0 auto;
+        opacity: 0.7;
     }
 }
 
@@ -384,8 +409,13 @@ pre {
     padding: 25px;
     margin: 0;
     border-radius: 2px;
-}
+    white-space: pre-wrap;
 
+    @media (max-width: $site_width) {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
 
 .dual_code {
     margin: 1em 0;
