@@ -8,7 +8,6 @@
     color: white;
 }
 
-
 body {
     background: white;
     color: $text_color;
@@ -40,63 +39,6 @@ a {
 
     > p {
         margin: 0;
-    }
-}
-
-.lang_headers {
-    @include transition(box-shadow 0.5s ease);
-    background: rgba(white, 0.8);
-    margin-bottom: 30px;
-    display: flex;
-    justify-content: center;
-    position: sticky;
-    box-shadow: 0 0 0 1px #dadada;
-    webkit-backdrop-filter: saturate(180%) blur(20px);
-    backdrop-filter: saturate(180%) blur(20px);
-    top: 0;
-
-    .lang_toggle {
-        @include transition(all 0.2s ease);
-        @include unselectable;
-        display: none;
-        font-size: 16px;
-        padding: 5px 10px;
-        margin-left: 10px;
-        font-weight: normal;
-        text-decoration: none;
-        cursor: pointer;
-
-        border: 1px solid $border_color;
-        border-radius: 4px;
-
-        &:hover {
-            background: #707BBD;
-            border-color: #70B6BD;
-            color: white;
-        }
-
-        &:active {
-            background: darken(#707BBD, 20%);
-        }
-    }
-
-    .lang_header {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        font-size: 18px;
-        flex: 1;
-        min-width: 0;
-        max-width: 650px;
-        vertical-align: top;
-        padding: 10px 0;
-        margin: 0;
-        font-weight: 900;
-
-        &:first-child {
-            border-right: 1px solid #dadada;
-        }
     }
 }
 
@@ -442,6 +384,69 @@ pre {
     border-radius: 2px;
 }
 
+
+.dual_code {
+    margin: 1em 0;
+
+    @mixin active_tab {
+        background: $code_bg;
+        color: white;
+    }
+
+
+
+    &.show_moonscript {
+        button[data-lang=moonscript] {
+            @include active_tab;
+        }
+
+
+        pre.lang_moon {
+            display: block;
+        }
+
+        pre.lang_lua {
+            display: none;
+        }
+    }
+
+    &:not(.show_moonscript) {
+        pre.lang_lua {
+            display: block;
+        }
+
+        pre.lang_moon {
+            display: none;
+        }
+
+        button[data-lang=lua] {
+            @include active_tab;
+        }
+    }
+
+    .dual_code_tabs {
+        background: rgba($code_bg, 0.1);
+        border-radius: 2px 2px 0 0;
+        overflow: hidden;
+        display: flex;
+
+        button {
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 14px;
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+        }
+    }
+
+
+    > pre {
+        margin: 0;
+        border-radius: 0 2px 2px 2px;
+    }
+}
+
 .changelog {
     ul {
         line-height: 1.5;
@@ -457,107 +462,6 @@ pre {
   #forkme {
       display: none;
   }
-}
-
-
-.split_columns {
-    font-size: 0;
-
-    pre  {
-        width: 600px;
-    }
-}
-
-.content_column {
-    width: 50%;
-    display: inline-block;
-    vertical-align: top;
-    font-size: $font_size;
-
-    .column_inner {
-        display: inline-block;
-        vertical-align: top;
-        text-align: left;
-    }
-}
-
-.left_column {
-    text-align: right;
-    .column_inner {
-        margin-right: 10px;
-    }
-}
-
-.right_column {
-    .column_inner {
-        margin-left: 10px;
-    }
-}
-
-.gplus {
-    display: none;
-}
-
-@media all and (max-width: 1340px) {
-    .lang_headers {
-        .lang_header {
-            border: 0 !important;
-
-            &.lua_header {
-                display: none;
-            }
-
-            .lang_toggle {
-                display: inline-block;
-            }
-        }
-    }
-
-    .content_column {
-        width: auto;
-        display: block;
-        text-align: center;
-
-        .column_inner {
-            margin-left: 0;
-            margin-right: 0;
-            display: block;
-            padding: 0 40px;
-
-            pre {
-                width: auto;
-                max-width: $site_width;
-                margin: 0 auto;
-            }
-        }
-
-        &.lua_column {
-            display: none;
-        }
-    }
-
-
-    body.show_lua {
-        .lang_header {
-            &.lua_header {
-                display: inline-block;
-            }
-
-            &.moon_header {
-                display: none;
-            }
-        }
-
-        .content_column {
-            &.lua_column {
-                display: block;
-            }
-
-            &.moon_column {
-                display: none;
-            }
-        }
-    }
 }
 
 .searcher {

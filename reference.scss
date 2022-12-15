@@ -1,4 +1,5 @@
 @import "common";
+
 @import "search";
 @import "syntaxhighlight";
 
@@ -652,6 +653,7 @@ a {
 
     > pre {
         margin: 0;
+        border-radius: 0 2px 2px 2px;
     }
 }
 
@@ -661,7 +663,7 @@ pre {
     font-size: 18px;
     line-height: 22px;
     padding: 12px 10px;
-    border-radius: 0 2px 2px 2px;
+    border-radius: 2px;
     white-space: pre-wrap;
 
     @include mobile_width {

@@ -1,7 +1,8 @@
 <div id="search_drop" data-root="$root" data-index="$root/reference.json"></div>
 
 <div class="box">
-  <h1>What is it?</h1>
+
+<h1>What is it?</h1>
 $markdown{[[
 Lapis is a framework for building web applications in [Lua](https://lua.org) (or [MoonScript](https://moonscript.org)) that primarily targets [OpenResty](https://openresty.org), a high performance web platform that runs on a customized version of [Nginx](https://nginx.org). Lapis can also be used in other server environments, being compatible with any modern version of Lua.
 ]]}
@@ -13,25 +14,15 @@ Lapis is a framework for building web applications in [Lua](https://lua.org) (or
   </p>
 </div>
 
-</div>
+$dual_code{
+moon = [[
+lapis = require "lapis"
 
-<div class="lang_headers">
-  <h2 class="lang_header lua_header">
-    <span class="label">Lua</span>
-    <span class="lang_toggle" data-hash="lang=moonscript">View examples in MoonScript</span>
-  </h2>
-  <h2 class="lang_header moon_header">
-    <span class="label">MoonScript</span>
-    <span class="lang_toggle" data-hash="lang=lua">View examples in Lua</span>
-  </h2>
-</div>
-
-<div class="split_columns">
-  <div class="lua_column left_column content_column">
-    <div class="column_inner">
-
-$markdown{[[
-```lua
+class extends lapis.Application
+  "/": =>
+    "Hello world!"
+]],
+lua = [[
 local lapis = require "lapis"
 local app = lapis.Application()
 
@@ -40,32 +31,9 @@ app:match("/", function(self)
 end)
 
 return app
-```
-]]}
-    </div>
-  </div>
-
-  <div class="moon_column right_column content_column">
-    <div class="column_inner">
-$markdown{[[
-
-```moon
-lapis = require "lapis"
-
-class extends lapis.Application
-  "/": =>
-    "Hello world!"
-```
 ]]}
 
-    </div>
-  </div>
-</div>
-
-<!-- <iframe style="display: none" width="800" height="450" class="video_embed" src="//www.youtube.com/embed/Eo67iTY1Yf8" frameborder="0" allowfullscreen></iframe> -->
-
-<div class="box">
-  <h1>How does it work?</h1>
+<h1>How does it work?</h1>
 $markdown{[[
 With OpenResty, Lua is run directly inside of the Nginx worker using LuaJIT, giving you the
 smallest barrier between the webserver and your code. Have a look at [Web Framework
@@ -81,13 +49,7 @@ handling concurrent requests, all without all that callback spaghetti seen in
 other asynchronous platforms. It's fast, easy to read, and easy to write.
 ]]}
 
-</div>
-
-<div class="dotdotdot">&times;</div>
-
-
-<div class="box">
-  <h1>What does it come with?</h1>
+<h1>What does it come with?</h1>
 $markdown{[[
 Lapis includes URL routing, [HTML Templating][1], [CSRF Protection][2] and [Session][3]
 support, [PostgreSQL/MySQL backed models][4], [schema generation][5] and
@@ -102,15 +64,29 @@ when developing a website.
   [6]: $root/reference/database.html#database-migrations
   [7]: $root/reference/utilities.html
 ]]}
-</div>
 
 
-<div class="split_columns">
-  <div class="lua_column left_column content_column">
-    <div class="column_inner">
+$dual_code{
+moon = [[
+lapis = require "lapis"
 
-$markdown{[[
-```lua
+class extends lapis.Application
+  -- Define a basic pattern that matches /
+  "/": =>
+    profile_url = @url_for "profile", name: "leafo"
+    -- Use inline HTML helper to quickly write a template
+    @html ->
+      h2 "Welcome!"
+      text "Go to my "
+      a href: profile_url, "profile"
+
+  -- Define a named route pattern with a variable called name
+  [profile: "/:name"]: =>
+    @html ->
+      div class: "profile", ->
+        text "Welcome to the profile of ", @params.name
+]],
+lua = [[
 local lapis = require "lapis"
 local app = lapis.Application()
 
@@ -134,58 +110,40 @@ app:match("profile", "/:name", function(self)
 end)
 
 return app
-```
-]]}
-    </div>
-  </div>
-
-  <div class="moon_column right_column content_column">
-    <div class="column_inner">
-$markdown{[[
-
-```moon
-lapis = require "lapis"
-
-class extends lapis.Application
-  -- Define a basic pattern that matches /
-  "/": =>
-    profile_url = @url_for "profile", name: "leafo"
-    -- Use inline HTML helper to quickly write a template
-    @html ->
-      h2 "Welcome!"
-      text "Go to my "
-      a href: profile_url, "profile"
-
-  -- Define a named route pattern with a variable called name
-  [profile: "/:name"]: =>
-    @html ->
-      div class: "profile", ->
-        text "Welcome to the profile of ", @params.name
-```
 ]]}
 
-
-    </div>
-  </div>
-</div>
-
-<div class="box">
 $markdown{[[
 ## Models
 Get a powerful abstraction layer over your database tables just by
 sub-classing `Model`:
 ]]}
-</div>
 
+$dual_code{
+moon = [[
+import Model from require "lapis.db.model"
 
+-- Create a model, automatically backed by the table `users`
+class Users extends Model
 
+-- fetch some rows from the table
+elderly_users = Users\select "where age > ? limit 5", 10
 
-<div class="split_columns">
-  <div class="lua_column left_column content_column">
-    <div class="column_inner">
+random_user = Users\find 1233 -- find by primary key
 
-$markdown{[[
-```lua
+lee = Users\find name: "Lee", email: "leemiller@example.com"
+
+-- create a new row and edit it
+user = Users\create {
+  name: "Leaf"
+  email: "leaf@example.com"
+  age: 6
+}
+
+user\update age: 10
+
+user\delete!
+]],
+lua = [[
 local Model = require("lapis.db.model").Model
 
 -- Create a model, backed by the table `users`
@@ -211,48 +169,8 @@ local user = Users:create({
 user:update({ age = 10 })
 
 user:delete()
-```
-
-]]}
-    </div>
-  </div>
-
-  <div class="moon_column right_column content_column">
-    <div class="column_inner">
-
-$markdown{[[
-```moon
-import Model from require "lapis.db.model"
-
--- Create a model, automatically backed by the table `users`
-class Users extends Model
-
--- fetch some rows from the table
-elderly_users = Users\select "where age > ? limit 5", 10
-
-random_user = Users\find 1233 -- find by primary key
-
-lee = Users\find name: "Lee", email: "leemiller@example.com"
-
--- create a new row and edit it
-user = Users\create {
-  name: "Leaf"
-  email: "leaf@example.com"
-  age: 6
-}
-
-user\update age: 10
-
-user\delete!
-```
-
 ]]}
 
-    </div>
-  </div>
-</div>
-
-<div class="box">
 $markdown{[[
 ## Templates
 Write your templates either in [etlua](https://github.com/leafo/etlua) or in
@@ -262,35 +180,9 @@ The template builder syntax works well in MoonScript and lets your organize
 your templates as classes, allowing you to use inheritance to mix and match
 methods as you see fit.
 ]]}
-</div>
 
-
-<div class="split_columns">
-  <div class="lua_column left_column content_column">
-    <div class="column_inner">
-
-$markdown{[[
-```erb
-<h1 class="header"><%= "Hello" %></h1>
-<% if current_user then %>
-  <div class="user_panel">
-    Welcome back <%= current_user.name %>
-  </div>
-<% end %>
-
-<div class="body">
-  Welcome to my site
-</div>
-```
-]]}
-    </div>
-  </div>
-
-  <div class="moon_column right_column content_column">
-    <div class="column_inner">
-
-$markdown{[[
-```moon
+$dual_code{
+moon = [[
 import Widget from require "lapis.html"
 
 class Index extends Widget
@@ -304,80 +196,31 @@ class Index extends Widget
   user_panel: =>
     return unless @current_user
     div class: "user_panel", "Welcome back " .. @current_user.name
-```
-]]}
-
-    </div>
+]],
+erb = [[
+<h1 class="header"><%= "Hello" %></h1>
+<% if current_user then %>
+  <div class="user_panel">
+    Welcome back <%= current_user.name %>
   </div>
+<% end %>
+
+<div class="body">
+  Welcome to my site
 </div>
+]] }
 
 
-<div class="box">
 $markdown{[[
 ## Example
 Using all the provided tools we can quickly and logically construct high
 performance and low memory web applications. Here's a more complicated example
 complete with forms, CSRF protection, and various database queries.
 ]]}
-</div>
 
-<div class="split_columns">
-  <div class="lua_column left_column content_column">
-    <div class="column_inner">
 
-$markdown{[[
-```lua
-local lapis = require "lapis"
-local Model = require("lapis.db.model").Model
-local capture_errors = require("lapis.application").capture_errors
-local csrf = require "lapis.csrf"
-
-local Users = Model:extend("users")
-
-local app = lapis.Application()
-
-app:before_filter(function(self)
-  self.csrf_token = csrf.generate_token(self)
-end)
-
-app:get("list_users", "/users", function(self)
-  self.users = Users:select() -- `select` all users
-  return { render = true }
-end)
-
-app:get("user", "/profile/:id", function(self)
-  local user = Users:find({ id = self.params.id })
-  if not user then
-    return { status = 404 }
-  end
-
-  return { render = true }
-end)
-
-app:post("/user/new", capture_errors(function(self)
-  csrf.assert_token(self)
-  Users:create({
-    name = self.params.username
-  })
-
-  return { redirect_to = self:url_for("list_users") }
-end))
-
-app:get("new_user", "/user/new", function(self)
-  return { render = true }
-end)
-
-return app
-```
-]]}
-    </div>
-  </div>
-
-  <div class="moon_column right_column content_column">
-    <div class="column_inner">
-
-$markdown{[[
-```moon
+$dual_code{
+moon = [[
 lapis = require "lapis"
 import Model from require "lapis.db.model"
 import respond_to, capture_errors from require "lapis.application"
@@ -419,15 +262,53 @@ class extends lapis.Application
             name: "csrf_token", value: @csrf_token
           input type: "text", name: "username"
   }
-```
+]],
+lua = [[
+local lapis = require "lapis"
+local Model = require("lapis.db.model").Model
+local capture_errors = require("lapis.application").capture_errors
+local csrf = require "lapis.csrf"
+
+local Users = Model:extend("users")
+
+local app = lapis.Application()
+
+app:before_filter(function(self)
+  self.csrf_token = csrf.generate_token(self)
+end)
+
+app:get("list_users", "/users", function(self)
+  self.users = Users:select() -- `select` all users
+  return { render = true }
+end)
+
+app:get("user", "/profile/:id", function(self)
+  local user = Users:find({ id = self.params.id })
+  if not user then
+    return { status = 404 }
+  end
+
+  return { render = true }
+end)
+
+app:post("/user/new", capture_errors(function(self)
+  csrf.assert_token(self)
+  Users:create({
+    name = self.params.username
+  })
+
+  return { redirect_to = self:url_for("list_users") }
+end))
+
+app:get("new_user", "/user/new", function(self)
+  return { render = true }
+end)
+
+return app
 ]]}
 
-    </div>
-  </div>
-</div>
 
-<div class="box">
-  <h1>Where can I learn more?</h1>
+<h1>Where can I learn more?</h1>
 $markdown{[[
 For a guide and tutorial to Lapis, consult the [$reference manual]($root/reference.html).
 
@@ -439,10 +320,9 @@ tracker](https://github.com/leafo/lapis/issues).
 in Lapis. It is a public Lua Rock repository and the [source can be found on
 GitHub](https://github.com/leafo/moonrocks-site).
 ]]}
-</div>
 
-<div class="box">
-  <h1>Anything else I should know?</h1>
+
+<h1>Anything else I should know?</h1>
 $markdown{[[
 You can use most existing Lua libraries with Lapis with no problems.
 Here are some libraries you might find useful:
@@ -455,11 +335,8 @@ Here are some libraries you might find useful:
 * [`lapis-exceptions`](https://github.com/leafo/lapis-exceptions) -- Exception tracking and reporting
 * [`lapis-bayes`](https://github.com/leafo/lapis-bayes) -- General purpose Bayes classification for Spam, Fraud, etc.
 ]]}
-</div>
 
-
-<div class="box">
-  <h1>About</h1>
+<h1>About</h1>
 $markdown{[[
 Lapis would not be possible without the following projects:
 
@@ -471,6 +348,7 @@ Lapis is licensed under the [MIT license](http://opensource.org/licenses/MIT).
 
 Lapis is written by [@moonscript](http://twitter.com/moonscript).
 ]]}
+
 </div>
 
 <div class="has_buttons bottom_buttons">
