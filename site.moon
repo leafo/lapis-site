@@ -89,11 +89,16 @@ sitegen.create =>
         link_headers: true
         min_depth: 2
         slugify: (header) ->
+          import slugify from require "sitegen.common"
+
+          -- custom handling for command line tool ref
+          if header.title\match "^lapis "
+            return slugify header.title
+
           -- just use the name of the method/function as the slug
           if method = header.html_content\match "^<code>([%w_:.]+)"
             return method
 
-          import slugify from require "sitegen.common"
           slugify header.title
       }
     }
