@@ -2,16 +2,31 @@
 $font_size: 18px;
 
 $background_sub: #e8d7ed;
+$background_sub_dark: #2a272b;
 
 $site_width: 800px;
 
 $link_color: #a55f64;
+$link_color_dark: #b96a70;
 $text_color: #333334;
+$text_color_dark: #dadada;
 
 $grad_left: #7079bd;
 $grad_right: #70b6bd;
 
 $border_color: $grad_right;
+
+:root {
+    --text-color: #{$text_color};
+    --background-sub: #{$background_sub};
+    --link-color: #{$link_color};
+
+    @media (prefers-color-scheme: dark) {
+        --text-color: #{$text_color_dark};
+        --background-sub: #{$background_sub_dark};
+        --link-color: #{$link_color_dark};
+    }
+}
 
 @mixin single_line {
     white-space: nowrap;

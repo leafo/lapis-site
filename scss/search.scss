@@ -26,6 +26,10 @@ $mobile_width: 600px;
         border-radius: 3px;
         overflow: hidden;
 
+        @media (prefers-color-scheme: dark) {
+            background: var(--background-sub);
+        }
+
         @include mobile_width {
             left: 10px;
             right: 10px;
@@ -41,6 +45,10 @@ $mobile_width: 600px;
             line-height: 20px;
             color: rgba($text_color, 0.6);
 
+            @media (prefers-color-scheme: dark) {
+                color: rgba($text_color_dark, 0.6);
+            }
+
             .result_sub {
                 margin-left: 10px;
                 font-size: 14px;
@@ -48,6 +56,10 @@ $mobile_width: 600px;
 
             &.selected {
                 background-color: rgba($background_sub, 0.4);
+
+                @media (prefers-color-scheme: dark) {
+                    background-color: rgba($background_sub_dark, 0.4);
+                }
             }
         }
     }
@@ -61,11 +73,16 @@ $mobile_width: 600px;
         width: 100%;
         box-sizing: border-box;
 
+        @media (prefers-color-scheme: dark) {
+            background: var(--background-sub);
+        }
+
         &:focus {
             outline: none;
             box-shadow: 0 0 0 1px $border_color;
         }
 
+        color: var(--text-color);
     }
 
 }
