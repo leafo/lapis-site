@@ -14,7 +14,7 @@ $border_color: #70b6bd; // highlight color
 $grad_left: $theme_color;
 $grad_right: $border_color;
 
-$code_bg: mix(#2C2C2C, $theme_color, 90%);
+$code_bg: #202128; // mix(#2C2C2C, $theme_color, 90%);
 
 @mixin single_line {
     white-space: nowrap;

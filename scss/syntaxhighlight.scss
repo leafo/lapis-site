@@ -1,8 +1,9 @@
+@import "common";
 
 // syntaxhighlight
 .highlight {
     .sh_keyword {
-        color: #BB84B4;
+        color: mix(#BB84B4, $border_color, 70%);
     }
 
     .sh_string {
@@ -10,7 +11,7 @@
     }
 
     .sh_operator {
-        color: #F277A1;
+        color: mix(#F277A1, $theme_color, 70%);
     }
 
     .sh_fndef, .sh_preprocessor, .sh_symbol, .sh_embedded, .sh_library {
