@@ -84,7 +84,7 @@ class extends lapis.Application
   -- Define a basic pattern that matches /
   "/": =>
     profile_url = @url_for "profile", name: "leafo"
-    -- Use inline HTML helper to quickly write a template
+    -- Use HTML builder syntax helper to quickly and safely write markup
     @html ->
       h2 "Welcome!"
       text "Go to my "
@@ -103,7 +103,7 @@ local app = lapis.Application()
 -- Define a basic pattern that matches /
 app:match("/", function(self)
   local profile_url = self:url_for("profile", {name = "leafo"})
-  -- Use inline HTML helper to quickly write a template
+  -- Use HTML builder syntax helper to quickly and safely write markup
   return self:html(function()
     h2("Welcome!")
     text("Go to my ")
@@ -192,6 +192,9 @@ The `Widget` base class allows you to organize your templates as modules,
 enabling you to use inheritance and mixins to mix and match methods combined
 with the HTML builder syntax that lets you express HTML with the full power of
 the language you're already using.
+
+The HTML builder syntax makes you immune to cross site scripting attacks from
+user-provided input by ensuring all written content is escaped correctly.
 ]]}
 
 $dual_code{
