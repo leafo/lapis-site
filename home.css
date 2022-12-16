@@ -122,6 +122,14 @@ a {
   a:hover {
     opacity: 0.8; }
 
+.center_column {
+  max-width: 820px;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 10px;
+  padding-right: 10px; }
+
 .content .chat_banner {
   display: flex;
   align-items: center;
@@ -137,30 +145,33 @@ code, pre {
 
 .sub_header {
   background: #e8d7ed;
-  padding: 10px 20px; }
-  .sub_header .inner {
-    width: 800px;
-    margin: 0 auto; }
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: 1.5em; }
 
 .header {
   background: #7098bd;
   background: linear-gradient(45deg, #7079bd, #70b6bd);
   padding: 40px 0 45px 0; }
+  @media (max-width: 800px) {
+    .header {
+      padding-top: 20px;
+      padding-bottom: 20px; } }
   .header .inner {
-    width: 800px;
-    margin: 0 auto 20px auto;
+    margin-bottom: 20px;
     position: relative;
-    display: flex; }
-    .header .inner .title_area {
-      flex: 1;
-      margin-left: 30px; }
+    display: flex;
+    align-items: start;
+    gap: 30px; }
+    @media (max-width: 800px) {
+      .header .inner .window_frame {
+        display: none; } }
   .header .button {
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
     box-sizing: border-box;
     display: inline-block;
-    margin-right: 10px;
     text-align: center;
     color: white;
     text-decoration: none;
@@ -171,8 +182,6 @@ code, pre {
     line-height: 44px;
     padding: 0 15px;
     vertical-align: top; }
-    .header .button:last-child {
-      margin-right: 0; }
     .header .button img {
       height: 24px;
       vertical-align: middle;
@@ -183,15 +192,18 @@ code, pre {
     .header .button:active {
       background: rgba(0, 0, 0, 0.1); }
   .header .version_flag {
-    position: absolute;
     background: white;
     font-weight: bold;
     font-size: 16px;
     color: #7079bd;
     padding: 10px;
     border-radius: 4px;
-    right: 90px;
-    top: 38px; }
+    position: relative;
+    top: 38px;
+    left: -20px; }
+    @media (max-width: 800px) {
+      .header .version_flag {
+        top: 28px; } }
     .header .version_flag a {
       color: inherit;
       text-decoration: none; }
@@ -238,6 +250,9 @@ code, pre {
     .header h1 a {
       color: inherit;
       text-decoration: none; }
+    @media (max-width: 800px) {
+      .header h1 {
+        font-size: 100px; } }
   .header h2 {
     margin: 0px 0 4px 0;
     font-weight: normal;
@@ -248,12 +263,15 @@ code, pre {
       font-style: italic;
       color: white; }
   .header .button_row {
-    width: 800px;
-    margin: 0 auto;
-    display: flex; }
+    display: flex;
+    gap: 10px; }
     .header .button_row > .button {
       flex: 1; }
-
+    @media (max-width: 800px) {
+      .header .button_row {
+        flex-direction: column; }
+        .header .button_row .installer_sub {
+          display: none; } }
 .new_banner {
   background: #dcf5e0;
   border-bottom: 2px solid #C8F0CE;
@@ -265,7 +283,6 @@ code, pre {
 .installer {
   display: flex;
   text-align: left;
-  margin-right: 10px;
   position: relative;
   min-width: 320px;
   background: rgba(0, 0, 0, 0.6);
@@ -304,9 +321,12 @@ code, pre {
     margin-bottom: 40px; }
   .content h1 {
     font-size: 2em; }
+    @media (max-width: 800px) {
+      .content h1 {
+        font-size: 1.5em; } }
   .content p, .content ul {
     margin: 0 0 27px 0;
-    line-height: 27px; }
+    line-height: 1.5em; }
   .content p code, .content li code {
     font-size: 16px;
     background: rgba(0, 0, 0, 0.1);
@@ -336,23 +356,22 @@ code, pre {
 
 .footer {
   margin-top: 20px;
-  background: #707BBD;
-  color: #d9dced;
-  font-size: 18px;
-  line-height: 52px; }
-  .footer .right {
-    font-size: 14px;
-    float: right; }
+  background: #7079bd;
+  color: #d9dbed;
+  font-size: 16px; }
+  .footer .center_column {
+    display: flex;
+    height: 52px;
+    align-items: center; }
+    .footer .center_column > :last-child {
+      margin-left: auto;
+      font-size: 80%; }
   .footer a {
-    color: #d1d8d8;
-    text-decoration: none; }
+    color: inherit; }
     .footer a:hover {
       color: white; }
   .footer .dot {
-    color: #d1d8d8; }
-  .footer .inner {
-    width: 800px;
-    margin: 0 auto; }
+    opacity: 0.7; }
 
 pre {
   background: #202128;
@@ -361,8 +380,12 @@ pre {
   line-height: 22px;
   padding: 25px;
   margin: 0;
-  border-radius: 2px; }
-
+  border-radius: 2px;
+  white-space: pre-wrap; }
+  @media (max-width: 800px) {
+    pre {
+      font-size: 14px;
+      padding: 10px; } }
 .dual_code {
   margin: 1em 0; }
   .dual_code.show_moonscript button[data-lang=moonscript] {

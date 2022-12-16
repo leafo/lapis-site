@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>etlua Templates - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Thu Dec 15 22:15:01 2022" />
+  <link rel="stylesheet" href="../reference.css?Fri Dec 16 00:15:29 2022" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     var _gaq = _gaq || [];
@@ -42,11 +42,17 @@
         
           <div class="nav_links">
             <h2>etlua Templates</h2>
-            <ul><li><a href="#rendering-from-actions">Rendering From Actions</a></li>
-<ul><li><a href="#rendering-from-actions/passing-values-to-views">Passing Values to Views</a></li></ul>
+            <ul><li><a href="#security-considerations">Security Considerations</a></li>
+<li><a href="#rendering-from-actions">Rendering From Actions</a></li>
+<ul><li><a href="#rendering-from-actions/passing-data-to-views">Passing Data to Views</a></li></ul>
 <li><a href="#calling-helper-functions-from-views">Calling Helper Functions from Views</a></li>
 <li><a href="#rendering-sub-templates">Rendering Sub-templates</a></li>
-<li><a href="#view-helper-functions">View Helper Functions</a></li></ul>
+<li><a href="#etlua"><code>etlua</code> template functions</a></li>
+<li><a href="#EtluaWidget"><code>EtluaWidget</code> reference</a></li>
+<ul><li><a href="#EtluaWidget/EtluaWidget:load"><code>EtluaWidget:load(template_code)</code></a></li>
+<li><a href="#EtluaWidget/EtluaWidget"><code>EtluaWidget([opts])</code></a></li>
+<li><a href="#EtluaWidget/etluawidget:render_to_string"><code>etluawidget:render_to_string()</code></a></li>
+<li><a href="#EtluaWidget/etluawidget:render"><code>etluawidget:render(buffer, ...)</code></a></li></ul></ul>
           </div>
         
 
@@ -114,11 +120,47 @@ of files automatically using Lua&rsquo;s <code>require</code> function after you
 <p><code>etlua</code> comes with the following tags for injecting Lua into your templates:</p>
 
 <ul>
-<li><code>&lt;% lua_code %&gt;</code> runs Lua code verbatim</li>
-<li><code>&lt;%= lua_expression %&gt;</code> writes result of expression to output, HTML escaped</li>
-<li><code>&lt;%- lua_expression %&gt;</code> same as above but with no HTML escaping</li>
+<li><code>&lt;% lua_code %&gt;</code> &mdash; runs Lua code verbatim. If the code is an expression then the result is ignored</li>
+<li><code>&lt;%= lua_expression %&gt;</code> &mdash; writes result of expression to output, HTML escaped</li>
+<li><code>&lt;%- lua_expression %&gt;</code> &mdash; writes result of expression to output, <strong>with no HTML escaping</strong>. See <a href="#security-considerations">Security Considerations</a></li>
 </ul>
 
+
+<h2><a name="security-considerations" href="#security-considerations">Security Considerations</a></h2>
+
+<p>If you are rendering user-provided data in your views then you must take
+special care to escape the data when rendering it to prevent cross-site
+scripting attacks. <code>etlua</code> is fundamentally a system for templating strings,
+and makes no guarantee that the HTML generated is valid or secure. It&rsquo;s your
+responsibility to verify that valid markup is generated.</p>
+
+<p>If a malicious user is able to inject JavaScript or other unapproved markup
+into your page then they may be able to comprise your platform for other users,
+including stealing sessions or performing unapproved authenticated actions.</p>
+
+<p>The etlua tag <code>&lt;%= lua_expression %&gt;</code> will HTML escape the output such that it
+is suitable for use in the content or attributes of an HTML tag.</p>
+
+<p>In some cases it may be cumbsome to use <code>&lt;%= lua_expression %&gt;</code> in multiple
+places when constructing HTML elements. The <code>element</code> function can be used to
+write a tag to the buffer programatically in Lua code, and it will
+automatically escape any values passed to it.</p>
+
+<p>In this example the <code>element</code> function is used to generate the link to the
+user, with the username and URL correctly escaped.</p>
+
+<pre class="highlight lang_erb"><code><span class="sh_element sh_keyword">&lt;ul</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_attribute sh_type">class</span><span class="sh_default">=</span><span class="sh_string">&quot;list&quot;</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_html_whitespace sh_whitespace">
+  </span><span class="sh_rhtml_tag sh_embedded">&lt;%</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_keyword">for</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_identifier">i</span><span class="sh_operator">,</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_keyword">in</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_identifier">ipairs</span><span class="sh_operator">(</span><span class="sh_identifier">users</span><span class="sh_operator">)</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_keyword">do</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_rhtml_tag sh_embedded">%&gt;</span><span class="sh_html_whitespace sh_whitespace">
+    </span><span class="sh_element sh_keyword">&lt;li&gt;</span><span class="sh_html_whitespace sh_whitespace">
+      </span><span class="sh_rhtml_tag sh_embedded">&lt;%</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_identifier">element</span><span class="sh_operator">(</span><span class="sh_string">&quot;a&quot;</span><span class="sh_operator">,</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_identifier">href</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_function">url_for</span><span class="sh_operator">(</span><span class="sh_identifier">user</span><span class="sh_operator">)</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_operator">},</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_symbol sh_constant">:get_display_name</span><span class="sh_operator">())</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_rhtml_tag sh_embedded">%&gt;</span><span class="sh_html_whitespace sh_whitespace">
+    </span><span class="sh_element sh_keyword">&lt;/li&gt;</span><span class="sh_html_whitespace sh_whitespace">
+  </span><span class="sh_rhtml_tag sh_embedded">&lt;%</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_keyword">end</span><span class="sh_ruby_whitespace sh_whitespace"> </span><span class="sh_rhtml_tag sh_embedded">%&gt;</span><span class="sh_html_whitespace sh_whitespace">
+</span><span class="sh_element sh_keyword">&lt;/ul&gt;</span></code>
+</pre>
+
+
+<p>Notice how <code>element</code> uses <code>&lt;% %&gt;</code> etlua tags. <code>element</code> does not return any
+value, but instead writes directly to the buffer.</p>
 
 <h2><a name="rendering-from-actions" href="#rendering-from-actions">Rendering From Actions</a></h2>
 
@@ -129,9 +171,21 @@ returning a table of options.</p>
 
 <p>The <code>render</code> option of the return value of an action lets us specify which
 template to render after the action is executed. If we place an <code>.etlua</code> file
-inside of the views directory, <code>views/</code> by default, then we can render a
-template by name like so:</p>
+inside of the views directory, <code>views/</code> by default (Configured by the
+application <code>views_prefix</code>), then we can render a template by name like so:</p>
 
+<pre class="highlight lang_html"><code><span class="sh_comment">&lt;!-- views/hello.etlua --&gt;</span><span class="sh_html_whitespace sh_whitespace">
+</span><span class="sh_element sh_keyword">&lt;div</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_attribute sh_type">class</span><span class="sh_default">=</span><span class="sh_string">&quot;hello&quot;</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_html_whitespace sh_whitespace">
+  </span><span class="sh_default">Welcome</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">to</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">my</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">site!</span><span class="sh_html_whitespace sh_whitespace">
+</span><span class="sh_element sh_keyword">&lt;/div&gt;</span></code>
+</pre>
+
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
@@ -143,8 +197,6 @@ template by name like so:</p>
 
 </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -152,64 +204,75 @@ template by name like so:</p>
   </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_tbl_key sh_regex">render:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;hello&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>Rendering <code>"hello"</code> will cause the module <code>"views.hello"</code> to load, which will
-resolve our <code>etlua</code> template located at <code>views/hello.etlua</code></p>
+resolve our <code>etlua</code> template located at <code>views/hello.etlua</code>. This works because
+<code>enable("etlua")</code> installs a custom package loader that is aware of <code>.etlua</code>
+files and will convert them into Lua modules that implement the interface
+necessary to be used as a view in Lapis.</p>
 
 <p>Because it&rsquo;s common to have a single view for every (or most actions) you can
 avoid repeating the name of the view when using a named route. A named route&rsquo;s
 action can just set <code>true</code> to the <code>render</code> option and the name of the route
 will be used as the name of the template:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">enable</span><span class="sh_operator">(</span><span class="sh_string">&quot;etlua&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
-</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;index&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_comment">-- notice route name of `hello` has been added</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;hello&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">render</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_self_ref sh_label">@enable</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;etlua&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">index:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+
+  </span><span class="sh_comment">-- notice route name of `hello` has been added</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">hello:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_tbl_key sh_regex">render:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span></code>
 </pre>
+</div>
 
+</p>
 
-<pre class="highlight lang_html"><code><span class="sh_comment">&lt;!-- views/index.etlua --&gt;</span><span class="sh_html_whitespace sh_whitespace">
-</span><span class="sh_element sh_keyword">&lt;div</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_attribute sh_type">class</span><span class="sh_default">=</span><span class="sh_string">&quot;index&quot;</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_html_whitespace sh_whitespace">
-  </span><span class="sh_default">Welcome</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">to</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">the</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">index</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">of</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">my</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">site!</span><span class="sh_html_whitespace sh_whitespace">
-</span><span class="sh_element sh_keyword">&lt;/div&gt;</span></code>
-</pre>
+<h3><a name="rendering-from-actions/passing-data-to-views" href="#rendering-from-actions/passing-data-to-views">Passing Data to Views</a></h3>
 
+<p>Data prepared in an action can be passed the view by storing it on <code>self</code>. For
+example we might set some state for our template to render:</p>
 
-<h3><a name="rendering-from-actions/passing-values-to-views" href="#rendering-from-actions/passing-values-to-views">Passing Values to Views</a></h3>
-
-<p>Values can be passed to views by setting them on <code>self</code> in the action. For
-example we might set some state for a template like so:</p>
-
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">pets</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Cat&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Dog&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Bird&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">render</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;my_template&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_self_ref sh_label">@enable</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;etlua&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_self_ref sh_label">@pets</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_string">&quot;Cat&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Dog&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Bird&quot;</span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_tbl_key sh_regex">render:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;my_template&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <pre class="highlight lang_erb"><code><span class="sh_comment">&lt;!-- views/my_template.etlua --&gt;</span><span class="sh_html_whitespace sh_whitespace">
 </span><span class="sh_element sh_keyword">&lt;ul</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_attribute sh_type">class</span><span class="sh_default">=</span><span class="sh_string">&quot;list&quot;</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_html_whitespace sh_whitespace">
@@ -234,7 +297,7 @@ URL to a named route:</p>
 </span><span class="sh_element sh_keyword">&lt;div</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_attribute sh_type">class</span><span class="sh_default">=</span><span class="sh_string">&quot;about_page&quot;</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_html_whitespace sh_whitespace">
   </span><span class="sh_element sh_keyword">&lt;p&gt;</span><span class="sh_default">This</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">is</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">a</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">great</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">page!</span><span class="sh_element sh_keyword">&lt;/p&gt;</span><span class="sh_html_whitespace sh_whitespace">
   </span><span class="sh_element sh_keyword">&lt;p&gt;</span><span class="sh_html_whitespace sh_whitespace">
-    </span><span class="sh_element sh_keyword">&lt;a</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_attribute sh_type">href</span><span class="sh_default">=</span><span class="sh_string">&quot;&lt;%= url_for(&quot;</span><span class="sh_default">index&quot;)</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">%</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_default">&quot;</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_default">Return</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">home</span><span class="sh_element sh_keyword">&lt;/a&gt;</span><span class="sh_html_whitespace sh_whitespace">
+    </span><span class="sh_element sh_keyword">&lt;a</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_attribute sh_type">href</span><span class="sh_default">=</span><span class="sh_string">&quot;&lt;%= url_for(&#x27;index&#x27;) %&gt;&quot;</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_default">Return</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">home</span><span class="sh_element sh_keyword">&lt;/a&gt;</span><span class="sh_html_whitespace sh_whitespace">
   </span><span class="sh_element sh_keyword">&lt;/p&gt;</span><span class="sh_html_whitespace sh_whitespace">
 </span><span class="sh_element sh_keyword">&lt;/div&gt;</span></code>
 </pre>
@@ -257,8 +320,8 @@ a navigation.</p>
 
 <pre class="highlight lang_erb"><code><span class="sh_comment">&lt;!-- views/navigation.etlua --&gt;</span><span class="sh_html_whitespace sh_whitespace">
 </span><span class="sh_element sh_keyword">&lt;div</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_attribute sh_type">class</span><span class="sh_default">=</span><span class="sh_string">&quot;nav_bar&quot;</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_html_whitespace sh_whitespace">
-  </span><span class="sh_element sh_keyword">&lt;a</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_attribute sh_type">href</span><span class="sh_default">=</span><span class="sh_string">&quot;&lt;%= url_for(&quot;</span><span class="sh_default">index&quot;)</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">%</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_default">&quot;</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_default">Home</span><span class="sh_element sh_keyword">&lt;/a&gt;</span><span class="sh_html_whitespace sh_whitespace">
-  </span><span class="sh_element sh_keyword">&lt;a</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_attribute sh_type">href</span><span class="sh_default">=</span><span class="sh_string">&quot;&lt;%= url_for(&quot;</span><span class="sh_default">about&quot;)</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_default">%</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_default">&quot;</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_default">About</span><span class="sh_element sh_keyword">&lt;/a&gt;</span><span class="sh_html_whitespace sh_whitespace">
+  </span><span class="sh_element sh_keyword">&lt;a</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_attribute sh_type">href</span><span class="sh_default">=</span><span class="sh_string">&quot;&lt;%= url_for(&#x27;index&#x27;) %&gt;&quot;</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_default">Home</span><span class="sh_element sh_keyword">&lt;/a&gt;</span><span class="sh_html_whitespace sh_whitespace">
+  </span><span class="sh_element sh_keyword">&lt;a</span><span class="sh_html_whitespace sh_whitespace"> </span><span class="sh_attribute sh_type">href</span><span class="sh_default">=</span><span class="sh_string">&quot;&lt;%= url_for(&#x27;about&#x27;) %&gt;&quot;</span><span class="sh_element sh_keyword">&gt;</span><span class="sh_default">About</span><span class="sh_element sh_keyword">&lt;/a&gt;</span><span class="sh_html_whitespace sh_whitespace">
 </span><span class="sh_element sh_keyword">&lt;/div&gt;</span></code>
 </pre>
 
@@ -272,15 +335,18 @@ a navigation.</p>
 
 <p>Note that you have to type the full module name of the template for the first
 argument to require, in this case <code>"views.navigation"</code>, which points to
-<code>views/navigation.etlua</code>. If you happen to also be using MoonScript templates
-you can also include them using the <code>render</code> function.</p>
+<code>views/navigation.etlua</code>. (The <code>views_prefix</code> is only used when an application
+is specifying a template to use)</p>
 
-<p>Any values and helpers available in the parent template are also available in
-the sub-template.</p>
+<p>The <code>render()</code> function can take any <em>renderable</em> object. This means you can
+use <a href="html_generation.html"><code>Widget</code> classes</a> or <code>etlua</code> templates. When a
+string is provided as the object to render, it will be loaded with <code>require()</code>.</p>
 
-<p>Sometimes you need to pass data to a sub-template that&rsquo;s generated during the
-execution of the parent template. <code>render</code> takes a second argument of values
-to pass into the sub-template.</p>
+<p>Any values and helpers available in the parent template are made available in
+the scope of the rendered sub-template.</p>
+
+<p>If data needs to be passed to a sub-template, <code>render</code> takes an optional second
+argument of a table of fields to pass down.</p>
 
 <p>Here&rsquo;s a contrived example of using a sub-template to render a list of numbers:</p>
 
@@ -300,13 +366,88 @@ to pass into the sub-template.</p>
 </pre>
 
 
-<h2><a name="view-helper-functions" href="#view-helper-functions">View Helper Functions</a></h2>
+<h2><a name="etlua" href="#etlua"><code>etlua</code> template functions</a></h2>
+
+<p>The following functions are globally available in any <code>etlua</code> template loaded
+by Lapis to be used as a view.</p>
 
 <ul>
-<li><code>render(template_name, [template_params])</code> &mdash; loads and renders a template</li>
-<li><code>widget(widget_instance)</code> &mdash; renders and instance of a <code>Widget</code></li>
+<li><code>render(template_name, [template_params])</code> &mdash; loads and renders a template to the buffer</li>
+<li><code>widget(widget_instance)</code> &mdash; renders and instance of a <code>Widget</code> to the buffer</li>
+<li><code>element(name, ...)</code> &mdash; renders an HTML element to the buffer with <code>name</code>, supporting the full HTML builder syntax for any nested functions</li>
 </ul>
 
+
+<p>Note that when a helper renders to the buffer, there will be no return value.
+It is not necessary to use an etlua tag that will take print the output of the
+function.</p>
+
+<h2><a name="EtluaWidget" href="#EtluaWidget"><code>EtluaWidget</code> reference</a></h2>
+
+<p>Lapis transparently converts <code>.etlua</code> files to <code>EtluaWidget</code>s when you request
+them to be used as a template (after enabling <code>etlua</code>). You can manually
+compile template code programatically by interacting directly with the
+<code>EtluaWidget</code> class.</p>
+
+<p>It is not necessary to <em>enable</em> <code>etlua</code> if you are using the <code>EtluaWidget</code>
+class directly. Instances of the <code>EtluaWidget</code> implement the <em>render</em> interface
+necessary to be used in any place Lapis expects a template or view.</p>
+
+<p>Note that <code>etlua</code> templates are <em>compiled</em> to enable them to render at the
+highest possible performance. You should avoid compiling templates (eg.
+<code>EtluaWidget:load()</code>) during every request or it may have a negative impact on
+your performance. Cache the result as a Lua module or somewhere where it can
+persist between requests.</p>
+
+<h3><a name="EtluaWidget/EtluaWidget:load" href="#EtluaWidget/EtluaWidget:load"><code>EtluaWidget:load(template_code)</code></a></h3>
+
+<p>The <code>load</code> method takes a etlua template string, compiles it and creates a new
+<code>EtluaWidget</code> class that can be used to render the template with parameters.</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">etlua</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.etlua&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">MyWidget</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">etlua</span><span class="sh_operator">.</span><span class="sh_identifier">EtluaWidget</span><span class="sh_operator">:</span><span class="sh_function">load</span><span class="sh_operator">(</span><span class="sh_longstring sh_string">[[
+  &lt;h1&gt;Hello &lt;%= username %&gt;&lt;/h1&gt;
+]]</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">w</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">MyWidget</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">username</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Garf&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">w</span><span class="sh_operator">:</span><span class="sh_identifier">render_to_string</span><span class="sh_operator">())</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &lt;h1&gt;Hello Garf&lt;/h1&gt;</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">EtluaWidget</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.etlua&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">widget</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">EtluaWidget</span><span class="sh_operator">\</span><span class="sh_function">load</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_longstring sh_string">[[
+  &lt;h1&gt;Hello &lt;%= username %&gt;&lt;/h1&gt;
+]]</span><span class="sh_moonscript_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">widget</span><span class="sh_symbol sh_embedded">(</span><span class="sh_tbl_key sh_regex">username:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Garf&quot;</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">\</span><span class="sh_identifier">render_to_string</span><span class="sh_operator">!</span></code>
+</pre>
+</div>
+
+</p>
+
+<h3><a name="EtluaWidget/EtluaWidget" href="#EtluaWidget/EtluaWidget"><code>EtluaWidget([opts])</code></a></h3>
+
+<p>The default constructor of the widget class will copy every field from the
+<code>opts</code> argument to <code>self</code>, if the <code>opts</code> argument is provided. Values on <code>self</code>
+will be available in scope for the template when it is rendered.</p>
+
+<h3><a name="EtluaWidget/etluawidget:render_to_string" href="#EtluaWidget/etluawidget:render_to_string"><code>etluawidget:render_to_string()</code></a></h3>
+
+<p>Renders the template and returns the string result. This will automatically
+create a temporary buffer for the duration of the render.</p>
+
+<h3><a name="EtluaWidget/etluawidget:render" href="#EtluaWidget/etluawidget:render"><code>etluawidget:render(buffer, ...)</code></a></h3>
+
+<p>Renders the template to the provided buffer. Under normal circumstances it is
+not necessary to use this method directly.</p>
+
+<p>This method returns nothing.</p>
 
       </div>
     </div>
@@ -318,8 +459,8 @@ to pass into the sub-template.</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Thu Dec 15 22:15:01 2022"></script>
-  <script type="text/javascript" src="../reference.js?Thu Dec 15 22:15:01 2022"></script>
+  <script type="text/javascript" src="../search.js?Fri Dec 16 00:15:29 2022"></script>
+  <script type="text/javascript" src="../reference.js?Fri Dec 16 00:15:29 2022"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>
