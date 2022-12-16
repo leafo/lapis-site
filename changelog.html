@@ -30,6 +30,11 @@ from a cookie's string value
 tables in the argument
 * `lapis.html` Add `is_mixins_class` function to determine if a class is a
 dynamically generated mixin class created by `Widget:include`
+* `lapis.etlua` The `element` function has been added to the template scope to
+allow rendering HTML elements programmatically (similar to the HTML builder
+syntax)
+* `lapis.etlua` `self` has been added to the template scope to allow accessing
+the instance of the `EtluaWidget`
 * The `lapis migrate` command now supports a `--transaction` flag, can be set
 to `global` to apply a transaction across all migrations to be run, or
 `individual` to apply a transaction to each migration run.
