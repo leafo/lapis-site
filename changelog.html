@@ -2,9 +2,27 @@
   title: "Changelog"
 }
 
-<div class="box only_box changelog">
-  <h1>Changelog</h1>
+<h1>Changelog</h1>
+
 $markdown{[[
+
+## v1.12.0 - January XX 2023
+
+## Additions
+
+* Add the `lapis.validate.types` module with [tableshape](https://github.com/leafo/tableshape) compatible types for parameter validation: `params_shape`, `assert_error`, `cleaned_text`, `valid_text`, `trimmed_text`, `truncated_text`, `limited_text`, `empty`, `file_upload`, `db_id`, `db_enum`
+* `lapis.validate` Add the `with_params` helper function for wrapping action function with parameter validation
+* `lapis.util.utf8` Add `string_length` function for counting the number of characters in a string
+
+## Changes
+
+* `lapis.application` `yield_error` now has a default error message if one isn't provided
+* `lapis.validate` `assert_valid` can take a tableshape object as the validation object. Will return transformed value and state on success
+* `lapis.db` `encode_clause` will now generate query with capital `NOT` when using false value
+
+## Misc
+
+* Revised documentation for input validation
 
 ## v1.11.0 - December 16th 2022
 
@@ -838,5 +856,4 @@ There are a few changes that affect backwards compatibility:
 
  * Initial release
 ]]}
-</div>
 
