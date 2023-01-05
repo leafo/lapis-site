@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Input Validation - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Wed Jan  4 23:54:35 2023" />
+  <link rel="stylesheet" href="../reference.css?Thu Jan  5 01:40:44 2023" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     var _gaq = _gaq || [];
@@ -27,7 +27,7 @@
     </h1>
     <div id="search_drop" data-root=".." data-index="../reference.json"></div>
     <a href="../changelog.html" class="version_flag">
-      v1.11.0
+      v1.12.0
     </a>
   </div>
 
@@ -45,7 +45,7 @@
             <ul><li><a href="#tableshape-validation">Tableshape Validation</a></li>
 <ul><li><a href="#tableshape-validation/with_params"><code>with_params(t, fn)</code></a></li>
 <li><a href="#tableshape-validation/type-constructors">Type Constructors</a></li>
-<ul><li><a href="#tableshape-validation/type-constructors/types.params_shape"><code>types.params_shape(param_spec, opts)</code></a></li>
+<ul><li><a href="#tableshape-validation/type-constructors/types.params_shape"><code>types.params_shape(param_spec, [opts])</code></a></li>
 <li><a href="#tableshape-validation/type-constructors/types.assert_error"><code>types.assert_error(t)</code></a></li></ul>
 <li><a href="#tableshape-validation/builtin-types">Builtin types</a></li>
 <ul><li><a href="#tableshape-validation/builtin-types/types.empty"><code>types.empty</code></a></li>
@@ -112,11 +112,6 @@
 input. It is your responsibility to verify that the inputs match some expected
 format before you use them directly in your models and application logic.</p>
 
-<p>The Lapis validation module helps you ensure that inputs are correct and safe
-before you start using them. Validation is aslo able to cleaning up malformed
-text, like removing unnecessary whitespace, broken UTF8 sequences, or clearing
-out empty strings.</p>
-
 <p>Some common types of inputs that web application developers often forget to
 verify:</p>
 
@@ -131,10 +126,15 @@ verify:</p>
 </ul>
 
 
+<p>The Lapis validation module helps you ensure that inputs are correct and safe
+before you start using them. Validation is also able to <em>transform</em> malformed
+input to turn it into something usable, eg. stripping whitespace from the start
+and end of a string.</p>
+
 <blockquote><p>Lapis is currently introducing a new validation system based around
-<a href="https://github.com/leafo/tableshape">tableshape</a>. The legacy validation
+<a href="https://github.com/leafo/tableshape">Tableshape</a>. The legacy validation
 functions will remain unchanged until further notice, but we recommend using
-the tableshape validation when possible.</p></blockquote>
+the Tableshape validation when possible.</p></blockquote>
 
 <h2><a name="tableshape-validation" href="#tableshape-validation">Tableshape Validation</a></h2>
 
@@ -148,7 +148,7 @@ that can be composed or nested to verify the structure of more complex types.</p
 for the validation of request parameters.</p>
 
 <p>Tableshape is not installed by default as a dependency of Lapis. In order to
-use the tableshape powered validation types you must install tableshape:</p>
+use the Tableshape powered validation types you must install Tableshape:</p>
 
 <pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">luarocks</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">install</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">tableshape</span></code>
 </pre>
@@ -171,16 +171,16 @@ use the tableshape powered validation types you must install tableshape:</p>
 
 <blockquote><p>The <code>lapis.validate.types</code> module has its <code>__index</code> metamethod set to the
 <code>types</code> object of the <code>tableshape</code> module. This enables access to any
-tableshape type directly from the Lapis module without having to import both.
+Tableshape type directly from the Lapis module without having to import both.
 Any types used in the examples below that are not directly documented are
-types provided by tableshape (eg. <code>types.string</code> is a type provided by
-tableshape that verifies a value such that <code>type(value) == "string"</code>).</p></blockquote>
+types provided by Tableshape (eg. <code>types.string</code> is a type provided by
+Tableshape that verifies a value such that <code>type(value) == "string"</code>).</p></blockquote>
 
 <h3><a name="tableshape-validation/with_params" href="#tableshape-validation/with_params"><code>with_params(t, fn)</code></a></h3>
 
 <p>The <code>with_params</code> is a helper function for wrapping an action function such
 that it only runs if fields from <code class="for_moon">@params</code><code class="for_lua">self.params</code> can be validated. The
-validated paramter table is passed as the the first argument to <code>fn</code>.</p>
+validated parameter table is passed as the first argument to <code>fn</code>.</p>
 
 <blockquote><p><code class="for_moon">@params</code><code class="for_lua">self.params</code> is left unchanged. This enables the calling of nested
 functions that use <code>with_params</code> to work with other sets of parameters</p></blockquote>
@@ -188,7 +188,7 @@ functions that use <code>with_params</code> to work with other sets of parameter
 <p>It returns a new function that is designed to be called with a <em>request object</em>
 as the first argument.</p>
 
-<p>The argument, <code>t</code>, can either be a tableshape type, or it can be a plain Lua
+<p>The argument, <code>t</code>, can either be a Tableshape type, or it can be a plain Lua
 table that will be converted into a type using <code>types.params_shape(t)</code>.</p>
 
 <p><div class="dual_code">
@@ -198,6 +198,7 @@ table that will be converted into a type using <code>types.params_shape(t)</code
       </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors_json</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">capture_errors_json</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">with_params</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.validate&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">with_params</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
@@ -233,11 +234,11 @@ then an error is raised for the nearest <code>capture_errors</code>. In the exam
 
 <h3><a name="tableshape-validation/type-constructors" href="#tableshape-validation/type-constructors">Type Constructors</a></h3>
 
-<h4><a name="tableshape-validation/type-constructors/types.params_shape" href="#tableshape-validation/type-constructors/types.params_shape"><code>types.params_shape(param_spec, opts)</code></a></h4>
+<h4><a name="tableshape-validation/type-constructors/types.params_shape" href="#tableshape-validation/type-constructors/types.params_shape"><code>types.params_shape(param_spec, [opts])</code></a></h4>
 
 <p>Creates a type checker that is suitable for extracting validated values from a
 parameters objects (or any other plain Lua table). <code>params_shape</code> is similar
-to <code>types.shape</code> from tableshape with a few key differences:</p>
+to <code>types.shape</code> from Tableshape with a few key differences:</p>
 
 <ul>
 <li>Fields to verify are specified in an array of tuples, values are checked in the order they provided.</li>
@@ -248,7 +249,7 @@ to <code>types.shape</code> from tableshape with a few key differences:</p>
 
 
 <p><code>types.params_shape</code> is designed to be used with the transform API of
-tableshape. The resulting transformed object is a validated table of
+Tableshape. The resulting transformed object is a validated table of
 parameters.</p>
 
 <p><code>param_spec</code> is an array of parameter specification objects object, the
@@ -300,7 +301,7 @@ parameters are checked in order:</p>
 </code></pre>
 
 <p><code>field_name</code> must be a string, <code>type_checker</code> must be an instance of a
-tableshape type checker.</p>
+Tableshape type checker.</p>
 
 <p>Additional options are provided as hash table properties of the table. The
 following options are supported:</p>
@@ -312,11 +313,11 @@ following options are supported:</p>
 
 <h4><a name="tableshape-validation/type-constructors/types.assert_error" href="#tableshape-validation/type-constructors/types.assert_error"><code>types.assert_error(t)</code></a></h4>
 
-<p>Wraps tableshape type checker to yield an error when checking/transforming
+<p>Wraps a Tableshape type checker to yield an error when checking/transforming
 fails. The yielded error is compatible with Lapis error handling (eg.
 <code>assert_error</code> &amp; <code>capture_errors</code>).</p>
 
-<p>This can be used to simplify code paths, as it is no longer necessarry to check
+<p>This can be used to simplify code paths, as it is no longer necessary to check
 for the error case when validating an input since the error will be passed up
 the stack to the enclosing <code>capture_errors</code>.</p>
 
@@ -380,7 +381,7 @@ whitespace strings are transformed to <code>nil</code>.</p>
 value with <code>types.empty</code> and only checking the first return value may not be
 desirable.  The transform method can be combined with a type check to ensure
 an empty value is provided. When using nested type checkers, like
-<code>types.shape</code> and <code>table.params_shape</code>, tableshape is aware of this
+<code>types.shape</code> and <code>table.params_shape</code>, Tableshape is aware of this
 distinction and no additional code is necessary.</p>
 
 <p><div class="dual_code">
@@ -402,13 +403,13 @@ distinction and no additional code is necessary.</p>
 </div>
 
 
-Alternatively, <code>types.assert</code> or <code>types.assert_error</code> can be used to guarante
-the value matches the type checker</p></blockquote>
+Alternatively, <code>types.assert</code> or <code>types.assert_error</code> can be used to
+guarantee the value matches the type checker</p></blockquote>
 
 <h4><a name="tableshape-validation/builtin-types/types.valid_text" href="#tableshape-validation/builtin-types/types.valid_text"><code>types.valid_text</code></a></h4>
 
 <p>Matches a string that is valid UTF8. Invalid characters sequences or
-unprintable charactres will cause validation to valid.</p>
+unprintable characters will cause validation to valid.</p>
 
 <p><div class="dual_code">
 <div class="dual_code_tabs">
@@ -428,7 +429,7 @@ unprintable charactres will cause validation to valid.</p>
 <h4><a name="tableshape-validation/builtin-types/types.cleaned_text" href="#tableshape-validation/builtin-types/types.cleaned_text"><code>types.cleaned_text</code></a></h4>
 
 <p>Matches a string, transforms it such that any invalid UTF8 sequences and
-non-printable charactres are stripped (eg removing <code>null</code> bytes)</p>
+non-printable characters are stripped (eg removing <code>null</code> bytes)</p>
 
 <p><div class="dual_code">
 <div class="dual_code_tabs">
@@ -616,7 +617,7 @@ value to the integer value of the enum using <code>for_db</code>.</p>
 <h2><a name="assert-valid" href="#assert-valid">Assert Valid</a></h2>
 
 <blockquote><p><strong>This is the legacy validation system.</strong> Due to shortcomings addressed by
-the tableshape validation system, it is not recommended to <code>assert_valid</code> and
+the Tableshape validation system, it is not recommended to <code>assert_valid</code> and
 related functions any more</p></blockquote>
 
 <p>The <code>assert_valid</code> function is Lapis&rsquo;s legacy validation framework. It provides
@@ -814,8 +815,8 @@ yielding the error.</li>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Wed Jan  4 23:54:35 2023"></script>
-  <script type="text/javascript" src="../reference.js?Wed Jan  4 23:54:35 2023"></script>
+  <script type="text/javascript" src="../search.js?Thu Jan  5 01:40:44 2023"></script>
+  <script type="text/javascript" src="../reference.js?Thu Jan  5 01:40:44 2023"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>
