@@ -14,14 +14,22 @@ $markdown{[[
 * `lapis.validate` Add the `with_params` helper function for wrapping action function with parameter validation
 * `lapis.util.utf8` Add `string_length` function for counting the number of characters in a string
 
+* The `lapis new` command will always write a config.lua/config.moon file. The default configuration's nginx specific variables will be phased out a future update
+* The `lapis generate` sub commands now can generate both Lua and MoonScript files. Project type detection has been added, in addition to flags to directly specify the file type
+
 ## Changes
 
+* The `lapis` command line tool's argument parsing has been rewritten using [argparse](https://luarocks.org/modules/argparse/argparse). New help commands are available for every command, with full argument documentation.
+* The `lapis generate` subcommands now use argparse and have full command line documentation available
+* The default nginx.conf file now include an `init_by_lua` block as an example to suppress global variable warning
+* Command line third-party sub commands now are executed using the `_` command. See `lapis help _`
 * `lapis.application` `yield_error` now has a default error message if one isn't provided
 * `lapis.validate` `assert_valid` can take a tableshape object as the validation object. Will return transformed value and state on success
 * `lapis.db` `encode_clause` will now generate query with capital `NOT` when using false value
 
 ## Misc
 
+* Internal reorganization for command line commands and path library
 * Revised documentation for input validation
 
 ## v1.11.0 - December 16th 2022
