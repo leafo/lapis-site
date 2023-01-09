@@ -21,6 +21,7 @@ $markdown{[[
 
 * The `lapis` command line tool's argument parsing has been rewritten using [argparse](https://luarocks.org/modules/argparse/argparse). New help commands are available for every command, with full argument documentation.
 * The `lapis generate` subcommands now use argparse and have full command line documentation available
+* The `lapis new ` command will now fail if the requested server type is not available. The `--force` option can be used to bypass the error
 * The default nginx.conf file now include an `init_by_lua` block as an example to suppress global variable warning
 * Command line third-party sub commands now are executed using the `_` command. See `lapis help _`
 * `lapis.application` `yield_error` now has a default error message if one isn't provided
