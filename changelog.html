@@ -6,6 +6,47 @@
 
 $markdown{[[
 
+## v1.13.0 - February 15 2023
+
+## Additions
+
+* Add the `lapis simulate` command to simulate a request to the application
+  without starting a server. This is useful for testing and debugging. See
+  `lapis simulate --help` for details about usage.
+* Add support for SQLite (See `lapis.db.sqlite`, `lapis.db.sqlite.model`,
+  lapis.db.sqlite.schema`)
+* Add `request:get_request()` method to get a reference to the request object.
+  (Note this just returns `self`, but it is useful in cases where the request
+  object is being proxied through the helper chain of a widget)
+
+## Changes
+
+* The default error page will now render a JSON response if the `accept`
+  request header is set to `application/json`
+* `content_for` now stores content blocks directly on the request object
+  (prefixed with `_content_for`). This may solve a bug where widget helper
+  chain could have cached an outdated copy of the `content_for` state.
+* `content_for` will now throw an error if attempted to be used in a context
+  without a request object
+* Layout content rendering has been simplified to avoid additional closure and
+  function scope created
+* The resolved layout is now written to `request.options` (aka `self.options`)
+  so that the view can know if a layout will be rendered within the current
+  request. Note: actions that skip layout by default (eg. `json`, `redirect_to`)
+  will write `false` to `options.layout`.
+* Internal refactors to all of the database modules, removal of some
+  undocumented functions (removed `set_backend`, `set_logger`, `get_logger`, `init_logger`)
+* Updated generated SQL for MySQL in some places to output keywords in capitals
+* `lapis.db.pagination` Paginators now have a simple fallback for clause
+  generation when the database module lacks a clause parser. (Will work for
+  simple queries without aggregates instead of throwing an error when calling
+  `total_items` and `has_items`)
+* `lapis.spec` Remove undocumented test helpers: `use_db_connection`, `assert_no_queries`.
+* `lapis.spec` `use_test_env` and `use_test_server` no longer interact with
+  database connection in `setup` and `teardown`.
+* `lapis.spec.request` The mocked `ngx` object now covers more fields to make
+  it suitable for more kinds of requests
+
 ## v1.12.0 - January 9 2023
 
 ## Additions
