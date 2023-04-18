@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Changelog - Lapis - A web framework for Lua</title>
-  <link rel="stylesheet" href="home.css?Wed Feb 15 21:40:52 2023" />
+  <link rel="stylesheet" href="home.css?Tue Apr 18 20:30:06 2023" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     var _gaq = _gaq || [];
@@ -33,7 +33,7 @@
       </div>
 
       <div class="version_flag">
-        <a href="./changelog.html">v1.13.0</a>
+        <a href="./changelog.html">v1.14.0</a>
       </div>
     </section>
 
@@ -59,7 +59,7 @@
 
   <div class="sub_header">
     <div class="center_column">
-      <strong>February 15th, 2023:</strong> Lapis v1.13.0 &mdash; SQLite support &amp; more: <a href="./changelog.html">changelog</a>
+      <strong>April 18th, 2023:</strong> Lapis v1.14.0 &mdash; New generators, preload updates &amp; more: <a href="./changelog.html">changelog</a>
     </div>
   </div>
 
@@ -67,9 +67,95 @@
 
 <h1>Changelog</h1>
 
+<h2>v1.14.0 &ndash; April 18 2023</h2>
+
+<h3>Additions</h3>
+
+<ul>
+<li>Add <code>--rockspec</code> command to <code>lapis new</code></li>
+<li>Add <code>lapis generate migration</code> command to either create blank migration file or append a new migration at the end of the existing migration file. See <code>lapis generate migration --help</code> for more information
+
+<ul>
+<li>Can append to Lua and MoonScript migrations files. It may not be able to edit all types of migration files, ensure that you return a simple table.</li>
+<li>Support for appending either timestamp named migration or incrementing counter named migration</li>
+</ul>
+</li>
+<li>Add <code>lapis generate rockspec</code> command to create a new rockspec for managing app dependencies. See <code>lapis generate rockspec --help</code> for more information
+
+<ul>
+<li>It will automatically detect the app name fro the current directory, if not specified with <code>--app-name</code></li>
+<li>It will automatically detect the git source URL from the current directory if a git repository has been created and has a remote</li>
+<li>Additional initial dependencies can be included with flags like <code>--postgres</code>, <code>--sqlite</code>, <code>--moonscript</code>, etc.</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Fixes</h3>
+
+<ul>
+<li>Fix code reloading for cqueues when changes to  <code>package.path</code>, <code>package.cpath</code>, <code>package.searchers</code>, and <code>package.loaders</code> is involved
+
+<ul>
+<li>These values will be reset to prevent infinitely growing module search path when reloading code</li>
+</ul>
+</li>
+<li>Fix bug with <code>lapis simulate</code> command where header output wouldn&rsquo;t be normalized correctly</li>
+<li>Fix bug where <code>lapis.validate.types</code> <code>params_shape</code> was not correctly passing initial state object through the validation</li>
+</ul>
+
+
+<h3>Changes</h3>
+
+<ul>
+<li>Update custom sub-command runner to support running commands with <code>argparse</code> specification
+
+<ul>
+<li>Update built in support for <a href="https://github.com/leafo/lapis-annotate">lapis annotate</a> and <a href="https://github.com/leafo/lapis-systemd">lapis sytemd</a> to work with this new system. It is necessary to update both of those packages if you wish to use them with this version of Lapis</li>
+</ul>
+</li>
+<li>Rewrite all template files that <code>lapis new</code> creates as generator modules. All of these files can be independently created using the <code>lapis generate</code> command if necessary, eg. <code>lapis generate app</code>
+
+<ul>
+<li><code>lapis new</code> will now internally call <code>lapis generate</code> to create the necessary files</li>
+<li><code>lapis generate {NAME} --help</code> can now be used for every template generator to view configuration options</li>
+<li>List of updated generators: (these can be called with <code>lapis generate {NAME}</code>)
+
+<ul>
+<li><code>app</code> – For creating initial lapis application file in (<code>app.lua</code> or <code>app.moon</code>)</li>
+<li><code>config</code> – For creating <code>config.lua</code> or <code>config.moon</code></li>
+<li><code>models</code> – For creating autoloader <code>modules.lua</code> or <code>modules.moon</code> module</li>
+<li><code>gitignore</code> – For creating initial <code>.gitignore</code> when using <code>lapis new --git</code> </li>
+<li><code>tupfile</code> – For creating initial Tupfile and Tuprules.tup when using <code>lapis new --tup</code></li>
+<li><code>nginx.config</code> – For creating initial <code>nginx.conf</code></li>
+<li><code>nginx.mime_types</code> – For creating <code>mime.types</code> nginx configuration include</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>The default generated config for cqueues on MoonScript no longer includes fields for <code>code_cache</code> and <code>num_workers</code>, and instead now matches the Lua version of the config.</li>
+<li><code>lapis.db</code> <code>db.clause</code> supports a <code>prefix</code> option to optionally append something to the front of the encoded clause if it contains any fields.</li>
+<li><code>lapis.db.model</code> Generic <code>preload</code> can take the a callback function with the name of a relation to execute a callback on the loaded objects. Eg. <code>preload(users, { profile = function(profiles) ... end })</code></li>
+<li><code>Model:include_in</code> add <code>skip_included</code> option to do nothing on objects that already have the related field loaded</li>
+<li><code>Model:include_in</code> add <code>loaded_results_callback</code> option to provide a function callback to be called with with the list of objects that were fetched from the query</li>
+<li><code>Model:include_in</code> when loading objects by a composite key, duplicate composite values will be stripped to reduce the size of the query generated (Singular keys already functioned this way)</li>
+<li><code>lapis.db.model.relations</code> <code>mark_loaded_relations</code> can now take a third argument of a value to set for the relation (defaults to <code>true</code>)</li>
+<li><code>lapis.util</code> <code>singularize</code> function has been improved slightly with more cases (eg. vertex, child, index, status) and will work with all capital words. Note that this function will never be comprehensive, only suitable for calculating a quick default in scenarios where names aren&rsquo;t explicitly specified</li>
+<li><code>lapis.validate.types</code> Add <code>multi_params</code> for joining two <code>params_shape</code> objects together</li>
+</ul>
+
+
+<h3>Internal Changes</h3>
+
+<ul>
+<li>Rewrite generic <code>preload</code></li>
+<li>Add much more comprehensive test suite for generic <code>preload</code></li>
+</ul>
+
+
 <h2>v1.13.0 &ndash; February 15 2023</h2>
 
-<h2>Additions</h2>
+<h3>Additions</h3>
 
 <ul>
 <li>Add the <code>lapis simulate</code> command to simulate a request to the application
@@ -83,7 +169,7 @@ object is being proxied through the helper chain of a widget)</li>
 </ul>
 
 
-<h2>Changes</h2>
+<h3>Changes</h3>
 
 <ul>
 <li>The default error page will now render a JSON response if the <code>accept</code>
@@ -116,7 +202,7 @@ it suitable for more kinds of requests</li>
 
 <h2>v1.12.0 &ndash; January 9 2023</h2>
 
-<h2>Additions</h2>
+<h3>Additions</h3>
 
 <ul>
 <li>Add the <code>lapis.validate.types</code> module with <a href="https://github.com/leafo/tableshape">tableshape</a> compatible types for parameter validation: <code>params_shape</code>, <code>assert_error</code>, <code>cleaned_text</code>, <code>valid_text</code>, <code>trimmed_text</code>, <code>truncated_text</code>, <code>limited_text</code>, <code>empty</code>, <code>file_upload</code>, <code>db_id</code>, <code>db_enum</code></li>
@@ -127,7 +213,7 @@ it suitable for more kinds of requests</li>
 </ul>
 
 
-<h2>Changes</h2>
+<h3>Changes</h3>
 
 <ul>
 <li>The <code>lapis</code> command line tool&rsquo;s argument parsing has been rewritten using <a href="https://luarocks.org/modules/argparse/argparse">argparse</a>. New help commands are available for every command, with full argument documentation.</li>
@@ -141,7 +227,7 @@ it suitable for more kinds of requests</li>
 </ul>
 
 
-<h2>Misc</h2>
+<h3>Misc</h3>
 
 <ul>
 <li>Internal reorganization for command line commands and path library</li>
@@ -151,7 +237,7 @@ it suitable for more kinds of requests</li>
 
 <h2>v1.11.0 &ndash; December 16th 2022</h2>
 
-<h2>Additions</h2>
+<h3>Additions</h3>
 
 <ul>
 <li><code>lapis.db</code> Add the <code>db.clause</code> constructor for safely building SQL fragments including clauses and conditionals</li>
@@ -170,7 +256,7 @@ it suitable for more kinds of requests</li>
 </ul>
 
 
-<h2>Changes</h2>
+<h3>Changes</h3>
 
 <ul>
 <li><code>lapis.db</code> Internally, queries now use <code>db.clause</code> to generate SQL conditional statements . This means that order of certain fields may now be different when using <code>where</code> clauses.</li>
@@ -189,7 +275,7 @@ it suitable for more kinds of requests</li>
 </ul>
 
 
-<h2>Internal Changes</h2>
+<h3>Internal Changes</h3>
 
 <p>These changes should have no effect on the end user implementing an app, but they are documented here in case you were depending on the undocumented structure of lapis</p>
 
@@ -200,7 +286,7 @@ it suitable for more kinds of requests</li>
 </ul>
 
 
-<h2>Misc</h2>
+<h3>Misc</h3>
 
 <ul>
 <li>Substantial updates to documentation, including rewrites for clarify and documenting fields that were previously not documented.</li>
@@ -210,7 +296,7 @@ it suitable for more kinds of requests</li>
 
 <h2>v1.10.0 &mdash; Oct 31 2022</h2>
 
-<h2>Additions</h2>
+<h3>Additions</h3>
 
 <ul>
 <li><code>Model:include_in</code> supports a new  <code>{ load = false }</code> option to disable the conversion of query results to model instances</li>
@@ -248,14 +334,14 @@ it suitable for more kinds of requests</li>
 </ul>
 
 
-<h2>Bugs</h2>
+<h3>Bugs</h3>
 
 <ul>
 <li><code>lapis.validate</code>: Fixed bug where the input options table passed into validate would get mutated, removing the <code>optional</code> field</li>
 </ul>
 
 
-<h2>Misc</h2>
+<h3>Misc</h3>
 
 <ul>
 <li>Assorted updates to docs</li>
@@ -367,7 +453,7 @@ method also supports additional arguments to control returning clause</li>
 </ul>
 
 
-<h4>Fixes</h4>
+<h3>Fixes</h3>
 
 <ul>
 <li>Using <code>order</code> and <code>group</code> at the same time with <code>Model\include_in</code> will no
@@ -382,7 +468,7 @@ result from parameter parsing, fixes
 </ul>
 
 
-<h4>Changes</h4>
+<h3>Changes</h3>
 
 <ul>
 <li>When running in <code>busted</code>, the <code>test</code> environment is set as the default
@@ -405,7 +491,7 @@ module, added <code>set_default_environment</code> function</li>
 </ul>
 
 
-<h4>Misc</h4>
+<h3>Misc</h3>
 
 <ul>
 <li>Test suites run across on all versions of Lua on GitHub actions</li>
@@ -421,7 +507,7 @@ works</a></li>
 
 <h2>v1.8.1 &mdash; April 27 2020</h2>
 
-<h4>Fixes</h4>
+<h3>Fixes</h3>
 
 <ul>
 <li>Fix error when parsing <code>Model\paginated()</code> model method arguments"&ldquo;to detect if
@@ -431,7 +517,7 @@ ordered paginator should be used</li>
 
 <h2>v1.8.0 &mdash; April 24 2020</h2>
 
-<h4>Deprecations</h4>
+<h3>Deprecations</h3>
 
 <ul>
 <li>The <code>flip</code> and <code>local_key</code> used with <code>include_in</code> or any relations are now
@@ -440,7 +526,7 @@ deprecated. Replacement syntax available in <a href="./reference/models.html#cla
 </ul>
 
 
-<h4>Additions</h4>
+<h3>Additions</h3>
 
 <ul>
 <li>Add support for a column mapping table when specifying the key for
@@ -473,7 +559,7 @@ create index concurrently (Contributed by Michael Ball <a href="https://github.c
 </ul>
 
 
-<h4>Changes</h4>
+<h3>Changes</h3>
 
 <ul>
 <li><code>assert_error</code> will now fail with <code>error</code> if the error it yielded was not
@@ -494,7 +580,7 @@ argument directly if passed a string</li>
 </ul>
 
 
-<h4>Fixes</h4>
+<h3>Fixes</h3>
 
 <ul>
 <li>Fix bug where internal shell_escape function would strip <code>'</code> characters</li>
@@ -503,7 +589,7 @@ json instead of skipping json render</li>
 </ul>
 
 
-<h4>Documentation</h4>
+<h3>Documentation</h3>
 
 <ul>
 <li>Started rewriting how options tables are described in the documentation.
@@ -516,7 +602,7 @@ Uses a grid layout with collapsing examples.</li>
 </ul>
 
 
-<h4>Misc</h4>
+<h3>Misc</h3>
 
 <ul>
 <li>Specs now run on GitHub actions with matrix for LuaJIT, OpenResty&rsquo;s LuaJIT,
@@ -897,7 +983,7 @@ the end of the URL</li>
 </ul>
 
 
-<h4>Database</h4>
+<h3>Database</h3>
 
 <ul>
 <li>Add support for MySQL (Thanks <a href="https://github.com/leafo/lapis/pull/250">starius</a>)</li>
@@ -905,7 +991,7 @@ the end of the URL</li>
 </ul>
 
 
-<h4>Models</h4>
+<h3>Models</h3>
 
 <ul>
 <li><code>include_in</code> can now preload many associated objects when <code>many</code> option is set to true</li>
@@ -917,7 +1003,7 @@ the end of the URL</li>
 </ul>
 
 
-<h4>Misc</h4>
+<h3>Misc</h3>
 
 <ul>
 <li>Enhance <code>singularize</code> function, can singularize words like <em>Categories</em> to <em>Category</em></li>
@@ -928,7 +1014,7 @@ the end of the URL</li>
 
 <h2>v1.1.1 &mdash; April 25th 2015</h2>
 
-<h4>Models</h4>
+<h3>Models</h3>
 
 <ul>
 <li>Add <code>singular_name</code> method to model classes, used when determining field name in relations and <code>inclue_in</code></li>
@@ -939,7 +1025,7 @@ the end of the URL</li>
 </ul>
 
 
-<h4><code>lapis.cache</code></h4>
+<h3><code>lapis.cache</code></h3>
 
 <ul>
 <li><code>cached</code> will only cache <code>GET</code> requests</li>
@@ -947,7 +1033,7 @@ the end of the URL</li>
 </ul>
 
 
-<h4>Misc</h4>
+<h3>Misc</h3>
 
 <ul>
 <li><code>url_for</code> now takes a third argument, a table of query parameters</li>
@@ -961,7 +1047,7 @@ the end of the URL</li>
 
 <h2>v1.1.0 &mdash; February 3rd 2015</h2>
 
-<h4>Models</h4>
+<h3>Models</h3>
 
 <ul>
 <li>Added <a href="./reference/models.html#describing-relationships">support for relations to models</a></li>
@@ -976,7 +1062,7 @@ the end of the URL</li>
 </ul>
 
 
-<h4>Widgets</h4>
+<h3>Widgets</h3>
 
 <ul>
 <li><code>content_for</code> data in widgets is prefixed to avoid conflict with user defined variables</li>
@@ -985,7 +1071,7 @@ the end of the URL</li>
 </ul>
 
 
-<h4>Misc</h4>
+<h3>Misc</h3>
 
 <ul>
 <li><code>Flow</code> can now expose instance variable assignments to request with <code>expose_assigns</code></li>
@@ -1069,7 +1155,7 @@ the end of the URL</li>
 
 <h2>v1.0.0 &mdash; Jun 16 2014</h2>
 
-<h4>General</h4>
+<h3>General</h3>
 
 <ul>
 <li>Add a new Lua friendly API, see <a href="./reference/lua_getting_started.html">Getting Started With Lua</a></li>
@@ -1078,7 +1164,7 @@ the end of the URL</li>
 </ul>
 
 
-<h4>Database</h4>
+<h3>Database</h3>
 
 <ul>
 <li><code>Model\include_in</code> can take a <code>where</code> option to filter results</li>
@@ -1096,7 +1182,7 @@ the end of the URL</li>
 </ul>
 
 
-<h4>Util</h4>
+<h3>Util</h3>
 
 <ul>
 <li><code>util.time_ago_in_words</code> can handle dates in the future</li>
@@ -1106,7 +1192,7 @@ the end of the URL</li>
 </ul>
 
 
-<h4>Misc</h4>
+<h3>Misc</h3>
 
 <ul>
 <li>A class passed to <code>widget</code> within MoonScript template will automatically be instantiated</li>
@@ -1264,7 +1350,7 @@ can now run queries directly in the console.</li>
       </div>
 
       <div>
-        Wed Feb 15 21:40:52 2023 PST
+        Tue Apr 18 20:30:06 2023 PST
       </div>
     </div>
   </div>
@@ -1290,8 +1376,8 @@ can now run queries directly in the console.</li>
   <script src="./lib/react-dom.production.min.js"></script>
   <script src="./lib/react-dom-factories.js"></script>
   <script src="./lib/lunr.min.js"></script>
-  <script type="text/javascript" src="./search.js?Wed Feb 15 21:40:52 2023"></script>
-  <script type="text/javascript" src="./home.js?Wed Feb 15 21:40:52 2023"></script>
+  <script type="text/javascript" src="./search.js?Tue Apr 18 20:30:06 2023"></script>
+  <script type="text/javascript" src="./home.js?Tue Apr 18 20:30:06 2023"></script>
 
   <script type="text/javascript">
     new L.Home();
