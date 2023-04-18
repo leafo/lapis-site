@@ -6,9 +6,60 @@
 
 $markdown{[[
 
+## v1.14.0 - April 18 2023
+
+### Additions
+
+* Add `--rockspec` command to `lapis new`
+* Add `lapis generate migration` command to either create blank migration file or append a new migration at the end of the existing migration file. See `lapis generate migration --help` for more information
+  * Can append to Lua and MoonScript migrations files. It may not be able to edit all types of migration files, ensure that you return a simple table.
+  * Support for appending either timestamp named migration or incrementing counter named migration
+* Add `lapis generate rockspec` command to create a new rockspec for managing app dependencies. See `lapis generate rockspec --help` for more information
+  * It will automatically detect the app name fro the current directory, if not specified with `--app-name`
+  * It will automatically detect the git source URL from the current directory if a git repository has been created and has a remote
+  * Additional initial dependencies can be included with flags like `--postgres`, `--sqlite`, `--moonscript`, etc.
+
+### Fixes
+
+* Fix code reloading for cqueues when changes to  `package.path`, `package.cpath`, `package.searchers`, and `package.loaders` is involved
+  * These values will be reset to prevent infinitely growing module search path when reloading code
+* Fix bug with `lapis simulate` command where header output wouldn't be normalized correctly
+* Fix bug where `lapis.validate.types` `params_shape` was not correctly passing initial state object through the validation
+
+### Changes
+
+* Update custom sub-command runner to support running commands with `argparse` specification
+  * Update built in support for [lapis annotate](https://github.com/leafo/lapis-annotate) and [lapis sytemd](https://github.com/leafo/lapis-systemd) to work with this new system. It is necessary to update both of those packages if you wish to use them with this version of Lapis
+* Rewrite all template files that `lapis new` creates as generator modules. All of these files can be independently created using the `lapis generate` command if necessary, eg. `lapis generate app`
+  * `lapis new` will now internally call `lapis generate` to create the necessary files
+  * `lapis generate {NAME} --help` can now be used for every template generator to view configuration options
+  * List of updated generators: (these can be called with `lapis generate {NAME}`)
+    * `app` – For creating initial lapis application file in (`app.lua` or `app.moon`)
+    * `config` – For creating `config.lua` or `config.moon`
+    * `models` – For creating autoloader `modules.lua` or `modules.moon` module
+    * `gitignore` – For creating initial `.gitignore` when using `lapis new --git` 
+    * `tupfile` – For creating initial Tupfile and Tuprules.tup when using `lapis new --tup`
+    * `nginx.config` – For creating initial `nginx.conf`
+    * `nginx.mime_types` – For creating `mime.types` nginx configuration include
+* The default generated config for cqueues on MoonScript no longer includes fields for `code_cache` and `num_workers`, and instead now matches the Lua version of the config.
+* `lapis.db` `db.clause` supports a `prefix` option to optionally append something to the front of the encoded clause if it contains any fields.
+* `lapis.db.model` Generic `preload` can take the a callback function with the name of a relation to execute a callback on the loaded objects. Eg. `preload(users, { profile = function(profiles) ... end })
+* `Model:include_in` add `skip_included` option to do nothing on objects that already have the related field loaded
+* `Model:include_in` add `loaded_results_callback` option to provide a function callback to be called with with the list of objects that were fetched from the query
+* `Model:include_in` when loading objects by a composite key, duplicate composite values will be stripped to reduce the size of the query generated (Singular keys already functioned this way)
+* `lapis.db.model.relations` `mark_loaded_relations` can now take a third argument of a value to set for the relation (defaults to `true`)
+* `lapis.util` `singularize` function has been improved slightly with more cases (eg. vertex, child, index, status) and will work with all capital words. Note that this function will never be comprehensive, only suitable for calculating a quick default in scenarios where names aren't explicitly specified
+* `lapis.validate.types` Add `multi_params` for joining two `params_shape` objects together
+
+### Internal Changes
+
+* Rewrite generic `preload`
+* Add much more comprehensive test suite for generic `preload`
+
+
 ## v1.13.0 - February 15 2023
 
-## Additions
+### Additions
 
 * Add the `lapis simulate` command to simulate a request to the application
   without starting a server. This is useful for testing and debugging. See
@@ -19,7 +70,7 @@ $markdown{[[
   (Note this just returns `self`, but it is useful in cases where the request
   object is being proxied through the helper chain of a widget)
 
-## Changes
+### Changes
 
 * The default error page will now render a JSON response if the `accept`
   request header is set to `application/json`
@@ -49,7 +100,7 @@ $markdown{[[
 
 ## v1.12.0 - January 9 2023
 
-## Additions
+### Additions
 
 * Add the `lapis.validate.types` module with [tableshape](https://github.com/leafo/tableshape) compatible types for parameter validation: `params_shape`, `assert_error`, `cleaned_text`, `valid_text`, `trimmed_text`, `truncated_text`, `limited_text`, `empty`, `file_upload`, `db_id`, `db_enum`
 * `lapis.validate` Add the `with_params` helper function for wrapping action function with parameter validation
@@ -57,7 +108,7 @@ $markdown{[[
 * The `lapis new` command will always write a config.lua/config.moon file. The default configuration's nginx specific variables will be phased out a future update
 * The `lapis generate` sub commands now can generate both Lua and MoonScript files. Project type detection has been added, in addition to flags to directly specify the file type
 
-## Changes
+### Changes
 
 * The `lapis` command line tool's argument parsing has been rewritten using [argparse](https://luarocks.org/modules/argparse/argparse). New help commands are available for every command, with full argument documentation.
 * The `lapis generate` subcommands now use argparse and have full command line documentation available
@@ -68,14 +119,14 @@ $markdown{[[
 * `lapis.validate` `assert_valid` can take a tableshape object as the validation object. Will return transformed value and state on success
 * `lapis.db` `encode_clause` will now generate query with capital `NOT` when using false value
 
-## Misc
+### Misc
 
 * Internal reorganization for command line commands and path library
 * Revised documentation for input validation
 
 ## v1.11.0 - December 16th 2022
 
-## Additions
+### Additions
 
 * `lapis.db` Add the `db.clause` constructor for safely building SQL fragments including clauses and conditionals
 * All db related methods can now take `db.clause` objects when appropriate for configuring filtering (eg. `Model:find`, relation `where:` clause, etc.)
@@ -91,7 +142,7 @@ $markdown{[[
 * The `lapis migrate` command now supports a `--transaction` flag, can be set to `global` to apply a transaction across all migrations to be run, or `individual` to apply a transaction to each migration run.
 * `lapis.flow` Add `Flow:extend()` method for sublcassing the `Flow` class
 
-## Changes
+### Changes
 
 * `lapis.db` Internally, queries now use `db.clause` to generate SQL conditional statements . This means that order of certain fields may now be different when using `where` clauses.
 * `lapis.db` It is no longer possible to override fields configured by a relation when specifying a `where:` option. This also applies to paginators generated for relations
@@ -107,7 +158,7 @@ $markdown{[[
 * The `application` field is no longer present on the `lapis.init` module.  This was never documented. Use `require("lapis.application")` instead.
 * Many error messages have been rewritten to be prefixed with the module or method they originate from
 
-## Internal Changes
+### Internal Changes
 
 These changes should have no effect on the end user implementing an app, but they are documented here in case you were depending on the undocumented structure of lapis
 
@@ -115,14 +166,14 @@ These changes should have no effect on the end user implementing an app, but the
 * `lapis.router` Parsed routes are now stored, and the arguments for `fill_path` have changed
 * `lapis.application` The way routes are internally managed and iterated has been rewritten to provide unified interface based on metatable inheritance.  The `lapis.application.route_group` module has been added to work with this interface.
 
-## Misc
+### Misc
 
 * Substantial updates to documentation, including rewrites for clarify and documenting fields that were previously not documented.
 * Changes to the homepage to prioritize Lua syntax over MoonScript to reduce confusion about what & who the framework is for
 
 ## v1.10.0 -- Oct 31 2022
 
-## Additions
+### Additions
 
 * `Model:include_in` supports a new  `{ load = false }` option to disable the conversion of query results to model instances
 * You can now specify `{ order = false }` when creating a paginator from a model relation to strip the default order that may have been specified in the relation definition
@@ -147,11 +198,11 @@ These changes should have no effect on the end user implementing an app, but the
 * `lapis.db.postgres`: OpenResty specific performance metrics about socket reuse are only written when an nginx socket is in use 
 * `lapis.db.postgres`: Add connection specific performance metric for when any socket type other than nginx is used
 
-## Bugs
+### Bugs
 * `lapis.validate`: Fixed bug where the input options table passed into validate would get mutated, removing the `optional` field
 
 
-## Misc
+### Misc
 * Assorted updates to docs
 * Expanded test suite, refactors to tests
 * Documentation typo fixes by  @tommy-mor in [#734](https://github.com/leafo/lapis/pull/734) [#746](https://github.com/leafo/lapis/pull/746)
@@ -229,7 +280,7 @@ method also supports additional arguments to control returning clause
 * `get_X_paginated` model relation method now supports passing `where` and
 `order` options to the paginator constructor
 
-#### Fixes
+### Fixes
 
 * Using `order` and `group` at the same time with `Model\include_in` will no
 longer generate an invalid query
@@ -241,7 +292,7 @@ result from parameter parsing, fixes
 [683](https://github.com/leafo/lapis/issues/68)
 * The substring `-` is no longer matched by accident for route pattern filters [#696](https://github.com/leafo/lapis/issues/696)
 
-#### Changes
+### Changes
 
 * When running in `busted`, the `test` environment is set as the default
 environment any tests are run. It is not longer necessary to have a `setup` or
@@ -261,7 +312,7 @@ module, added `set_default_environment` function
 * Better error when trying to use default composite primary key with a
 `has_one` relation
 
-#### Misc
+### Misc
 
 * Test suites run across on all versions of Lua on GitHub actions
 * Added docs for how [request parameters are parsed and
@@ -274,20 +325,20 @@ works]($root/reference/configuration.html#default-environment)
 
 ## v1.8.1 -- April 27 2020
 
-#### Fixes
+### Fixes
 
   * Fix error when parsing `Model\paginated()` model method arguments""to detect if
   ordered paginator should be used
 
 ## v1.8.0 -- April 24 2020
 
-#### Deprecations
+### Deprecations
 
   * The `flip` and `local_key` used with `include_in` or any relations are now
   deprecated. Replacement syntax available in [documentation for
   `Model\include_in`]($root/reference/models.html#class-methods/include_in)
 
-#### Additions
+### Additions
 
   * Add support for a column mapping table when specifying the key for
   `include_in` and any relations. See more documentation for
@@ -317,7 +368,7 @@ works]($root/reference/configuration.html#default-environment)
   create index concurrently (Contributed by Michael Ball [659](https://github.com/leafo/lapis/pull/659))
   * add `test` validation for manually specifying a function to test input
 
-#### Changes
+### Changes
 
   * `assert_error` will now fail with `error` if the error it yielded was not
   captured and execution attempted to continue
@@ -335,13 +386,13 @@ works]($root/reference/configuration.html#default-environment)
   * (`lapis.logging`) `query` log function can now take a prefix and duration
   * Removed undocumented `locals` action render option
 
-#### Fixes
+### Fixes
 
   * Fix bug where internal shell_escape function would strip `'` characters
   * Returning `{ json = false }` in action render will actually render false as
   json instead of skipping json render
 
-#### Documentation
+### Documentation
 
   * Started rewriting how options tables are described in the documentation.
   Uses a grid layout with collapsing examples.
@@ -351,7 +402,7 @@ works]($root/reference/configuration.html#default-environment)
   * Add documentation for the `timestamp` option for `model\update`
   * Updated colors of site to be blue
 
-#### Misc
+### Misc
 
   * Specs now run on GitHub actions with matrix for LuaJIT, OpenResty's LuaJIT,
   and all versions of Lua
@@ -637,12 +688,12 @@ There are a few changes that affect backwards compatibility:
 * The `default` Postgres backend, which utilizes `ngx_postgres`, has been entirely removed. Early users of Lapis are recommended to upgrade to `pgmoon`
 * The `has_many` relation now defines two methods: the `get_relation` method no longer returns a pager but all the associated rows. A new method, `get_relation_paginated` will return a pager
 
-#### Database
+### Database
 
 * Add support for MySQL (Thanks [starius](https://github.com/leafo/lapis/pull/250))
 * Add `db.list` for automatically building SQL list syntax for `where x in ()` queries
 
-#### Models
+### Models
 
 * `include_in` can now preload many associated objects when `many` option is set to true
 * A flipped `include_in` can now specify the `local_key` to use a different key than `id`
@@ -651,7 +702,7 @@ There are a few changes that affect backwards compatibility:
 * `has_many` relation now supports the `order` option
 * Fix all syntax errors in reference manual
 
-#### Misc
+### Misc
 
 * Enhance `singularize` function, can singularize words like *Categories* to *Category*
 * Main Lapis server and spec server can now be launched in different directories from the current
@@ -659,7 +710,7 @@ There are a few changes that affect backwards compatibility:
 
 ## v1.1.1 -- April 25th 2015
 
-#### Models
+### Models
 
 * Add `singular_name` method to model classes, used when determining field name in relations and `inclue_in
 * Add `clause` parameter to `find_all`
@@ -667,12 +718,12 @@ There are a few changes that affect backwards compatibility:
 * Relation getters will no longer error if foreign key has `nil` value
 * Fixed bug where ordered paginator with multiple keys could skip records if non-specific keys shared values
 
-#### `lapis.cache`
+### `lapis.cache`
 
 * `cached` will only cache `GET` requests
 * `cached` updated to not interfere with `request` method
 
-#### Misc
+### Misc
 
 * `url_for` now takes a third argument, a table of query parameters
 * A flow can be passed to a flow in place of the `req` object.
@@ -683,7 +734,7 @@ There are a few changes that affect backwards compatibility:
 
 ## v1.1.0 -- February 3rd 2015
 
-#### Models
+### Models
 
  * Added [support for relations to models]($root/reference/models.html#describing-relationships)
  * Added [`enum` function for models]($root/reference/models.html#enum)
@@ -695,13 +746,13 @@ There are a few changes that affect backwards compatibility:
  * Migrations table automatically created on running migrations if it doesn't exist
  * Migrations are now run outside of Nginx
 
-#### Widgets
+### Widgets
 
  * `content_for` data in widgets is prefixed to avoid conflict with user defined variables
  * Boolean values for attributes in HTML builder will render value-less attribute
  * Multiple `content_for` of same name will now append instead of overwrite
 
-#### Misc
+### Misc
 
  * `Flow` can now expose instance variable assignments to request with `expose_assigns`
  * Added new `lapis generate` command, add basic generators for model and spec
@@ -764,13 +815,13 @@ There are a few changes that affect backwards compatibility:
 
 ## v1.0.0 -- Jun 16 2014
 
-#### General
+### General
 
   * Add a new Lua friendly API, see [Getting Started With Lua]($root/reference/lua_getting_started.html)
   * Add support for [etlua](http://github.com/leafo/etlua) as a view language, see Lua guide
   * Overhaul to [reference manual]($root/reference.html): better organization, Lua examples, and more guides
 
-#### Database
+### Database
 
   * `Model\include_in` can take a `where` option to filter results
   * A flipped `Model\include_in` no longer throws error when not using primary key
@@ -785,14 +836,14 @@ There are a few changes that affect backwards compatibility:
   * Postgres connection options can be set as table instead of connect string
   * Add support for [pgmoon](http://github.com/leafo/pgmoon), documentation forthcoming
 
-#### Util
+### Util
 
   * `util.time_ago_in_words` can handle dates in the future
   * `util.parse_query_string` will correctly parse empty string values
   * `assert_error` passes through all arguments passed to it instead of just first argument
   * `cached` can have a dynamically set dictionary by setting `dict` to a function
 
-#### Misc
+### Misc
 
   * A class passed to `widget` within MoonScript template will automatically be instantiated
   * Update OpenResty search path to find instalation from Brew on OSX *(Stefan Natchev)*
