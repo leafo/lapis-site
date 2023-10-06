@@ -10,19 +10,13 @@ $markdown{[[
 
 ### Additions
 
-* `Model:include_in` can now use *computed keys* to dynamically calculate a
-foreign key value by applying a function to each passed in object to load
-* Relations can use *compured keys* where appropriate
-* `lapis.validate.types` -- add `types.params_array`
-* `lapis.validate.types` -- add `types.flatten_errors`
-* `lapis.validate.types` -- `types.params_shape` can now accept numerical
-names for fields for validating array like objects with a fixed number of
-entries
-* `lapis generate` -- Rockspec generator can now specify `--moonscript` and `--cqueues` to
-automatically append dependencies
-* `lapis migrate` -- Add the `--dry-run` flag to to run all pending migrations
-in a transaction that is never commited. (Note: in some databases, there are
-queries that can not be rolled back)
+* `Model:include_in` can now use *computed keys* to dynamically calculate a foreign key value by applying a function to each passed in object to load. This can be done by specifying a function instead of a field name when defining the column mapping table
+* Relations can use *compured keys* where appropriate by passing a function instead of a field name when defining the column mapping table
+* `lapis.validate.types` -- add `types.params_array` for validating an array of objects with a common shape
+* `lapis.validate.types` -- add `types.flatten_errors` for error output compatibility with tableshape
+* `lapis.validate.types` -- `types.params_shape` can now accept numerical names for fields for validating array like objects with a fixed number of entries
+* `lapis generate` -- Rockspec generator can now specify `--moonscript` and `--cqueues` to automatically append dependencies
+* `lapis migrate` -- Add the `--dry-run` flag to to run all pending migrations in a transaction that is never commited. (Note: in some databases, there are queries that can not be rolled back)
 
 ### Misc
 
