@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Requests and Actions - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Tue Apr 18 21:09:32 2023" />
+  <link rel="stylesheet" href="../reference.css?Fri Oct  6 22:56:40 2023" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     var _gaq = _gaq || [];
@@ -27,7 +27,7 @@
     </h1>
     <div id="search_drop" data-root=".." data-index="../reference.json"></div>
     <a href="../changelog.html" class="version_flag">
-      v1.14.0
+      v1.15.0
     </a>
   </div>
 
@@ -137,31 +137,37 @@
       <div class="text_column"><h1>Requests and Actions</h1>
 
 <p>Every HTTP request that is handled by Lapis follows the same basic flow after
-being handed off from processing server. The first step is routing. A <em>route</em>
-is a pattern that a URL must match. When you define a route you also include an
-<em>action</em>. An action is a regular Lua/MoonScript function that will be called if
-the associated route matches.</p>
+being handed off from processing server. The first step is routing. The path of
+an incoming request is matched against the routes defined in your application
+to look up the corresponding <em>action function</em>. An action is a regular
+Lua/MoonScript function that will be called if the associated route matches.</p>
 
-<p>All actions are invoked with one argument, a <a href="#request-object"><em>request
-object</em></a>. The request object is where you'll store all the
-data you want to share between your actions and views. Additionally, the
-request object is your interface to the webserver on how the result is sent to
-the client.</p>
+<p>An <em>action function</em> is invoked with one argument, a <a href="#request-object"><em>request
+object</em></a>, when processing a request. The request object is
+where you'll store all the data you want to share between your actions and
+views. Additionally, the request object is your interface to the webserver on
+how the result is sent to the client.</p>
 
-<p>The return value of the action is used to render the output. A string return
-value will be rendered to the browser directly. A table return value will be
-used as the <a href="#render-options"><em>render options</em></a>. If there is more than one
-return value, all of them are merged into the final result. You can return both
-strings and tables to control the output.</p>
+<p>The return value of the action is used to control how the output is rendered. A
+string return value will be rendered to the browser directly. A table return
+value will be used as the <a href="#render-options"><em>render options</em></a>. If there is more
+than one return value, all of them are merged into the final result. You can
+return both strings and tables to control the output.</p>
 
 <p>If there is no route that matches the request then the default route handler is
-executed, read more in <a href="#application-configuration/callbacks"><em>application callbacks</em></a>.</p>
+executed, read more in <a href="#application-configuration/callbacks"><em>application
+callbacks</em></a>.</p>
 
 <h2><a name="routes-and-url-patterns" href="#routes-and-url-patterns">Routes &amp; URL Patterns</a></h2>
 
 <p>Route patterns use a special syntax to define dynamic parameters of the URL and
 assign a name to them. The simplest routes have no parameters though:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
@@ -169,8 +175,6 @@ assign a name to them. The simplest routes have no parameters though:</p>
 </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/hello&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/users/all&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -178,7 +182,9 @@ assign a name to them. The simplest routes have no parameters though:</p>
   </span><span class="sh_string">&quot;/hello&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;/users/all&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>These routes match the URLs verbatim. The leading <code>/</code> is required. The route
 must match the entire path of the request. That means a request to
@@ -187,21 +193,26 @@ must match the entire path of the request. That means a request to
 <p>You can specify a named parameter with a <code>:</code> followed immediately by the name.
 The parameter will match all characters excluding <code>/</code> (in the general case):</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/page/:page&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">params</span><span class="sh_operator">.</span><span class="sh_identifier">page</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/post/:post_id/:post_name&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;/page/:page&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@params</span><span class="sh_operator">.</span><span class="sh_identifier">page</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;/post/:post_id/:post_name&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span></code>
 </pre>
+</div>
 
+</p>
 
 <blockquote><p>In the example above we called <code>print</code> to debug. When running inside
 OpenResty, the output of <code>print</code> is sent to the Nginx notice log.</p></blockquote>
@@ -214,6 +225,11 @@ character, and will fail to match otherwise.</p>
 any <code>/</code> characters.  The splat is stored in a <code>splat</code>  named parameter in the
 <code>params</code> table of the request object. It&rsquo;s just a single <code>*</code></p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/browse/*&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">params</span><span class="sh_operator">.</span><span class="sh_identifier">splat</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
@@ -221,8 +237,6 @@ any <code>/</code> characters.  The splat is stored in a <code>splat</code>  nam
   </span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">params</span><span class="sh_operator">.</span><span class="sh_identifier">name</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">params</span><span class="sh_operator">.</span><span class="sh_identifier">splat</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -232,7 +246,9 @@ any <code>/</code> characters.  The splat is stored in a <code>splat</code>  nam
   </span><span class="sh_string">&quot;/user/:name/file/*&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@params</span><span class="sh_operator">.</span><span class="sh_identifier">name</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@params</span><span class="sh_operator">.</span><span class="sh_identifier">splat</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>If you put any text directly after the splat or the named parameter it will not
 be included in the named parameter. For example you can match URLs that end in
@@ -303,6 +319,11 @@ MoonScript gives us convenient syntax for representing this:</span><span
 class="for_lua">Every method on the application that defines a new route has a
 second form that takes the name of the route as the first argument:</span></p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
@@ -314,8 +335,6 @@ second form that takes the name of the route as the first argument:</span></p>
   </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello &quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">..</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">params</span><span class="sh_operator">.</span><span class="sh_identifier">name</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">..</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;, go home: &quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">..</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_string">&quot;index&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -325,7 +344,9 @@ second form that takes the name of the route as the first argument:</span></p>
   </span><span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">user_profile:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/user/:name&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_string">&quot;Hello #{@params.name}, go home: #{@url_for &quot;</span><span class="sh_identifier">index</span><span class="sh_string">&quot;}&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>We can generate the paths to various actions using <span
 class="for_moon"><code>@url_for</code></span><span
@@ -343,6 +364,11 @@ verb. Lapis comes with some helpers to make writing these actions simple.
 <code>respond_to</code> takes a table indexed by HTTP verb with a value of the function to
 perform when the action receives that verb.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">respond_to</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">respond_to</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
@@ -357,8 +383,6 @@ perform when the action receives that verb.</p>
   </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">}))</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">respond_to</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
@@ -371,7 +395,9 @@ perform when the action receives that verb.</p>
       </span><span class="sh_tbl_key sh_regex">redirect_to:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;index&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
+</p>
 
 <p><code>respond_to</code> can also take a before filter of its own that will run before the
 corresponding HTTP verb action. We do this by specifying a <code>before</code> function.
@@ -380,6 +406,11 @@ The same semantics of <a href="#before-filters">before filters</a> apply, so if 
 class="for_lua"><code>self:write()</code></span> then the rest of the action will not get
 run.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">respond_to</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">respond_to</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
@@ -400,8 +431,6 @@ run.</p>
   </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">}))</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">respond_to</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
@@ -417,10 +446,11 @@ run.</p>
     </span><span class="sh_tbl_key sh_regex">POST:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
       </span><span class="sh_self_ref sh_label">@user</span><span class="sh_operator">\</span><span class="sh_identifier">update</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@params</span><span class="sh_operator">.</span><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace">
       </span><span class="sh_tbl_key sh_regex">redirect_to:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;index&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
-</span></code>
+  </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>On any <code>POST</code> request, regardless of whether <code>respond_to</code> is used or not, if
 the <code>Content-type</code> header is set to <code>application/x-www-form-urlencoded</code> then
@@ -451,6 +481,11 @@ You'll find these wrappers for the most common verbs: <code>get</code>, <code>po
 of this is setting up the user session. We can declare a before filter, or a
 function that runs before every action, like so:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">before_filter</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
@@ -463,8 +498,6 @@ function that runs before every action, like so:</p>
   </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;current user is: &quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">..</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">tostring</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">current_user</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -475,7 +508,9 @@ function that runs before every action, like so:</p>
   </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_string">&quot;current user is: #{@current_user}&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>You are free to add as many as you like by calling <span
 class="for_moon"><code>@before_filter</code></span><span
@@ -487,6 +522,11 @@ class="for_lua"><code>self:write()</code></span> method then the action will be 
 For example we can cancel the action and redirect to another page if some
 condition is not met:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">before_filter</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
@@ -499,8 +539,6 @@ condition is not met:</p>
   </span><span class="sh_comment">-- ...</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -510,7 +548,9 @@ condition is not met:</p>
 
   </span><span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">login:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/login&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">...</span></code>
 </pre>
+</div>
 
+</p>
 
 <blockquote><p><span class="for_moon"><code>@write</code></span><span
 class="for_lua"><code>self:write()</code></span> is what processes the return value of a
@@ -573,21 +613,18 @@ action.</p>
 <h3><a name="request-object/request.req" href="#request-object/request.req"><code>request.req</code></a></h3>
 
 <p>The raw request table <code class="for_moon">@req</code><code class="for_lua">self.req</code> contains data from the request provided
-by the underlying server. The format of this data may be server specific.</p>
+by the underlying server. The format of this data may be server specific, but
+generally will contain the following common fields:</p>
 
-<ul>
-<li><code class="for_moon">@headers</code><code class="for_lua">self.headers</code> &mdash; Request headers table</li>
-<li><code class="for_moon">@parsed_url</code><code class="for_lua">self.parsed_url</code> &mdash; A table generated containing all the components of the requesting URL. Contains fields like <code>scheme</code>, <code>path</code>, <code>host</code>, <code>port</code>, and <code>query</code></li>
-<li><code class="for_moon">@params_get</code><code class="for_lua">self.params_get</code> &mdash; Unprocessed table of parameters from the query string of the requesting URL</li>
-<li><code class="for_moon">@params_post</code><code class="for_lua">self.params_post</code> &mdash; Unprocessed table of parameters from the body of the request</li>
-</ul>
-
+<p><table class="configuration_table" cellspacing="0" cellpadding="0"><thead><tr><td>Name</td><td>Description</td></tr></thead><tbody><tr><td><code class="for_moon">@req.headers</code><code class="for_lua">self.req.headers</code></td><td><p>Request headers table</p>
+</td></tr><tr><td><code class="for_moon">@req.parsed_url</code><code class="for_lua">self.req.parsed_url</code></td><td><p>A table generated containing all the components of the requesting URL. Contains fields like <code>scheme</code>, <code>path</code>, <code>host</code>, <code>port</code>, and <code>query</code></p>
+</td></tr><tr><td><code class="for_moon">@req.params_get</code><code class="for_lua">self.req.params_get</code></td><td><p>Unprocessed table of parameters from the query string of the requesting URL</p>
+</td></tr><tr><td><code class="for_moon">@req.params_post</code><code class="for_lua">self.req.params_post</code></td><td><p>Unprocessed table of parameters from the body of the request</p>
+</td></tr></tbody></table></p>
 
 <h3><a name="request-object/cookies" href="#request-object/cookies">Cookies</a></h3>
 
-<p>The <span class="for_moon"><code>@cookies</code></span><span
-class="for_lua"><code>self.cookies</code></span> table in the request lets you read and
-write cookies.</p>
+<p>The <code class="for_moon">@cookies</code><code class="for_lua">self.cookies</code> table in the request lets you read and write cookies.</p>
 
 <p>The cookies object, <code class="for_moon">@cookies</code><code class="for_lua">self.cookies</code>, is a proxy object. It supports
 reading existing cookies by indexing the object by name, and writing new
@@ -595,17 +632,19 @@ cookies by writing them to the table. When iterating, the cookies object will
 always appear as an empty table. The initial cookies are stored in the
 <code>__index</code> of the metatable.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/reads-cookie&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">cookies</span><span class="sh_operator">.</span><span class="sh_identifier">foo</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-
 
 </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/sets-cookie&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">cookies</span><span class="sh_operator">.</span><span class="sh_identifier">foo</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;bar&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;/reads-cookie&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@cookies</span><span class="sh_operator">.</span><span class="sh_identifier">foo</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -613,7 +652,9 @@ always appear as an empty table. The initial cookies are stored in the
   </span><span class="sh_string">&quot;/sets-cookie&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_self_ref sh_label">@cookies</span><span class="sh_operator">.</span><span class="sh_identifier">foo</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;bar&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>All new cookies created are given the default attributes <code>Path=/; HttpOnly</code>
 (know as a <a href="http://en.wikipedia.org/wiki/HTTP_cookie#Terminology"><em>session
@@ -622,15 +663,11 @@ configure a cookie&rsquo;s settings by overriding the the <code>cookie_attribute
 on your application. Here&rsquo;s an example that adds an expiration date to cookies
 to make them persist:</p>
 
-<pre class="highlight lang_moon"><code><span class="sh_identifier">date</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;date&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-
-</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_tbl_key sh_regex">cookie_attributes:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">name</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">value</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-    </span><span class="sh_identifier">expires</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">date</span><span class="sh_symbol sh_embedded">(</span><span class="sh_keyword">true</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">\</span><span class="sh_identifier">adddays</span><span class="sh_symbol sh_embedded">(</span><span class="sh_number">365</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">\</span><span class="sh_identifier">fmt</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;${http}&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-    </span><span class="sh_string">&quot;Expires=#{expires}; Path=/; HttpOnly&quot;</span></code>
-</pre>
-
-
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">date</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;date&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
@@ -639,7 +676,16 @@ to make them persist:</p>
   </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Expires=&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">..</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">expires</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">..</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;; Path=/; HttpOnly&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span></code>
 </pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">date</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;date&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
+</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_tbl_key sh_regex">cookie_attributes:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">name</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">value</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_identifier">expires</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">date</span><span class="sh_symbol sh_embedded">(</span><span class="sh_keyword">true</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">\</span><span class="sh_identifier">adddays</span><span class="sh_symbol sh_embedded">(</span><span class="sh_number">365</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">\</span><span class="sh_identifier">fmt</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;${http}&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_string">&quot;Expires=#{expires}; Path=/; HttpOnly&quot;</span></code>
+</pre>
+</div>
+
+</p>
 
 <p>The <code>cookie_attributes</code> method takes the request object as the first argument
 (<code>self</code>) and then the name and value of the cookie being processed.</p>
@@ -659,19 +705,24 @@ an empty table.</p>
 
 <p>The session object can be manipulated the same way as the cookies object:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_identifier">app</span><span class="sh_operator">.</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_keyword">if</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">not</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">session</span><span class="sh_operator">.</span><span class="sh_identifier">current_user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">then</span><span class="sh_lua_whitespace sh_whitespace">
     </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">session</span><span class="sh_operator">.</span><span class="sh_identifier">current_user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Adam&quot;</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_keyword">unless</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@session</span><span class="sh_operator">.</span><span class="sh_identifier">current_user</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_self_ref sh_label">@session</span><span class="sh_operator">.</span><span class="sh_identifier">current_user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Adam&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>By default the session is stored in a cookie called <code>lapis_session</code>. You can
 overwrite the name of the session using the <code>session_name</code> <a href="configuration.html">configuration
@@ -679,6 +730,11 @@ variable</a>. Sessions are signed with your
 application secret, which is stored in the configuration value <code>secret</code>. It is
 highly recommended to change this from the default.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_comment">-- config.lua</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">config</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">config</span><span class="sh_lua_whitespace sh_whitespace">
 
@@ -687,8 +743,6 @@ highly recommended to change this from the default.</p>
   </span><span class="sh_identifier">secret</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;this is my secret string 123456&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_comment">-- config.moon</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">config</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
@@ -696,32 +750,34 @@ highly recommended to change this from the default.</p>
   </span><span class="sh_identifier">session_name</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;my_app_session&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_identifier">secret</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;this is my secret string 123456&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <h2><a name="request-parameters" href="#request-parameters">Request Parameters</a></h2>
 
-<p>The request object contains a few fields to help you access the user-supplies
-parameters sent with the request. Parameters are loaded by default from the
-following sources:</p>
+<p>The request object contains several fields that facilitate access to
+user-supplied parameters sent with the request. These parameters are
+automatically loaded from the following sources:</p>
 
 <ul>
-<li>URL parameters &mdash; When using a route that has a named variable. A route <code>/users/:id</code> will create a parameters named <code>id</code></li>
-<li>Body parameters &mdash; For request methods that support a body, like <code>POST</code> and <code>PUT</code>, the body will automatically be parsed if the content type is <code>application/x-www-form-urlencoded</code> or <code>multipart/form-data</code></li>
-<li>Query parameters &mdash; Parameters included at the end of a request URL following the <code>?</code>. <code>/users?filter=blue</code> will create a parameter called filter with the value <code>"blue"</code></li>
+<li>URL parameters &ndash; These are created when using a route that has a named variable. For instance, a route <code>/users/:id</code> will create a parameter named <code>id</code>.</li>
+<li>Body parameters &ndash; For request methods that support a body, such as <code>POST</code> and <code>PUT</code>, the body will be automatically parsed if the content type is <code>application/x-www-form-urlencoded</code> or <code>multipart/form-data</code>.</li>
+<li>Query parameters &ndash; These are parameters included at the end of a request URL following the <code>?</code>. For example, <code>/users?filter=blue</code> will create a parameter called <code>filter</code> with the value <code>"blue"</code>.</li>
 </ul>
 
 
-<p>The <code>@params</code> object is a concatenation of all the default loaded parameters
-listed above. URL parameters have the highest precedence, followed by body
-parameters, then query parameters. This means that an <code>:id</code> URL parameters will
-not be overwritten by an <code>?id=</code> query parameter.</p>
+<p>The <code class="for_moon">@params</code><code class="for_lua">self.params</code> object is a combination of all the default loaded
+parameters listed above. URL parameters have the highest precedence, followed
+by body parameters, and then query parameters. This means that an <code>:id</code> URL
+parameter will not be overwritten by an <code>?id=</code> query parameter.</p>
 
-<blockquote><p>Headers and cookies are also accessible on the request object but they are
+<blockquote><p>Headers and cookies can also be accessed on the request object, but they are
 not included in the parameters object.</p></blockquote>
 
 <p>The body of the request is only parsed if the content type is
 <code>application/x-www-form-urlencoded</code> or <code>multipart/form-data</code>. For requests that
-use another content type, like <code>json</code>, you can use the <code>json_params</code> helper
+use another content type, such as <code>json</code>, you can use the <code>json_params</code> helper
 function to parse the body.</p>
 
 <p>See <a href="../reference/quick_reference.html#how-can-i-read-json-http-body">How can I read JSON HTTP body?</a>.</p>
@@ -756,61 +812,65 @@ advanced parameter can unknowingly introduce bugs.</p></blockquote>
 
 <h3><a name="request-parameters/parameters-types-and-limits" href="#request-parameters/parameters-types-and-limits">Parameters Types &amp; Limits</a></h3>
 
-<p>The value of a parameter can either be a string, <code>true</code>, or a simple table. No complex
-parsing or validation is done on parameters, it&rsquo;s the responsibility of the
-application creator to verify and sanitize any parameters. For example, if you're
-expecting a number, you will need to convert the value to a number using
-something like the Lua builtin <code>tonumber</code>.</p>
+<p>The value of a parameter can either be a string, <code>true</code>, or a simple table. No
+complex parsing or validation is performed on parameters; it is the
+responsibility of the application creator to verify and sanitize any
+parameters. For instance, if you're expecting a number, you will need to
+convert the value to a number using something like the Lua built-in <code>tonumber</code>.</p>
 
 <p>Lapis provides a <a href="../reference/input_validation.html">validation module</a> to
-help with verifying that user supplied data matches a set of constraints that
+assist with verifying that user-supplied data matches a set of constraints that
 you provide.</p>
 
-<p>Duplicate parameter names are overwritten by subsequent values. Note that due
-to hash table ordering, the final value may not be consistent so we recommend
-avoid setting the same parameters multiple times.</p>
+<p>Duplicate parameter names are overwritten by subsequent values. Due to hash
+table ordering, the final value may not be consistent, so we recommend against
+setting the same parameters multiple times.</p>
 
-<p>When using Nginx, a default limit of 100 parameters are parsed by default from
+<p>When using Nginx, a default limit of 100 parameters is parsed by default from
 the body and query. This is to prevent malicious users from overloading your
 server with a large amount of data.</p>
 
-<blockquote><p>Storing or processing user input as a string? We highly recommend adding
-limits on the max length of the string and trimming whitespace from the
-sides. Additionally, verifying that the data is a valid Unicode string can
-prevent any processing errors by your database.</p></blockquote>
+<blockquote><p>Are you storing or processing user input as a string? We highly recommend
+adding limits on the maximum length of the string and trimming whitespace
+from the sides. Additionally, verifying that the data is a valid Unicode
+string can help prevent any processing errors by your database.</p></blockquote>
 
 <h2><a name="request-object-methods" href="#request-object-methods">Request Object Methods</a></h2>
 
 <h3><a name="request-object-methods/request:write" href="#request-object-methods/request:write"><code>request:write(things...)</code></a></h3>
 
-<p>Writes all of the arguments to the output buffer or options table. A different
-action is done depending on the type of each argument.</p>
+<p>Appends all of the arguments to the output buffer or options table. The action
+performed varies depending on the type of each argument:</p>
 
 <ul>
-<li><code>string</code> &mdash; String is appended to output buffer</li>
-<li><code>function</code> (or callable table) &mdash; Function is called with the output buffer, result is recursively passed to <code>write</code></li>
-<li><code>table</code> &mdash; key/value pairs are assigned into <code class="for_moon">@options</code><code class="for_lua">self.options</code>, all other values are recursively passed to <code>write</code></li>
+<li><code>string</code> &mdash; The string is appended to the output buffer.</li>
+<li><code>function</code> (or callable table) &mdash; The function is called with the output buffer, and the result is recursively passed to <code>write</code>.</li>
+<li><code>table</code> &mdash; Key/value pairs are assigned into the <code class="for_moon">@options</code><code class="for_lua">self.options</code>, while all other values are recursively passed to <code>write</code>.</li>
 </ul>
 
 
-<p>In most circumstances it is unnecessary to call write as the return value of an
-action is automatically passed to write. In before filters, write has the dual
-purpose of writing to the output and cancelling any further actions from
-running.</p>
+<p>Under most circumstances, it is unnecessary to call <code>write</code> because the return
+value of an action is automatically passed to it. In before filters, <code>write</code>
+serves a dual purpose: it writes to the output and cancels any further actions
+from running.</p>
 
 <h3><a name="request-object-methods/request:url_for" href="#request-object-methods/request:url_for"><code>request:url_for(name_or_obj, params, query_params=nil, ...)</code></a></h3>
 
 <p>Generates a URL for <code>name_or_obj</code>.</p>
 
-<blockquote><p><code>url_for</code> is a bit of a misnomer since it typically generates a path to the
-requested page. If you want to get the entire URL you can combine this
-function with <code>build_url</code>.</p></blockquote>
+<blockquote><p>The function <code>url_for</code> is somewhat misleadingly named as it typically generates a path to the requested page. To obtain the complete URL, you can combine this function with <code>build_url</code>.</p></blockquote>
 
-<p>If <code>name_or_obj</code> is a string, then the route of that name is looked up and
-filled using the values in params. If no route exists then an error is thrown.</p>
+<p>If <code>name_or_obj</code> is a string, the route of that name is looked up and populated
+using the values in <code>params</code>. If no named route exists that matches, then an
+error is thrown.</p>
 
 <p>Given the following routes:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;index&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_comment">-- ...</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
@@ -819,52 +879,62 @@ filled using the values in params. If no route exists then an error is thrown.</
   </span><span class="sh_comment">-- ...</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">index:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">-- ..</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">user_data:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/data/:user_id/:data_field&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">-- ...</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>URLs to the pages can be generated like this:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_comment">-- returns: /</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_string">&quot;index&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_comment">-- returns: /data/123/height</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_string">&quot;user_data&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user_id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">123</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">data_field</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;height&quot;</span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_comment">-- returns: /</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;index&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_comment">-- returns: /data/123/height</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_data&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">user_id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">123</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">data_field:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;height&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>If the third argument, <code>query_params</code>, is supplied, it will be converted into
 query parameters and appended to the end of the generated URL. If the route
 doesn&rsquo;t take  any parameters in the URL then <code>nil</code>, or empty object, must be
 passed as the second argument:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_comment">-- returns: /data/123/height?sort=asc</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_string">&quot;user_data&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user_id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">123</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">data_field</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;height&quot;</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">sort</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;asc&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_comment">-- returns: /?layout=new</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_string">&quot;index&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">nil</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_identifier">layout</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;new&quot;</span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_comment">-- returns: /data/123/height?sort=asc</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_data&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">user_id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">123</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">data_field:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;height&quot;</span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">sort:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;asc&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_comment">-- returns: /?layout=new</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;index&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">nil</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">layout:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;new&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>Any optional components of the route will only be included if all of the
 enclosed parameters are provided. If the optional component does not have any
@@ -872,19 +942,29 @@ parameters then it will never be included.</p>
 
 <p>Given the following route:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;user_page&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/user/:username(/:page)(.:format)&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_comment">-- ...</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">user_page:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/user/:username(/:page)(.:format)&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">-- ...</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>The following URLs can be generated:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_comment">-- returns: /user/leafo</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_string">&quot;user_page&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">username</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;leafo&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 
@@ -897,8 +977,6 @@ parameters then it will never be included.</p>
 </span><span class="sh_comment">-- returns: /user/leafo/code.json</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_string">&quot;user_page&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">username</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;leafo&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">page</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;code&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">format</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;json&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_comment">-- returns: /user/leafo</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_page&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">username:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;leafo&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
@@ -911,37 +989,49 @@ parameters then it will never be included.</p>
 </span><span class="sh_comment">-- returns: /user/leafo/code.json</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_page&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">username:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;leafo&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">page:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;code&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">format:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;json&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>If a route contains a splat, the value can be provided via the parameter named
 <code>splat</code>:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;browse&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/browse(/*)&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_comment">-- ...</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">browse:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/browse(/*)&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">-- ...</span></code>
 </pre>
+</div>
 
+</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_comment">-- returns: /browse</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_string">&quot;browse&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_comment">-- returns: /browse/games/recent</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_string">&quot;browse&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">splat</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;games/recent&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_comment">-- returns: /browse</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;browse&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_comment">-- returns: /browse/games/recent</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;browse&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">splat:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;games/recent&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <h4><a name="request-object-methods/request:url_for/passing-an-object-to-url-for" href="#request-object-methods/request:url_for/passing-an-object-to-url-for">Passing an object to <code>url_for</code></a></h4>
 
@@ -955,49 +1045,64 @@ anything else passed to <code>url_for</code> originally.</p>
 define what page they represent. For example, consider a <code>Users</code> model that
 defines a <code>url_params</code> method, which goes to the profile page of the user:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Model</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;users&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">url_params</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">req</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">...)</span><span class="sh_lua_whitespace sh_whitespace">
     </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_profile&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">...</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">url_params:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">req</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">...</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_string">&quot;user_profile&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@id</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">...</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>We can now just pass an instance of <code>Users</code> directly to <code>url_for</code> and the path
 for the <code>user_profile</code> route is returned:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">100</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_identifier">user</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_comment">-- could return: /user-profile/100</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">find</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">100</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_comment">-- could return: /user-profile/100</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>You might notice we passed <code>...</code> through the <code>url_params</code> method to the return
 value. This allows the third <code>query_params</code> argument to still function:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_identifier">user</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">page</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;likes&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_comment">-- could return: /user-profile/100?page=likes</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">find</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">page:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;likes&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_comment">-- could return: /user-profile/100?page=likes</span></code>
 </pre>
+</div>
 
+</p>
 
 <h4><a name="request-object-methods/request:url_for/using-the-url-key-method" href="#request-object-methods/request:url_for/using-the-url-key-method">Using the <code>url_key</code> method</a></h4>
 
@@ -1008,44 +1113,59 @@ called on it, and the return value is inserted into the path.</p>
 <p>For example, consider a <code>Users</code> model which we've generated a <code>url_key</code> method
 for:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Model</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;users&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">url_key</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">route_name</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
     </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">id</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">url_key:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">route_name</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@id</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>If we wanted to generate a path to the user profile we might normally write
 something like this:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_string">&quot;user_profile&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_identifier">id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">.</span><span class="sh_identifier">id</span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">find</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_profile&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">.</span><span class="sh_identifier">id</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>The <code>url_key</code> method we've defined lets us pass the <code>User</code> object directly as
 the <code>id</code> parameter and it will be converted to the id:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_string">&quot;user_profile&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_identifier">id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">find</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_self_ref sh_label">@url_for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_profile&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span></code>
 </pre>
+</div>
 
+</p>
 
 <blockquote><p>The <code>url_key</code> method takes the name of the path as the first argument, so we
 could change what we return based on which route is being handled.</p></blockquote>
@@ -1057,19 +1177,24 @@ the URL.</p>
 
 <p>For example, if we are running our server on <code>localhost:8080</code>:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">build_url</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; http://localhost:8080</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">build_url</span><span class="sh_operator">(</span><span class="sh_string">&quot;hello&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; http://localhost:8080/hello</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">build_url</span><span class="sh_operator">(</span><span class="sh_string">&quot;world&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">host</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;leafo.net&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">port</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">2000</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; http://leafo.net:2000/world</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_self_ref sh_label">@build_url</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; http://localhost:8080</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_self_ref sh_label">@build_url</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;hello&quot;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; http://localhost:8080/hello</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_self_ref sh_label">@build_url</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;world&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">host:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;leafo.net&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">port:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">2000</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; http://leafo.net:2000/world</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>The following options are supported:</p>
 
@@ -1086,43 +1211,49 @@ the URL.</p>
 <h3><a name="request-object-methods/request:flow" href="#request-object-methods/request:flow"><code>request:flow(module_name)</code></a></h3>
 
 <p>Loads a flow by <code>module_name</code> with the <code>flows_prefix</code> on the current request
-object. If the flow with that name had been previously loaded, then the
-existing flow instance is returned.</p>
+object. If the flow with that name has been previously loaded, the existing
+flow instance is returned.</p>
 
 <h3><a name="request-object-methods/request:html" href="#request-object-methods/request:html"><code>request:html(fn)</code></a></h3>
 
 <p>Returns a new function that implements the buffer writer interface for
-rendering the contents of <code>fn</code> as an HTML scoped function. Suitable for
+rendering the contents of <code>fn</code> as an HTML scoped function. This is suitable for
 returning from an action.</p>
 
 <h3><a name="request-object-methods/request:get_request" href="#request-object-methods/request:get_request"><code>request:get_request()</code></a></h3>
 
-<p>This function returns <code>self</code>. This method is useful in scenarios where the
-request object is being proxied, and you wish to get a direct access to the
-instance of the request object for mutation. Examples include within flows and
-within widgets where the request object is embedded into the <em>helper chain</em>.</p>
+<p>Returns <code>self</code>. This method is useful in scenarios where the request object is
+being proxied, and you need direct access to the instance of the request object
+for mutation. Examples include accessing the request object in a flow or in a
+widget where the request object is embedded into the <em>helper chain</em>.</p>
 
 <h2><a name="render-options" href="#render-options">Render Options</a></h2>
 
 <p>Render options are set by explicit calls to <code>write</code> or by the return value of
 the action function. They are accumulated in the <code class="for_moon">@options</code><code class="for_lua">self.options</code> field of
-the request object. Typically an action function does not generate the response
-directly, but sets the options to be used by Lapis during the rendering phase
-of the request which happens immediately after executing the action.</p>
+the request object. Typically, an action function does not generate the
+response directly but sets the options to be used by Lapis during the rendering
+phase of the request, which happens immediately after executing the action.</p>
 
-<p>For example, in the following action the <code>render</code> and <code>status</code> fields are used
-to set the HTTP status response code, and specify a view by name to be used to
+<p>For example, in the following action, the <code>render</code> and <code>status</code> fields are used
+to set the HTTP status response code and specify a view by name to be used to
 generate the response body.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">render</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;error&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">status</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">404</span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
-<pre class="highlight lang_moon"><code><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">render:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;error&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">status:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">404</span></code>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">render:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;error&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">status:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">404</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>Here are the options that can used to control the how the response is generated:</p>
 
@@ -1289,73 +1420,79 @@ generate the response body.</p>
 <p>When rendering JSON make sure to use the <code>json</code> render option. It will
 automatically set the correct content type and disable the layout:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/hello&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">json</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">hello</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;world&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_string">&quot;/hello&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_tbl_key sh_regex">json:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">hello:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;world!&quot;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
+</p>
 
 <h2><a name="application-configuration" href="#application-configuration">Application Configuration</a></h2>
 
-<p>These fields are designed to be overwritten by the application creator to
-configure how the application functions. These fields can either be overwridden
-on the instance, of by setting the instance fields when creating a new
-Application class.</p>
+<p>The following fields on the application object are designed to be overwritten
+by the application creator to configure how the application processes a
+request. These fields can either be overwritten on the instance or by setting
+the instance fields when creating a new Application class.</p>
 
 <h3><a name="application-configuration/application.layout" href="#application-configuration/application.layout"><code>application.layout</code></a></h3>
 
-<p>Specifies a view that will be used to wrap the content of the results response
-in. A layout is always rendered around the result of the action&rsquo;s render unless
-<code>layout</code> is set to false, or a renderer with a separate content type is used
-(eg. <code>json</code>)</p>
+<p>This specifies a default view that will be used to wrap the content of the
+results response. A layout is always rendered around the result of the action&rsquo;s
+render unless <code>layout</code> is set to <code>false</code>, or a renderer with a separate content
+type is used (e.g., <code>json</code>).</p>
 
-<p>Can either be an instance of a view or a string. When a string is provided, the
-layout is loaded as a module via the <code>require</code> using the module name
+<p>It can either be an instance of a view or a string. When a string is provided,
+the layout is loaded as a module via the <code>require</code> using the module name
 <code>{views_prefix}.{layout_name}</code>.</p>
 
 <p>Default <code>require "lapis.views.layout"</code></p>
 
 <h3><a name="application-configuration/application.error_page" href="#application-configuration/application.error_page"><code>application.error_page</code></a></h3>
 
-<p>View used to render an unrecoverable error in the <a href="#application-configuration/callbacks/handle_error">default
-<code>handle_error</code></a> callback.
-The value of this field is passed directly to Render Option <code>render</code>, enabling
-the use of specifying the page by view name or directly by a widget or
-template.</p>
+<p>This is the view used to render an unrecoverable error in the default
+<code>handle_error</code> callback. The value of this field is passed directly to Render
+Option <code>render</code>, enabling the use of specifying the page by view name or
+directly by a widget or template.</p>
 
 <p>Default <code>require "lapis.views.error"</code></p>
 
 <h3><a name="application-configuration/application.views_prefix" href="#application-configuration/application.views_prefix"><code>application.views_prefix</code></a></h3>
 
-<p>A prefix appended to the view name (joined by <code>.</code>) whenever a view is
+<p>This is a prefix appended to the view name (joined by <code>.</code>) whenever a view is
 specified by string to determine the full module name to require.</p>
 
 <p>Default <code>"views"</code></p>
 
 <h3><a name="application-configuration/application.actions_prefix" href="#application-configuration/application.actions_prefix"><code>application.actions_prefix</code></a></h3>
 
-<p>A prefix appended to the action name (joined by <code>.</code>) whenever an action is
-specified by string to determine the full module name to require.</p>
+<p>This is a prefix appended to the action name (joined by <code>.</code>) whenever an action
+is specified by string to determine the full module name to require.</p>
 
 <p>Default <code>"actions"</code></p>
 
 <h3><a name="application-configuration/application.flows_prefix" href="#application-configuration/application.flows_prefix"><code>application.flows_prefix</code></a></h3>
 
-<p>A prefix appended to the flow name (joined by <code>.</code>) whenever a flow is specified
-by string to determine the full module name to require.</p>
+<p>This is a prefix appended to the flow name (joined by <code>.</code>) whenever a flow is
+specified by string to determine the full module name to require.</p>
 
 <p>Default <code>"flows"</code></p>
 
 <h3><a name="application-configuration/application.Request" href="#application-configuration/application.Request"><code>application.Request</code></a></h3>
 
-<p>The class that will be used to instantiate new request objects when dispatching
-a request. Default <code>require "lapis.request"</code></p>
+<p>This is the class that will be used to instantiate new request objects when
+dispatching a request.</p>
+
+<p>Default <code>require "lapis.request"</code></p>
 
 <h3><a name="application-configuration/callbacks" href="#application-configuration/callbacks">Callbacks</a></h3>
 
@@ -1373,6 +1510,11 @@ request object.</p>
 
 <p>A default implementation is provided:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">function</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">default_route</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_comment">-- strip trailing /</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_keyword">if</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">req</span><span class="sh_operator">.</span><span class="sh_identifier">parsed_url</span><span class="sh_operator">.</span><span class="sh_identifier">path</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;./$&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">then</span><span class="sh_lua_whitespace sh_whitespace">
@@ -1388,8 +1530,6 @@ request object.</p>
   </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_tbl_key sh_regex">default_route:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_comment">-- strip trailing /</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_keyword">if</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@req</span><span class="sh_operator">.</span><span class="sh_identifier">parsed_url</span><span class="sh_operator">.</span><span class="sh_identifier">path</span><span class="sh_operator">\</span><span class="sh_identifier">match</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;./$&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -1398,7 +1538,9 @@ request object.</p>
   </span><span class="sh_keyword">else</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_self_ref sh_label">@app</span><span class="sh_operator">.</span><span class="sh_identifier">handle_404</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>The default implementation will check for excess trailing <code>/</code> on the end of the
 URL it will attempt to redirect to a version without the trailing slash.
@@ -1407,6 +1549,11 @@ Otherwise it will call the <code>handle_404</code> method on the application.</p
 <p>This method, <code>default_route</code>, is a normal method of your application. You can
 override it to do whatever you like. For example, this adds logging:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">function</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">default_route</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">ngx</span><span class="sh_operator">.</span><span class="sh_identifier">log</span><span class="sh_operator">(</span><span class="sh_identifier">ngx</span><span class="sh_operator">.</span><span class="sh_identifier">NOTICE</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;User hit unknown path &quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">..</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">req</span><span class="sh_operator">.</span><span class="sh_identifier">parsed_url</span><span class="sh_operator">.</span><span class="sh_identifier">path</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
@@ -1414,14 +1561,14 @@ override it to do whatever you like. For example, this adds logging:</p>
   </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">.</span><span class="sh_identifier">default_route</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">default_route:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_identifier">ngx</span><span class="sh_operator">.</span><span class="sh_identifier">log</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">ngx</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">NOTICE</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;User hit unknown path #{@req.parsed_url.path}&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_keyword">super</span><span class="sh_operator">!</span></code>
 </pre>
+</div>
 
+</p>
 
 <h4><a name="application-configuration/callbacks/application:handle_404" href="#application-configuration/callbacks/application:handle_404"><code>application:handle_404()</code></a></h4>
 
@@ -1430,54 +1577,74 @@ of the request did not match any routes.</p>
 
 <p>A default implementation is provided:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">function</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">handle_404</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_function">error</span><span class="sh_operator">(</span><span class="sh_string">&quot;Failed to find route: &quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">..</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">req</span><span class="sh_operator">.</span><span class="sh_identifier">request_uri</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span></code>
 </pre>
-
-
-<pre class="highlight lang_moon"><code><span class="sh_tbl_key sh_regex">handle_404:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_function">error</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Failed to find route: #{@req.request_uri}&quot;</span></code>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
+  </span><span class="sh_tbl_key sh_regex">handle_404:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
+    </span><span class="sh_function">error</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Failed to find route: #{@req.request_uri}&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
-<p>This will trigger a 500 error and a stack trace on every invalid request. If
-you want to make a proper 404 page this is where you would do it.</p>
+<p>This handler will cause a 500 error and a stack trace for every invalid
+request. If you wish to create a suitable 404 page, this is where you would do
+it.</p>
 
-<p>Overriding the <code>handle_404</code> method instead of <code>default_route</code> allows us to
-create a custom 404 page while still keeping the trailing slash removal code.</p>
+<p>By overriding the <code>handle_404</code> method instead of the <code>default_route</code>, we can
+create a custom 404 page while maintaining the code for removing the trailing
+slash.</p>
 
-<p>Here&rsquo;s a simple 404 handler that just prints the text <code>"Not Found!"</code></p>
+<p>Here&rsquo;s a straightforward 404 handler that merely displays the text <code>"Not
+Found!"</code>:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">function</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">handle_404</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">status</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">404</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">layout</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Not Found!&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">handle_404:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
     </span><span class="sh_tbl_key sh_regex">status:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">404</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">layout:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">false</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Not Found!&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <h4><a name="application-configuration/callbacks/application:handle_error" href="#application-configuration/callbacks/application:handle_error"><code>application:handle_error(err, trace)</code></a></h4>
 
-<p>Every action executed by Lapis is wrapped by <a href="http://www.lua.org/manual/5.1/manual.html#pdf-xpcall"><code>xpcall</code></a>. This ensures fatal
-errors can be captured and a meaningful error page can be generated instead of
-the server&rsquo;s default error page, which may not be useful.</p>
+<p>Every action executed by Lapis is called through <a href="http://www.lua.org/manual/5.1/manual.html#pdf-xpcall"><code>xpcall</code></a>. This ensures
+that fatal errors can be captured and a meaningful error page can be produced
+instead of the server&rsquo;s default error page.</p>
 
-<p>The error handler should only be used to capture fatal and unexpected errors,
-expected errors are discussed in the <a href="../reference/exception_handling.html">Exception Handling
-guide</a></p>
+<p>The error handler should only be utilized to capture fatal and unexpected
+errors. Expected errors are discussed in the <a href="../reference/exception_handling.html">Exception Handling
+guide</a>.</p>
 
-<p>Lapis comes with an error handler pre-defined that extracts information about
-the error and renders the template specified by <code>application.error_page</code>. This error page
-contains a stack trace and the error message.</p>
+<p>Lapis comes with a pre-defined error handler that extracts information about
+the error and renders it into the template specified by
+<code>application.error_page</code>. This error page includes a stack trace and the error
+message.</p>
 
-<p>If you want to have your own error handling logic you can override the method
-<code>handle_error</code>:</p>
+<p>If you wish to implement your own error handling logic, you can override the
+<code>handle_error</code> method.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_comment">-- config.custom_error_page is made up for this example</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">function</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">handle_error</span><span class="sh_operator">(</span><span class="sh_identifier">err</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">trace</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_keyword">if</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">config</span><span class="sh_operator">.</span><span class="sh_identifier">custom_error_page</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">then</span><span class="sh_lua_whitespace sh_whitespace">
@@ -1487,8 +1654,6 @@ contains a stack trace and the error message.</p>
   </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_comment">-- config.custom_error_page is made up for this example</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">handle_error:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">err</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">trace</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -1497,19 +1662,23 @@ contains a stack trace and the error message.</p>
     </span><span class="sh_keyword">else</span><span class="sh_moonscript_whitespace sh_whitespace">
       </span><span class="sh_keyword">super</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">err</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">trace</span></code>
 </pre>
+</div>
 
+</p>
 
-<p>The request object, or <code>self</code>, passed to the error handler is not the one that
-was created for the request that failed. Lapis provides a new one since the
-existing one maybe have been partially written to when it failed.</p>
+<p>The request object, or <code>self</code>, that is passed to the error handler is not the
+one that was created for the request that failed, as it may have been tainted
+by the failed request via a partial write. Lapis generates an empty request
+object for rendering the error page.</p>
 
-<p>You can access the original request object with <span
-class="for_moon"><code>@original_request</code></span><span
-class="for_lua"><code>self.original_request</code></span></p>
+<p>If you need to inspect the original request object to extract information about
+why the error occurred, you can access it through
+<code class="for_moon">@original_request</code><code class="for_lua">self.original_request</code>.</p>
 
-<p>Lapis' default error page shows an entire stack trace, so it&rsquo;s recommended to
-replace it with a custom one in your production environments, and log the
-exception in the background.</p>
+<p>Lapis' default error page displays a full stack trace. Therefore, it is
+recommended to replace it with a custom one in your production environments and
+log the exception in the background to prevent leaking file pathes and function
+names related to your application.</p>
 
 <p>The <a href="https://github.com/leafo/lapis-exceptions"><code>lapis-exceptions</code></a> module augments the error handler to records errors
 in a database. It can also email you when there&rsquo;s an exception.</p>
@@ -1532,18 +1701,23 @@ change.</p>
 
 <p>Class approach:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;index&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/index&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello world!&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/about&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;My site is cool&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">end</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_self_ref sh_label">@match</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;index&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/index&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello world!&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_self_ref sh_label">@match</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;/about&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;My site is cool&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>Instance approach:</p>
 
@@ -1668,8 +1842,8 @@ instances of the class.</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Tue Apr 18 21:09:32 2023"></script>
-  <script type="text/javascript" src="../reference.js?Tue Apr 18 21:09:32 2023"></script>
+  <script type="text/javascript" src="../search.js?Fri Oct  6 22:56:40 2023"></script>
+  <script type="text/javascript" src="../reference.js?Fri Oct  6 22:56:40 2023"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>
