@@ -6,6 +6,29 @@
 
 $markdown{[[
 
+## v1.15.0 - October 6 2023
+
+### Additions
+
+* `Model:include_in` can now use *computed keys* to dynamically calculate a
+foreign key value by applying a function to each passed in object to load
+* Relations can use *compured keys* where appropriate
+* `lapis.validate.types` -- add `types.params_array`
+* `lapis.validate.types` -- add `types.flatten_errors`
+* `lapis.validate.types` -- `types.params_shape` can now accept numerical
+names for fields for validating array like objects with a fixed number of
+entries
+* `lapis generate` -- Rockspec generator can now specify `--moonscript` and `--cqueues` to
+automatically append dependencies
+* `lapis migrate` -- Add the `--dry-run` flag to to run all pending migrations
+in a transaction that is never commited. (Note: in some databases, there are
+queries that can not be rolled back)
+
+### Misc
+
+* Various updates to documentation
+* Fix error message for `types.truncated_text`
+
 ## v1.14.0 - April 18 2023
 
 ### Additions
