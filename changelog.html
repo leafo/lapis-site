@@ -6,6 +6,23 @@
 
 $markdown{[[
 
+## v1.16.0 - November 2 2023
+
+### Additions
+
+* `lapis.validate.types` -- Add `types.params_map` validation type, the params compatible variant of `types.map_of`
+
+### Changes
+
+* `model:update` will now only assign the update object to the model instnance if the update completes successfully
+* `model:update` support the `returns` option to control the `RETURNING` clause of the generated query
+* `model:update` when timestamps are enabled, the generated `updated_at` value is assigned to the model instance
+
+### Fixes
+
+* `lapis.validate.types` -- Fix bug where `types.params_shape` would not return the state object
+* `model:update` will avoid storing `db.raw` values on passed as update object to the model instance if the update does not complmete successfully
+
 ## v1.15.0 - October 6 2023
 
 ### Additions
