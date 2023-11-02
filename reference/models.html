@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Models - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Fri Oct  6 22:56:41 2023" />
+  <link rel="stylesheet" href="../reference.css?Thu Nov  2 20:10:48 2023" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     var _gaq = _gaq || [];
@@ -27,7 +27,7 @@
     </h1>
     <div id="search_drop" data-root=".." data-index="../reference.json"></div>
     <a href="../changelog.html" class="version_flag">
-      v1.15.0
+      v1.16.0
     </a>
   </div>
 
@@ -239,29 +239,39 @@ method</a>.</p>
 <p>By default all models expect the table to have a primary key called<code>"id"</code>. This
 can be changed by setting the <code class="for_moon">@primary_key</code><code class="for_lua">self.primary_key</code> field on the class.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Model</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;users&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">primary_key</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;login&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_self_ref sh_label">@primary_key</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;login&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>If there are multiple primary keys then an array table can be used:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Followings</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Model</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;followings&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">primary_key</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;followed_user_id&quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Followings</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_self_ref sh_label">@primary_key</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;followed_user_id&quot;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>A unique primary key is needed for every row in order to <code>update</code> and <code>delete</code>
 rows without affecting other rows unintentially.</p>
@@ -273,6 +283,11 @@ fetching data about the underlying table.</p>
 
 <p>For the following examples assume we have the following models:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Model</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.db.model&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">Model</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Model</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;users&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
@@ -281,8 +296,6 @@ fetching data about the underlying table.</p>
   </span><span class="sh_identifier">primary_key</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;tag&quot;</span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.db.model&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -290,7 +303,9 @@ fetching data about the underlying table.</p>
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Tags</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_self_ref sh_label">@primary_key</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;tag&quot;</span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
+</p>
 
 <h3><a name="class-methods/Model:find" href="#class-methods/Model:find"><code>Model:find(...)</code></a></h3>
 
@@ -479,6 +494,11 @@ are supported:</p>
 
 <p>For example:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">UserProfile</span><span class="sh_operator">:</span><span class="sh_identifier">find_all</span><span class="sh_operator">({</span><span class="sh_number">1</span><span class="sh_operator">,</span><span class="sh_number">2</span><span class="sh_operator">,</span><span class="sh_number">3</span><span class="sh_operator">,</span><span class="sh_number">4</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">key</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">fields</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id, twitter_account&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
@@ -487,8 +507,6 @@ are supported:</p>
   </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">users</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">UserProfile</span><span class="sh_operator">\</span><span class="sh_identifier">find_all</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_number">1</span><span class="sh_operator">,</span><span class="sh_number">2</span><span class="sh_operator">,</span><span class="sh_number">3</span><span class="sh_operator">,</span><span class="sh_number">4</span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">key:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">fields:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id, twitter_account&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -497,7 +515,9 @@ are supported:</p>
   </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
+</p>
 
 <pre class="highlight lang_sql"><code><span class="sh_keyword">SELECT</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_identifier">user_id</span><span class="sh_operator">,</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_identifier">twitter_account</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_string">&quot;things&quot;</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_keyword">where</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_keyword">in</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">,</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_number">2</span><span class="sh_operator">,</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_number">3</span><span class="sh_operator">,</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_number">4</span><span class="sh_operator">)</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_keyword">and</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_string">&quot;public&quot;</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_default">=</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_keyword">TRUE</span></code>
 </pre>
@@ -545,19 +565,24 @@ an auto-incrementing key from the insert statement.</p>
 <blockquote><p>In MySQL the <em>last insert id</em> is used to get the id of the row since the
 <code>RETURNING</code> statement is not available.</p></blockquote>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">create</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">login</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;superuser&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">password</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;1234&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">create</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">login:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;superuser&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">password:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;1234&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
+</p>
 
 <pre class="highlight lang_sql"><code><span class="sh_keyword">INSERT</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_keyword">INTO</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_string">&quot;users&quot;</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_operator">(</span><span class="sh_string">&quot;password&quot;</span><span class="sh_operator">,</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_string">&quot;login&quot;</span><span class="sh_operator">)</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_keyword">VALUES</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_operator">(</span><span class="sh_string">&#x27;1234&#x27;</span><span class="sh_operator">,</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_string">&#x27;superuser&#x27;</span><span class="sh_operator">)</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_identifier">RETURNING</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_string">&quot;id&quot;</span></code>
 </pre>
@@ -571,17 +596,22 @@ raw values are replaced by the values returned by the database.</p>
 <p>For example, we might create a new row in a table with a <code>position</code> column set
 to the next highest number:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">create</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">position</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_operator">(</span><span class="sh_string">&quot;(select coalesce(max(position) + 1, 0) from users)&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">create</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_tbl_key sh_regex">position:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;(select coalesce(max(position) + 1, 0) from users)&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
+</p>
 
 <pre class="highlight lang_sql"><code><span class="sh_keyword">INSERT</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_keyword">INTO</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_string">&quot;users&quot;</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_operator">(</span><span class="sh_identifier">position</span><span class="sh_operator">)</span><span class="sh_sql_whitespace sh_whitespace">
 </span><span class="sh_keyword">VALUES</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_operator">((</span><span class="sh_keyword">select</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_identifier">coalesce</span><span class="sh_operator">(</span><span class="sh_identifier">max</span><span class="sh_operator">(</span><span class="sh_identifier">position</span><span class="sh_operator">)</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_default">+</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_number">1</span><span class="sh_operator">,</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_number">0</span><span class="sh_operator">)</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_identifier">users</span><span class="sh_operator">))</span><span class="sh_sql_whitespace sh_whitespace">
@@ -676,39 +706,50 @@ be slightly different</p></blockquote>
 
 <p>Returns the name of the table backed by the model.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_identifier">Model</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;users&quot;</span><span class="sh_operator">):</span><span class="sh_identifier">table_name</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &quot;users&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">Model</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;user_posts&quot;</span><span class="sh_operator">):</span><span class="sh_identifier">table_name</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &quot;user_posts&quot;</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_symbol sh_embedded">(</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">\</span><span class="sh_identifier">table_name</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &quot;users&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">(</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">UserPosts</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">\</span><span class="sh_identifier">table_name</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &quot;user_posts&quot;</span></code>
 </pre>
+</div>
 
-
-<p class="for_moon">
-This class method can be overridden to change what table a model uses:
 </p>
 
+<div class="for_moon">
+
+This class method can be overridden to change what table a model uses:
 
 <pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_self_ref sh_label">@table_name</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;active_users&quot;</span></code>
 </pre>
+
+</div>
 
 
 <h3><a name="class-methods/Model:singular_name" href="#class-methods/Model:singular_name"><code>Model:singular_name()</code></a></h3>
 
 <p>Returns the singular name of the table.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_identifier">Model</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;users&quot;</span><span class="sh_operator">):</span><span class="sh_identifier">singular_name</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &quot;user&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">Model</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;user_posts&quot;</span><span class="sh_operator">):</span><span class="sh_identifier">singular_name</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &quot;user_post&quot;</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_symbol sh_embedded">(</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">\</span><span class="sh_identifier">singular_name</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &quot;user&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_symbol sh_embedded">(</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">UserPosts</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">\</span><span class="sh_identifier">singular_name</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; &quot;user_post&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>The singular name is used internally by Lapis when calculating what the name of
 the field is when loading rows with <code>include_in</code>. It&rsquo;s also used when
@@ -749,14 +790,14 @@ automatically chosen.</p>
 <p>Possible values for <code>key</code> argument:</p>
 
 <ul>
-<li><strong>string</strong> &mdash; for each object, the value <code>object[key]</code> is used to lookup instances of the model by the model&rsquo;s primary key. The model is assumed to have a singular primary key, and will error otherwise
+<li><strong>String</strong> &mdash; For each object, the value <code>object[key]</code> is used to look up instances of the model by the model&rsquo;s primary key. It&rsquo;s assumed that the model has a singular primary key; otherwise, an error will occur.
 
 <ul>
-<li>with <code>flip</code> enabled: <code>key</code> is used as the foreign key column name, and <code>object[opts.local_key or "id"]</code> is used to pull the values</li>
+<li>With <code>flip</code> enabled: <code>key</code> is used as the foreign key column name, and <code>object[opts.local_key or "id"]</code> is used to retrieve the values.</li>
 </ul>
 </li>
-<li><strong>array of string</strong> &mdash; for each object, a composite key is created by individually mapping each field of the key array via <code>object[key]</code> to the composite primary key of the model</li>
-<li><strong>column mapping table</strong> &mdash; explicitly specify the mapping of fields to columns. The <em>key</em> of the table will be used as the column name, and the value in the table will be used as the field name referenced from the <code>objects</code> argument. If the value is a function, then the function will be called for each object to dynamically calculate the foreign key value.</li>
+<li><strong>Array of Strings</strong> &mdash; For each object, a composite key is created by mapping each field of the key array individually via <code>object[key]</code> to the composite primary key of the model.</li>
+<li><strong>Column Mapping Table</strong> &mdash; This allows for the explicit specification of the mapping of fields to columns. The <em>key</em> of the table is used as the column name, while the value in the table is used as the field name referenced from the <code>objects</code> argument. If the value is a function, this function will be called for each object to dynamically calculate the foreign key value.</li>
 </ul>
 
 
@@ -923,20 +964,25 @@ foreign key on the array of model instances that points to the rows we are
 preloading. By default, the value of the foreign key is mapped to the primary
 key of the model that is being loaded.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">posts</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Posts</span><span class="sh_operator">:</span><span class="sh_function">select</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">-- this gets all the posts</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">include_in</span><span class="sh_operator">(</span><span class="sh_identifier">posts</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">posts</span><span class="sh_operator">[</span><span class="sh_number">1</span><span class="sh_operator">].</span><span class="sh_identifier">user</span><span class="sh_operator">.</span><span class="sh_identifier">name</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">-- print the fetched data</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">posts</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Posts</span><span class="sh_operator">\</span><span class="sh_function">select</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">-- this gets all the posts</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">include_in</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">posts</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;user_id&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">posts</span><span class="sh_symbol sh_embedded">[</span><span class="sh_number">1</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">.</span><span class="sh_identifier">user</span><span class="sh_operator">.</span><span class="sh_identifier">name</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">-- print the fetched data</span></code>
 </pre>
+</div>
 
+</p>
 
 <pre class="highlight lang_sql"><code><span class="sh_keyword">SELECT</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_default">*</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_string">&quot;posts&quot;</span><span class="sh_sql_whitespace sh_whitespace">
 </span><span class="sh_keyword">SELECT</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_default">*</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_string">&quot;users&quot;</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_keyword">where</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_string">&quot;id&quot;</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_keyword">in</span><span class="sh_sql_whitespace sh_whitespace"> </span><span class="sh_operator">(</span><span class="sh_number">1</span><span class="sh_operator">,</span><span class="sh_number">2</span><span class="sh_operator">,</span><span class="sh_number">3</span><span class="sh_operator">,</span><span class="sh_number">4</span><span class="sh_operator">,</span><span class="sh_number">5</span><span class="sh_operator">,</span><span class="sh_number">6</span><span class="sh_operator">)</span></code>
@@ -969,17 +1015,19 @@ the <code>Users</code> model.</p>
 fields in our object array match to the columns in our query. Here are the
 relevant models:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Model</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.db.model&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">Model</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_comment">-- table with columns: id, name</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Users</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Model</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;users&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_comment">-- table with columns: user_id, twitter_account, facebook_username</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">UserData</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Model</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;user_data&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-</span></code>
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">UserData</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">Model</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">(</span><span class="sh_string">&quot;user_data&quot;</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.db.model&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_comment">-- columns: id, name</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -988,7 +1036,9 @@ relevant models:</p>
 </span><span class="sh_comment">-- columns: user_id, twitter_account, facebook_username</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">UserData</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Model</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>Now let&rsquo;s say we have an array of users and we want to fetch the associated
 user data.</p>
@@ -1115,9 +1165,10 @@ built in methods to avoid unexpected issues.</p>
 
 <h3><a name="instance-methods/model:update" href="#instance-methods/model:update"><code>model:update(..., opts={})</code></a></h3>
 
-<p>Generate and issue a query to update the row backed by the instance of the
-model. The values of the primary keys specified by the model&rsquo;s class are used
-to uniquely identify the row for updating.</p>
+<p>Issue a query to update the row backed by the instance of the model. The values
+of the primary keys, as specified by the model&rsquo;s class, are used to uniquely
+identify the row for updating. The <code>updated_at</code> timestamp field will also be
+set if the model has timestamps enabled.</p>
 
 <p>This method returns two values:</p>
 
@@ -1143,7 +1194,7 @@ take place</p></blockquote>
 
 <p>In the first form we simply pass a table mapping column names to the updated
 values. The values in the table will be merged into the instance of the model
-to reflect the update:</p>
+to reflect the update if the update is able to complete successfully.</p>
 
 <p><div class="dual_code">
 <div class="dual_code_tabs">
@@ -1243,7 +1294,7 @@ value from the database to store on the model instance, similar to the
 
 <p><strong>Options</strong></p>
 
-<p><table class="configuration_table" cellspacing="0" cellpadding="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>timestamp</code></td><td><p>The <code>updated_at</code> field will be updated to the current time if the model has timestamps. Note that if the update itself contains <code>updated_at</code> then that will take precedence over the auto-update.</p>
+<p><table class="configuration_table" cellspacing="0" cellpadding="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>timestamp</code></td><td><p>The <code>updated_at</code> field will be updated to the current time if the model has timestamps enabled. Note that if the update itself contains <code>updated_at</code> then that will take precedence over the auto-update.</p>
 <details class="option_example"><summary>Show Example</summary><div class="dual_code">
 <div class="dual_code_tabs">
         <button type="button" data-lang="lua" class="set_language">Lua</button>
@@ -1262,6 +1313,8 @@ value from the database to store on the model instance, similar to the
 </div>
 
 </details></td><td><p><code>true</code></p>
+</td></tr><tr><td><code>returning</code></td><td><p>Manually specify a list of columns to be returned from the query when issuing the update. These values will be assigned to the model instance object if the query completes successfully. Note that any updated fields that use <code>db.raw</code> will automatically use <code>returning</code> and it is not necessary to manually specify. A special value of <code>"*"</code> can be provided to cause every field to be returned with the update.</p>
+</td><td><p><code>nil</code></p>
 </td></tr><tr><td><code>where</code></td><td><p>A table of additional conditions to add to the <code>WHERE</code> clause of the updated query. This can be used to have an atomic conditional update. The return value should be checked to see if the update succeeeded or not.</p>
 <details class="option_example"><summary>Show Example</summary><div class="dual_code">
 <div class="dual_code_tabs">
@@ -2872,8 +2925,8 @@ your database rows by using integers to represent a state.</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Fri Oct  6 22:56:41 2023"></script>
-  <script type="text/javascript" src="../reference.js?Fri Oct  6 22:56:41 2023"></script>
+  <script type="text/javascript" src="../search.js?Thu Nov  2 20:10:48 2023"></script>
+  <script type="text/javascript" src="../reference.js?Thu Nov  2 20:10:48 2023"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>
