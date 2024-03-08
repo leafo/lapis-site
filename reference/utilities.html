@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Utilities - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Fri Mar  8 18:53:34 2024" />
+  <link rel="stylesheet" href="../reference.css?Fri Mar  8 20:35:45 2024" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     var _gaq = _gaq || [];
@@ -56,14 +56,14 @@
 <li><a href="#functions/trim_filter"><code>trim_filter(tbl, [{keys ...}], [empty_val=nil])</code></a></li>
 <li><a href="#functions/to_json"><code>to_json(obj)</code></a></li>
 <li><a href="#functions/from_json"><code>from_json(str)</code></a></li>
-<li><a href="#functions/time_ago_in_words"><code>time_ago_in_words(date, [parts=1], [suffix="ago"])</code></a></li></ul>
+<li><a href="#functions/time_ago_in_words"><code>time_ago_in_words(date, [parts=1], [suffix="ago"])</code></a></li>
+<li><a href="#functions/autoload"><code>autoload(prefix, tbl={})</code></a></li></ul>
 <li><a href="#encoding-methods">Encoding Methods</a></li>
 <ul><li><a href="#encoding-methods/encode_base64"><code>encode_base64(str)</code></a></li>
 <li><a href="#encoding-methods/decode_base64"><code>decode_base64(str)</code></a></li>
 <li><a href="#encoding-methods/hmac_sha1"><code>hmac_sha1(secret, str)</code></a></li>
 <li><a href="#encoding-methods/encode_with_secret"><code>encode_with_secret(object, secret=config.secret)</code></a></li>
-<li><a href="#encoding-methods/decode_with_secret"><code>decode_with_secret(msg_and_sig, secret=config.secret)</code></a></li>
-<li><a href="#encoding-methods/autoload"><code>autoload(prefix, tbl={})</code></a></li></ul>
+<li><a href="#encoding-methods/decode_with_secret"><code>decode_with_secret(msg_and_sig, secret=config.secret)</code></a></li></ul>
 <li><a href="#csrf-protection">CSRF Protection</a></li>
 <ul><li><a href="#csrf-protection/csrf.generate_token"><code>csrf.generate_token(req, data=nil)</code></a></li>
 <li><a href="#csrf-protection/csrf.validate_token"><code>csrf.validate_token(req, callback=nil)</code></a></li>
@@ -87,7 +87,8 @@
 <li><a href="#utf8">UTF8</a></li>
 <ul><li><a href="#utf8/utf8.trim"><code>utf8.trim</code></a></li>
 <li><a href="#utf8/utf8.printable_character"><code>utf8.printable_character</code></a></li>
-<li><a href="#utf8/utf8.whitepace"><code>utf8.whitepace</code></a></li></ul></ul>
+<li><a href="#utf8/utf8.whitepace"><code>utf8.whitepace</code></a></li>
+<li><a href="#utf8/utf8.string_length"><code>utf8.string_length</code></a></li></ul></ul>
           </div>
         
 
@@ -139,65 +140,301 @@
 
 <p>Utility functions are found in:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">util</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <h3><a name="functions/unescape" href="#functions/unescape"><code>unescape(str)</code></a></h3>
 
-<p>URL unescapes string</p>
+<p>URL unescapes string, returning the resulting string.</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">original_string</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello%2C%20World%21&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">unescaped_string</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">unescape</span><span class="sh_operator">(</span><span class="sh_identifier">original_string</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">unescaped_string</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;Hello, World!&quot;</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">util</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">original_string</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello%2C%20World%21&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">unescaped_string</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">unescape</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">original_string</span><span class="sh_moonscript_whitespace sh_whitespace">
+
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">unescaped_string</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;Hello, World!&quot;</span></code>
+</pre>
+</div>
+
+</p>
 
 <h3><a name="functions/escape" href="#functions/escape"><code>escape(str)</code></a></h3>
 
-<p>URL escapes string</p>
+<p>URL escapes string, returning the resulting string.</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">original_string</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello, World!&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">escaped_string</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">escape</span><span class="sh_operator">(</span><span class="sh_identifier">original_string</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">escaped_string</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;Hello%2C%20World%21&quot;</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">util</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">original_string</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello, World!&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">escaped_string</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">escape</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">original_string</span><span class="sh_moonscript_whitespace sh_whitespace">
+
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">escaped_string</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;Hello%2C%20World%21&quot;</span></code>
+</pre>
+</div>
+
+</p>
 
 <h3><a name="functions/escape_pattern" href="#functions/escape_pattern"><code>escape_pattern(str)</code></a></h3>
 
-<p>Escapes string for use in Lua pattern</p>
+<p>Escapes string for use in Lua pattern. This function is useful for instances
+where you want to use a string as a pattern in Lua&rsquo;s string matching functions,
+but the string may contain special characters that have special meanings in Lua
+patterns.</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">pattern</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">escape_pattern</span><span class="sh_operator">(</span><span class="sh_string">&quot;[special]&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">pattern</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;%[special%]&quot;</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">util</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">pattern</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">escape_pattern</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;[special]&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">pattern</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;%[special%]&quot;</span></code>
+</pre>
+</div>
+
+</p>
 
 <h3><a name="functions/parse_query_string" href="#functions/parse_query_string"><code>parse_query_string(str)</code></a></h3>
 
-<p>Parses query string into a table</p>
+<p>Parses a query string into a table. Note that if query keys do not include a
+value, their value will be set to <code>true</code> in the table. Each parsed tuple is
+inserted into the table in two ways: first as a <code>[key] = value</code>, which overwrites any
+existing keys, and secondly, it is appended to the end of the array portion of the table
+as <code>{key, value}</code>.</p>
+
+<blockquote><p>The query string being parsed should not start with a &lsquo;?&rsquo;. The function only
+processes the key-value pairs and does not handle the &lsquo;?&rsquo; character typically
+used at the start of query strings in URLs.</p></blockquote>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">query_table</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">parse_query_string</span><span class="sh_operator">(</span><span class="sh_string">&quot;key1=value1&amp;key2&amp;key1=value2&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">query_table</span><span class="sh_operator">[</span><span class="sh_string">&quot;key1&quot;</span><span class="sh_operator">])</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- &quot;value2&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">query_table</span><span class="sh_operator">[</span><span class="sh_string">&quot;key2&quot;</span><span class="sh_operator">])</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- true</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_comment">-- numeric indicies showing duplicates</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_deprecated_function sh_function">unpack</span><span class="sh_operator">(</span><span class="sh_identifier">query_table</span><span class="sh_operator">[</span><span class="sh_number">1</span><span class="sh_operator">]))</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- &quot;key1&quot;, &quot;value1&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_deprecated_function sh_function">unpack</span><span class="sh_operator">(</span><span class="sh_identifier">query_table</span><span class="sh_operator">[</span><span class="sh_number">2</span><span class="sh_operator">]))</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- &quot;key2&quot;, true</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_deprecated_function sh_function">unpack</span><span class="sh_operator">(</span><span class="sh_identifier">query_table</span><span class="sh_operator">[</span><span class="sh_number">3</span><span class="sh_operator">]))</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- &quot;key1&quot;, &quot;value2&quot;</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">util</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">query_table</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">parse_query_string</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;key1=value1&amp;key2&amp;key1=value2&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">query_table</span><span class="sh_symbol sh_embedded">[</span><span class="sh_string">&quot;key1&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- &quot;value2&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">query_table</span><span class="sh_symbol sh_embedded">[</span><span class="sh_string">&quot;key2&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- true</span><span class="sh_moonscript_whitespace sh_whitespace">
+
+</span><span class="sh_comment">-- numeric indicies showing duplicates</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">unpack</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">query_table</span><span class="sh_symbol sh_embedded">[</span><span class="sh_number">1</span><span class="sh_symbol sh_embedded">]</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- &quot;key1&quot;, &quot;value1&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">unpack</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">query_table</span><span class="sh_symbol sh_embedded">[</span><span class="sh_number">2</span><span class="sh_symbol sh_embedded">]</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- &quot;key2&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">unpack</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">query_table</span><span class="sh_symbol sh_embedded">[</span><span class="sh_number">1</span><span class="sh_symbol sh_embedded">]</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- &quot;key1&quot;, &quot;value2&quot;</span></code>
+</pre>
+</div>
+
+</p>
 
 <h3><a name="functions/encode_query_string" href="#functions/encode_query_string"><code>encode_query_string(tbl)</code></a></h3>
 
-<p>Converts a key,value table into a query string</p>
+<p>Converts a key-value table into a query string. For ordered query strings, the
+numeric indices of the table can also be a table in the form <code>{key, value}</code>.
+The two formats can be mixed into the same table and all parameters will be encoded.</p>
+
+<blockquote><p>The output of <code>parse_query_string</code>, if passed directly into
+<code>encode_query_string</code>, will cause duplicates due to the parsing structure. To
+re-encode, either strip the hash table parts or strip the numeric indices.</p></blockquote>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">example1</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">encode_query_string</span><span class="sh_operator">({</span><span class="sh_identifier">key1</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;value1&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">key2</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">example1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;key1=value1&amp;key2&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_comment">-- example with numeric indices pairs that guarantees output order</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">example2</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">encode_query_string</span><span class="sh_operator">({{</span><span class="sh_identifier">key1</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;value1&quot;</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_identifier">key2</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_operator">}})</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">example2</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;key1=value1&amp;key2&quot;</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">util</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">example1</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">encode_query_string</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_tbl_key sh_regex">key1:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;value1&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">key2:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">example1</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;key1=value1&amp;key2&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+
+</span><span class="sh_comment">-- example with numeric indices pairs that guarantees output order</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">example2</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">encode_query_string</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{{</span><span class="sh_string">&quot;key1&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;value1&quot;</span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_string">&quot;key2&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_symbol sh_embedded">}}</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">example2</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;key1=value1&amp;key2&quot;</span></code>
+</pre>
+</div>
+
+</p>
 
 <h3><a name="functions/underscore" href="#functions/underscore"><code>underscore(str)</code></a></h3>
 
-<p>Convert CamelCase to camel_case.</p>
+<p>Convert CamelCase to camel_case. This is used in various parts of Lapis, such
+as handling the automatic translation of names like converting a class name to
+a database table name.</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">underscored</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">underscore</span><span class="sh_operator">(</span><span class="sh_string">&quot;CamelCase&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">underscored</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;camel_case&quot;</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">util</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">underscored</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">underscore</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;CamelCase&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">underscored</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;camel_case&quot;</span></code>
+</pre>
+</div>
+
+</p>
 
 <h3><a name="functions/slugify" href="#functions/slugify"><code>slugify(str)</code></a></h3>
 
 <p>Converts a string to a slug suitable for a URL. Removes all whitespace and
 symbols and replaces them with <code>-</code>.</p>
 
+<blockquote><p>It might be worthwhile to check if the output is an empty string, to ensure
+that a slug could be generated from the input string. For example, a string
+composed entirely of symbols will be converted into an empty string.</p></blockquote>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">slug</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">slugify</span><span class="sh_operator">(</span><span class="sh_string">&quot;Hello World!&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">slug</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;hello-world&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">slug2</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">slugify</span><span class="sh_operator">(</span><span class="sh_string">&quot;!!!@@@###$$$&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">slug2</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;&quot;</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">util</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">slug</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">slugify</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello World!&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">slug</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;hello-world&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">slug2</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">slugify</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;!!!@@@###$$$&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">slug2</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;&quot;</span></code>
+</pre>
+</div>
+
+</p>
+
 <h3><a name="functions/uniquify" href="#functions/uniquify"><code>uniquify(tbl)</code></a></h3>
 
-<p>Iterates over array table <code>tbl</code> appending all unique values into a new array
-table, then returns the new one.</p>
+<p>Iterates over the array table <code>tbl</code>, appending all unique values into a new
+array table, and then returns this new table. The original table is not
+modified; a new table is always returned.</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">unique_table</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">uniquify</span><span class="sh_operator">({</span><span class="sh_number">1</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">2</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">2</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">3</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">3</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">3</span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_deprecated_function sh_function">unpack</span><span class="sh_operator">(</span><span class="sh_identifier">unique_table</span><span class="sh_operator">))</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: 1, 2, 3</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">util</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">unique_table</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">uniquify</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_number">1</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">2</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">2</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">3</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">3</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">3</span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">unpack</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">unique_table</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: 1, 2, 3</span></code>
+</pre>
+</div>
+
+</p>
 
 <h3><a name="functions/trim" href="#functions/trim"><code>trim(str)</code></a></h3>
 
-<p>Trims the whitespace off of both sides of a string. Note that this function is
-only aware of ASCII whitepsace characters, such as space, newline, tab, etc.
-For full Unicode/UTF8 support see the <code>lapis.util.utf8</code> module</p>
+<p>Trims the whitespace from both sides of a string. Note that this function is
+only aware of ASCII whitespace characters, such as space, newline, tab, etc.
+For full Unicode/UTF8 support, see the <code>lapis.util.utf8</code> module.</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">trimmed</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">trim</span><span class="sh_operator">(</span><span class="sh_string">&quot;   Hello World!   &quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">trimmed</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;Hello World!&quot;</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">util</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">trimmed</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">trim</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;   Hello World!   &quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">trimmed</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;Hello World!&quot;</span></code>
+</pre>
+</div>
+
+</p>
 
 <h3><a name="functions/trim_all" href="#functions/trim_all"><code>trim_all(tbl)</code></a></h3>
 
-<p>Trims the whitespace off of all values in a table. Uses <code>pairs</code> to traverse
-every key in the table.</p>
+<p>Trims the whitespace from all values in a table. It uses <code>pairs</code> to traverse
+every key in the table. Trimming is performed with the <code>trim</code> function provided in
+the <code>lapis.util</code> module.</p>
 
 <p>The table is modified in place.</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">trimmed_table</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_identifier">key1</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;   value1   &quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">key2</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;   value2   &quot;</span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">trim_all</span><span class="sh_operator">(</span><span class="sh_identifier">trimmed_table</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">for</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">k</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">v</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">in</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">pairs</span><span class="sh_operator">(</span><span class="sh_identifier">trimmed_table</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">do</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">k</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">v</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: key1 value1, key2 value2</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">util</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">trimmed_table</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_tbl_key sh_regex">key1:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;   value1   &quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">key2:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;   value2   &quot;</span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">trim_all</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">trimmed_table</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_keyword">for</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">k</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">v</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">in</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">pairs</span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">trimmed_table</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">do</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">print</span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">k</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">v</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_error">end</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: key1 value1, key2 value2</span></code>
+</pre>
+</div>
+
+</p>
 
 <h3><a name="functions/trim_filter" href="#functions/trim_filter"><code>trim_filter(tbl, [{keys ...}], [empty_val=nil])</code></a></h3>
 
 <p>Trims the whitespace off of all values in a table. The entry is removed from
-the table if the result is an empty string.</p>
+the table if the trimmed value is an empty string.</p>
 
 <p>If an array table <code>keys</code> is supplied then any other keys not in that list are
 removed (with <code>nil</code>, not the <code>empty_val</code>)</p>
@@ -207,6 +444,11 @@ that value instead of <code>nil</code></p>
 
 <p>The table is modified in place.</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">db</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.db&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">trim_filter</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">trim_filter</span><span class="sh_lua_whitespace sh_whitespace">
 
@@ -222,11 +464,8 @@ that value instead of <code>nil</code></p>
 </span><span class="sh_comment">-- {</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_comment">--   username = &quot;hello&quot;,</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_comment">--   description = db.NULL</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_comment">-- }</span><span class="sh_lua_whitespace sh_whitespace">
-</span></code>
+</span><span class="sh_comment">-- }</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">db</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.db&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">trim_filter</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
@@ -244,11 +483,38 @@ that value instead of <code>nil</code></p>
 </span><span class="sh_comment">--   description: db.NULL</span><span class="sh_moonscript_whitespace sh_whitespace">
 </span><span class="sh_comment">-- }</span></code>
 </pre>
+</div>
 
+</p>
 
 <h3><a name="functions/to_json" href="#functions/to_json"><code>to_json(obj)</code></a></h3>
 
-<p>Converts <code>obj</code> to JSON. Will strip recursion and things that can not be encoded.</p>
+<p>Converts <code>obj</code> to JSON. This process removes recursion and elements that cannot
+be encoded, thus preventing infinite recursion. The following types are
+stripped: userdata, function, thread.</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">example1</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">to_json</span><span class="sh_operator">({</span><span class="sh_number">1</span><span class="sh_operator">,</span><span class="sh_number">2</span><span class="sh_operator">,</span><span class="sh_number">3</span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">example1</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;[1,2,3]&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">example2</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">to_json</span><span class="sh_operator">({</span><span class="sh_identifier">hello</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;world&quot;</span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">example2</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &#x27;{&quot;hello&quot;:&quot;world&quot;}&#x27;</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">util</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">example1</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">to_json</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_number">1</span><span class="sh_operator">,</span><span class="sh_number">2</span><span class="sh_operator">,</span><span class="sh_number">3</span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">example1</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;[1,2,3]&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">example2</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">to_json</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_tbl_key sh_regex">hello:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;world&quot;</span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">example2</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &#x27;{&quot;hello&quot;:&quot;world&quot;}&#x27;</span></code>
+</pre>
+</div>
+
+</p>
 
 <h3><a name="functions/from_json" href="#functions/from_json"><code>from_json(str)</code></a></h3>
 
@@ -260,6 +526,49 @@ that value instead of <code>nil</code></p>
 
 <p><code>parts</code> allows you to add more words. With <code>parts=2</code>, the string
 returned would be in the format <code>1 day, 4 hours ago</code>.</p>
+
+<h3><a name="functions/autoload" href="#functions/autoload"><code>autoload(prefix, tbl={})</code></a></h3>
+
+<p>Modifies <code>tbl</code> such that accessing an unset value in <code>tbl</code> will run a <code>require</code>
+to search for the value. This is useful for autoloading components split across
+many files. It overwrites the <code>__index</code> metamethod. The result of the require
+is cached in the table, so the loading process only happens once. Returns the
+<code>tbl</code> value.</p>
+
+<blockquote><p>By default, a new empty table is created for the &lsquo;tbl&rsquo; argument, so it&rsquo;s not
+necessary to provide one if you intend to create a new autoloading table.</p></blockquote>
+
+<p>The following is the list of search patterns tried in order when requesting an
+unloaded field:</p>
+
+<ol>
+<li><code>require("#{prefix}.#{field}")</code></li>
+<li><code>require("#{prefix}.#{util.underscore(field)}")</code></li>
+</ol>
+
+
+<p>If a module is not able to be located, an error is thrown.</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">models</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">util</span><span class="sh_operator">.</span><span class="sh_identifier">autoload</span><span class="sh_operator">(</span><span class="sh_string">&quot;models&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">_</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">models</span><span class="sh_operator">.</span><span class="sh_identifier">HelloWorld</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; will require &quot;models.hello_world&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">_</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">models</span><span class="sh_operator">.</span><span class="sh_identifier">foo_bar</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; will require &quot;models.foo_bar&quot;</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">util</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_symbol sh_embedded">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">models</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">autoload</span><span class="sh_symbol sh_embedded">(</span><span class="sh_string">&quot;models&quot;</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace">
+
+</span><span class="sh_identifier">models</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">HelloWorld</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; will require &quot;models.hello_world&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">models</span><span class="sh_operator">.</span><span class="sh_identifier">foo_bar</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; will require &quot;models.foo_bar&quot;</span></code>
+</pre>
+</div>
+
+</p>
 
 <h2><a name="encoding-methods" href="#encoding-methods">Encoding Methods</a></h2>
 
@@ -297,27 +606,6 @@ that contains the encoded object and signature.</p>
 returned if the signature is correct. Otherwise returns <code>nil</code> and an error
 message. The secret must match what was used with <code>encode_with_secret</code>.</p>
 
-<h3><a name="encoding-methods/autoload" href="#encoding-methods/autoload"><code>autoload(prefix, tbl={})</code></a></h3>
-
-<p>Makes it so accessing an unset value in <code>tbl</code> will run a <code>require</code> to search
-for the value. Useful for autoloading components split across many files.
-Overwrites <code>__index</code> metamethod. The result of the require is stored in the
-table.</p>
-
-<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">models</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">autoload</span><span class="sh_operator">(</span><span class="sh_string">&quot;models&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">_</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">models</span><span class="sh_operator">.</span><span class="sh_identifier">HelloWorld</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; will require &quot;models.hello_world&quot;</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">_</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">models</span><span class="sh_operator">.</span><span class="sh_identifier">foo_bar</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; will require &quot;models.foo_bar&quot;</span></code>
-</pre>
-
-
-<pre class="highlight lang_moon"><code><span class="sh_identifier">models</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">autoload</span><span class="sh_symbol sh_embedded">(</span><span class="sh_string">&quot;models&quot;</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace">
-
-</span><span class="sh_identifier">models</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">HelloWorld</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; will require &quot;models.hello_world&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-</span><span class="sh_identifier">models</span><span class="sh_operator">.</span><span class="sh_identifier">foo_bar</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">--&gt; will require &quot;models.foo_bar&quot;</span></code>
-</pre>
-
-
 <h2><a name="csrf-protection" href="#csrf-protection">CSRF Protection</a></h2>
 
 <p>CSRF protection provides a way to prevent unauthorized requests that originate
@@ -338,25 +626,34 @@ application&rsquo;s secret. This is a string that only the application knows abo
 If your application is open source it&rsquo;s worthwhile to not commit this secret.
 The secret is set in <a href="#configuration-and-environments">your configuration</a> like so:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">config</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
 </span><span class="sh_identifier">config</span><span class="sh_operator">(</span><span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
   </span><span class="sh_identifier">secret</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;this is my secret string 123456&quot;</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
-</span></code>
+</span><span class="sh_operator">})</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">config</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_identifier">config</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_identifier">secret</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;this is my secret string 123456&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>Now that you have the secret configured, we might create a CSRF protected form
 like so:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">csrf</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.csrf&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
@@ -379,8 +676,6 @@ like so:</p>
   </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;The form is valid!&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">))</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">csrf</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.csrf&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -397,20 +692,27 @@ like so:</p>
       </span><span class="sh_string">&quot;The form is valid!&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
+</p>
 
 <blockquote><p>If you're using CSRF protection in a lot of actions then it might be helpful
 to create a before filter that generates the token automatically.</p></blockquote>
 
 <p>The following functions are part of the CSRF module:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">csrf</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.csrf&quot;</span><span class="sh_operator">)</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">csrf</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.csrf&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <h3><a name="csrf-protection/csrf.generate_token" href="#csrf-protection/csrf.generate_token"><code>csrf.generate_token(req, data=nil)</code></a></h3>
 
@@ -435,6 +737,11 @@ data with the second argument of <code>generate_token</code>.</p>
 
 <p>Here&rsquo;s an example of adding an expiration date using the token data:</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">csrf</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.csrf&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
 
@@ -462,8 +769,6 @@ data with the second argument of <code>generate_token</code>.</p>
   </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;The request is valid!&quot;</span><span class="sh_lua_whitespace sh_whitespace">
 </span><span class="sh_keyword">end</span><span class="sh_operator">))</span></code>
 </pre>
-
-
 <pre class="highlight lang_moon"><code><span class="sh_identifier">csrf</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.csrf&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
 
 </span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
@@ -484,7 +789,9 @@ data with the second argument of <code>generate_token</code>.</p>
       </span><span class="sh_string">&quot;The form is valid!&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
   </span><span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
+</p>
 
 <h3><a name="csrf-protection/csrf.assert_token" href="#csrf-protection/csrf.assert_token"><code>csrf.assert_token(...)</code></a></h3>
 
@@ -640,32 +947,39 @@ buffered entirely into memory. The result cannot be read until the full request
 completes. Also, it does not support <code>proxy</code>, <code>create</code>, <code>step</code>, or <code>redirect</code>
 parameters of LuaSocket&rsquo;s request function.</p>
 
+<p>The <code>/proxy</code> location described above must exist in the same server block that
+is handling the original request for this function to work.</p>
+
 <blockquote><p>If you are looking for a more flexible HTTP client that is specific to Nginx,
 look at <a href="https://github.com/ledgetech/lua-resty-http">https://github.com/ledgetech/lua-resty-http</a></p></blockquote>
 
 <p><strong>Parameters:</strong></p>
 
 <ul>
-<li><code>url_or_table</code>: This can either be a string specifying the URL for a GET request, or a table for more complex requests. If a table, the following keys can be used:
+<li><code>url_or_table</code>: This can either be a string specifying the URL for a simple GET/POST request, or a table for more complex requests. If a table, the following keys can be used:
 
 <ul>
-<li><code>url</code>: The URL to request.</li>
+<li><code>url</code>: The URL to request.  (Required)</li>
 <li><code>method</code>: The HTTP method to use, for example: <code>"GET"</code>, <code>"POST"</code>, <code>"PUT"</code>, etc.</li>
-<li><code>source</code>: The body of the request. If this is provided, the method defaults to <code>"POST"</code>.</li>
-<li><code>headers</code>: A table of headers to add to the request.</li>
-<li><code>sink</code>: A sink function to handle the response body.</li>
+<li><code>source</code>: An <code>ltn12</code> source that generates the body of the request.</li>
+<li><code>headers</code>: A plain table of headers to include in the request.</li>
+<li><code>sink</code>: An <code>ltn12</code> sink that will receive the output of the request.</li>
 </ul>
 </li>
-<li><code>body</code>: This is an optional parameter. If provided, it is used as the body for a POST request.</li>
+<li><code>body</code>: This arugment is only used if <code>url_or_table</code> is provided as a string. Converts the request to a POST request and adds the <code>"Content-type: application/x-www-form-urlencoded"</code> header pair</li>
 </ul>
 
 
 <p><strong>Returns:</strong></p>
 
-<p>The function returns three values:
-1. <code>body</code>: The string result of the request. If a <code>sink</code> is provided, then the body is returned as the number value <code>1</code>
-2. <code>status</code>: The HTTP status code of the response.
-3. <code>headers</code>: A table of headers from the response.</p>
+<p>The function returns three values:</p>
+
+<ol>
+<li><code>body</code>: The string result of the request. If a <code>sink</code> is provided, then the body is returned as the number value <code>1</code>, and the body should be read from the sink.</li>
+<li><code>status</code>: The HTTP status code of the response, as a number.</li>
+<li><code>headers</code>: A table of headers from the response.</li>
+</ol>
+
 
 <p>Every successful HTTP request increments the following performance metrics in the Nginx context:</p>
 
@@ -677,7 +991,8 @@ look at <a href="https://github.com/ledgetech/lua-resty-http">https://github.com
 
 <h3><a name="making-http-requests/http.simple" href="#making-http-requests/http.simple"><code>http.simple(req, body)</code></a></h3>
 
-<p><strong>NOTE:</strong> This function is now deprecated. We recommend using the http.request interface, which is compatible with multiple HTTP clients.</p>
+<blockquote><p>This function is now deprecated. We recommend using the <code>http.request</code>
+interface, which is compatible with multiple HTTP clients.</p></blockquote>
 
 <p>Performs an HTTP request using the internal <code>/proxy</code> location.</p>
 
@@ -703,6 +1018,11 @@ parameters. It takes the following keys:</p>
 
 
 <h2><a name="caching" href="#caching">Caching</a></h2>
+
+<blockquote><p>The caching functionality here is very rudimentary. If you are looking for
+more robust caching, look into the <code>proxy_cache</code> directive that is part of
+the Nginx HTTP proxy module:
+<a href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache</a></p></blockquote>
 
 <p>Lapis comes with a simple memory cache for caching the entire result of an
 action keyed on the parameters it receives. This is useful for speeding up the
@@ -1050,6 +1370,26 @@ request will continue without error.</p>
 <p>A pattern that will trim all invisible characters from either side of the
 matched string. (Utilizes the <code>whitespace</code> pattern described below)</p>
 
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_library sh_type">utf8</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util.utf8&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">original_string</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;    Hello, World!    &quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">trimmed_string</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">utf8</span><span class="sh_operator">.</span><span class="sh_identifier">trim</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_identifier">original_string</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">trimmed_string</span><span class="sh_operator">)</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_library sh_type">utf8</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util.utf8&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">original_string</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;    Hello, World!    &quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">trimmed_string</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">utf8</span><span class="sh_operator">.</span><span class="sh_identifier">trim</span><span class="sh_operator">\</span><span class="sh_identifier">match</span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">original_string</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace">
+
+</span><span class="sh_function">print</span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">trimmed_string</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: &quot;Hello, World!&quot;</span></code>
+</pre>
+</div>
+
+</p>
+
 <h3><a name="utf8/utf8.printable_character" href="#utf8/utf8.printable_character"><code>utf8.printable_character</code></a></h3>
 
 <p>A pattern that matches a single printable character. Note that printable
@@ -1061,6 +1401,32 @@ control characters.</p>
 <p>An optimal pattern that matches any unicode codepoints that are classified as
 whitespace.</p>
 
+<h3><a name="utf8/utf8.string_length" href="#utf8/utf8.string_length"><code>utf8.string_length</code></a></h3>
+
+<p>Calculates the length of a string, counting each printable character. It takes
+a string as an argument and returns the number of printable characters in the
+string. This is aware of multi-byte characters:</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_library sh_type">utf8</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util.utf8&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">multi_byte_string</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;こんにちは世界&quot;</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">string_length</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">utf8</span><span class="sh_operator">.</span><span class="sh_identifier">string_length</span><span class="sh_operator">(</span><span class="sh_identifier">multi_byte_string</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">string_length</span><span class="sh_operator">)</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_library sh_type">utf8</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util.utf8&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">multi_byte_string</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;こんにちは世界&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+</span><span class="sh_identifier">string_length</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">utf8</span><span class="sh_operator">.</span><span class="sh_identifier">string_length</span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">multi_byte_string</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace">
+
+</span><span class="sh_function">print</span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">string_length</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace">  </span><span class="sh_comment">-- Output: 7</span></code>
+</pre>
+</div>
+
+</p>
+
       </div>
     </div>
 
@@ -1071,8 +1437,8 @@ whitespace.</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Fri Mar  8 18:53:34 2024"></script>
-  <script type="text/javascript" src="../reference.js?Fri Mar  8 18:53:34 2024"></script>
+  <script type="text/javascript" src="../search.js?Fri Mar  8 20:35:45 2024"></script>
+  <script type="text/javascript" src="../reference.js?Fri Mar  8 20:35:45 2024"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>
