@@ -6,6 +6,38 @@
 
 $markdown{[[
 
+## v1.17.0 - November 12 2025
+
+### Postgres Update
+
+This version contains the first rewrite of the database modules to allow for running multiple connection configurations in parallel instead of relying on a global configuration. This refactor will eventually make it to the other database modules in future versions.
+
+- The `lapis.db.postgres` module is now a proxy object for the `"default"` connection configuration
+- Add `configure` function to `lapis.db.postgres` to define a new connection configuration. (Returns a compatible `db` object)
+- Add `logger` field to `db` object. The `db` object will use that logger for any logging actions (queries, connections). Defaults to the module `lapis.logger`
+- Add `db_connection` logger function to `lapis.logger`. The default implementation is empty and is designed to be overridden.
+- Postgres connection now emits `logging.db_connection(db, pgmoon, success, err)` so you can add metrics on connections as you see fit
+- Removed the `pgmoon_conn` performance fields, they were unreliable given that multiple connections could be created in a single request
+- Add explicit `disconnect` and `connect` functions to the `db` module. The connection configuration can automatically reconnect if the connection has been disconnected.
+- **Note:** The entire `lapis.db.postgres` module has mostly been rewritten, if you were relying on undocumented exports for custom behavior you should review your code before deploying
+
+### Other additions
+
+- Added `timer_at` to `lapis.nginx`, a safe wrapper around `ngx.timer.at` that runs callbacks under `pcall`, bubbles errors, and guarantees `after_dispatch` is called to clean up any database connections
+- After dispatch callbacks are removed after running to prevent double running if manually called
+- `lapis.http` defaults to `socket.http` unless the cqueues is explicitly running (previously it would try to load lua-http)
+- `params_shape` accepts `label = false`, letting you hide the automatic `field:` prefix when you want bare error strings or custom labels.
+- Add support for dot syntax in default Nginx config template syntax to access fields of tables, eg. `${{postgres.host}}`
+
+### Fixes
+
+- Fix a bug where a nested preload could try to load relations on a basic value type that was returned by a relation
+
+### CLI
+- Top level `lapis` command supports a `--dir` flag (requires `luafilesystem`), so you can run `lapis` from outside the project root
+- Add `lapis mcp` shortcut for the [lapis-mcp](httpshttps://github.com/leafo/lapis-mcp) package
+- When using `lapis generate migration` the name of the generated migration is now printed to stdout
+
 ## v1.16.0 - November 2 2023
 
 ### Additions
