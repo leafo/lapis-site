@@ -67,6 +67,7 @@ sitegen.create =>
     "models"
     "etlua_templates"
     "exception_handling"
+    "flows"
     "getting_started"
     "html_generation"
     "input_validation"
