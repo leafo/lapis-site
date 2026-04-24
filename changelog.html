@@ -6,6 +6,41 @@
 
 $markdown{[[
 
+## v1.18.0 - April 23 2026
+
+### HTTP and OpenResty
+
+- Added `lapis.nginx.resty_http`, an HTTP client utilizing `lua-resty-http`
+- `lapis.nginx.http` automatically switches to `lua-resty-http` in timer phase callbacks where `ngx.location.capture` isn't available
+- Documentation for supporting HTTPS certificate verification for both proxy-pass and `lua-resty-http` clients
+
+### Models and Database
+
+- `include_in` supports computed key functions returning `db.list(...)` for matching multiple related rows
+- `include_in` preserves transformed values from the `value` option when used with computed `db.list` keys
+- Polymorphic `belongs_to` preloading now forwards preload options like `skip_included` to the underlying calls
+- New `db.clause + db.clause` syntax for combining clauses with OR logic
+- `json_encodable` preserves table metatables, including `cjson.array_mt`, so empty arrays stay encoded as JSON arrays
+- `OrderedPaginator:each_page(...)` accepts an initial cursor parameter
+
+### Testing
+
+- Added `simulate_request` and `simulate_action` as clearer alternatives to the existing helpers (old names remain as deprecated aliases)
+- Enhanced `stub_request` setup for params, GET/POST tables, session, cookies, headers, and custom request classes
+- Request simulation now uses higher-resolution LuaSocket time
+
+### Application and Flows
+
+- Requests expose `route_pattern` alongside `route_name`
+- Renamed `is_flow` to `is_flow_class` for clarity
+- Expanded flow documentation
+
+### CLI
+
+- Third-party command modules resolve as top-level commands without the need for special `_` command
+- Added shortcut action for [lapis-exceptions](https://github.com/leafo/lapis-exceptions)
+- Command discovery checks module availability without requiring module loading
+
 ## v1.17.0 - November 12 2025
 
 ### Postgres Update
