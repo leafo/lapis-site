@@ -6,6 +6,52 @@
 
 $markdown{[[
 
+## v1.19.0 - August 13 2026
+
+### Models and Database
+
+- Relation and `include_in` keys can now use `db.raw` for the column name, letting you match rows on a computed expression.
+
+  ```moon
+  class Users extends Model
+    @relations: {
+      {"user_emails", has_many: "UserEmails", key: {
+        [db.raw "lower(email)"]: (u) -> u.email\lower!
+      }}
+    }
+  ```
+
+  When preloading, the raw expression is aliased in the generated query so the returned rows can be matched back to their source objects. The alias columns are stripped from the loaded models.
+
+- `Model:create` accepts an `on_conflict` option. Currently only `"do_nothing"` is supported, which appends `ON CONFLICT DO NOTHING` to the insert. If the conflict prevents the row from being inserted then `create` returns `nil` with no error message. Postgres and SQLite only.
+
+  ```moon
+  Users\create {
+    id: 1
+    profile_color: "blue"
+  }, on_conflict: "do_nothing"
+  ```
+
+### OpenResty
+
+- Fixed bug where after dispatch lock was stored globally on a worker instead of per ctx, resulting in `you tried add to after_dispatch while running a callback` error. 
+- Added `lapis.nginx.is_simulate`, which returns `true` when running under a simulated request instead of real Nginx.
+
+### CLI
+
+- `lapis build` validates the compiled config with `nginx -t` before reloading a running server. If the config is invalid the Nginx error output is printed and the `HUP` signal is not sent, so the running server keeps serving its previous config. Without this check a broken config would appear to reload successfully while the old workers kept running. Pass `--test-config` to force the check when no server is running, useful as a pre-flight before deploying.
+
+  ```bash
+  $ lapis build --test-config
+  ```
+
+- `lapis migrate` accepts `--statement-timeout` to set the Postgres `statement_timeout` before migrations run, so a runaway migration is aborted instead of blocking indefinitely. The value is passed to Postgres directly, so it takes milliseconds (`--statement-timeout=5000`) or a string with units (`--statement-timeout=5s`). Postgres only, using it with another backend is an error.
+- `lapis simulate` forces `socket.http` as the HTTP client instead of trying to use `ngx.location.capture`.
+
+### Configuration
+
+- The default app module is now selected with `config.default_app_module`, replacing the undocumented `config.app_class`. Loading the app module is unified across the command line and the server backends.
+
 ## v1.18.0 - April 23 2026
 
 ### HTTP and OpenResty
