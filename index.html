@@ -276,8 +276,7 @@ class extends lapis.Application
     GET: =>
       @html ->
         form method: "POST", action: @url_for("new_user"), ->
-          input type: "hidden",
-            name: "csrf_token", value: @csrf_token
+          input type: "hidden", name: "csrf_token", value: @csrf_token
           input type: "text", name: "username"
   }
 ]],
