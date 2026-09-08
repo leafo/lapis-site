@@ -259,7 +259,7 @@ class extends lapis.Application
       ul ->
         for user in *users
           li ->
-            a href: @url_for("user", user.id), user.name
+            a href: @url_for("user", id: user.id), user.name
 
   [user: "/profile/:id"]: =>
     user = Users\find id: @params.id
@@ -276,8 +276,7 @@ class extends lapis.Application
     GET: =>
       @html ->
         form method: "POST", action: @url_for("new_user"), ->
-          input type: "hidden",
-            name: "csrf_token", value: @csrf_token
+          input type: "hidden", name: "csrf_token", value: @csrf_token
           input type: "text", name: "username"
   }
 ]],
