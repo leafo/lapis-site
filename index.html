@@ -259,7 +259,7 @@ class extends lapis.Application
       ul ->
         for user in *users
           li ->
-            a href: @url_for("user", user.id), user.name
+            a href: @url_for("user", id: user.id), user.name
 
   [user: "/profile/:id"]: =>
     user = Users\find id: @params.id
