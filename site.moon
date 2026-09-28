@@ -63,6 +63,7 @@ sitegen.create =>
     "actions"
     "command_line"
     "configuration"
+    "server_backends"
     "database"
     "models"
     "etlua_templates"
