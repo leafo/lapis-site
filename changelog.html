@@ -6,6 +6,103 @@
 
 $markdown{[[
 
+## v1.20.0 - September 29 2026
+
+### Security
+
+- Fixed request parsing that took quadratic time on crafted input. A single request could tie up a worker for seconds, or much longer if you've raised your body size limits. Both are now linear:
+  - Nested parameter names like `a[b][c]`, when the name has many `[` without a closing `]`. This runs on every routed request before before filters.
+  - The `Cookie` header, when it contains long runs without `=`.
+- Nested parameters are expanded at most 64 levels deep. A name with more levels is kept as a single flat key instead of allocating a table for every level.
+- The default route no longer redirects off domain. A request for `//evil.com/` used to redirect to the protocol relative URL `//evil.com`. Leading slashes are now collapsed, so it redirects to `/evil.com`.
+- The HTML builder throws an error for attribute names that contain whitespace, control characters, or any of `"'>/=`. Attribute names can't be escaped, and previously they were passed through directly. An untrusted value used as an attribute name could escape the sanitizer.
+- `util.underscore` and `util.singularize` are now linear time. Previously they were quadratic on long input due to unanchored pattern matches.
+
+### Requests
+
+- `util.parse_query_string` now decodes `+` as a space, the same as `ngx.decode_args`. Values containing `=` are kept whole, and a segment without a key is skipped instead of failing the whole parse. Previously `a=b=c&d=e` parsed as just `{a = "b"}`. This is also used to parse query strings and form bodies on the cqueues server.
+- Cookie parsing no longer requires a space after `;`. Previously `a=1;b=2` produced a cookie named `;b`.
+- The default route collapses multiple trailing slashes to one before redirecting, so `/hello///` redirects to `/hello/` and can match a route that ends in `/`. A single trailing slash is still removed.
+- `json_params` ignores a `Content-Type` header that was sent more than once, instead of throwing an error.
+- The cqueues server parses form bodies whose content type has parameters, like `application/x-www-form-urlencoded; charset=UTF-8`.
+
+### Models and Database
+
+- Added `no_transaction` to `lapis.db.migrations` for migrations that can't run inside a transaction, like `CREATE INDEX CONCURRENTLY`. In `global` transaction mode the open transaction is committed before the migration and a new one is started after it. A dry run stops before any `no_transaction` migration, since it can't be rolled back.
+
+  ```moon
+  import no_transaction from require "lapis.db.migrations"
+
+  {
+    [1790452452]: no_transaction =>
+      db.query "create index concurrently games_title_idx on games (title)"
+  }
+  ```
+
+- Postgres column types accept `references`, `on_delete`, and `on_update` options for foreign key constraints.
+
+  ```moon
+  types.foreign_key references: "users", on_delete: "cascade"
+  -- integer NOT NULL REFERENCES "users" ON DELETE CASCADE
+  ```
+
+- SQLite schema `types` throws an error for an unknown column type instead of returning `nil`.
+
+#### MySQL
+
+- `Model:update` supports the `where` option.
+- `returning` and `on_conflict` now throw an error instead of being silently ignored. This applies to `db.insert`, `db.update`, `db.delete`, `Model:create`, and `Model:update`.
+- `Model:update` now handles the model instance the same way as the Postgres and SQLite models: values are only stored on the instance after a row is updated, updating a column to `db.NULL` sets the field to `nil`, and `updated_at` is stored on the instance. Previously values were assigned before the query ran, even if the update failed.
+
+### Validation
+
+- Added `types.params_join` to combine params types into a single checker, useful for sharing a common set of fields across endpoints. Every member is tested against the same input and their outputs are merged. It replaces the undocumented `types.multi_params`, which has been removed.
+
+  ```moon
+  paginated = types.params_shape {
+    {"page", types.empty / 1 + types.db_id}
+  }
+
+  search_params = types.params_join {
+    paginated
+    types.params_shape {
+      {"q", types.limited_text 100}
+    }
+  }
+  ```
+
+- Fixed the legacy `is_color` validator accepting letters outside of `a-f`, like `#ZZZ`.
+
+### Configuration
+
+- Arrays in config are replaced instead of merged by index. An empty table clears an existing array. Merging a table that mixes array and hash keys, or merging a hash table into an existing array, throws an error.
+
+  ```moon
+  config {"alpha", "beta"}, ->
+    emails {"one@example.com", "two@example.com"}
+
+  config "beta", ->
+    emails {"three@example.com"}
+
+  -- beta's emails is now {"three@example.com"}
+  -- previously it was {"three@example.com", "two@example.com"}
+  ```
+
+### Utilities
+
+- `util.escape` matches `ngx.escape_uri`: `-._~!*'()` are no longer escaped, hex digits are uppercase, and `nil` returns an empty string instead of throwing an error.
+- `util.to_json` drops references back to a parent table instead of overflowing the stack. A table used in more than one place is still encoded each time.
+- `lapis.logging.flatten_params` includes nested tables in its output, which were previously dropped, and stops at 5 levels deep. Values that aren't strings are written with `tostring`.
+
+### Testing and CLI
+
+- `lapis generate spec` works with `--type helpers`, and generated Lua model specs no longer have a typo in `require`.
+- `simulate_action` throws an error if the URL isn't a string.
+
+### Documentation
+
+Most of the guides got a full pass: typos, broken examples, and a number of functions and options that were never documented.
+
 ## v1.19.0 - August 13 2026
 
 ### Models and Database
