@@ -38,7 +38,7 @@ SyntaxhighlightPlugin.before_highlight.moon = (code_text, page) =>
 SyntaxhighlightPlugin.language_aliases.erb = "etlua"
 
 sitegen.create =>
-  @current_version = "1.19.0"
+  @current_version = "1.20.0"
 
   scss = tools.system_command "sassc -I scss < %s > %s", "css"
   coffeescript = tools.system_command "coffee -c -s < %s > %s", "js"
