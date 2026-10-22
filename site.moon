@@ -1,14 +1,3 @@
-
-
-Site = require "sitegen.site"
-
-Site.default_plugins = for plugin in *Site.default_plugins
-  if plugin == "sitegen.plugins.pygments"
-    "sitegen.plugins.syntaxhighlight"
-  else
-    plugin
-
-
 sitegen = require "sitegen"
 tools = require "sitegen.tools"
 
@@ -26,6 +15,8 @@ verify_lua_code = (code_text, page) ->
     if err2
       error "[#{page and page.source}] failed to compile: #{err}: #{code_text}"
 
+  true
+
 verify_moon_code = (code_text, page) ->
   parse = require "moonscript.parse"
   _, err =  parse.string code_text
@@ -33,16 +24,18 @@ verify_moon_code = (code_text, page) ->
   if err
     error "[#{page and page.source}] failed to compile: #{err}: #{code_text}"
 
--- TODO: this code checking needs to be upgraded for new syntax highlighter
--- since we aren't going to be using pygments anymore
-PygmentsPlugin = require "sitegen.plugins.pygments"
-PygmentsPlugin.custom_highlighters.lua = (code_text, page) =>
-  verify_lua_code code_text, page
-  @pre_tag @highlight("lua", code_text), "lua"
+  true
 
-PygmentsPlugin.custom_highlighters.moon = (code_text, page) =>
+-- every highlighted code block is checked for compile errors
+SyntaxhighlightPlugin = require "sitegen.plugins.syntaxhighlight"
+SyntaxhighlightPlugin.before_highlight.lua = (code_text, page) =>
+  verify_lua_code code_text, page
+
+SyntaxhighlightPlugin.before_highlight.moon = (code_text, page) =>
   verify_moon_code code_text, page
-  @pre_tag @highlight("moon", code_text), "moon"
+
+-- erb blocks are etlua templates
+SyntaxhighlightPlugin.language_aliases.erb = "etlua"
 
 sitegen.create =>
   @current_version = "1.19.0"
@@ -145,10 +138,7 @@ sitegen.create =>
 
     if type(lua_code) == "string"
       lua_code = trim_snippet lua_code
-      if lua_format == "lua"
-        verify_lua_code lua_code, page
     else
-      -- this will also verify moon code
       lua_code = assert moonscript.to_lua moon_code, implicitly_return_root: false
 
     assert render_markdown table.concat {

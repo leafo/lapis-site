@@ -22,10 +22,9 @@ jobs:
 
     - name: dependencies
       run: |
-        sudo apt-get install -q python3-pygments
         sudo apt-get install -q sassc
         sudo npm install -g coffee-script
-        luarocks install --dev sitegen
+        luarocks install sitegen
         luarocks install lapis
         make vendor
 
