@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Models - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Thu Oct 22 18:58:16 2026" />
+  <link rel="stylesheet" href="../reference.css?Thu Oct 22 19:11:03 2026" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     window.dataLayer = window.dataLayer || [];
@@ -181,7 +181,7 @@ the database. You do not need to manually specify the names of the columns.  If
 you have any relationships, though, you can specify them using the
 <a href="#relations"><code>relations</code> property</a>.</p>
 
-<h2><a href="#custom-methods" name="custom-methods">Custom Methods</a></h2>
+<h2><a name="custom-methods" href="#custom-methods">Custom Methods</a></h2>
 
 <p>The model system in Lapis implements an object-oriented interface for working
 with tables and rows from your database.</p>
@@ -238,7 +238,7 @@ capable of generating their own URLs when passed to
 implementing a <a href="actions.html#request-object-methods/request:url_for/passing-an-object-to-url-for"><code>url_params</code>
 method</a>.</p>
 
-<h2><a href="#primary-keys" name="primary-keys">Primary Keys</a></h2>
+<h2><a name="primary-keys" href="#primary-keys">Primary Keys</a></h2>
 
 <p>By default all models expect the table to have a primary key called <code>"id"</code>. This
 can be changed by setting the <code class="for_moon">@primary_key</code><code class="for_lua">self.primary_key</code> field on the class.</p>
@@ -280,7 +280,7 @@ can be changed by setting the <code class="for_moon">@primary_key</code><code cl
 <p>A unique primary key is needed for every row in order to <code>update</code> and <code>delete</code>
 rows without affecting other rows unintentionally.</p>
 
-<h2><a href="#class-methods" name="class-methods">Class Methods</a></h2>
+<h2><a name="class-methods" href="#class-methods">Class Methods</a></h2>
 
 <p>Model class methods are used for fetching existing rows, creating new ones, or
 fetching data about the underlying table.</p>
@@ -311,7 +311,7 @@ fetching data about the underlying table.</p>
 
 </p>
 
-<h3><a href="#class-methods/Model:find" name="class-methods/Model:find"><code>Model:find(...)</code></a></h3>
+<h3><a name="class-methods/Model:find" href="#class-methods/Model:find"><code>Model:find(...)</code></a></h3>
 
 <p>The <code>find</code> class method fetches a single row from the table by some condition.
 Pass the values of the primary keys you want to look up by in the order
@@ -386,7 +386,7 @@ example, you might perform a case insensitive email search like so:</p>
 </pre>
 
 
-<h3><a href="#class-methods/Model:select" name="class-methods/Model:select"><code>Model:select(query, ...)</code></a></h3>
+<h3><a name="class-methods/Model:select" href="#class-methods/Model:select"><code>Model:select(query, ...)</code></a></h3>
 
 <p>When searching for multiple rows the <code>select</code> class method is used. It works
 similarly to the <a href="database.html#query-interface/db.select"><code>select</code> function from the raw query
@@ -418,7 +418,7 @@ the query. If there are no matching rows an empty table is returned.</p>
 <p>The final argument can optionally be a plain Lua table which can contain the
 following options:</p>
 
-<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>fields</code></td><td><p>A SQL fragment used for the list of fields to return from the query. Do
+<p><table cellspacing="0" cellpadding="0" class="configuration_table"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>fields</code></td><td><p>A SQL fragment used for the list of fields to return from the query. Do
 not use untrusted strings otherwise you may be vulnerable to SQL
 injection. Use
 <a href="database.html#query-interface/db.escape_identifier"><code>db.escape_identifier</code></a>
@@ -441,7 +441,7 @@ to escape column names.</p>
 will return the results unaffected, as plain Lua tables.</p>
 </td><td><em class="default_value"><code>nil</code></em></td></tr></tbody></table></p>
 
-<h3><a href="#class-methods/Model:find_all" name="class-methods/Model:find_all"><code>Model:find_all(primary_keys)</code></a></h3>
+<h3><a name="class-methods/Model:find_all" href="#class-methods/Model:find_all"><code>Model:find_all(primary_keys)</code></a></h3>
 
 <p>If you want to find many rows by their primary key you can use the <code>find_all</code>
 method. It takes an array table of primary keys. This method only works on
@@ -488,7 +488,7 @@ can pass in the optional second argument:</p>
 <p>The second argument can also be a table of options. The following properties
 are supported:</p>
 
-<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>key</code></td><td><p>Specify the column name to find by, same effect as passing in a string as the second argument. The column name will be escaped as an identifier.</p>
+<p><table cellspacing="0" cellpadding="0" class="configuration_table"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>key</code></td><td><p>Specify the column name to find by, same effect as passing in a string as the second argument. The column name will be escaped as an identifier.</p>
 </td><td><p>the table&rsquo;s primary key</p>
 </td></tr><tr><td><code>fields</code></td><td><p>A string of raw SQL inserted directly after the <code>SELECT</code> portion of the query. Use this to control what fields are returned</p>
 </td><td><p><code>*</code></p>
@@ -527,7 +527,7 @@ are supported:</p>
 </pre>
 
 
-<h3><a href="#class-methods/Model:count" name="class-methods/Model:count"><code>Model:count(clause, ...)</code></a></h3>
+<h3><a name="class-methods/Model:count" href="#class-methods/Model:count"><code>Model:count(clause, ...)</code></a></h3>
 
 <p>Counts the number of records in the table that match the clause. The <code>clause</code>
 argument can either be a string, or a <code>db.clause</code> object. If a string is
@@ -558,7 +558,7 @@ counted.</p>
 </pre>
 
 
-<h3><a href="#class-methods/Model:create" name="class-methods/Model:create"><code>Model:create(values, create_opts=nil)</code></a></h3>
+<h3><a name="class-methods/Model:create" href="#class-methods/Model:create"><code>Model:create(values, create_opts=nil)</code></a></h3>
 
 <p>The <code>create</code> class method is used to create new rows. It takes a table of
 column values to create the row with. It returns an instance of the model. The
@@ -623,8 +623,8 @@ to the next highest number:</p>
 </pre>
 
 
-<blockquote><p><code>RETURNING</code> is not available in MySQL. The <code>returning</code> and <code>on_conflict</code>
-options below are ignored when using MySQL.</p></blockquote>
+<blockquote><p><code>RETURNING</code> is not available in MySQL. An error is thrown if the <code>returning</code>
+or <code>on_conflict</code> options below are used with MySQL.</p></blockquote>
 
 <p>If your model has any <a href="#constraints">constraints</a> they will be checked before trying to create
 a new row. If a constraint fails then <code>nil</code> and the error message are returned
@@ -632,7 +632,7 @@ from the <code>create</code> function.</p>
 
 <p><code>create_opts</code> is an optional table supporting the following fields:</p>
 
-<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>returning</code></td><td><p>An array table of column names or the string <code>"*"</code> to represent all column names. Their values will be returned from the insertion query using <code>RETURNING</code> clause to initially populate the model object</p>
+<p><table cellspacing="0" cellpadding="0" class="configuration_table"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>returning</code></td><td><p>An array table of column names or the string <code>"*"</code> to represent all column names. Their values will be returned from the insertion query using <code>RETURNING</code> clause to initially populate the model object</p>
 <details class="option_example"><summary>Show Example</summary><div class="dual_code">
 <div class="dual_code_tabs">
         <button type="button" data-lang="lua" class="set_language">Lua</button>
@@ -673,7 +673,7 @@ from the <code>create</code> function.</p>
 
 </details></td><td><em class="default_value"><code>nil</code></em></td></tr></tbody></table></p>
 
-<h3><a href="#class-methods/Model:columns" name="class-methods/Model:columns"><code>Model:columns()</code></a></h3>
+<h3><a name="class-methods/Model:columns" href="#class-methods/Model:columns"><code>Model:columns()</code></a></h3>
 
 <p>Returns an array of details about each column the table has. Each item in the
 array is a table with the name, <code>column_name</code>, and the column type,
@@ -727,7 +727,7 @@ array is a table with the name, <code>column_name</code>, and the column type,
 <blockquote><p>This example is pulled from PostgreSQL. The format from MySQL and SQLite will
 be slightly different</p></blockquote>
 
-<h3><a href="#class-methods/Model:table_name" name="class-methods/Model:table_name"><code>Model:table_name()</code></a></h3>
+<h3><a name="class-methods/Model:table_name" href="#class-methods/Model:table_name"><code>Model:table_name()</code></a></h3>
 
 <p>Returns the name of the table backed by the model.</p>
 
@@ -757,7 +757,7 @@ This class method can be overridden to change what table a model uses:
 </div>
 
 
-<h3><a href="#class-methods/Model:singular_name" name="class-methods/Model:singular_name"><code>Model:singular_name()</code></a></h3>
+<h3><a name="class-methods/Model:singular_name" href="#class-methods/Model:singular_name"><code>Model:singular_name()</code></a></h3>
 
 <p>Returns the singular name of the table.</p>
 
@@ -781,7 +781,7 @@ the field is when loading rows with <code>include_in</code>. It&rsquo;s also use
 determining the foreign key column name with a <code>has_one</code> or <code>has_many</code>
 relation.</p>
 
-<h3><a href="#class-methods/Model:include_in" name="class-methods/Model:include_in"><code>Model:include_in(objects, key, opts={})</code></a></h3>
+<h3><a name="class-methods/Model:include_in" href="#class-methods/Model:include_in"><code>Model:include_in(objects, key, opts={})</code></a></h3>
 
 <p>Bulk load rows of the model into an array of objects (often this array of
 objects is an array of instances of another model). This is used to preload
@@ -828,7 +828,7 @@ automatically selected.</p>
 
 <p><code>include_in</code> supports the following options (via the optional <code>opts</code> argument):</p>
 
-<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>as</code></td><td><p>The name of the field the loaded associated model is stored into</p>
+<p><table cellspacing="0" cellpadding="0" class="configuration_table"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>as</code></td><td><p>The name of the field the loaded associated model is stored into</p>
 </td><td><p>generated from table name (eg. <code>Posts</code> → <code>post</code>)</p>
 </td></tr><tr><td><code>where</code></td><td><p>A table of additional conditionals to limit the query by</p>
 <details class="option_example"><summary>Show Example</summary><div class="dual_code">
@@ -1206,7 +1206,7 @@ for each input object into an array. (The derived field name will be plural)</p>
 all the associated posts that were found. (Note that <code>posts</code> is a plural
 derived field name when <code>many</code> is true.)</p>
 
-<h3><a href="#class-methods/Model:paginated" name="class-methods/Model:paginated"><code>Model:paginated(query, ...)</code></a></h3>
+<h3><a name="class-methods/Model:paginated" href="#class-methods/Model:paginated"><code>Model:paginated(query, ...)</code></a></h3>
 
 <p>Similar to <code>select</code> but returns a <code>Paginator</code>. Read more in <a href="#pagination">Pagination</a>.</p>
 
@@ -1232,7 +1232,7 @@ value of <code>ordered</code> as the column or columns to order by.</p>
 
 </p>
 
-<h3><a href="#class-methods/Model:get_relation_model" name="class-methods/Model:get_relation_model"><code>Model:get_relation_model(name)</code></a></h3>
+<h3><a name="class-methods/Model:get_relation_model" href="#class-methods/Model:get_relation_model"><code>Model:get_relation_model(name)</code></a></h3>
 
 <p>This method is used to look up the model for a relation by the name specified
 in the relation. The default implementation handles the following types:</p>
@@ -1276,7 +1276,7 @@ class property, which defaults to <code>"models"</code>. eg. <code>require("mode
 <p>For anything more complex you can override this method to handle loading the
 models for those relations.</p>
 
-<h3><a href="#class-methods/Model:extend" name="class-methods/Model:extend"><code>Model:extend(table_name, fields={})</code></a></h3>
+<h3><a name="class-methods/Model:extend" href="#class-methods/Model:extend"><code>Model:extend(table_name, fields={})</code></a></h3>
 
 <p>Creates a new subclass of the <code>Model</code> base class. The <code>fields</code> argument is a
 table of properties that will be copied into the instance metatable of the
@@ -1292,12 +1292,12 @@ metatable.</p>
 <p>The instance metatable can be used as an alternative syntax to add new methods
 to model instances.</p>
 
-<h2><a href="#instance-methods" name="instance-methods">Instance Methods</a></h2>
+<h2><a name="instance-methods" href="#instance-methods">Instance Methods</a></h2>
 
 <p>When extending the base Model class, you should avoid overriding any of the
 built in methods to avoid unexpected issues.</p>
 
-<h3><a href="#instance-methods/model:update" name="instance-methods/model:update"><code>model:update(..., opts={})</code></a></h3>
+<h3><a name="instance-methods/model:update" href="#instance-methods/model:update"><code>model:update(..., opts={})</code></a></h3>
 
 <p>Issue a query to update the row backed by the instance of the model. The values
 of the primary keys, as specified by the model&rsquo;s class, are used to uniquely
@@ -1428,7 +1428,7 @@ value from the database to store on the model instance, similar to the
 
 <p><strong>Options</strong></p>
 
-<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>timestamp</code></td><td><p>The <code>updated_at</code> field will be updated to the current time if the model has timestamps enabled. Note that if the update itself contains <code>updated_at</code> then that will take precedence over the auto-update.</p>
+<p><table cellspacing="0" cellpadding="0" class="configuration_table"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>timestamp</code></td><td><p>The <code>updated_at</code> field will be updated to the current time if the model has timestamps enabled. Note that if the update itself contains <code>updated_at</code> then that will take precedence over the auto-update.</p>
 <details class="option_example"><summary>Show Example</summary><div class="dual_code">
 <div class="dual_code_tabs">
         <button type="button" data-lang="lua" class="set_language">Lua</button>
@@ -1472,10 +1472,10 @@ value from the database to store on the model instance, similar to the
 </details></td><td><p><code>nil</code></p>
 </td></tr></tbody></table></p>
 
-<blockquote><p>When using MySQL, the <code>returning</code> and <code>where</code> options are not supported and
-are ignored. <code>db.raw</code> values will not be replaced with their updated values.</p></blockquote>
+<blockquote><p>When using MySQL, an error is thrown if the <code>returning</code> option is used.
+<code>db.raw</code> values will not be replaced with their updated values.</p></blockquote>
 
-<h3><a href="#instance-methods/model:delete" name="instance-methods/model:delete"><code>model:delete(...)</code></a></h3>
+<h3><a name="instance-methods/model:delete" href="#instance-methods/model:delete"><code>model:delete(...)</code></a></h3>
 
 <p>Attempts to delete the row backed by the model instance based on the primary
 key.</p>
@@ -1607,7 +1607,7 @@ if two requests are able to load the model instance at the same time, and
 the <code>decrement_total_user_count</code> function would get called twice and may
 invalidate whatever data it has.</p>
 
-<h3><a href="#instance-methods/model:refresh" name="instance-methods/model:refresh"><code>model:refresh(...)</code></a></h3>
+<h3><a name="instance-methods/model:refresh" href="#instance-methods/model:refresh"><code>model:refresh(...)</code></a></h3>
 
 <p>Updates the values of the fields on the instance from the database.</p>
 
@@ -1657,7 +1657,7 @@ then pass them in as arguments:</p>
 
 <blockquote><p>Refreshing specific fields does not clear any cached relations.</p></blockquote>
 
-<h3><a href="#instance-methods/model:url_key" name="instance-methods/model:url_key"><code>model:url_key(...)</code></a></h3>
+<h3><a name="instance-methods/model:url_key" href="#instance-methods/model:url_key"><code>model:url_key(...)</code></a></h3>
 
 <p>This method implements the interface for <code>url_for</code> that allows the model
 instance to be used as a value for a URL parameter. The default implementation
@@ -1668,7 +1668,7 @@ string.</p>
 <p>Generally, you should implement <code>url_params</code> method on your model if you would
 like to have the model have a fully declared URL within your app.</p>
 
-<h2><a href="#timestamps" name="timestamps">Timestamps</a></h2>
+<h2><a name="timestamps" href="#timestamps">Timestamps</a></h2>
 
 <p>Because it&rsquo;s common to store creation and update times, models have
 support for managing these columns automatically.</p>
@@ -1765,7 +1765,7 @@ false</code></span><span class="for_lua"><code>timestamp = false</code></span>:<
 </pre>
 
 
-<h2><a href="#constraints" name="constraints">Constraints</a></h2>
+<h2><a name="constraints" href="#constraints">Constraints</a></h2>
 
 <p>Often before we insert or update a row we want to check that some conditions
 are met. In Lapis these are called constraints. For example let&rsquo;s say we have a
@@ -1820,7 +1820,7 @@ of the column being checked, the name of the column being checked, and lastly
 the object being checked. On insertion the object is the table passed to the
 create method. On update the object is the instance of the model.</p>
 
-<h2><a href="#pagination" name="pagination">Pagination</a></h2>
+<h2><a name="pagination" href="#pagination">Pagination</a></h2>
 
 <p>Using the <code>paginated</code> method on models we can easily paginate through a query
 that might otherwise return many results. The arguments are the same as the
@@ -1885,7 +1885,7 @@ returned by the paginator may not be consistent.</p></blockquote>
 <p>A paginator can be configured by passing a table as the last argument. The
 following options are available for all types of paginators:</p>
 
-<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>per_page</code></td><td><p>The number of items fetched per page</p>
+<p><table cellspacing="0" cellpadding="0" class="configuration_table"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>per_page</code></td><td><p>The number of items fetched per page</p>
 <details class="option_example"><summary>Show Example</summary><div class="dual_code">
 <div class="dual_code_tabs">
         <button type="button" data-lang="lua" class="set_language">Lua</button>
@@ -1930,7 +1930,7 @@ following options are available for all types of paginators:</p>
 
 <p>A paginator has the following methods:</p>
 
-<h3><a href="#pagination/get_page" name="pagination/get_page"><code>get_page(page_num)</code></a></h3>
+<h3><a name="pagination/get_page" href="#pagination/get_page"><code>get_page(page_num)</code></a></h3>
 
 <p>Gets <code>page_num</code>th page, where pages are 1 indexed. The number of items per page
 is controlled by the <code>per_page</code> option, and defaults to 10. Returns an array
@@ -1959,11 +1959,11 @@ table of model instances.</p>
 <blockquote><p>The OrderedPaginator fetches pages in a fundamentally different way, see
 below for more information.</p></blockquote>
 
-<h3><a href="#pagination/num_pages" name="pagination/num_pages"><code>num_pages()</code></a></h3>
+<h3><a name="pagination/num_pages" href="#pagination/num_pages"><code>num_pages()</code></a></h3>
 
 <p>Returns the total number of pages.</p>
 
-<h3><a href="#pagination/total_items" name="pagination/total_items"><code>total_items()</code></a></h3>
+<h3><a name="pagination/total_items" href="#pagination/total_items"><code>total_items()</code></a></h3>
 
 <p>Gets the total number of items that can be returned. The paginator will parse
 the query and remove all clauses except for the <code>WHERE</code> when issuing a <code>COUNT</code>.</p>
@@ -1988,7 +1988,7 @@ the query and remove all clauses except for the <code>WHERE</code> when issuing 
 <blockquote><p>An error is thrown if the query contains a <code>GROUP BY</code> clause, since the
 total can&rsquo;t be calculated by removing the other clauses.</p></blockquote>
 
-<h3><a href="#pagination/each_page" name="pagination/each_page"><code>each_page(starting_page=1)</code></a></h3>
+<h3><a name="pagination/each_page" href="#pagination/each_page"><code>each_page(starting_page=1)</code></a></h3>
 
 <p>Returns an iterator function that can be used to iterate through each page of
 the results. Useful for processing a large query without having the entire
@@ -2017,7 +2017,7 @@ your modifications might change the query result order and you may process
 rows multiple times or none at all. Consider using a stable sorting
 direction like the primary key ascending.</p></blockquote>
 
-<h3><a href="#pagination/each_item" name="pagination/each_item"><code>each_item()</code></a></h3>
+<h3><a name="pagination/each_item" href="#pagination/each_item"><code>each_item()</code></a></h3>
 
 <p>Returns an iterator for every item returned by the pager. It uses <code>each_page</code> to
 fetch results in chunks of <code>per_page</code> items. Because data is pulled
@@ -2044,7 +2044,7 @@ warning on <code>each_page</code>.</p></blockquote>
 
 </p>
 
-<h3><a href="#pagination/has_items" name="pagination/has_items"><code>has_items()</code></a></h3>
+<h3><a name="pagination/has_items" href="#pagination/has_items"><code>has_items()</code></a></h3>
 
 <p>Checks to see if the paginator returns at least 1 item. Returns a boolean. This is
 more efficient than counting the items and checking for a number greater than 0
@@ -2070,7 +2070,7 @@ because the query generated by this function doesn&rsquo;t do any counting.</p>
 </pre>
 
 
-<h3><a href="#pagination/get_all" name="pagination/get_all"><code>get_all()</code></a></h3>
+<h3><a name="pagination/get_all" href="#pagination/get_all"><code>get_all()</code></a></h3>
 
 <p>Gets every item from the paginator by issuing a single query, ignoring any pagination options.
 If you have a large dataset you want to iterate over, consider using
@@ -2095,7 +2095,7 @@ If you have a large dataset you want to iterate over, consider using
 </pre>
 
 
-<h2><a href="#ordered-paginator" name="ordered-paginator">Ordered Paginator</a></h2>
+<h2><a name="ordered-paginator" href="#ordered-paginator">Ordered Paginator</a></h2>
 
 <p>The default paginator, also known as the <code>OffsetPaginator</code>, uses <code>LIMIT</code> and
 <code>OFFSET</code> to handle fetching pages. For large data sets, this can become
@@ -2200,7 +2200,7 @@ should be passed to <code>get_page</code> to get the next page of results.</p>
 </pre>
 
 
-<h3><a href="#ordered-paginator/pagination-order" name="ordered-paginator/pagination-order">Pagination order</a></h3>
+<h3><a name="ordered-paginator/pagination-order" href="#ordered-paginator/pagination-order">Pagination order</a></h3>
 
 <p>The pagination order can be specified by the <code>order</code> field in the options
 table. The default is <code>asc</code>.</p>
@@ -2226,7 +2226,7 @@ results in a specific order. They both share the same interface as <code>get_pag
 but <code>after</code> will always fetch ascending, and <code>before</code> will always fetch
 descending.</p>
 
-<h3><a href="#ordered-paginator/composite-ordering" name="ordered-paginator/composite-ordering">Composite ordering</a></h3>
+<h3><a name="ordered-paginator/composite-ordering" href="#ordered-paginator/composite-ordering">Composite ordering</a></h3>
 
 <p>If you have a model that has a composite sorting key (made up of more than one
 column), you can pass a table array as the ordering column:</p>
@@ -2270,7 +2270,7 @@ results to be passed on as the next page</p>
 </pre>
 
 
-<h3><a href="#ordered-paginator/each_page" name="ordered-paginator/each_page"><code>each_page(...)</code></a></h3>
+<h3><a name="ordered-paginator/each_page" href="#ordered-paginator/each_page"><code>each_page(...)</code></a></h3>
 
 <p>Returns an iterator function that can be used to iterate through each page of
 results. Optional arguments can be provided to specify the starting point for
@@ -2333,7 +2333,7 @@ iteration, using the same cursor values that would be passed to <code>get_page</
 
 </p>
 
-<h2><a href="#relations" name="relations">Relations</a></h2>
+<h2><a name="relations" href="#relations">Relations</a></h2>
 
 <p>Often your models are connected to other models by use of a <em>foreign_key</em>. You
 can describe the relationships between models using the <code>relations</code> class
@@ -2385,7 +2385,7 @@ model class to make fetching the associated row easy.  For example the
 
 <p>The following relations are available:</p>
 
-<h3><a href="#relations/belongs_to" name="relations/belongs_to"><code>belongs_to</code></a></h3>
+<h3><a name="relations/belongs_to" href="#relations/belongs_to"><code>belongs_to</code></a></h3>
 
 <p>A relation that fetches a single related model. The foreign key column used to
 fetch the other model is located on the same table as the model. For example, a
@@ -2457,7 +2457,7 @@ You can call the <code>refresh</code> method to clear the relation caches.</p>
 <a href="#relations/polymorphic_belongs_to"><code>polymorphic_belongs_to</code></a>, which lets a
 relation point to one of many different models.</p>
 
-<h3><a href="#relations/has_one" name="relations/has_one"><code>has_one</code></a></h3>
+<h3><a name="relations/has_one" href="#relations/has_one"><code>has_one</code></a></h3>
 
 <p>A relation that fetches a single related model. Similar to <code>belongs_to</code>, but
 the foreign key used to fetch the other model is located on the other table.</p>
@@ -2578,7 +2578,7 @@ search for.</p>
 the model and subsequent calls will return <code>nil</code> without issuing another query.
 You can call the <code>refresh</code> method to clear the relation caches.</p>
 
-<h3><a href="#relations/has_many" name="relations/has_many"><code>has_many</code></a></h3>
+<h3><a name="relations/has_many" href="#relations/has_many"><code>has_many</code></a></h3>
 
 <p>A one to many relation. It defines two methods, one that returns a <a href="#pagination">paginator
 object</a>, and one that fetches all of the objects. In the following
@@ -2609,7 +2609,7 @@ associated posts for each user.</p>
 
 <p>The following options may be included to customize the relation</p>
 
-<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>key</code></td><td><p>The foreign key to search on. Either a string for singular foreign key,
+<p><table cellspacing="0" cellpadding="0" class="configuration_table"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>key</code></td><td><p>The foreign key to search on. Either a string for singular foreign key,
 an array table to specify composite foreign keys, or a mapping table to
 specify which field on the current model each column is matched
 against.</p>
@@ -2788,7 +2788,7 @@ specify an <code>ordered</code> option to the method with a list:</p>
 </pre>
 
 
-<h3><a href="#relations/fetch" name="relations/fetch"><code>fetch</code></a></h3>
+<h3><a name="relations/fetch" href="#relations/fetch"><code>fetch</code></a></h3>
 
 <p>A manual relation where you provide a function that will fetch the associated
 data for an individual row. A preload implementation can also be provided.
@@ -2819,7 +2819,7 @@ other relation types.</p>
 
 <p>The following options control how the <code>fetch</code> relation works:</p>
 
-<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>fetch</code></td><td><p>Callback function to fetch a result for a single model instance, or the value <code>true</code> to use the <code>preload</code> function to load a single result</p>
+<p><table cellspacing="0" cellpadding="0" class="configuration_table"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>fetch</code></td><td><p>Callback function to fetch a result for a single model instance, or the value <code>true</code> to use the <code>preload</code> function to load a single result</p>
 </td><td><p><strong><em>required</em></strong></p>
 </td></tr><tr><td><code>preload</code></td><td><p>Callback function to load data for many model instances at once. Receives an argument of an array of model instances, and more. This is only required if trying to preload multiple objects at once, or when using fetch set to <code>true</code>. See below</p>
 </td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><code>many</code></td><td><p>Set this to true if your fetch relation returns a collection of models instead of a single model. This will allow the preloader to traverse arrays of objects loaded with fetch</p>
@@ -2884,7 +2884,7 @@ a single instance of the model.</p>
 </pre>
 
 
-<h3><a href="#relations/polymorphic_belongs_to" name="relations/polymorphic_belongs_to"><code>polymorphic_belongs_to</code></a></h3>
+<h3><a name="relations/polymorphic_belongs_to" href="#relations/polymorphic_belongs_to"><code>polymorphic_belongs_to</code></a></h3>
 
 <p>A relation that fetches a single related model that can be one of multiple
 models. For example, you might have a <code>Purchases</code> model that is associated with
@@ -2979,7 +2979,7 @@ associated objects across all the different tables to be loaded efficiently.
 When preloading, the <code>fields</code> option can be a table mapping type names to the
 fields to select for that type&rsquo;s model, eg. <code>{video_game: "id, title"}</code>.</p>
 
-<h4><a href="#relations/polymorphic_belongs_to/migrating-for-a-new-polymorphic-relation" name="relations/polymorphic_belongs_to/migrating-for-a-new-polymorphic-relation">Migrating for a New Polymorphic Relation</a></h4>
+<h4><a name="relations/polymorphic_belongs_to/migrating-for-a-new-polymorphic-relation" href="#relations/polymorphic_belongs_to/migrating-for-a-new-polymorphic-relation">Migrating for a New Polymorphic Relation</a></h4>
 
 <p>When adding a <code>polymorphic_belongs_to</code> to one of your tables you need to make
 the appropriate columns. You'll need to create a foreign key column along with
@@ -3010,7 +3010,7 @@ called <code>primary_item</code>, columns should be created with the names
 </pre>
 
 
-<h2><a href="#preloading-relations" name="preloading-relations">Preloading relations</a></h2>
+<h2><a name="preloading-relations" href="#preloading-relations">Preloading relations</a></h2>
 
 <p>In addition to the method to fetch the associated rows on a single model
 instance, relations also provide a way to preload the rows for many instances
@@ -3021,7 +3021,7 @@ many queries inside of a loop when fetching a related object on each iteration.
 In order to avoid the <code>n+1</code> query problem you can load all the related models
 ahead of time in a single query before iterating over them.</p>
 
-<h3><a href="#preloading-relations/preload" name="preloading-relations/preload"><code>preload(instances, relations...)</code></a></h3>
+<h3><a name="preloading-relations/preload" href="#preloading-relations/preload"><code>preload(instances, relations...)</code></a></h3>
 
 <pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">preload</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.db.model&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">preload</span></code>
 </pre>
@@ -3104,7 +3104,7 @@ contains different models.</p>
 
 </p>
 
-<h3><a href="#preloading-relations/Model:preload_relation" name="preloading-relations/Model:preload_relation"><code>Model:preload_relation(instances, name, ...)</code></a></h3>
+<h3><a name="preloading-relations/Model:preload_relation" href="#preloading-relations/Model:preload_relation"><code>Model:preload_relation(instances, name, ...)</code></a></h3>
 
 <blockquote><p>This function should be avoided in favor of the <code>preload</code> function when
 possible. Options can be passed to preloaders with <code>preload</code> using the
@@ -3155,7 +3155,7 @@ passed to <code>preload_relation</code> are merged in the options to the call to
 </pre>
 
 
-<h3><a href="#preloading-relations/Model:preload_relations" name="preloading-relations/Model:preload_relations"><code>Model:preload_relations(instances, names...)</code></a></h3>
+<h3><a name="preloading-relations/Model:preload_relations" href="#preloading-relations/Model:preload_relations"><code>Model:preload_relations(instances, names...)</code></a></h3>
 
 <blockquote><p>This call is deprecated, use the <code>preload</code> function to preload many relations
 in a single call</p></blockquote>
@@ -3175,7 +3175,7 @@ relation definition.</p>
 </pre>
 
 
-<h2><a href="#enum" name="enum">Enum</a></h2>
+<h2><a name="enum" href="#enum">Enum</a></h2>
 
 <p>The <code>enum</code> function lets you create a special table that lets you convert
 between integer constants and names. This is useful for creating enumerations in
@@ -3254,8 +3254,8 @@ your database rows by using integers to represent a state.</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Thu Oct 22 18:58:16 2026"></script>
-  <script type="text/javascript" src="../reference.js?Thu Oct 22 18:58:16 2026"></script>
+  <script type="text/javascript" src="../search.js?Thu Oct 22 19:11:03 2026"></script>
+  <script type="text/javascript" src="../reference.js?Thu Oct 22 19:11:03 2026"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>

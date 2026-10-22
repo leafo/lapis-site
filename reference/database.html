@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Database Access - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Thu Oct 22 18:58:16 2026" />
+  <link rel="stylesheet" href="../reference.css?Thu Oct 22 19:11:03 2026" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     window.dataLayer = window.dataLayer || [];
@@ -173,7 +173,7 @@ otherwise <a href="https://lunarmodules.github.io/luasql/">LuaSQL-MySQL</a></li>
 </ul>
 
 
-<h2><a href="#database-modules" name="database-modules">Database Modules</a></h2>
+<h2><a name="database-modules" href="#database-modules">Database Modules</a></h2>
 
 <p>Lapis provides a collection of Lua modules for performing operations against
 your database. The generic named modules will automatically select the
@@ -201,7 +201,7 @@ of schema changes (aka Migrations). This module will utilize the generic
 your application&rsquo;s configuration. Learn more about <a href="#database-migrations">Database
 Migrations</a></p>
 
-<h2><a href="#establishing-a-connection" name="establishing-a-connection">Establishing A Connection</a></h2>
+<h2><a name="establishing-a-connection" href="#establishing-a-connection">Establishing A Connection</a></h2>
 
 <p>You'll need to configure Lapis so it can connect to the database. Lapis manages
 a single global database connection (or pool of connections) in the <code>lapis.db</code>
@@ -213,7 +213,7 @@ connect or disconnect to the database for standard use.</p>
 <p>If you need multiple database connections in the same project then you will
 have to manually create and release them.</p>
 
-<h3><a href="#establishing-a-connection/postgresql" name="establishing-a-connection/postgresql">PostgreSQL</a></h3>
+<h3><a name="establishing-a-connection/postgresql" href="#establishing-a-connection/postgresql">PostgreSQL</a></h3>
 
 <p>To use PostgreSQL create a <code>postgres</code> block in the <span
 class="for_moon"><code>config.moon</code></span><span class="for_lua"><code>config.lua</code></span>
@@ -253,7 +253,7 @@ leave those fields out if they aren&rsquo;t different from the defaults. If a
 non-default port is required it can be set with the <code>port</code> field (Otherwise
 <code>5432</code>, the PostgreSQL default, is used).</p>
 
-<h3><a href="#establishing-a-connection/mysql" name="establishing-a-connection/mysql">MySQL</a></h3>
+<h3><a name="establishing-a-connection/mysql" href="#establishing-a-connection/mysql">MySQL</a></h3>
 
 <p>To use MySQL create a <code>mysql</code> block in the <span
 class="for_moon"><code>config.moon</code></span><span class="for_lua"><code>config.lua</code></span>
@@ -288,7 +288,7 @@ file.</p>
 
 </p>
 
-<h3><a href="#establishing-a-connection/sqlite" name="establishing-a-connection/sqlite">SQLite</a></h3>
+<h3><a name="establishing-a-connection/sqlite" href="#establishing-a-connection/sqlite">SQLite</a></h3>
 
 <p>If you use the <code>lapis.db.sqlite</code> module then a database named
 <code>lapis.sqlite</code> will be created in the working directory by default.
@@ -322,7 +322,7 @@ You can configure what database file to use like so:</p>
 <blockquote><p>You can use the specially named <code>":memory:"</code> database to have a temporary
 database that lives only for the duration of your apps runtime.</p></blockquote>
 
-<h2><a href="#making-a-query" name="making-a-query">Making a Query</a></h2>
+<h2><a name="making-a-query" href="#making-a-query">Making a Query</a></h2>
 
 <p>There are generally two ways to work with the data in your database:</p>
 
@@ -417,7 +417,7 @@ your <span class="for_moon"><code>config.moon</code></span><span
 class="for_lua"><code>config.lua</code></span> file so that you configuration can
 be loaded.</p>
 
-<h2><a href="#query-interface" name="query-interface">Query Interface</a></h2>
+<h2><a name="query-interface" href="#query-interface">Query Interface</a></h2>
 
 <p><div class="dual_code">
 <div class="dual_code_tabs">
@@ -434,7 +434,7 @@ be loaded.</p>
 
 <p>The <code>db</code> module provides the following functions:</p>
 
-<h3><a href="#query-interface/db.query" name="query-interface/db.query"><code>db.query(query, params...)</code></a></h3>
+<h3><a name="query-interface/db.query" href="#query-interface/db.query"><code>db.query(query, params...)</code></a></h3>
 
 <p>Sends a query to the database using an active &amp; available connection. If there
 is no connection, then Lapis will automatically allocate &amp; connect one using
@@ -488,7 +488,7 @@ will eventually end up calling <code>db.query</code>. The same logic with regard
 handling and connection management applies to all database operations that
 Lapis does.</p>
 
-<h3><a href="#query-interface/db.select" name="query-interface/db.select"><code>db.select(query, params...)</code></a></h3>
+<h3><a name="query-interface/db.select" href="#query-interface/db.select"><code>db.select(query, params...)</code></a></h3>
 
 <p>Similar to <code>db.query</code>, but it prepends <code>"SELECT "</code> to the query.</p>
 
@@ -509,7 +509,7 @@ Lapis does.</p>
 </pre>
 
 
-<h3><a href="#query-interface/db.insert" name="query-interface/db.insert"><code>db.insert(table, values, opts_or_returning...)</code></a></h3>
+<h3><a name="query-interface/db.insert" href="#query-interface/db.insert"><code>db.insert(table, values, opts_or_returning...)</code></a></h3>
 
 <p>Inserts a row into <code>table</code>. <code>values</code> is a Lua table of column names and values.</p>
 
@@ -559,13 +559,13 @@ Lapis does.</p>
 </pre>
 
 
-<blockquote><p><code>RETURNING</code> and <code>ON CONFLICT</code> are supported by PostgreSQL and SQLite, and not available when using MySQL</p></blockquote>
+<blockquote><p><code>RETURNING</code> and <code>ON CONFLICT</code> are supported by PostgreSQL and SQLite. An error is thrown if they are used with MySQL</p></blockquote>
 
 <p>Alternatively, an options table can be provided as third argument with support
 for the following fields: (When providing an options table, all other arguments
 are ignored)</p>
 
-<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>returning</code></td><td><p>An array table of column names or the string <code>'*'</code> to represent all column names. Their values will be returned from the insertion query using <code>RETURNING</code> clause to initially populate the model object. <code>db.raw</code> can be used for more advanced expressions</p>
+<p><table cellspacing="0" cellpadding="0" class="configuration_table"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>returning</code></td><td><p>An array table of column names or the string <code>'*'</code> to represent all column names. Their values will be returned from the insertion query using <code>RETURNING</code> clause to initially populate the model object. <code>db.raw</code> can be used for more advanced expressions</p>
 <details class="option_example"><summary>Show Example</summary><div class="dual_code">
 <div class="dual_code_tabs">
         <button type="button" data-lang="lua" class="set_language">Lua</button>
@@ -611,7 +611,7 @@ are ignored)</p>
 
 </details></td><td><em class="default_value"><code>nil</code></em></td></tr></tbody></table></p>
 
-<h3><a href="#query-interface/db.update" name="query-interface/db.update"><code>db.update(table, values, conditions, params...)</code></a></h3>
+<h3><a name="query-interface/db.update" href="#query-interface/db.update"><code>db.update(table, values, conditions, params...)</code></a></h3>
 
 <p>Updates <code>table</code> with <code>values</code> on all rows that match <code>conditions</code>. If
 conditions is a plain table or a <code>db.clause</code> object, then it will be converted
@@ -709,9 +709,9 @@ evaluate a raw sql expression.</p></blockquote>
 array of rows generated by the <code>RETURNING</code> expression, in addition to
 containing the <code>affected_rows</code> field.</p>
 
-<blockquote><p><code>RETURNING</code> is supported by PostgreSQL and SQLite, and is not available when using MySQL</p></blockquote>
+<blockquote><p><code>RETURNING</code> is supported by PostgreSQL and SQLite. An error is thrown if it is used with MySQL</p></blockquote>
 
-<h3><a href="#query-interface/db.delete" name="query-interface/db.delete"><code>db.delete(table, conditions, params...)</code></a></h3>
+<h3><a name="query-interface/db.delete" href="#query-interface/db.delete"><code>db.delete(table, conditions, params...)</code></a></h3>
 
 <p>Deletes rows from <code>table</code> that match <code>conditions</code>.</p>
 
@@ -776,9 +776,9 @@ evaluate a raw sql expression.</p></blockquote>
 <p>The return value will now be an array of rows generated by the return values,
 in addition to containing the <code>affected_rows</code> field.</p>
 
-<blockquote><p><code>RETURNING</code> is supported by PostgreSQL and SQLite, and is not available when using MySQL</p></blockquote>
+<blockquote><p><code>RETURNING</code> is supported by PostgreSQL and SQLite. An error is thrown if it is used with MySQL</p></blockquote>
 
-<h3><a href="#query-interface/db.escape_literal" name="query-interface/db.escape_literal"><code>db.escape_literal(value)</code></a></h3>
+<h3><a name="query-interface/db.escape_literal" href="#query-interface/db.escape_literal"><code>db.escape_literal(value)</code></a></h3>
 
 <p>Escapes a value for use in a query. A value is any type that can be stored in a
 column. Numbers, strings, and booleans will be escaped accordingly.</p>
@@ -801,7 +801,7 @@ column. Numbers, strings, and booleans will be escaped accordingly.</p>
 <p><code>escape_literal</code> is not appropriate for escaping column or table names. See
 <code>escape_identifier</code>.</p>
 
-<h3><a href="#query-interface/db.escape_identifier" name="query-interface/db.escape_identifier"><code>db.escape_identifier(str)</code></a></h3>
+<h3><a name="query-interface/db.escape_identifier" href="#query-interface/db.escape_identifier"><code>db.escape_identifier(str)</code></a></h3>
 
 <p>Escapes a string for use in a query as an identifier. An identifier is a column
 or table name.</p>
@@ -824,7 +824,7 @@ or table name.</p>
 <p><code>escape_identifier</code> is not appropriate for escaping values. See
 <code>escape_literal</code> for escaping values.</p>
 
-<h3><a href="#query-interface/db.interpolate_query" name="query-interface/db.interpolate_query"><code>db.interpolate_query(query, ...)</code></a></h3>
+<h3><a name="query-interface/db.interpolate_query" href="#query-interface/db.interpolate_query"><code>db.interpolate_query(query, ...)</code></a></h3>
 
 <p>Interpolates a query containing <code>?</code> markers with the rest of the arguments
 escaped via <code>escape_literal</code>. If a <code>db.clause</code> is passed as one of the
@@ -845,7 +845,7 @@ arguments, then it will be encoded using <code>db.encode_clause</code>.</p>
 
 </p>
 
-<h3><a href="#query-interface/db.encode_clause" name="query-interface/db.encode_clause"><code>db.encode_clause(clause_obj)</code></a></h3>
+<h3><a name="query-interface/db.encode_clause" href="#query-interface/db.encode_clause"><code>db.encode_clause(clause_obj)</code></a></h3>
 
 <p>Generates a boolean SQL expression from an object describing one or many
 conditions. The <code>clause</code> argument must be either a plain Lua table or a value
@@ -910,7 +910,7 @@ than desired.</p>
 
 </p>
 
-<h2><a href="#database-primitives" name="database-primitives">Database Primitives</a></h2>
+<h2><a name="database-primitives" href="#database-primitives">Database Primitives</a></h2>
 
 <p>To make writing queries easier and safer, Lapis provides a set of basic
 primitive types that can be used within your queries for constructing more
@@ -934,7 +934,7 @@ module:</p>
 
 </p>
 
-<h3><a href="#database-primitives/db.raw" name="database-primitives/db.raw"><code>db.raw(str)</code></a></h3>
+<h3><a name="database-primitives/db.raw" href="#database-primitives/db.raw"><code>db.raw(str)</code></a></h3>
 
 <p>Returns an object wrapping the string argument that will be inserted verbatim
 into a query without being escaped. Special care should be taken to avoid
@@ -972,11 +972,11 @@ table names are also requested (eg. <code>db.update</code>)</p>
 </pre>
 
 
-<h3><a href="#database-primitives/db.is_raw" name="database-primitives/db.is_raw"><code>db.is_raw(obj)</code></a></h3>
+<h3><a name="database-primitives/db.is_raw" href="#database-primitives/db.is_raw"><code>db.is_raw(obj)</code></a></h3>
 
 <p>Returns <code>true</code> if <code>obj</code> is a value created by <code>db.raw</code>.</p>
 
-<h3><a href="#database-primitives/db.list" name="database-primitives/db.list"><code>db.list({values...})</code></a></h3>
+<h3><a name="database-primitives/db.list" href="#database-primitives/db.list"><code>db.list({values...})</code></a></h3>
 
 <p>Returns a special value that will be inserted into the query using SQL&rsquo;s list
 syntax. It takes a single argument of an array table. A new object is returned
@@ -1024,11 +1024,11 @@ is used.</p>
 </pre>
 
 
-<h3><a href="#database-primitives/db.is_list" name="database-primitives/db.is_list"><code>db.is_list(obj)</code></a></h3>
+<h3><a name="database-primitives/db.is_list" href="#database-primitives/db.is_list"><code>db.is_list(obj)</code></a></h3>
 
 <p>Returns <code>true</code> if <code>obj</code> is a value created by <code>db.list</code>.</p>
 
-<h3><a href="#database-primitives/db.clause" name="database-primitives/db.clause"><code>db.clause({clause...}, opts?)</code></a></h3>
+<h3><a name="database-primitives/db.clause" href="#database-primitives/db.clause"><code>db.clause({clause...}, opts?)</code></a></h3>
 
 <p>Creates a <em>clause</em> object that can be encoded into a boolean SQL expression for
 filtering or finding operations in the database. A clause object is an
@@ -1165,7 +1165,7 @@ clause that joins them with <code>OR</code>:</p>
 <p>The second argument can be a table of options. The following properties are
 supported:</p>
 
-<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>operator</code></td><td><p>Change the operator used to join the clause components. eg. <code>AND</code>, <code>OR</code></p>
+<p><table cellspacing="0" cellpadding="0" class="configuration_table"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>operator</code></td><td><p>Change the operator used to join the clause components. eg. <code>AND</code>, <code>OR</code></p>
 <details class="option_example"><summary>Show Example</summary><div class="dual_code">
 <div class="dual_code_tabs">
         <button type="button" data-lang="lua" class="set_language">Lua</button>
@@ -1280,11 +1280,11 @@ untrusted input to avoid SQL injection.</p></blockquote>
 
 </details></td><td><em class="default_value"><code>nil</code></em></td></tr></tbody></table></p>
 
-<h3><a href="#database-primitives/db.is_clause" name="database-primitives/db.is_clause"><code>db.is_clause(obj)</code></a></h3>
+<h3><a name="database-primitives/db.is_clause" href="#database-primitives/db.is_clause"><code>db.is_clause(obj)</code></a></h3>
 
 <p>Returns <code>true</code> if <code>obj</code> is a value created by <code>db.clause</code>.</p>
 
-<h3><a href="#database-primitives/db.array" name="database-primitives/db.array"><code>db.array({values...})</code></a></h3>
+<h3><a name="database-primitives/db.array" href="#database-primitives/db.array"><code>db.array({values...})</code></a></h3>
 
 <p>Converts the argument passed to an array type that will be inserted/updated
 using PostgreSQL&rsquo;s array syntax. This function does not exist for MySQL or
@@ -1326,12 +1326,12 @@ automatically converted into a <code>db.array</code>.</p>
 </pre>
 
 
-<h3><a href="#database-primitives/db.is_array" name="database-primitives/db.is_array"><code>db.is_array(obj)</code></a></h3>
+<h3><a name="database-primitives/db.is_array" href="#database-primitives/db.is_array"><code>db.is_array(obj)</code></a></h3>
 
 <p>Returns <code>true</code> if <code>obj</code> is a table with the <code>PostgresArray</code> metatable (eg. a
 value created by <code>db.array</code>)</p>
 
-<h3><a href="#database-primitives/db.NULL" name="database-primitives/db.NULL"><code>db.NULL</code></a></h3>
+<h3><a name="database-primitives/db.NULL" href="#database-primitives/db.NULL"><code>db.NULL</code></a></h3>
 
 <p>Represents <code>NULL</code> in SQL syntax. In Lua, <code>nil</code> can&rsquo;t be stored in a table, so the
 <code>db.NULL</code> object can be used to provide <code>NULL</code> as a value. When used with
@@ -1358,24 +1358,24 @@ value created by <code>db.array</code>)</p>
 </pre>
 
 
-<h3><a href="#database-primitives/db.TRUE" name="database-primitives/db.TRUE"><code>db.TRUE</code></a></h3>
+<h3><a name="database-primitives/db.TRUE" href="#database-primitives/db.TRUE"><code>db.TRUE</code></a></h3>
 
 <p>Represents <code>TRUE</code> in SQL syntax. In most cases, it is not necessary to use this
 constant, and instead the Lua boolean values can be used.</p>
 
-<h3><a href="#database-primitives/db.FALSE" name="database-primitives/db.FALSE"><code>db.FALSE</code></a></h3>
+<h3><a name="database-primitives/db.FALSE" href="#database-primitives/db.FALSE"><code>db.FALSE</code></a></h3>
 
 <p>Represents <code>FALSE</code> in SQL syntax. In most cases, it is not necessary to use this
 constant, and instead the Lua boolean values can be used.</p>
 
-<h2><a href="#database-schemas" name="database-schemas">Database Schemas <span data-keywords="schema"></span></a></h2>
+<h2><a name="database-schemas" href="#database-schemas">Database Schemas <span data-keywords="schema"></span></a></h2>
 
 <p>Lapis comes with a collection of tools for creating your database schema inside
 of the <code>lapis.db.schema</code> module.</p>
 
-<h3><a href="#database-schemas/creating-and-dropping-tables" name="database-schemas/creating-and-dropping-tables">Creating and Dropping Tables</a></h3>
+<h3><a name="database-schemas/creating-and-dropping-tables" href="#database-schemas/creating-and-dropping-tables">Creating and Dropping Tables</a></h3>
 
-<h4><a href="#database-schemas/creating-and-dropping-tables/create_table" name="database-schemas/creating-and-dropping-tables/create_table"><code>create_table(table_name, { table_declarations... }, [options])</code></a></h4>
+<h4><a name="database-schemas/creating-and-dropping-tables/create_table" href="#database-schemas/creating-and-dropping-tables/create_table"><code>create_table(table_name, { table_declarations... }, [options])</code></a></h4>
 
 <p>The first argument to <code>create_table</code> is the name of the table and the second
 argument is an array table that describes the table. An optional third argument
@@ -1437,7 +1437,7 @@ into the <code>CREATE TABLE</code> statement, that&rsquo;s how we create the pri
 
 <p>The following options are supported:</p>
 
-<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>if_not_exists</code></td><td><p>Generate <code>CREATE TABLE IF NOT EXISTS</code> so no error is thrown if the table
+<p><table cellspacing="0" cellpadding="0" class="configuration_table"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>if_not_exists</code></td><td><p>Generate <code>CREATE TABLE IF NOT EXISTS</code> so no error is thrown if the table
 already exists.</p>
 </td><td><p><code>false</code></p>
 </td></tr><tr><td><code>strict</code></td><td><p>Create a <a href="https://sqlite.org/stricttables.html"><code>STRICT</code></a> table. (SQLite only)</p>
@@ -1447,7 +1447,7 @@ already exists.</p>
 </td><td><p><code>"UTF8"</code></p>
 </td></tr></tbody></table></p>
 
-<h4><a href="#database-schemas/creating-and-dropping-tables/drop_table" name="database-schemas/creating-and-dropping-tables/drop_table"><code>drop_table(table_name)</code></a></h4>
+<h4><a name="database-schemas/creating-and-dropping-tables/drop_table" href="#database-schemas/creating-and-dropping-tables/drop_table"><code>drop_table(table_name)</code></a></h4>
 
 <p>Drops a table.</p>
 
@@ -1465,15 +1465,15 @@ already exists.</p>
 </pre>
 
 
-<h3><a href="#database-schemas/indexes" name="database-schemas/indexes">Indexes</a></h3>
+<h3><a name="database-schemas/indexes" href="#database-schemas/indexes">Indexes</a></h3>
 
-<h4><a href="#database-schemas/indexes/create_index" name="database-schemas/indexes/create_index"><code>create_index(table_name, col1, col2..., [options])</code></a></h4>
+<h4><a name="database-schemas/indexes/create_index" href="#database-schemas/indexes/create_index"><code>create_index(table_name, col1, col2..., [options])</code></a></h4>
 
 <p><code>create_index</code> is used to add new indexes to a table. The first argument is a
 table, the rest of the arguments are the ordered columns that make up the
 index. Optionally the last argument can be a Lua table of options.</p>
 
-<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>unique</code></td><td><p>A boolean value indicating whether the index should be unique.</p>
+<p><table cellspacing="0" cellpadding="0" class="configuration_table"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>unique</code></td><td><p>A boolean value indicating whether the index should be unique.</p>
 </td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><code>where</code></td><td><p>A clause string that specifies conditions for the index. This string will be used literally in the query and is used to create partial indexes.</p>
 <details class="option_example"><summary>Show Example</summary><div class="dual_code">
 <div class="dual_code_tabs">
@@ -1550,7 +1550,7 @@ names are replaced with underscores to ensure the index name is valid.</p>
 <p>To override the default index name, you can use the <code>index_name</code> option when
 creating an index.</p>
 
-<h4><a href="#database-schemas/indexes/drop_index" name="database-schemas/indexes/drop_index"><code>drop_index(table_name, col1, col2..., [options])</code></a></h4>
+<h4><a name="database-schemas/indexes/drop_index" href="#database-schemas/indexes/drop_index"><code>drop_index(table_name, col1, col2..., [options])</code></a></h4>
 
 <p>Drops an index from a table. It calculates the name of the index from the table
 name and columns. This is the same as the default index name generated by
@@ -1578,9 +1578,9 @@ directly. On PostgreSQL, the <code>cascade</code> option will append <code>CASCA
 </pre>
 
 
-<h3><a href="#database-schemas/altering-tables" name="database-schemas/altering-tables">Altering Tables</a></h3>
+<h3><a name="database-schemas/altering-tables" href="#database-schemas/altering-tables">Altering Tables</a></h3>
 
-<h4><a href="#database-schemas/altering-tables/add_column" name="database-schemas/altering-tables/add_column"><code>add_column(table_name, column_name, column_type)</code></a></h4>
+<h4><a name="database-schemas/altering-tables/add_column" href="#database-schemas/altering-tables/add_column"><code>add_column(table_name, column_name, column_type)</code></a></h4>
 
 <p>Adds a column to a table.</p>
 
@@ -1600,7 +1600,7 @@ directly. On PostgreSQL, the <code>cascade</code> option will append <code>CASCA
 </pre>
 
 
-<h4><a href="#database-schemas/altering-tables/drop_column" name="database-schemas/altering-tables/drop_column"><code>drop_column(table_name, column_name)</code></a></h4>
+<h4><a name="database-schemas/altering-tables/drop_column" href="#database-schemas/altering-tables/drop_column"><code>drop_column(table_name, column_name)</code></a></h4>
 
 <p>Removes a column from a table.</p>
 
@@ -1620,7 +1620,7 @@ directly. On PostgreSQL, the <code>cascade</code> option will append <code>CASCA
 </pre>
 
 
-<h4><a href="#database-schemas/altering-tables/rename_column" name="database-schemas/altering-tables/rename_column"><code>rename_column(table_name, old_name, new_name)</code></a></h4>
+<h4><a name="database-schemas/altering-tables/rename_column" href="#database-schemas/altering-tables/rename_column"><code>rename_column(table_name, old_name, new_name)</code></a></h4>
 
 <p>Changes the name of a column.</p>
 
@@ -1643,7 +1643,7 @@ directly. On PostgreSQL, the <code>cascade</code> option will append <code>CASCA
 <blockquote><p>In MySQL, <code>rename_column</code> takes a required fourth argument, the column type,
 since the query is generated with <code>CHANGE COLUMN</code>.</p></blockquote>
 
-<h4><a href="#database-schemas/altering-tables/rename_table" name="database-schemas/altering-tables/rename_table"><code>rename_table(old_name, new_name)</code></a></h4>
+<h4><a name="database-schemas/altering-tables/rename_table" href="#database-schemas/altering-tables/rename_table"><code>rename_table(old_name, new_name)</code></a></h4>
 
 <p>Changes the name of a table.</p>
 
@@ -1663,7 +1663,7 @@ since the query is generated with <code>CHANGE COLUMN</code>.</p></blockquote>
 </pre>
 
 
-<h3><a href="#database-schemas/column-types" name="database-schemas/column-types">Column Types</a></h3>
+<h3><a name="database-schemas/column-types" href="#database-schemas/column-types">Column Types</a></h3>
 
 <p>All of the column type generators are stored in <code>schema.types</code>. All the types
 are special objects that can either be turned into a type declaration string
@@ -1711,7 +1711,7 @@ defaults of 0 and boolean false.</p>
 <p>When a type is called like a function it takes one argument, a table of
 options. The options include:</p>
 
-<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>default</code></td><td><p>Sets default value. Use <code>db.NULL</code> to set a <code>NULL</code> default.</p>
+<p><table cellspacing="0" cellpadding="0" class="configuration_table"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>default</code></td><td><p>Sets default value. Use <code>db.NULL</code> to set a <code>NULL</code> default.</p>
 </td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><code>null</code></td><td><p>Determines if the column is <code>NOT NULL</code>.</p>
 </td><td><p><code>false</code></p>
 </td></tr><tr><td><code>unique</code></td><td><p>Determines if the column has a unique index.</p>
@@ -1719,6 +1719,9 @@ options. The options include:</p>
 </td></tr><tr><td><code>primary_key</code></td><td><p>Determines if the column is the primary key.</p>
 </td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><code>array</code></td><td><p>Makes the type an array (PostgreSQL Only), pass number to set how many dimensions the array is, or set to <code>true</code> to make a 1 dimensional array. The type&rsquo;s default value is not used for arrays.</p>
 </td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><code>timezone</code></td><td><p>Only for <code>types.time</code>, generates <code>timestamp WITH TIME ZONE</code>. (PostgreSQL only)</p>
+</td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><code>references</code></td><td><p>Adds a foreign key constraint. Pass a table name to reference its primary key, a table with a single table name to column name pair like <code>{users = "id"}</code> to reference a specific column, or <code>db.raw</code> for anything else, like <code>db.raw "users(id) DEFERRABLE"</code>. Table names are quoted as a single identifier, so use <code>db.raw '"public"."users"("id")'</code> for a schema-qualified reference instead of <code>"public.users"</code>. (PostgreSQL only)</p>
+</td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><code>on_delete</code></td><td><p>Sets the <code>ON DELETE</code> action of a <code>references</code> constraint. One of <code>"cascade"</code>, <code>"restrict"</code>, <code>"set_null"</code>, <code>"set_default"</code>, or <code>"no_action"</code>. Use <code>null = true</code> with <code>"set_null"</code> so the action can set the column to <code>NULL</code>; columns default to <code>NOT NULL</code>. (PostgreSQL only)</p>
+</td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><code>on_update</code></td><td><p>Sets the <code>ON UPDATE</code> action of a <code>references</code> constraint, takes the same values as <code>on_delete</code>. As with <code>on_delete</code>, use <code>null = true</code> with <code>"set_null"</code>. (PostgreSQL only)</p>
 </td><td><em class="default_value"><code>nil</code></em></td></tr></tbody></table></p>
 
 <p>Here are some examples:</p>
@@ -1734,7 +1737,12 @@ options. The options include:</p>
 <span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">varchar</span><span class="sh_operator">({</span> <span class="sh_identifier">primary_key</span> <span class="sh_operator">=</span> <span class="sh_keyword">true</span> <span class="sh_operator">})</span>        <span class="sh_comment">--&gt; character varying(255) NOT NULL PRIMARY KEY</span>
 <span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">real</span><span class="sh_operator">({</span> <span class="sh_identifier">array</span> <span class="sh_operator">=</span> <span class="sh_keyword">true</span> <span class="sh_operator">})</span>                 <span class="sh_comment">--&gt; real[] NOT NULL</span>
 <span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">text</span><span class="sh_operator">({</span> <span class="sh_identifier">array</span> <span class="sh_operator">=</span> <span class="sh_number">2</span> <span class="sh_operator">})</span>                    <span class="sh_comment">--&gt; text[][] NOT NULL</span>
-<span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">time</span><span class="sh_operator">({</span> <span class="sh_identifier">timezone</span> <span class="sh_operator">=</span> <span class="sh_keyword">true</span> <span class="sh_operator">})</span>              <span class="sh_comment">--&gt; timestamp WITH TIME ZONE NOT NULL</span></code>
+<span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">time</span><span class="sh_operator">({</span> <span class="sh_identifier">timezone</span> <span class="sh_operator">=</span> <span class="sh_keyword">true</span> <span class="sh_operator">})</span>              <span class="sh_comment">--&gt; timestamp WITH TIME ZONE NOT NULL</span>
+<span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">foreign_key</span><span class="sh_operator">({</span> <span class="sh_identifier">references</span> <span class="sh_operator">=</span> <span class="sh_string">&quot;users&quot;</span> <span class="sh_operator">})</span> <span class="sh_comment">--&gt; integer NOT NULL REFERENCES &quot;users&quot;</span>
+<span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">foreign_key</span><span class="sh_operator">({</span> <span class="sh_identifier">references</span> <span class="sh_operator">=</span> <span class="sh_operator">{</span> <span class="sh_identifier">users</span> <span class="sh_operator">=</span> <span class="sh_string">&quot;id&quot;</span> <span class="sh_operator">}</span> <span class="sh_operator">})</span> <span class="sh_comment">--&gt; integer NOT NULL REFERENCES &quot;users&quot;(&quot;id&quot;)</span>
+<span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">foreign_key</span><span class="sh_operator">({</span> <span class="sh_identifier">references</span> <span class="sh_operator">=</span> <span class="sh_string">&quot;users&quot;</span><span class="sh_operator">,</span> <span class="sh_identifier">on_delete</span> <span class="sh_operator">=</span> <span class="sh_string">&quot;cascade&quot;</span> <span class="sh_operator">})</span> <span class="sh_comment">--&gt; integer NOT NULL REFERENCES &quot;users&quot; ON DELETE CASCADE</span>
+<span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">foreign_key</span><span class="sh_operator">({</span> <span class="sh_identifier">references</span> <span class="sh_operator">=</span> <span class="sh_string">&quot;users&quot;</span><span class="sh_operator">,</span> <span class="sh_identifier">on_delete</span> <span class="sh_operator">=</span> <span class="sh_string">&quot;set_null&quot;</span><span class="sh_operator">,</span> <span class="sh_identifier">null</span> <span class="sh_operator">=</span> <span class="sh_keyword">true</span> <span class="sh_operator">})</span> <span class="sh_comment">--&gt; integer REFERENCES &quot;users&quot; ON DELETE SET NULL</span>
+<span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">foreign_key</span><span class="sh_operator">({</span> <span class="sh_identifier">references</span> <span class="sh_operator">=</span> <span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_operator">(</span><span class="sh_string">&#x27;&quot;public&quot;.&quot;users&quot;(&quot;id&quot;)&#x27;</span><span class="sh_operator">)</span> <span class="sh_operator">})</span> <span class="sh_comment">--&gt; integer NOT NULL REFERENCES &quot;public&quot;.&quot;users&quot;(&quot;id&quot;)</span></code>
 </pre>
 <pre class="highlight lang_moon"><code><span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">integer</span> <span class="sh_tbl_key sh_regex">default:</span> <span class="sh_number">1</span><span class="sh_operator">,</span> <span class="sh_tbl_key sh_regex">null:</span> <span class="sh_constant">true</span>  <span class="sh_comment">--&gt; integer DEFAULT 1</span>
 <span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">integer</span> <span class="sh_tbl_key sh_regex">primary_key:</span> <span class="sh_constant">true</span>       <span class="sh_comment">--&gt; integer NOT NULL DEFAULT 0 PRIMARY KEY</span>
@@ -1742,7 +1750,12 @@ options. The options include:</p>
 <span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">varchar</span> <span class="sh_tbl_key sh_regex">primary_key:</span> <span class="sh_constant">true</span>       <span class="sh_comment">--&gt; character varying(255) NOT NULL PRIMARY KEY</span>
 <span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">real</span> <span class="sh_tbl_key sh_regex">array:</span> <span class="sh_constant">true</span>                <span class="sh_comment">--&gt; real[] NOT NULL</span>
 <span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">text</span> <span class="sh_tbl_key sh_regex">array:</span> <span class="sh_number">2</span>                   <span class="sh_comment">--&gt; text[][] NOT NULL</span>
-<span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">time</span> <span class="sh_tbl_key sh_regex">timezone:</span> <span class="sh_constant">true</span>             <span class="sh_comment">--&gt; timestamp WITH TIME ZONE NOT NULL</span></code>
+<span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">time</span> <span class="sh_tbl_key sh_regex">timezone:</span> <span class="sh_constant">true</span>             <span class="sh_comment">--&gt; timestamp WITH TIME ZONE NOT NULL</span>
+<span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">foreign_key</span> <span class="sh_tbl_key sh_regex">references:</span> <span class="sh_string">&quot;users&quot;</span> <span class="sh_comment">--&gt; integer NOT NULL REFERENCES &quot;users&quot;</span>
+<span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">foreign_key</span> <span class="sh_tbl_key sh_regex">references:</span> <span class="sh_symbol sh_embedded">{</span><span class="sh_tbl_key sh_regex">users:</span> <span class="sh_string">&quot;id&quot;</span><span class="sh_symbol sh_embedded">}</span> <span class="sh_comment">--&gt; integer NOT NULL REFERENCES &quot;users&quot;(&quot;id&quot;)</span>
+<span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">foreign_key</span> <span class="sh_tbl_key sh_regex">references:</span> <span class="sh_string">&quot;users&quot;</span><span class="sh_operator">,</span> <span class="sh_tbl_key sh_regex">on_delete:</span> <span class="sh_string">&quot;cascade&quot;</span> <span class="sh_comment">--&gt; integer NOT NULL REFERENCES &quot;users&quot; ON DELETE CASCADE</span>
+<span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">foreign_key</span> <span class="sh_tbl_key sh_regex">references:</span> <span class="sh_string">&quot;users&quot;</span><span class="sh_operator">,</span> <span class="sh_tbl_key sh_regex">on_delete:</span> <span class="sh_string">&quot;set_null&quot;</span><span class="sh_operator">,</span> <span class="sh_tbl_key sh_regex">null:</span> <span class="sh_constant">true</span> <span class="sh_comment">--&gt; integer REFERENCES &quot;users&quot; ON DELETE SET NULL</span>
+<span class="sh_identifier">types</span><span class="sh_operator">.</span><span class="sh_identifier">foreign_key</span> <span class="sh_tbl_key sh_regex">references:</span> <span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span><span class="sh_symbol sh_embedded">(</span><span class="sh_string">&#x27;&quot;public&quot;.&quot;users&quot;(&quot;id&quot;)&#x27;</span><span class="sh_symbol sh_embedded">)</span> <span class="sh_comment">--&gt; integer NOT NULL REFERENCES &quot;public&quot;.&quot;users&quot;(&quot;id&quot;)</span></code>
 </pre>
 </div>
 
@@ -1753,7 +1766,7 @@ types</a>.
 SQLite provides <code>integer</code>, <code>text</code>, <code>blob</code>, <code>real</code>, <code>numeric</code> and <code>any</code>, see
 <a href="https://github.com/leafo/lapis/blob/master/lapis/db/sqlite/schema.moon">SQLite types</a>.</p></blockquote>
 
-<h2><a href="#database-migrations" name="database-migrations">Database Migrations</a></h2>
+<h2><a name="database-migrations" href="#database-migrations">Database Migrations</a></h2>
 
 <p>Because requirements typically change over the lifespan of a web application
 it&rsquo;s useful to have a system to make incremental schema changes to the
@@ -1803,7 +1816,7 @@ stored in the migrations table, a database table that holds the names of the
 migrations that have already been run. Migrations are run in the order of their
 keys sorted ascending.</p>
 
-<h3><a href="#database-migrations/running-migrations" name="database-migrations/running-migrations">Running Migrations</a></h3>
+<h3><a name="database-migrations/running-migrations" href="#database-migrations/running-migrations">Running Migrations</a></h3>
 
 <p>The Lapis command line tool has a special command for running migrations. It&rsquo;s
 called <code>lapis migrate</code>.</p>
@@ -1860,7 +1873,7 @@ exist yet then it will run every migration that hasn&rsquo;t been executed yet.<
 
 <p>Read more about <a href="command_line.html#command-reference/lapis-migrate">the migrate command</a>.</p>
 
-<h3><a href="#database-migrations/generating-migration-stubs" name="database-migrations/generating-migration-stubs">Generating Migration Stubs</a></h3>
+<h3><a name="database-migrations/generating-migration-stubs" href="#database-migrations/generating-migration-stubs">Generating Migration Stubs</a></h3>
 
 <p>The CLI can scaffold (or extend) the migrations module for you via <code>lapis
 generate migration</code>. The command appends a new keyed function to the end of
@@ -1880,7 +1893,7 @@ written next to the module you specify with <code>--module</code>/<code>--migrat
 you are maintaining MoonScript migrations remember to re-run <code>make build</code>
 before executing <code>lapis migrate</code>.</p>
 
-<h3><a href="#database-migrations/manually-running-migrations" name="database-migrations/manually-running-migrations">Manually Running Migrations</a></h3>
+<h3><a name="database-migrations/manually-running-migrations" href="#database-migrations/manually-running-migrations">Manually Running Migrations</a></h3>
 
 <p>We can manually create the migrations table using the following code:</p>
 
@@ -1934,7 +1947,7 @@ first.</p></blockquote>
 with <code>_</code>, when checking and recording which migrations have run. The following
 options are supported:</p>
 
-<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>transaction</code></td><td><p>Set to <code>"global"</code> to run all the migrations inside of a single
+<p><table cellspacing="0" cellpadding="0" class="configuration_table"><thead><tr><td>Name</td><td>Description</td><td>Default</td></tr></thead><tbody><tr><td><code>transaction</code></td><td><p>Set to <code>"global"</code> to run all the migrations inside of a single
 transaction, or <code>"individual"</code> to run each migration in its own
 transaction.</p>
 </td><td><em class="default_value"><code>nil</code></em></td></tr><tr><td><code>dry_run</code></td><td><p>Run the migrations inside of a transaction that is rolled back instead
@@ -1947,12 +1960,12 @@ from <code>lapis.db.migrations</code> to always run it outside of a transaction.
 migrate command</a> for more
 details and an example.</p>
 
-<h2><a href="#database-helpers" name="database-helpers">Database Helpers</a></h2>
+<h2><a name="database-helpers" href="#database-helpers">Database Helpers</a></h2>
 
 <p>These are additional helper functions from the <code>db</code> module that
 aren&rsquo;t directly related to the query interface.</p>
 
-<h4><a href="#database-helpers/db.format_date" name="database-helpers/db.format_date"><code>db.format_date(time)</code></a></h4>
+<h4><a name="database-helpers/db.format_date" href="#database-helpers/db.format_date"><code>db.format_date(time)</code></a></h4>
 
 <p>Returns a date string formatted properly for insertion in the database.</p>
 
@@ -1983,8 +1996,8 @@ aren&rsquo;t directly related to the query interface.</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Thu Oct 22 18:58:16 2026"></script>
-  <script type="text/javascript" src="../reference.js?Thu Oct 22 18:58:16 2026"></script>
+  <script type="text/javascript" src="../search.js?Thu Oct 22 19:11:03 2026"></script>
+  <script type="text/javascript" src="../reference.js?Thu Oct 22 19:11:03 2026"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>

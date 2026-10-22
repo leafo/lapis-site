@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Flows - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Thu Oct 22 18:58:17 2026" />
+  <link rel="stylesheet" href="../reference.css?Thu Oct 22 19:11:03 2026" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
     window.dataLayer = window.dataLayer || [];
@@ -200,7 +200,7 @@ implementation. This can help your code stay more organized and also make it
 easier to unit-test individual code paths without having to mock an entire
 request.</p>
 
-<h2><a href="#assigning-fields-within-a-flow" name="assigning-fields-within-a-flow">Assigning Fields Within a Flow</a></h2>
+<h2><a name="assigning-fields-within-a-flow" href="#assigning-fields-within-a-flow">Assigning Fields Within a Flow</a></h2>
 
 <p>If you assign to <code>self</code> in a flow it is saved on the flow instance by default.
 This can be used for private data specific to that flow. A good example might
@@ -270,7 +270,7 @@ the class object instead, and it will have no effect.
 object where you want to set up fields on the request that may be made
 available to views or other parts of the request handler.</p>
 
-<h2><a href="#accessing-the-contained-object" name="accessing-the-contained-object">Accessing The Contained Object</a></h2>
+<h2><a name="accessing-the-contained-object" href="#accessing-the-contained-object">Accessing The Contained Object</a></h2>
 
 <p>The contained object is stored on <code>self</code> with the name <code>_</code> (an underscore).
 Consider it a reserved field for the flow to operate correctly, don&rsquo;t replace
@@ -306,7 +306,7 @@ some reason:</p>
 
 </p>
 
-<h2><a href="#organizing-your-application-with-flows" name="organizing-your-application-with-flows">Organizing Your Application With Flows</a></h2>
+<h2><a name="organizing-your-application-with-flows" href="#organizing-your-application-with-flows">Organizing Your Application With Flows</a></h2>
 
 <p>In Lapis, an application class is where you define routes and your request
 logic. Since there are so many responsibilities it&rsquo;s easy for an application
@@ -420,7 +420,7 @@ repeating ourselves.</p>
 
 </p>
 
-<h2><a href="#nested-flows" name="nested-flows">Nested Flows</a></h2>
+<h2><a name="nested-flows" href="#nested-flows">Nested Flows</a></h2>
 
 <p>When you instantiate a flow and pass an existing flow as the argument, the
 backing object is passed directly into the new flow. This means that the
@@ -463,7 +463,7 @@ current flow&rsquo;s methods are not made available to the new flow.</p>
 
 </p>
 
-<h2><a href="#initial-flow-fields" name="initial-flow-fields">Initial Flow Fields</a></h2>
+<h2><a name="initial-flow-fields" href="#initial-flow-fields">Initial Flow Fields</a></h2>
 
 <p>The flow constructor takes an optional second argument, a table of fields that
 will be stored on the flow instance. These fields take precedence over the
@@ -484,9 +484,9 @@ fields of the contained object.</p>
 
 </p>
 
-<h2><a href="#utility-functions" name="utility-functions">Utility Functions</a></h2>
+<h2><a name="utility-functions" href="#utility-functions">Utility Functions</a></h2>
 
-<h3><a href="#utility-functions/is_flow_class" name="utility-functions/is_flow_class"><code>is_flow_class(cls)</code></a></h3>
+<h3><a name="utility-functions/is_flow_class" href="#utility-functions/is_flow_class"><code>is_flow_class(cls)</code></a></h3>
 
 <p>The <code>is_flow_class</code> function checks if a class is a Flow class. To check an
 instance, pass its class:</p>
@@ -529,8 +529,8 @@ instance, pass its class:</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Thu Oct 22 18:58:17 2026"></script>
-  <script type="text/javascript" src="../reference.js?Thu Oct 22 18:58:17 2026"></script>
+  <script type="text/javascript" src="../search.js?Thu Oct 22 19:11:03 2026"></script>
+  <script type="text/javascript" src="../reference.js?Thu Oct 22 19:11:03 2026"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>
