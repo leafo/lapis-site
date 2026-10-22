@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Configuration and Environments - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Fri Mar  8 20:35:44 2024" />
+  <link rel="stylesheet" href="../reference.css?Thu Oct 22 18:58:16 2026" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-136625-1']);
-    _gaq.push(['_trackPageview']);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-136625-1');
 
     (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var ga = document.createElement('script'); ga.async = true;
+      ga.src = 'https://www.googletagmanager.com/gtag/js?id=UA-136625-1';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
   }
@@ -27,7 +28,7 @@
     </h1>
     <div id="search_drop" data-root=".." data-index="../reference.json"></div>
     <a href="../changelog.html" class="version_flag">
-      v1.16.0
+      v1.19.0
     </a>
   </div>
 
@@ -48,7 +49,7 @@
 <li><a href="#built-in-configuration">Built-in Configuration</a></li>
 <ul><li><a href="#built-in-configuration/logging-configuration">Logging configuration</a></li></ul>
 <li><a href="#configurations-and-nginx">Configurations and Nginx</a></li>
-<li><a href="#overriding-with-environment-variables">Overriding With Environment Variables</a></li>
+<ul><li><a href="#configurations-and-nginx/overriding-with-environment-variables">Overriding With Environment Variables</a></li></ul>
 <li><a href="#accessing-configuration-from-application">Accessing Configuration From Application</a></li>
 <li><a href="#performance-measurement">Performance Measurement</a></li></ul>
           </div>
@@ -73,6 +74,7 @@
 <li><a href="../reference/moon_creating_configurations.html">MoonScript configuration syntax</a></li>
 </ul>
 </li>
+<li><a href="../reference/server_backends.html">Server Backends</a></li>
 <li><a href="../reference/database.html">Database Access, and Queries</a>
 
 <ul>
@@ -80,6 +82,7 @@
 </ul>
 </li>
 <li><a href="../reference/exception_handling.html">Handling Exceptions</a></li>
+<li><a href="../reference/flows.html">Flows</a></li>
 <li><a href="../reference/input_validation.html">Input Validation</a></li>
 <li><a href="../reference/html_generation.html">HTML Generation</a></li>
 <li><a href="../reference/etlua_templates.html">etlua Templates</a></li>
@@ -106,18 +109,19 @@ and 8 workers.</p>
 
 <p>The <code>lapis</code> command line tool takes a second argument when starting the server:</p>
 
-<pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">server</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">[</span><span class="sh_identifier">environment</span><span class="sh_operator">]</span></code>
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span> <span class="sh_identifier">lapis</span> <span class="sh_identifier">server</span> <span class="sh_operator">[</span><span class="sh_identifier">environment</span><span class="sh_operator">]</span></code>
 </pre>
 
 
-<h2><a name="default-environment" href="#default-environment">Default Environment</a></h2>
+<h2><a href="#default-environment" name="default-environment">Default Environment</a></h2>
 
 <p>The default environment is used when you don&rsquo;t explicitly specify an
 environment. The following conditions are checked in order to determine the
 default environment:</p>
 
 <ol>
-<li>When inside a of a test suite (supported environments: <a href="http://olivinelabs.com/busted/">Busted</a>), the default environment is set to <code>test</code></li>
+<li>When the <code>LAPIS_ENVIRONMENT</code> environment variable is set, its value is used</li>
+<li>When inside of a test suite (supported environments: <a href="https://lunarmodules.github.io/busted/">Busted</a>), the default environment is set to <code>test</code></li>
 <li>When a module named <code>lapis_environment</code> exists, the return value of that module is used as the default environment</li>
 <li>Otherwise, default environment is set to <code>development</code></li>
 </ol>
@@ -130,15 +134,18 @@ environment name has no effect unless you are working with configurations.</p>
 the database, so you'll often use different environments to connect to
 different databases.</p></blockquote>
 
-<h3><a name="default-environment/overriding-the-default-environment" href="#default-environment/overriding-the-default-environment">Overriding The Default Environment</a></h3>
+<h3><a href="#default-environment/overriding-the-default-environment" name="default-environment/overriding-the-default-environment">Overriding The Default Environment</a></h3>
 
 <p>You can override the default environment by setting a <code>LAPIS_ENVIRONMENT</code>
-environment variable on your system before executing any Lapis code.</p>
+environment variable on your system before executing any Lapis code. To
+prevent accidentally running tests against a production database, an error is
+thrown if <code>LAPIS_ENVIRONMENT</code> is set to <code>production</code> while running in a test
+suite.</p>
 
 <p>Some <code>lapis</code> commands also let you explicitly set the environment to override
 the default.</p>
 
-<h2><a name="creating-configurations" href="#creating-configurations">Creating Configurations</a></h2>
+<h2><a href="#creating-configurations" name="creating-configurations">Creating Configurations</a></h2>
 
 <p>Whenever Lapis executes code that depends on a configuration it attempts to
 load the module <code>"config"</code>.  The <code>"config"</code> module is where we define our
@@ -147,34 +154,38 @@ environment specific variables. It&rsquo;s a standard Lua/MoonScript file.</p>
 <blockquote><p>If the <code>config</code> module is not found no error is thrown, and only the default
 configuration is available.</p></blockquote>
 
-<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">config</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_comment">-- config.lua</span>
+<span class="sh_keyword">local</span> <span class="sh_identifier">config</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_operator">)</span>
 
-</span><span class="sh_identifier">config</span><span class="sh_operator">(</span><span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_identifier">port</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">8080</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+<span class="sh_identifier">config</span><span class="sh_operator">(</span><span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span> <span class="sh_operator">{</span>
+  <span class="sh_identifier">port</span> <span class="sh_operator">=</span> <span class="sh_number">8080</span>
+<span class="sh_operator">})</span>
 
-</span><span class="sh_identifier">config</span><span class="sh_operator">(</span><span class="sh_string">&quot;production&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_identifier">port</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">80</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_identifier">num_workers</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">4</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_identifier">code_cache</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;on&quot;</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
-</span></code>
+<span class="sh_identifier">config</span><span class="sh_operator">(</span><span class="sh_string">&quot;production&quot;</span><span class="sh_operator">,</span> <span class="sh_operator">{</span>
+  <span class="sh_identifier">port</span> <span class="sh_operator">=</span> <span class="sh_number">80</span><span class="sh_operator">,</span>
+  <span class="sh_identifier">num_workers</span> <span class="sh_operator">=</span> <span class="sh_number">4</span><span class="sh_operator">,</span>
+  <span class="sh_identifier">code_cache</span> <span class="sh_operator">=</span> <span class="sh_string">&quot;on&quot;</span>
+<span class="sh_operator">})</span></code>
 </pre>
+<pre class="highlight lang_moon"><code><span class="sh_comment">-- config.moon</span>
+<span class="sh_identifier">config</span> <span class="sh_operator">=</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.config&quot;</span>
 
+<span class="sh_identifier">config</span> <span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span> <span class="sh_fndef sh_preprocessor">-&gt;</span>
+  <span class="sh_identifier">port</span> <span class="sh_number">8080</span>
 
-<pre class="highlight lang_moon"><code><span class="sh_comment">-- config.moon</span><span class="sh_moonscript_whitespace sh_whitespace">
-</span><span class="sh_identifier">config</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-
-</span><span class="sh_identifier">config</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_identifier">port</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">8080</span><span class="sh_moonscript_whitespace sh_whitespace">
-
-</span><span class="sh_identifier">config</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;production&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_identifier">port</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">80</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_identifier">num_workers</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">4</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_identifier">code_cache</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;on&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-</span></code>
+<span class="sh_identifier">config</span> <span class="sh_string">&quot;production&quot;</span><span class="sh_operator">,</span> <span class="sh_fndef sh_preprocessor">-&gt;</span>
+  <span class="sh_identifier">port</span> <span class="sh_number">80</span>
+  <span class="sh_identifier">num_workers</span> <span class="sh_number">4</span>
+  <span class="sh_identifier">code_cache</span> <span class="sh_string">&quot;on&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>We use the configuration helpers provided in <code>"lapis.config"</code> to create our
 configurations. This defines a domain specific language for setting variables.
@@ -187,16 +198,21 @@ construct the configuration tables.</p>
 <p>We can configure multiple environments at once by passing in an array table for
 environment names:</p>
 
-<pre class="highlight lang_lua"><code><span class="sh_identifier">config</span><span class="sh_operator">({</span><span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;production&quot;</span><span class="sh_operator">},</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_identifier">session_name</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;my_app_session&quot;</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_operator">})</span></code>
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">config</span><span class="sh_operator">({</span><span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span> <span class="sh_string">&quot;production&quot;</span><span class="sh_operator">},</span> <span class="sh_operator">{</span>
+  <span class="sh_identifier">session_name</span> <span class="sh_operator">=</span> <span class="sh_string">&quot;my_app_session&quot;</span>
+<span class="sh_operator">})</span></code>
 </pre>
-
-
-<pre class="highlight lang_moon"><code><span class="sh_identifier">config</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;production&quot;</span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_identifier">session_name</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;my_app_session&quot;</span></code>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">config</span> <span class="sh_symbol sh_embedded">{</span><span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span> <span class="sh_string">&quot;production&quot;</span><span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span> <span class="sh_fndef sh_preprocessor">-&gt;</span>
+  <span class="sh_identifier">session_name</span> <span class="sh_string">&quot;my_app_session&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>The configuration file has access to a nice syntax for combining nested
 tables. Both MoonScript and Lua have their own variations, for more details
@@ -208,7 +224,7 @@ about the syntax have a look at the respective guide.</p>
 </ul>
 
 
-<h2><a name="built-in-configuration" href="#built-in-configuration">Built-in Configuration</a></h2>
+<h2><a href="#built-in-configuration" name="built-in-configuration">Built-in Configuration</a></h2>
 
 <p>Although most configuration keys are free for any use, some names are reserved
 for controlling how Lapis and supporting libraries work. Keep in mind some
@@ -217,7 +233,7 @@ configurations are only used depending on the server.</p>
 <blockquote><p>For your app&rsquo;s configuration, you can avoid future conflicts by scoping your
 configuration values to your app&rsquo;s name.</p></blockquote>
 
-<p><table class="configuration_table" cellspacing="0" cellpadding="0"><thead><tr><td>Name</td><td>Description</td><td>Default value</td><td>Servers</td></tr></thead><tbody><tr><td><code>server</code></td><td><p>The server your code will run in. Either <code>nginx</code> or <code>cqueues</code></p>
+<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default value</td><td>Servers</td></tr></thead><tbody><tr><td><code>server</code></td><td><p>The server your code will run in. Either <code>nginx</code> or <code>cqueues</code></p>
 </td><td><p><code>"nginx"</code></p>
 </td><td><em>Any</em></td></tr><tr><td><code>port</code></td><td><p>The port your server will bind to</p>
 </td><td><p><code>8080</code></p>
@@ -227,7 +243,7 @@ configuration values to your app&rsquo;s name.</p></blockquote>
 </td><td><p><code>"please-change-me"</code></p>
 </td><td><em>Any</em></td></tr><tr><td><code>hmac_digest</code></td><td><p>Controls the hashing function used for HMAC sessions and signed strings. One of <code>"sha1"</code>, <code>"sha256"</code>.</p>
 </td><td><p><code>"sha1"</code></p>
-</td><td><em>Any</em></td></tr><tr><td><code>session_name</code></td><td><p>Name of cookie used to store the <a href="../reference/actions.html#request-object-session">session</a></p>
+</td><td><em>Any</em></td></tr><tr><td><code>session_name</code></td><td><p>Name of cookie used to store the <a href="../reference/actions.html#request-object/session">session</a></p>
 </td><td><p><code>"lapis_session"</code></p>
 </td><td><em>Any</em></td></tr><tr><td><code>code_cache</code></td><td><p>Controls if code is cached across requests, or is reloaded for each request.</p>
 
@@ -243,6 +259,8 @@ See <code>max_args</code> in <a href="https://github.com/openresty/lua-nginx-mod
 </td><td><p><code>nil</code></p>
 </td><td><strong>nginx</strong></td></tr><tr><td><code>measure_performance</code></td><td><p>Enables per-request performance metric collection, see <a href="#performance-measurement">Performance Measurement</a>.</p>
 </td><td><p><code>false</code></p>
+</td><td><strong>nginx</strong></td></tr><tr><td><code>default_app_module</code></td><td><p>The name of the module that contains your application, used by commands like <code>lapis server</code> and <code>lapis simulate</code> when starting the application</p>
+</td><td><p><code>"app"</code></p>
 </td><td><em>Any</em></td></tr><tr><td><code>postgres</code></td><td><p>PostgreSQL connection settings</p>
 </td><td><p><a href="database.html"><em>See PostgreSQL docs</em></a></p>
 </td><td><em>Any</em></td></tr><tr><td><code>mysql</code></td><td><p>MySQL connection settings</p>
@@ -251,7 +269,7 @@ See <code>max_args</code> in <a href="https://github.com/openresty/lua-nginx-mod
 </td><td><p><code>nil</code></p>
 </td><td><em>Any</em></td></tr></tbody></table></p>
 
-<h3><a name="built-in-configuration/logging-configuration" href="#built-in-configuration/logging-configuration">Logging configuration</a></h3>
+<h3><a href="#built-in-configuration/logging-configuration" name="built-in-configuration/logging-configuration">Logging configuration</a></h3>
 
 <p>Logging configuration is stored in a table under the name <code>logging</code> in the
 global configuration. If the value is set to <code>false</code> then all logging is
@@ -260,7 +278,7 @@ disabled.</p>
 <blockquote><p>This only controls logging done by Lapis, server specific logging in
 OpenResty is controlled with the nginx config file.</p></blockquote>
 
-<p><table class="configuration_table" cellspacing="0" cellpadding="0"><thead><tr><td>Name</td><td>Description</td><td>Default value</td><td>Servers</td></tr></thead><tbody><tr><td><code>server</code></td><td><p>Show server start message</p>
+<p><table cellpadding="0" class="configuration_table" cellspacing="0"><thead><tr><td>Name</td><td>Description</td><td>Default value</td><td>Servers</td></tr></thead><tbody><tr><td><code>server</code></td><td><p>Show server start message</p>
 </td><td><p><code>true</code></p>
 </td><td><strong>cqueues</strong></td></tr><tr><td><code>queries</code></td><td><p>Show queries sent to database</p>
 </td><td><p><code>true</code></p>
@@ -276,64 +294,108 @@ directive</a>.</p>
 
 <p>Otherwise, logs are written to standard out using Lua&rsquo;s <code>print</code> function.</p>
 
-<h2><a name="configurations-and-nginx" href="#configurations-and-nginx">Configurations and Nginx</a></h2>
+<p>Setting the <code>LAPIS_SHOW_QUERIES</code> environment variable will log queries
+regardless of the logging configuration. Set it to <code>0</code> to disable query
+logging.</p>
+
+<h2><a href="#configurations-and-nginx" name="configurations-and-nginx">Configurations and Nginx</a></h2>
 
 <p>The values in the configuration are used when compiling <code>nginx.conf</code>.
-Interpolated Nginx configuration variables are case insensitive. They are
-typically written in all capitals because the shell&rsquo;s environment is checked
-for a value before the configuration is checked.</p>
+Configuration values are inserted with the <code>${{name}}</code> syntax. Variable names
+are case insensitive, and nested tables can be accessed with <code>.</code>. Any
+variables that don&rsquo;t have a value are left unchanged.</p>
 
-<p>For example, here&rsquo;s a chunk of an Lapis Nginx configuration:</p>
+<p>For example, here&rsquo;s a chunk of a Lapis Nginx configuration:</p>
 
-<pre class="highlight lang_nginx"><code><span class="sh_keyword">events</span><span class="sh_default"> {
-  </span><span class="sh_function">worker_connections</span><span class="sh_default"> </span><span class="sh_variable sh_label">${{WORKER_CONNECTIONS}};</span><span class="sh_default">
-}</span></code>
+<pre class="highlight lang_nginx"><code><span class="sh_function">worker_processes</span> <span class="sh_variable sh_label">${{num_workers}}</span><span class="sh_operator">;</span>
+
+<span class="sh_keyword">http</span> <span class="sh_operator">{</span>
+  <span class="sh_function">lua_shared_dict</span> <span class="sh_identifier">page_cache</span> <span class="sh_variable sh_label">${{cache.size}}</span><span class="sh_operator">;</span>
+
+  <span class="sh_keyword">server</span> <span class="sh_operator">{</span>
+    <span class="sh_function">listen</span> <span class="sh_variable sh_label">${{port}}</span><span class="sh_operator">;</span>
+    <span class="sh_function">lua_code_cache</span> <span class="sh_variable sh_label">${{code_cache}}</span><span class="sh_operator">;</span>
+    <span class="sh_comment"># ...</span>
+  <span class="sh_operator">}</span>
+<span class="sh_operator">}</span></code>
 </pre>
 
 
-<h2><a name="overriding-with-environment-variables" href="#overriding-with-environment-variables">Overriding With Environment Variables</a></h2>
+<p>The <code>pg</code> filter will convert a <code>postgres</code> configuration table into a
+PostgreSQL connection string, eg. for use with <code>ngx_postgres</code>: <code>${{pg
+postgres}}</code>.</p>
 
-<p>You can override any configuration value with an environment variable. Prefix
-the configuration name with <code>LAPIS_</code> and make the rest of the name all
-uppercase. For example, to override the <code>worker_connections</code> variable:</p>
+<p>If a file named <code>nginx.conf.etlua</code> exists then it is used instead of
+<code>nginx.conf</code>, and is compiled as an <a href="https://github.com/leafo/etlua">etlua</a>
+template with the configuration values in scope. This can be used for more
+complex logic like conditionally including blocks:</p>
 
-<pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">LAPIS_WORKER_CONNECTIONS</span><span class="sh_operator">=</span><span class="sh_number">5</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">server</span></code>
+<pre class="highlight lang_nginx"><code><span class="sh_function">worker_processes</span> <span class="sh_template_tag sh_embedded">&lt;%=</span> <span class="sh_identifier">num_workers</span> <span class="sh_template_tag sh_embedded">%&gt;</span><span class="sh_operator">;</span>
+
+<span class="sh_template_tag sh_embedded">&lt;%</span> <span class="sh_keyword">if</span> <span class="sh_identifier">enable_gzip</span> <span class="sh_keyword">then</span> <span class="sh_template_tag sh_embedded">%&gt;</span>
+<span class="sh_function">gzip</span> <span class="sh_keyword">on</span><span class="sh_operator">;</span>
+<span class="sh_template_tag sh_embedded">&lt;%</span> <span class="sh_keyword">end</span> <span class="sh_template_tag sh_embedded">%&gt;</span></code>
 </pre>
 
 
-<p>This can be used with any configuration variable. Keep in mind that the value
-will always be a string type, so you may need to add additional type coercion
-to you code that reads it.</p>
+<h3><a href="#configurations-and-nginx/overriding-with-environment-variables" name="configurations-and-nginx/overriding-with-environment-variables">Overriding With Environment Variables</a></h3>
 
-<h2><a name="accessing-configuration-from-application" href="#accessing-configuration-from-application">Accessing Configuration From Application</a></h2>
+<p>When compiling <code>nginx.conf</code>, any configuration value can be overridden with an
+environment variable. Prefix the configuration name with <code>LAPIS_</code> and make the
+rest of the name all uppercase. For example, to override the <code>port</code>:</p>
+
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span> <span class="sh_identifier">LAPIS_PORT</span><span class="sh_operator">=</span><span class="sh_number">9090</span> <span class="sh_identifier">lapis</span> <span class="sh_identifier">server</span></code>
+</pre>
+
+
+<blockquote><p>These environment variables only change the values used when compiling the
+Nginx configuration file. They do not change the values returned by
+<code>require("lapis.config").get()</code> in your application. To read environment
+variables in your application, use <code>os.getenv</code> in your configuration file.</p></blockquote>
+
+<h2><a href="#accessing-configuration-from-application" name="accessing-configuration-from-application">Accessing Configuration From Application</a></h2>
 
 <p>The configuration is also made available in the application. We can get access
 to the configuration table like so:</p>
 
-<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">config</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">get</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">config</span><span class="sh_operator">.</span><span class="sh_identifier">port</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">-- shows the current port</span></code>
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">config</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">get</span><span class="sh_operator">()</span>
+<span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">config</span><span class="sh_operator">.</span><span class="sh_identifier">port</span><span class="sh_operator">)</span> <span class="sh_comment">-- shows the current port</span></code>
 </pre>
-
-
-<pre class="highlight lang_moon"><code><span class="sh_identifier">config</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_symbol sh_embedded">(</span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">.</span><span class="sh_identifier">get</span><span class="sh_operator">!</span><span class="sh_moonscript_whitespace sh_whitespace">
-</span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">config</span><span class="sh_operator">.</span><span class="sh_identifier">port</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">-- shows the current port</span></code>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">config</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_symbol sh_embedded">(</span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">.</span><span class="sh_identifier">get</span><span class="sh_operator">!</span>
+<span class="sh_function">print</span> <span class="sh_identifier">config</span><span class="sh_operator">.</span><span class="sh_identifier">port</span> <span class="sh_comment">-- shows the current port</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>The name of the environment is stored in <code>_name</code>.</p>
 
-<pre class="highlight lang_lua"><code><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">config</span><span class="sh_operator">.</span><span class="sh_identifier">_name</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">-- development, production, etc...</span></code>
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">config</span><span class="sh_operator">.</span><span class="sh_identifier">_name</span><span class="sh_operator">)</span> <span class="sh_comment">-- development, production, etc...</span></code>
 </pre>
-
-
-<pre class="highlight lang_moon"><code><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">config</span><span class="sh_operator">.</span><span class="sh_identifier">_name</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">-- development, production, etc...</span></code>
+<pre class="highlight lang_moon"><code><span class="sh_function">print</span> <span class="sh_identifier">config</span><span class="sh_operator">.</span><span class="sh_identifier">_name</span> <span class="sh_comment">-- development, production, etc...</span></code>
 </pre>
+</div>
 
+</p>
 
-<h2><a name="performance-measurement" href="#performance-measurement">Performance Measurement</a></h2>
+<p>To get the configuration of an environment other than the current one, pass
+its name to <code>get</code>: <span class="for_moon"><code>config.get "production"</code></span><span
+class="for_lua"><code>config.get("production")</code></span>.</p>
 
-<p>Lapis can collect timings and counts for various actions if the
-<code>measure_performance</code> configuration value is set to true.</p>
+<h2><a href="#performance-measurement" name="performance-measurement">Performance Measurement</a></h2>
+
+<p>When running in OpenResty, Lapis can collect timings and counts for various
+actions if the <code>measure_performance</code> configuration value is set to true.</p>
 
 <p>The data is stored in <code>ngx.ctx.performance</code>. The following fields are collected
 in a table:</p>
@@ -357,46 +419,45 @@ end of processing a request.</p>
 <p>In this example the performance data is printed to the log at the end of every
 request:</p>
 
-<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">after_dispatch</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.nginx.context&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">after_dispatch</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">to_json</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">to_json</span><span class="sh_lua_whitespace sh_whitespace">
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">lapis</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span>
+<span class="sh_keyword">local</span> <span class="sh_identifier">after_dispatch</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.nginx.context&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">after_dispatch</span>
+<span class="sh_keyword">local</span> <span class="sh_identifier">to_json</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">to_json</span>
 
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">config</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<span class="sh_keyword">local</span> <span class="sh_identifier">config</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_operator">)</span>
 
-</span><span class="sh_identifier">config</span><span class="sh_operator">(</span><span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_identifier">measure_performance</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_operator">})</span><span class="sh_lua_whitespace sh_whitespace">
+<span class="sh_identifier">config</span><span class="sh_operator">(</span><span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span> <span class="sh_operator">{</span>
+  <span class="sh_identifier">measure_performance</span> <span class="sh_operator">=</span> <span class="sh_keyword">true</span>
+<span class="sh_operator">})</span>
 
 
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+<span class="sh_keyword">local</span> <span class="sh_identifier">app</span> <span class="sh_operator">=</span> <span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span>
 
-</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">before_filter</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_identifier">after_dispatch</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
-    </span><span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">to_json</span><span class="sh_operator">(</span><span class="sh_identifier">ngx</span><span class="sh_operator">.</span><span class="sh_identifier">ctx</span><span class="sh_operator">.</span><span class="sh_identifier">performance</span><span class="sh_operator">))</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">before_filter</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+  <span class="sh_identifier">after_dispatch</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">()</span>
+    <span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">to_json</span><span class="sh_operator">(</span><span class="sh_identifier">ngx</span><span class="sh_operator">.</span><span class="sh_identifier">ctx</span><span class="sh_operator">.</span><span class="sh_identifier">performance</span><span class="sh_operator">))</span>
+  <span class="sh_keyword">end</span><span class="sh_operator">)</span>
+<span class="sh_keyword">end</span><span class="sh_operator">)</span>
 
-</span><span class="sh_comment">-- ...</span><span class="sh_lua_whitespace sh_whitespace">
+<span class="sh_comment">-- ...</span>
 
-</span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace">
-</span></code>
+<span class="sh_keyword">return</span> <span class="sh_identifier">app</span></code>
 </pre>
 
 
-<pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-</span><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">after_dispatch</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.nginx.context&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-</span><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">to_json</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.util&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
+<pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span> <span class="sh_operator">=</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis&quot;</span>
+<span class="sh_keyword">import</span> <span class="sh_identifier">after_dispatch</span> <span class="sh_keyword">from</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.nginx.context&quot;</span>
+<span class="sh_keyword">import</span> <span class="sh_identifier">to_json</span> <span class="sh_keyword">from</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.util&quot;</span>
 
-</span><span class="sh_identifier">config</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.config&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-</span><span class="sh_identifier">config</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_identifier">measure_performance</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_moonscript_whitespace sh_whitespace">
+<span class="sh_identifier">config</span> <span class="sh_operator">=</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.config&quot;</span>
+<span class="sh_identifier">config</span> <span class="sh_string">&quot;development&quot;</span><span class="sh_operator">,</span> <span class="sh_fndef sh_preprocessor">-&gt;</span>
+  <span class="sh_identifier">measure_performance</span> <span class="sh_constant">true</span>
 
-</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_self_ref sh_label">@before_filter</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-    </span><span class="sh_identifier">after_dispatch</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-      </span><span class="sh_function">print</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">to_json</span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">ngx</span><span class="sh_operator">.</span><span class="sh_identifier">ctx</span><span class="sh_operator">.</span><span class="sh_identifier">performance</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace">
+<span class="sh_keyword">class</span> <span class="sh_proper_ident sh_class">App</span> <span class="sh_keyword">extends</span> <span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span>
+  <span class="sh_self_ref sh_label">@before_filter</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+    <span class="sh_identifier">after_dispatch</span> <span class="sh_fndef sh_preprocessor">-&gt;</span>
+      <span class="sh_function">print</span> <span class="sh_identifier">to_json</span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">ngx</span><span class="sh_operator">.</span><span class="sh_identifier">ctx</span><span class="sh_operator">.</span><span class="sh_identifier">performance</span><span class="sh_symbol sh_embedded">)</span>
 
-  </span><span class="sh_comment">-- ...</span></code>
+  <span class="sh_comment">-- ...</span></code>
 </pre>
 
 
@@ -410,8 +471,8 @@ request:</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Fri Mar  8 20:35:44 2024"></script>
-  <script type="text/javascript" src="../reference.js?Fri Mar  8 20:35:44 2024"></script>
+  <script type="text/javascript" src="../search.js?Thu Oct 22 18:58:16 2026"></script>
+  <script type="text/javascript" src="../reference.js?Thu Oct 22 18:58:16 2026"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>

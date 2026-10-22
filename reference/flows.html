@@ -1,0 +1,538 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flows - Lapis Reference Manual</title>
+  <link rel="stylesheet" href="../reference.css?Thu Oct 22 18:58:17 2026" />
+  <script type="text/javascript">
+  if (window.location.hostname != "localhost") {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-136625-1');
+
+    (function() {
+      var ga = document.createElement('script'); ga.async = true;
+      ga.src = 'https://www.googletagmanager.com/gtag/js?id=UA-136625-1';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  }
+</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<body>
+  <div class="header">
+    <button class="toggle_nav_btn" id="menu_toggle">Menu</button>
+    <h1>
+      <a href="..">Lapis</a>
+    </h1>
+    <div id="search_drop" data-root=".." data-index="../reference.json"></div>
+    <a href="../changelog.html" class="version_flag">
+      v1.19.0
+    </a>
+  </div>
+
+  <div class="columns">
+    <div class="nav_column">
+      <div class="scrolling_inner">
+        <div class="lang_picker">
+          <span class="lang_toggle active" data-lang="lua">Lua</span>
+          <span class="lang_toggle" data-lang="moonscript">MoonScript</span>
+        </div>
+
+        
+          <div class="nav_links">
+            <h2>Flows</h2>
+            <ul><li><a href="#assigning-fields-within-a-flow">Assigning Fields Within a Flow</a></li>
+<li><a href="#accessing-the-contained-object">Accessing The Contained Object</a></li>
+<li><a href="#organizing-your-application-with-flows">Organizing Your Application With Flows</a></li>
+<li><a href="#nested-flows">Nested Flows</a></li>
+<li><a href="#initial-flow-fields">Initial Flow Fields</a></li>
+<li><a href="#utility-functions">Utility Functions</a></li>
+<ul><li><a href="#utility-functions/is_flow_class"><code>is_flow_class(cls)</code></a></li></ul></ul>
+          </div>
+        
+
+        <div class="nav_links">
+          <h2>All Guides</h2>
+
+<ul>
+<li><a href="../reference/getting_started.html">Getting Started</a>
+
+<ul>
+<li><a href="../reference/lua_getting_started.html">Getting Started With Lua</a></li>
+<li><a href="../reference/moon_getting_started.html">Getting Started With MoonScript</a></li>
+</ul>
+</li>
+<li><a href="../reference/actions.html">Requests and Actions</a></li>
+<li><a href="../reference/configuration.html">Writing Configurations</a>
+
+<ul>
+<li><a href="../reference/lua_creating_configurations.html">Lua configuration syntax</a></li>
+<li><a href="../reference/moon_creating_configurations.html">MoonScript configuration syntax</a></li>
+</ul>
+</li>
+<li><a href="../reference/server_backends.html">Server Backends</a></li>
+<li><a href="../reference/database.html">Database Access, and Queries</a>
+
+<ul>
+<li><a href="../reference/models.html">Models</a></li>
+</ul>
+</li>
+<li><a href="../reference/exception_handling.html">Handling Exceptions</a></li>
+<li><a href="../reference/flows.html">Flows</a></li>
+<li><a href="../reference/input_validation.html">Input Validation</a></li>
+<li><a href="../reference/html_generation.html">HTML Generation</a></li>
+<li><a href="../reference/etlua_templates.html">etlua Templates</a></li>
+<li><a href="../reference/testing.html">Testing</a></li>
+<li><a href="../reference/utilities.html">Utility Functions</a></li>
+<li><a href="../reference/command_line.html">Command Line Tool</a></li>
+<li><a href="../reference/lapis_console.html">Lapis Console</a></li>
+</ul>
+
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="nav_offset">
+      <div class="text_column"><h1>Flows</h1>
+
+<p>The <code>Flow</code> class is a way of writing a module of methods that operates on some
+encapsulated object. You might call it a
+<a href="https://en.wikipedia.org/wiki/Mediator_pattern">mediator</a>. We'll call the
+encapsulated object the <em>contained object</em> in this guide.</p>
+
+<p>Typically we'll use flows to wrap the request object within Lapis, but it&rsquo;s not
+a requirement and you can use any Lua object. The flow will proxy method calls
+and field reads back to the contained object. (Assignments can also be proxied,
+see <a href="#assigning-fields-within-a-flow">Assigning Fields Within a Flow</a>)</p>
+
+<p>If this explanation is confusing, don&rsquo;t worry. It&rsquo;s easier to understand a flow
+in example. We'll use the <code>Flow</code> class standalone to demonstrate how it works.</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">Flow</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.flow&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">Flow</span>
+
+<span class="sh_keyword">local</span> <span class="sh_identifier">FormatterFlow</span> <span class="sh_operator">=</span> <span class="sh_identifier">Flow</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">({</span>
+  <span class="sh_identifier">format_name</span> <span class="sh_operator">=</span> <span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+    <span class="sh_comment">-- self.name and self.age are read from the contained object</span>
+    <span class="sh_keyword">return</span> <span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">name</span> <span class="sh_operator">..</span> <span class="sh_string">&quot; (age: &quot;</span> <span class="sh_operator">..</span> <span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">age</span> <span class="sh_operator">..</span> <span class="sh_string">&quot;)&quot;</span>
+  <span class="sh_keyword">end</span><span class="sh_operator">,</span>
+
+  <span class="sh_identifier">print_greeting</span> <span class="sh_operator">=</span> <span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+    <span class="sh_comment">-- self:get_greeting() calls get_greeting on the contained object</span>
+    <span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">get_greeting</span><span class="sh_operator">())</span>
+  <span class="sh_keyword">end</span>
+<span class="sh_operator">})</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span> <span class="sh_proper_ident sh_class">Flow</span> <span class="sh_keyword">from</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.flow&quot;</span>
+
+<span class="sh_keyword">class</span> <span class="sh_proper_ident sh_class">FormatterFlow</span> <span class="sh_keyword">extends</span> <span class="sh_proper_ident sh_class">Flow</span>
+  <span class="sh_tbl_key sh_regex">format_name:</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+    <span class="sh_comment">-- @name and @age are read from the contained object</span>
+    <span class="sh_string">&quot;</span><span class="sh_interpolation sh_embedded">#{</span><span class="sh_self_ref sh_label">@name</span><span class="sh_interpolation sh_embedded">}</span><span class="sh_string"> (age: </span><span class="sh_interpolation sh_embedded">#{</span><span class="sh_self_ref sh_label">@age</span><span class="sh_interpolation sh_embedded">}</span><span class="sh_string">)&quot;</span>
+
+  <span class="sh_tbl_key sh_regex">print_greeting:</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+    <span class="sh_comment">-- @get_greeting! calls get_greeting on the contained object</span>
+    <span class="sh_function">print</span> <span class="sh_self_ref sh_label">@get_greeting</span><span class="sh_operator">!</span></code>
+</pre>
+</div>
+
+</p>
+
+<p>The above flow provides a <code>format_name</code> method that reads the <code>name</code> and <code>age</code>
+fields from the contained object. When you access a field or call a method on
+<code>self</code> that doesn&rsquo;t exist on the flow, it is automatically proxied to the
+contained object. When calling a method on the contained object, the receiver
+is the contained object itself, not the flow.</p>
+
+<p>We can instantiate a flow with an object that provides those fields, then call
+the flow&rsquo;s method on the flow instance:</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">obj</span> <span class="sh_operator">=</span> <span class="sh_operator">{</span>
+  <span class="sh_identifier">name</span> <span class="sh_operator">=</span> <span class="sh_string">&quot;Pizza Zone&quot;</span><span class="sh_operator">,</span>
+  <span class="sh_identifier">age</span> <span class="sh_operator">=</span> <span class="sh_string">&quot;2000 Years&quot;</span><span class="sh_operator">,</span>
+  <span class="sh_identifier">get_greeting</span> <span class="sh_operator">=</span> <span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+    <span class="sh_comment">-- self will always be obj, not a flow instance, even if called through a</span>
+    <span class="sh_comment">-- flow</span>
+    <span class="sh_keyword">return</span> <span class="sh_string">&quot;Hello from &quot;</span> <span class="sh_operator">..</span> <span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">name</span>
+  <span class="sh_keyword">end</span>
+<span class="sh_operator">}</span>
+
+<span class="sh_keyword">local</span> <span class="sh_identifier">flow</span> <span class="sh_operator">=</span> <span class="sh_identifier">FormatterFlow</span><span class="sh_operator">(</span><span class="sh_identifier">obj</span><span class="sh_operator">)</span>
+<span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">flow</span><span class="sh_operator">:</span><span class="sh_identifier">format_name</span><span class="sh_operator">())</span> <span class="sh_comment">--&gt; &quot;Pizza Zone (age: 2000 Years)&quot;</span>
+<span class="sh_identifier">flow</span><span class="sh_operator">:</span><span class="sh_identifier">print_greeting</span><span class="sh_operator">()</span>     <span class="sh_comment">--&gt; &quot;Hello from Pizza Zone&quot;</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">obj</span> <span class="sh_operator">=</span> <span class="sh_symbol sh_embedded">{</span>
+  <span class="sh_tbl_key sh_regex">name:</span> <span class="sh_string">&quot;Pizza Zone&quot;</span>
+  <span class="sh_tbl_key sh_regex">age:</span> <span class="sh_string">&quot;2000 Years&quot;</span>
+  <span class="sh_tbl_key sh_regex">get_greeting:</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+    <span class="sh_comment">-- @ will always be obj, not a flow instance, even if called through a</span>
+    <span class="sh_comment">-- flow</span>
+    <span class="sh_string">&quot;Hello from </span><span class="sh_interpolation sh_embedded">#{</span><span class="sh_self_ref sh_label">@name</span><span class="sh_interpolation sh_embedded">}</span><span class="sh_string">&quot;</span>
+<span class="sh_symbol sh_embedded">}</span>
+
+<span class="sh_identifier">flow</span> <span class="sh_operator">=</span> <span class="sh_proper_ident sh_class">FormatterFlow</span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">obj</span><span class="sh_symbol sh_embedded">)</span>
+<span class="sh_function">print</span> <span class="sh_identifier">flow</span><span class="sh_operator">\</span><span class="sh_identifier">format_name</span><span class="sh_operator">!</span> <span class="sh_comment">--&gt; &quot;Pizza Zone (age: 2000 Years)&quot;</span>
+<span class="sh_identifier">flow</span><span class="sh_operator">\</span><span class="sh_identifier">print_greeting</span><span class="sh_operator">!</span>    <span class="sh_comment">--&gt; &quot;Hello from Pizza Zone&quot;</span></code>
+</pre>
+</div>
+
+</p>
+
+<p>You can think of a flow as a collection of methods that are designed to operate
+on a certain kind of object. Why would we use a flow instead of just making
+these methods part of the object&rsquo;s class? A flow lets you encapsulate logic
+into a separate namespace. Instead of having classes with many methods, you
+split apart your methods into flows and leave the class with a smaller
+implementation. This can help your code stay more organized and also make it
+easier to unit-test individual code paths without having to mock an entire
+request.</p>
+
+<h2><a href="#assigning-fields-within-a-flow" name="assigning-fields-within-a-flow">Assigning Fields Within a Flow</a></h2>
+
+<p>If you assign to <code>self</code> in a flow it is saved on the flow instance by default.
+This can be used for private data specific to that flow. A good example might
+be caching the result of an expensive method call.</p>
+
+<p>If you want assignments on <code>self</code> to be sent back to the contained object then
+you can use <code>expose_assigns</code>. It&rsquo;s a property of the flow class&rsquo;s instances
+that tells the flow how to handle assignments to self.</p>
+
+<p class="for_moon">
+Note that <code>expose_assigns</code> is declared like a method, without the
+<code>@</code> prefix. Declaring it as <code>@expose_assigns</code> puts it on
+the class object instead, and it will have no effect.
+</p>
+
+
+<p><code>expose_assigns</code> can take two types of values:</p>
+
+<ul>
+<li><code>true</code> &mdash; all assignments are proxied back to the contained object</li>
+<li>An array of strings &mdash; any field name contained in this array is proxied back to the object</li>
+</ul>
+
+
+<p>Here&rsquo;s an example using an array to selectively expose certain fields:</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">Flow</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.flow&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">Flow</span>
+
+<span class="sh_keyword">local</span> <span class="sh_identifier">MyFlow</span> <span class="sh_operator">=</span> <span class="sh_identifier">Flow</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">({</span>
+  <span class="sh_identifier">expose_assigns</span> <span class="sh_operator">=</span> <span class="sh_operator">{</span><span class="sh_string">&quot;user&quot;</span><span class="sh_operator">,</span> <span class="sh_string">&quot;session&quot;</span><span class="sh_operator">},</span>
+
+  <span class="sh_identifier">load_user</span> <span class="sh_operator">=</span> <span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+    <span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">user</span> <span class="sh_operator">=</span> <span class="sh_identifier">fetch_user</span><span class="sh_operator">()</span>      <span class="sh_comment">-- proxied to contained object</span>
+    <span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">session</span> <span class="sh_operator">=</span> <span class="sh_identifier">get_session</span><span class="sh_operator">()</span>  <span class="sh_comment">-- proxied to contained object</span>
+    <span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">cache</span> <span class="sh_operator">=</span> <span class="sh_operator">{}</span>               <span class="sh_comment">-- stored on flow instance (private)</span>
+  <span class="sh_keyword">end</span>
+<span class="sh_operator">})</span>
+
+<span class="sh_keyword">local</span> <span class="sh_identifier">obj</span> <span class="sh_operator">=</span> <span class="sh_operator">{}</span>
+<span class="sh_identifier">MyFlow</span><span class="sh_operator">(</span><span class="sh_identifier">obj</span><span class="sh_operator">):</span><span class="sh_identifier">load_user</span><span class="sh_operator">()</span>
+<span class="sh_comment">-- obj.user and obj.session are now set, obj.cache is not</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span> <span class="sh_proper_ident sh_class">Flow</span> <span class="sh_keyword">from</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.flow&quot;</span>
+
+<span class="sh_keyword">class</span> <span class="sh_proper_ident sh_class">MyFlow</span> <span class="sh_keyword">extends</span> <span class="sh_proper_ident sh_class">Flow</span>
+  <span class="sh_tbl_key sh_regex">expose_assigns:</span> <span class="sh_symbol sh_embedded">{</span><span class="sh_string">&quot;user&quot;</span><span class="sh_operator">,</span> <span class="sh_string">&quot;session&quot;</span><span class="sh_symbol sh_embedded">}</span>
+
+  <span class="sh_tbl_key sh_regex">load_user:</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+    <span class="sh_self_ref sh_label">@user</span> <span class="sh_operator">=</span> <span class="sh_identifier">fetch_user</span><span class="sh_operator">!</span>      <span class="sh_comment">-- proxied to contained object</span>
+    <span class="sh_self_ref sh_label">@session</span> <span class="sh_operator">=</span> <span class="sh_identifier">get_session</span><span class="sh_operator">!</span>  <span class="sh_comment">-- proxied to contained object</span>
+    <span class="sh_self_ref sh_label">@cache</span> <span class="sh_operator">=</span> <span class="sh_symbol sh_embedded">{}</span>              <span class="sh_comment">-- stored on flow instance (private)</span>
+
+<span class="sh_identifier">obj</span> <span class="sh_operator">=</span> <span class="sh_symbol sh_embedded">{}</span>
+<span class="sh_proper_ident sh_class">MyFlow</span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">obj</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">\</span><span class="sh_identifier">load_user</span><span class="sh_operator">!</span>
+<span class="sh_comment">-- obj.user and obj.session are now set, obj.cache is not</span></code>
+</pre>
+</div>
+
+</p>
+
+<p>This pattern is helpful when you have a Flow operating on a Lapis Request
+object where you want to set up fields on the request that may be made
+available to views or other parts of the request handler.</p>
+
+<h2><a href="#accessing-the-contained-object" name="accessing-the-contained-object">Accessing The Contained Object</a></h2>
+
+<p>The contained object is stored on <code>self</code> with the name <code>_</code> (an underscore).
+Consider it a reserved field for the flow to operate correctly, don&rsquo;t replace
+it, but you can access it.</p>
+
+<p>For example, if you need to access the metatable on the contained object for
+some reason:</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">Flow</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.flow&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">Flow</span>
+
+<span class="sh_keyword">local</span> <span class="sh_identifier">MetatableFlow</span> <span class="sh_operator">=</span> <span class="sh_identifier">Flow</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">({</span>
+  <span class="sh_identifier">get_metatable</span> <span class="sh_operator">=</span> <span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+    <span class="sh_keyword">return</span> <span class="sh_function">getmetatable</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">_</span><span class="sh_operator">)</span>
+  <span class="sh_keyword">end</span>
+<span class="sh_operator">})</span>
+
+<span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">MetatableFlow</span><span class="sh_operator">({}):</span><span class="sh_identifier">get_metatable</span><span class="sh_operator">())</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span> <span class="sh_proper_ident sh_class">Flow</span> <span class="sh_keyword">from</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.flow&quot;</span>
+
+<span class="sh_keyword">class</span> <span class="sh_proper_ident sh_class">MetatableFlow</span> <span class="sh_keyword">extends</span> <span class="sh_proper_ident sh_class">Flow</span>
+  <span class="sh_tbl_key sh_regex">get_metatable:</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+    <span class="sh_function">getmetatable</span> <span class="sh_self_ref sh_label">@_</span>
+
+<span class="sh_function">print</span> <span class="sh_proper_ident sh_class">MetatableFlow</span><span class="sh_symbol sh_embedded">({})</span><span class="sh_operator">\</span><span class="sh_identifier">get_metatable</span><span class="sh_operator">!</span></code>
+</pre>
+</div>
+
+</p>
+
+<h2><a href="#organizing-your-application-with-flows" name="organizing-your-application-with-flows">Organizing Your Application With Flows</a></h2>
+
+<p>In Lapis, an application class is where you define routes and your request
+logic. Since there are so many responsibilities it&rsquo;s easy for an application
+class to get too large to maintain. A good way of separating concerns is to use
+flows. In this case, the contained object will be the request instance. You'll
+call the flow from within your application. Because this is a common pattern,
+there&rsquo;s a <code>flow</code> method on the request object that makes instantiating flows
+easy.</p>
+
+<p><span class="for_moon"><code>@flow "accounts"</code></span><span
+class="for_lua"><code>self:flow("accounts")</code></span> will <code>require</code> the module
+<code>flows.accounts</code> and instantiate the flow class it returns with the request
+object. (The <code>flows</code> prefix can be changed with the application&rsquo;s
+<a href="actions.html#application-configuration/application.flows_prefix"><code>flows_prefix</code></a>
+field.) The flow instance is cached on the request, so calling <code>flow</code> again
+with the same name returns the same instance.</p>
+
+<p>In this example, we declare a flow class for handling logging in and
+registering on a website. Logging in and registering an account may share code,
+so we can use additional flow methods to encapsulate our logic without
+repeating ourselves.</p>
+
+<p>Here&rsquo;s the flow, which would be placed in the <code>flows/accounts</code> module:</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">Flow</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.flow&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">Flow</span>
+
+<span class="sh_keyword">local</span> <span class="sh_identifier">AccountsFlow</span> <span class="sh_operator">=</span> <span class="sh_identifier">Flow</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">({</span>
+  <span class="sh_identifier">check_params</span> <span class="sh_operator">=</span> <span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+    <span class="sh_comment">-- validate self.params...</span>
+  <span class="sh_keyword">end</span><span class="sh_operator">,</span>
+
+  <span class="sh_identifier">write_session</span> <span class="sh_operator">=</span> <span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">,</span> <span class="sh_identifier">user</span><span class="sh_operator">)</span>
+    <span class="sh_comment">-- store user in session...</span>
+  <span class="sh_keyword">end</span><span class="sh_operator">,</span>
+
+  <span class="sh_identifier">login</span> <span class="sh_operator">=</span> <span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+    <span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">check_params</span><span class="sh_operator">()</span>
+    <span class="sh_comment">-- load user from database...</span>
+    <span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">write_session</span><span class="sh_operator">(</span><span class="sh_identifier">user</span><span class="sh_operator">)</span>
+    <span class="sh_keyword">return</span> <span class="sh_operator">{</span> <span class="sh_identifier">redirect_to</span> <span class="sh_operator">=</span> <span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_string">&quot;homepage&quot;</span><span class="sh_operator">)</span> <span class="sh_operator">}</span>
+  <span class="sh_keyword">end</span><span class="sh_operator">,</span>
+
+  <span class="sh_identifier">register</span> <span class="sh_operator">=</span> <span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+    <span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">check_params</span><span class="sh_operator">()</span>
+    <span class="sh_comment">-- create user in database...</span>
+    <span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">write_session</span><span class="sh_operator">(</span><span class="sh_identifier">user</span><span class="sh_operator">)</span>
+    <span class="sh_keyword">return</span> <span class="sh_operator">{</span> <span class="sh_identifier">redirect_to</span> <span class="sh_operator">=</span> <span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">url_for</span><span class="sh_operator">(</span><span class="sh_string">&quot;homepage&quot;</span><span class="sh_operator">)</span> <span class="sh_operator">}</span>
+  <span class="sh_keyword">end</span>
+<span class="sh_operator">})</span>
+
+<span class="sh_keyword">return</span> <span class="sh_identifier">AccountsFlow</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span> <span class="sh_proper_ident sh_class">Flow</span> <span class="sh_keyword">from</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.flow&quot;</span>
+
+<span class="sh_keyword">class</span> <span class="sh_proper_ident sh_class">AccountsFlow</span> <span class="sh_keyword">extends</span> <span class="sh_proper_ident sh_class">Flow</span>
+  <span class="sh_tbl_key sh_regex">check_params:</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+    <span class="sh_comment">-- validate @params...</span>
+
+  <span class="sh_tbl_key sh_regex">write_session:</span> <span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">user</span><span class="sh_symbol sh_embedded">)</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+    <span class="sh_comment">-- store user in session...</span>
+
+  <span class="sh_tbl_key sh_regex">login:</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+    <span class="sh_self_ref sh_label">@check_params</span><span class="sh_operator">!</span>
+    <span class="sh_comment">-- load user from database...</span>
+    <span class="sh_self_ref sh_label">@write_session</span> <span class="sh_identifier">user</span>
+    <span class="sh_tbl_key sh_regex">redirect_to:</span> <span class="sh_self_ref sh_label">@url_for</span> <span class="sh_string">&quot;homepage&quot;</span>
+
+  <span class="sh_tbl_key sh_regex">register:</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+    <span class="sh_self_ref sh_label">@check_params</span><span class="sh_operator">!</span>
+    <span class="sh_comment">-- create user in database...</span>
+    <span class="sh_self_ref sh_label">@write_session</span> <span class="sh_identifier">user</span>
+    <span class="sh_tbl_key sh_regex">redirect_to:</span> <span class="sh_self_ref sh_label">@url_for</span> <span class="sh_string">&quot;homepage&quot;</span></code>
+</pre>
+</div>
+
+</p>
+
+<p>From our application we call the flow:</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">lapis</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span>
+<span class="sh_keyword">local</span> <span class="sh_identifier">capture_errors</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">capture_errors</span>
+
+<span class="sh_keyword">local</span> <span class="sh_identifier">app</span> <span class="sh_operator">=</span> <span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span>
+
+<span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;login&quot;</span><span class="sh_operator">,</span> <span class="sh_string">&quot;/login&quot;</span><span class="sh_operator">,</span> <span class="sh_identifier">capture_errors</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+  <span class="sh_keyword">return</span> <span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">flow</span><span class="sh_operator">(</span><span class="sh_string">&quot;accounts&quot;</span><span class="sh_operator">):</span><span class="sh_identifier">login</span><span class="sh_operator">()</span>
+<span class="sh_keyword">end</span><span class="sh_operator">))</span>
+
+<span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;register&quot;</span><span class="sh_operator">,</span> <span class="sh_string">&quot;/register&quot;</span><span class="sh_operator">,</span> <span class="sh_identifier">capture_errors</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+  <span class="sh_keyword">return</span> <span class="sh_identifier">self</span><span class="sh_operator">:</span><span class="sh_identifier">flow</span><span class="sh_operator">(</span><span class="sh_string">&quot;accounts&quot;</span><span class="sh_operator">):</span><span class="sh_identifier">register</span><span class="sh_operator">()</span>
+<span class="sh_keyword">end</span><span class="sh_operator">))</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span> <span class="sh_operator">=</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis&quot;</span>
+<span class="sh_keyword">import</span> <span class="sh_identifier">capture_errors</span> <span class="sh_keyword">from</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.application&quot;</span>
+
+<span class="sh_keyword">class</span> <span class="sh_proper_ident sh_class">App</span> <span class="sh_keyword">extends</span> <span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span>
+  <span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">login:</span> <span class="sh_string">&quot;/login&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span> <span class="sh_identifier">capture_errors</span> <span class="sh_fndef sh_preprocessor">=&gt;</span> <span class="sh_self_ref sh_label">@flow</span><span class="sh_symbol sh_embedded">(</span><span class="sh_string">&quot;accounts&quot;</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">\</span><span class="sh_identifier">login</span><span class="sh_operator">!</span>
+  <span class="sh_symbol sh_embedded">[</span><span class="sh_tbl_key sh_regex">register:</span> <span class="sh_string">&quot;/register&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span> <span class="sh_identifier">capture_errors</span> <span class="sh_fndef sh_preprocessor">=&gt;</span> <span class="sh_self_ref sh_label">@flow</span><span class="sh_symbol sh_embedded">(</span><span class="sh_string">&quot;accounts&quot;</span><span class="sh_symbol sh_embedded">)</span><span class="sh_operator">\</span><span class="sh_identifier">register</span><span class="sh_operator">!</span></code>
+</pre>
+</div>
+
+</p>
+
+<h2><a href="#nested-flows" name="nested-flows">Nested Flows</a></h2>
+
+<p>When you instantiate a flow and pass an existing flow as the argument, the
+backing object is passed directly into the new flow. This means that the
+current flow&rsquo;s methods are not made available to the new flow.</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">Flow</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.flow&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">Flow</span>
+
+<span class="sh_keyword">local</span> <span class="sh_identifier">my_object</span> <span class="sh_operator">=</span> <span class="sh_operator">{</span> <span class="sh_identifier">color</span> <span class="sh_operator">=</span> <span class="sh_string">&quot;blue&quot;</span> <span class="sh_operator">}</span>
+
+<span class="sh_keyword">local</span> <span class="sh_identifier">FlowA</span> <span class="sh_operator">=</span> <span class="sh_identifier">Flow</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">({})</span>
+<span class="sh_keyword">local</span> <span class="sh_identifier">FlowB</span> <span class="sh_operator">=</span> <span class="sh_identifier">Flow</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">({})</span>
+
+<span class="sh_keyword">local</span> <span class="sh_identifier">flow_a</span> <span class="sh_operator">=</span> <span class="sh_identifier">FlowA</span><span class="sh_operator">(</span><span class="sh_identifier">my_object</span><span class="sh_operator">)</span>
+<span class="sh_keyword">local</span> <span class="sh_identifier">flow_b</span> <span class="sh_operator">=</span> <span class="sh_identifier">FlowB</span><span class="sh_operator">(</span><span class="sh_identifier">flow_a</span><span class="sh_operator">)</span>  <span class="sh_comment">-- passing flow_a, not my_object</span>
+
+<span class="sh_comment">-- flow_a and flow_b both point to my_object</span>
+<span class="sh_function">assert</span><span class="sh_operator">(</span><span class="sh_identifier">flow_a</span><span class="sh_operator">.</span><span class="sh_identifier">_</span> <span class="sh_operator">==</span> <span class="sh_identifier">my_object</span><span class="sh_operator">)</span>
+<span class="sh_function">assert</span><span class="sh_operator">(</span><span class="sh_identifier">flow_b</span><span class="sh_operator">.</span><span class="sh_identifier">_</span> <span class="sh_operator">==</span> <span class="sh_identifier">my_object</span><span class="sh_operator">)</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span> <span class="sh_proper_ident sh_class">Flow</span> <span class="sh_keyword">from</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.flow&quot;</span>
+
+<span class="sh_identifier">my_object</span> <span class="sh_operator">=</span> <span class="sh_symbol sh_embedded">{</span> <span class="sh_tbl_key sh_regex">color:</span> <span class="sh_string">&quot;blue&quot;</span> <span class="sh_symbol sh_embedded">}</span>
+
+<span class="sh_keyword">class</span> <span class="sh_proper_ident sh_class">FlowA</span> <span class="sh_keyword">extends</span> <span class="sh_proper_ident sh_class">Flow</span>
+<span class="sh_keyword">class</span> <span class="sh_proper_ident sh_class">FlowB</span> <span class="sh_keyword">extends</span> <span class="sh_proper_ident sh_class">Flow</span>
+
+<span class="sh_identifier">flow_a</span> <span class="sh_operator">=</span> <span class="sh_proper_ident sh_class">FlowA</span> <span class="sh_identifier">my_object</span>
+<span class="sh_identifier">flow_b</span> <span class="sh_operator">=</span> <span class="sh_proper_ident sh_class">FlowB</span> <span class="sh_identifier">flow_a</span>  <span class="sh_comment">-- passing flow_a, not my_object</span>
+
+<span class="sh_comment">-- flow_a and flow_b both point to my_object</span>
+<span class="sh_function">assert</span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">flow_a</span><span class="sh_operator">.</span><span class="sh_identifier">_</span> <span class="sh_operator">==</span> <span class="sh_identifier">my_object</span><span class="sh_symbol sh_embedded">)</span>
+<span class="sh_function">assert</span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">flow_b</span><span class="sh_operator">.</span><span class="sh_identifier">_</span> <span class="sh_operator">==</span> <span class="sh_identifier">my_object</span><span class="sh_symbol sh_embedded">)</span></code>
+</pre>
+</div>
+
+</p>
+
+<h2><a href="#initial-flow-fields" name="initial-flow-fields">Initial Flow Fields</a></h2>
+
+<p>The flow constructor takes an optional second argument, a table of fields that
+will be stored on the flow instance. These fields take precedence over the
+fields of the contained object.</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">flow</span> <span class="sh_operator">=</span> <span class="sh_identifier">FormatterFlow</span><span class="sh_operator">(</span><span class="sh_identifier">obj</span><span class="sh_operator">,</span> <span class="sh_operator">{</span> <span class="sh_identifier">age</span> <span class="sh_operator">=</span> <span class="sh_string">&quot;unknown&quot;</span> <span class="sh_operator">})</span>
+<span class="sh_function">print</span><span class="sh_operator">(</span><span class="sh_identifier">flow</span><span class="sh_operator">:</span><span class="sh_identifier">format_name</span><span class="sh_operator">())</span> <span class="sh_comment">--&gt; &quot;Pizza Zone (age: unknown)&quot;</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">flow</span> <span class="sh_operator">=</span> <span class="sh_proper_ident sh_class">FormatterFlow</span> <span class="sh_identifier">obj</span><span class="sh_operator">,</span> <span class="sh_tbl_key sh_regex">age:</span> <span class="sh_string">&quot;unknown&quot;</span>
+<span class="sh_function">print</span> <span class="sh_identifier">flow</span><span class="sh_operator">\</span><span class="sh_identifier">format_name</span><span class="sh_operator">!</span> <span class="sh_comment">--&gt; &quot;Pizza Zone (age: unknown)&quot;</span></code>
+</pre>
+</div>
+
+</p>
+
+<h2><a href="#utility-functions" name="utility-functions">Utility Functions</a></h2>
+
+<h3><a href="#utility-functions/is_flow_class" name="utility-functions/is_flow_class"><code>is_flow_class(cls)</code></a></h3>
+
+<p>The <code>is_flow_class</code> function checks if a class is a Flow class. To check an
+instance, pass its class:</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">Flow</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.flow&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">Flow</span>
+<span class="sh_keyword">local</span> <span class="sh_identifier">is_flow_class</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.flow&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">is_flow_class</span>
+
+<span class="sh_keyword">local</span> <span class="sh_identifier">MyFlow</span> <span class="sh_operator">=</span> <span class="sh_identifier">Flow</span><span class="sh_operator">:</span><span class="sh_identifier">extend</span><span class="sh_operator">({})</span>
+<span class="sh_keyword">local</span> <span class="sh_identifier">some_object</span> <span class="sh_operator">=</span> <span class="sh_operator">{}</span>
+
+<span class="sh_identifier">is_flow_class</span><span class="sh_operator">(</span><span class="sh_identifier">MyFlow</span><span class="sh_operator">)</span> <span class="sh_comment">--&gt; true</span>
+<span class="sh_identifier">is_flow_class</span><span class="sh_operator">(</span><span class="sh_identifier">MyFlow</span><span class="sh_operator">({}).</span><span class="sh_identifier">__class</span><span class="sh_operator">)</span> <span class="sh_comment">--&gt; true</span>
+<span class="sh_identifier">is_flow_class</span><span class="sh_operator">(</span><span class="sh_identifier">some_object</span><span class="sh_operator">)</span> <span class="sh_comment">--&gt; false</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span> <span class="sh_proper_ident sh_class">Flow</span><span class="sh_operator">,</span> <span class="sh_identifier">is_flow_class</span> <span class="sh_keyword">from</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.flow&quot;</span>
+
+<span class="sh_keyword">class</span> <span class="sh_proper_ident sh_class">MyFlow</span> <span class="sh_keyword">extends</span> <span class="sh_proper_ident sh_class">Flow</span>
+<span class="sh_identifier">some_object</span> <span class="sh_operator">=</span> <span class="sh_symbol sh_embedded">{}</span>
+
+<span class="sh_identifier">is_flow_class</span> <span class="sh_proper_ident sh_class">MyFlow</span> <span class="sh_comment">--&gt; true</span>
+<span class="sh_identifier">is_flow_class</span> <span class="sh_proper_ident sh_class">MyFlow</span><span class="sh_symbol sh_embedded">({})</span><span class="sh_operator">.</span><span class="sh_identifier">__class</span> <span class="sh_comment">--&gt; true</span>
+<span class="sh_identifier">is_flow_class</span> <span class="sh_identifier">some_object</span> <span class="sh_comment">--&gt; false</span></code>
+</pre>
+</div>
+
+</p>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../lib/jquery.min.js"></script>
+  <script src="../lib/react.production.min.js"></script>
+  <script src="../lib/react-dom.production.min.js"></script>
+  <script src="../lib/react-dom-factories.js"></script>
+  <script src="../lib/lunr.min.js"></script>
+  <script type="text/javascript" src="../search.js?Thu Oct 22 18:58:17 2026"></script>
+  <script type="text/javascript" src="../reference.js?Thu Oct 22 18:58:17 2026"></script>
+  <script type="text/javascript">
+    new L.Reference();
+  </script>
+</body>
+</html>

@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Lapis Console - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Fri Mar  8 20:35:45 2024" />
+  <link rel="stylesheet" href="../reference.css?Thu Oct 22 18:58:17 2026" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-136625-1']);
-    _gaq.push(['_trackPageview']);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-136625-1');
 
     (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var ga = document.createElement('script'); ga.async = true;
+      ga.src = 'https://www.googletagmanager.com/gtag/js?id=UA-136625-1';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
   }
@@ -27,7 +28,7 @@
     </h1>
     <div id="search_drop" data-root=".." data-index="../reference.json"></div>
     <a href="../changelog.html" class="version_flag">
-      v1.16.0
+      v1.19.0
     </a>
   </div>
 
@@ -67,6 +68,7 @@
 <li><a href="../reference/moon_creating_configurations.html">MoonScript configuration syntax</a></li>
 </ul>
 </li>
+<li><a href="../reference/server_backends.html">Server Backends</a></li>
 <li><a href="../reference/database.html">Database Access, and Queries</a>
 
 <ul>
@@ -74,6 +76,7 @@
 </ul>
 </li>
 <li><a href="../reference/exception_handling.html">Handling Exceptions</a></li>
+<li><a href="../reference/flows.html">Flows</a></li>
 <li><a href="../reference/input_validation.html">Input Validation</a></li>
 <li><a href="../reference/html_generation.html">HTML Generation</a></li>
 <li><a href="../reference/etlua_templates.html">etlua Templates</a></li>
@@ -93,70 +96,92 @@
       <div class="text_column"><h1>Lapis Console</h1>
 
 <p><a href="https://github.com/leafo/lapis-console">Lapis Console</a> is a separate project that adds an interactive console to
-your web application. Because Lapis runs inside of the Nginx loop, it&rsquo;s not
-trivial to make a standard terminal based console that behaves the same way as
-the web application. So a console that runs inside of your browser was created,
-letting you reliably execute code in the same way as your web application when
-debugging.</p>
+your web application. The console runs inside of your browser and executes
+code on the server as part of a request, so the code runs in the same
+environment as your web application. This makes it useful for debugging and
+for exploring your models and data.</p>
 
-<p><img src="http://leafo.net/dump/lapis_console.png" title="Screenshot of the Lapis Console exploring an object." alt="Lapis Console Screenshot" /></p>
+<p><img src="https://leafo.net/dump/lapis_console.png" title="Screenshot of the Lapis Console exploring an object." alt="Lapis Console Screenshot" /></p>
 
 <p>Install through LuaRocks:</p>
 
-<pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">luarocks</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">install</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">-</span><span class="sh_identifier">console</span></code>
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span> <span class="sh_identifier">luarocks</span> <span class="sh_identifier">install</span> <span class="sh_identifier">lapis</span><span class="sh_operator">-</span><span class="sh_identifier">console</span></code>
 </pre>
 
 
-<h2><a name="creating-a-console" href="#creating-a-console">Creating A Console</a></h2>
+<blockquote><p>If you only need to run a snippet of code on the server from the command
+line, see <a href="command_line.html#command-reference/lapis-exec"><code>lapis exec</code></a>.</p></blockquote>
 
-<h3><a name="creating-a-console/console.make" href="#creating-a-console/console.make"><code>console.make([opts])</code></a></h3>
+<h2><a href="#creating-a-console" name="creating-a-console">Creating A Console</a></h2>
+
+<h3><a href="#creating-a-console/console.make" name="creating-a-console/console.make"><code>console.make([opts])</code></a></h3>
 
 <p>Lapis console provides an action that you can insert into your application to a
 route of your choosing:</p>
 
-<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">console</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.console&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">lapis</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span>
+<span class="sh_keyword">local</span> <span class="sh_identifier">console</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.console&quot;</span><span class="sh_operator">)</span>
 
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+<span class="sh_keyword">local</span> <span class="sh_identifier">app</span> <span class="sh_operator">=</span> <span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span>
 
-</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/console&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">console</span><span class="sh_operator">.</span><span class="sh_identifier">make</span><span class="sh_operator">())</span><span class="sh_lua_whitespace sh_whitespace">
+<span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/console&quot;</span><span class="sh_operator">,</span> <span class="sh_identifier">console</span><span class="sh_operator">.</span><span class="sh_identifier">make</span><span class="sh_operator">())</span>
 
-</span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span></code>
+<span class="sh_keyword">return</span> <span class="sh_identifier">app</span></code>
 </pre>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span> <span class="sh_operator">=</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis&quot;</span>
+<span class="sh_identifier">console</span> <span class="sh_operator">=</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.console&quot;</span>
 
-
-<pre class="highlight lang_moon"><code><span class="sh_identifier">lapis</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-</span><span class="sh_identifier">console</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.console&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-
-</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_string">&quot;/console&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">console</span><span class="sh_operator">.</span><span class="sh_identifier">make</span><span class="sh_operator">!</span></code>
+<span class="sh_keyword">class</span> <span class="sh_keyword">extends</span> <span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span>
+  <span class="sh_string">&quot;/console&quot;</span><span class="sh_operator">:</span> <span class="sh_identifier">console</span><span class="sh_operator">.</span><span class="sh_identifier">make</span><span class="sh_operator">!</span></code>
 </pre>
+</div>
 
+</p>
 
-<p>Now just head to to the <code>/console</code> location in your browser to use it. By
-default the action that is created will only run in the <code>"development"</code>
-environment.</p>
+<p>Now head to the <code>/console</code> location in your browser to use it. By default the
+action that is created will only run in the <code>"development"</code> environment, and
+will return a 404 in any other environment.</p>
 
-<p>You can set the <code>env</code> option in the first argument to <code>"all"</code> to enable in
+<p>You can set the <code>env</code> option in the first argument to <code>"all"</code> to enable it in
 every environment, or you can name an environment.</p>
 
-<blockquote><p>Be careful about allowing access to the console, a malicious individual could
-destroy your application and compromise your system if given access.</p></blockquote>
+<blockquote><p>Be careful about allowing access to the console. The code that runs is not
+restricted in any way, and a malicious individual could destroy your
+application and compromise your system if given access.</p></blockquote>
 
-<h2><a name="tips" href="#tips">Tips</a></h2>
+<h2><a href="#tips" name="tips">Tips</a></h2>
 
-<p>The console lets your write and execute a MoonScript program. Multiple lines
-are supported.</p>
+<p>Code can be written in either MoonScript or Lua, selectable from the dropdown
+next to the run button. The editor supports multiple lines, and code is run
+with Ctrl+Enter (Cmd+Enter on macOS).</p>
 
-<p>The <code>print</code> function has been replaced in the console to print to the debug
-output. You can print any type of object and the console will pretty print it.
-Tables can be opened up and other types are color coded.</p>
+<p>Any values returned by the code are shown in the result. MoonScript returns
+the value of the last expression, so you can type an expression like
+<code>Users\find 1</code> without wrapping it in <code>print</code>. In Lua, use <code>return</code>.</p>
 
-<p>Any queries that execute during the script are logged to a special portion on
-the bottom of the output.</p>
+<p>The <code>print</code> function has been replaced in the console to print to the output.
+You can print any type of object and the console will pretty print it. Tables
+can be opened up and other types are color coded.</p>
 
-<p><code>@</code> is equal to the value of the request that is initiating the console. You
-can use this if you are testing a method that needs a request object.</p>
+<p>Any queries that execute during the code are logged along with the result. The
+time taken by each query is shown when the <code>measure_performance</code>
+<a href="configuration.html">configuration</a> value is enabled.</p>
+
+<p>If the code throws an error, anything printed before the error is still shown,
+along with the stack trace.</p>
+
+<p><code>self</code> (<code>@</code> in MoonScript) is equal to the request object that is running the
+console. You can use this if you are testing a method that needs a request
+object.</p>
+
+<p>Each result shows the code that produced it. Click it to load the code back
+into the editor. Previous runs can also be browsed by pressing up on the first
+line of the editor, and down on the last line.</p>
 
       </div>
     </div>
@@ -168,8 +193,8 @@ can use this if you are testing a method that needs a request object.</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Fri Mar  8 20:35:45 2024"></script>
-  <script type="text/javascript" src="../reference.js?Fri Mar  8 20:35:45 2024"></script>
+  <script type="text/javascript" src="../search.js?Thu Oct 22 18:58:17 2026"></script>
+  <script type="text/javascript" src="../reference.js?Thu Oct 22 18:58:17 2026"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>

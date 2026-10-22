@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Command Line Interface - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Fri Mar  8 20:35:44 2024" />
+  <link rel="stylesheet" href="../reference.css?Thu Oct 22 18:58:16 2026" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-136625-1']);
-    _gaq.push(['_trackPageview']);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-136625-1');
 
     (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var ga = document.createElement('script'); ga.async = true;
+      ga.src = 'https://www.googletagmanager.com/gtag/js?id=UA-136625-1';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
   }
@@ -27,7 +28,7 @@
     </h1>
     <div id="search_drop" data-root=".." data-index="../reference.json"></div>
     <a href="../changelog.html" class="version_flag">
-      v1.16.0
+      v1.19.0
     </a>
   </div>
 
@@ -50,7 +51,9 @@
 <li><a href="#command-reference/lapis-server/cqueues-server">Cqueues Server</a></li></ul>
 <li><a href="#command-reference/lapis-migrate"><code>lapis migrate</code></a></li>
 <li><a href="#command-reference/lapis-build"><code>lapis build</code></a></li>
+<ul><li><a href="#command-reference/lapis-build/config-validation">Config validation</a></li></ul>
 <li><a href="#command-reference/lapis-term"><code>lapis term</code></a></li>
+<li><a href="#command-reference/lapis-exec"><code>lapis exec</code></a></li>
 <li><a href="#command-reference/lapis-simulate"><code>lapis simulate</code></a></li>
 <li><a href="#command-reference/lapis-generate"><code>lapis generate</code></a></li>
 <ul><li><a href="#command-reference/lapis-generate/lapis-generate-rockspec"><code>lapis generate rockspec</code></a></li>
@@ -77,6 +80,7 @@
 <li><a href="../reference/moon_creating_configurations.html">MoonScript configuration syntax</a></li>
 </ul>
 </li>
+<li><a href="../reference/server_backends.html">Server Backends</a></li>
 <li><a href="../reference/database.html">Database Access, and Queries</a>
 
 <ul>
@@ -84,6 +88,7 @@
 </ul>
 </li>
 <li><a href="../reference/exception_handling.html">Handling Exceptions</a></li>
+<li><a href="../reference/flows.html">Flows</a></li>
 <li><a href="../reference/input_validation.html">Input Validation</a></li>
 <li><a href="../reference/html_generation.html">HTML Generation</a></li>
 <li><a href="../reference/etlua_templates.html">etlua Templates</a></li>
@@ -103,14 +108,14 @@
       <div class="text_column"><h1>Command Line Interface</h1>
 
 <p>A <code>lapis</code> command is installed into your system when Lapis is installed with
-LuaRocks. Run <code>lapis</code> in your terminal to install without any arguments to get
-a summary of what it can do, along with information about the installation, eg.</p>
+LuaRocks. Run <code>lapis</code> in your terminal without any arguments to get a summary
+of what it can do, along with information about the installation, eg.</p>
 
 <pre><code>Usage: lapis [-h] [--environment &lt;name&gt;] [--config-module &lt;name&gt;]
-       [--trace] &lt;command&gt; ...
+       [--dir &lt;dir&gt;] [--trace] &lt;command&gt; ...
 
 Control &amp; create web applications written with Lapis
-Lapis: 1.14.0
+Lapis: 1.19.0
 Default environment: development
 OpenResty: /usr/local/openresty/nginx/sbin/nginx
 cqueues: 20200726 lua-http: 0.4
@@ -120,6 +125,7 @@ Options:
    --environment &lt;name&gt;  Override the environment name
    --config-module &lt;name&gt;
                          Override module name to require configuration from (default: config)
+   --dir &lt;dir&gt;           Set the working directory for lapis command (requires luafilesystem)
    --trace               Show full error trace if lapis command fails
 
 Commands:
@@ -137,13 +143,18 @@ Commands:
 <p>Note that some commands are only available for certain server types, eg. <code>lapis
 term</code> is only available for OpenResty/nginx.</p>
 
+<p>Libraries can add their own commands to <code>lapis</code> by providing a module named
+<code>lapis.cmd.actions.{command_name}</code>. For example, installing
+<a href="https://github.com/leafo/lapis-annotate">lapis-annotate</a> adds a <code>lapis
+annotate</code> command. Installed commands are listed in the help output.</p>
+
 <p>To learn more about a command you can type <code>lapis help COMMAND</code>, eg. <code>lapis
 help migrate</code>.</p>
 
-<h2><a name="default-environment" href="#default-environment">Default Environment</a></h2>
+<h2><a href="#default-environment" name="default-environment">Default Environment</a></h2>
 
-<p>Lapis will load your Applications&rsquo;s configuration by for an environment before
-executing a command. The default environment name in command line <code>development</code>
+<p>Lapis will load your Application&rsquo;s configuration for an environment before
+executing a command. The default environment name on the command line is <code>development</code>
 unless otherwise overwritten.</p>
 
 <p>You can confirm what the default environment is by running <code>lapis help</code>.</p>
@@ -153,7 +164,7 @@ environment in a few different ways:</p>
 
 <ul>
 <li>Using the <code>--environment</code> flag on the <code>lapis</code> command will set the environment for the duration of the command</li>
-<li>For convenience, some commands can also take the environment as an argument after the command name, eg <code>lapis server production</code> (This will have the same effect as using <code>--environment</code></li>
+<li>For convenience, some commands can also take the environment as an argument after the command name, eg <code>lapis server production</code> (This will have the same effect as using <code>--environment</code>)</li>
 <li>Creating a <code>lapis_environment.lua</code> file in your working directory that returns a string will allow you to change the default environment to whatever is returned</li>
 <li>Setting the <code>LAPIS_ENVIRONMENT</code> environment variable will change the default environment</li>
 </ul>
@@ -161,9 +172,9 @@ environment in a few different ways:</p>
 
 <p>Learn more about environments on the <a href="configuration.html">Configuration</a> guide.</p>
 
-<h2><a name="command-reference" href="#command-reference">Command Reference</a></h2>
+<h2><a href="#command-reference" name="command-reference">Command Reference</a></h2>
 
-<h3><a name="command-reference/lapis-new" href="#command-reference/lapis-new"><code>lapis new</code></a></h3>
+<h3><a href="#command-reference/lapis-new" name="command-reference/lapis-new"><code>lapis new</code></a></h3>
 
 <pre><code>Usage: lapis new ([--nginx] | [--cqueues]) ([--lua] | [--moonscript])
        [-h] [--etlua-config] [--git] [--tup] [--rockspec] [--force]
@@ -174,7 +185,7 @@ Options:
    -h, --help            Show this help message and exit.
    --nginx               Generate config for nginx server (default)
    --cqueues             Generate config for cqueues server
-   --lua                 Generate app template file in Lua (defaul)
+   --lua                 Generate app template file in Lua (default)
    --moonscript, --moon  Generate app template file in MoonScript
    --etlua-config        Use etlua for templated configuration files (eg. nginx.conf)
    --git                 Generate default .gitignore file
@@ -187,37 +198,41 @@ Options:
 writing some starter files. Note that it is not necessary to use <code>lapis new</code> to
 create a new Lapis project, but it can help you get started more quickly.</p>
 
-<p>By default it creates the following files for a OpenResty server:</p>
+<p>By default it creates the following files for an OpenResty server:</p>
 
 <ul>
+<li><code>config.lua</code></li>
 <li><code>nginx.conf</code></li>
 <li><code>mime.types</code></li>
 <li><code>app.lua</code></li>
-<li><code>config.lua</code></li>
+<li><code>models.lua</code></li>
 </ul>
 
+
+<p>When using <code>--cqueues</code>, the <code>nginx.conf</code> and <code>mime.types</code> files are not
+created.</p>
 
 <blockquote><p>Use the <code>--moonscript</code> flag to generate a blank MoonScript based app</p></blockquote>
 
 <p>The generated files are only starting points, you are encouraged to read, and
 customize them.</p>
 
-<p>The <code>--rockspec</code> flag can be used to generated a blank rockspec for managing
+<p>The <code>--rockspec</code> flag can be used to generate a blank rockspec for managing
 your app&rsquo;s dependencies. If you need to configure the rockspec file then you
 can instead use <code>lapis generate rockspec</code> after creating your app.</p>
 
-<h3><a name="command-reference/lapis-server" href="#command-reference/lapis-server"><code>lapis server</code></a></h3>
+<h3><a href="#command-reference/lapis-server" name="command-reference/lapis-server"><code>lapis server</code></a></h3>
 
-<pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">server</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">[</span><span class="sh_identifier">environment</span><span class="sh_operator">]</span></code>
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span> <span class="sh_identifier">lapis</span> <span class="sh_identifier">server</span> <span class="sh_operator">[</span><span class="sh_identifier">environment</span><span class="sh_operator">]</span></code>
 </pre>
 
 
-<p>This command start the configured webserver for your app under the specified
+<p>This command starts the configured webserver for your app under the specified
 environment. This command will first read your configuration file to determine
 the server type for the environment, then it will attempt to start your
 application using the entry point for the app.</p>
 
-<h4><a name="command-reference/lapis-server/openresty-server" href="#command-reference/lapis-server/openresty-server">OpenResty Server</a></h4>
+<h4><a href="#command-reference/lapis-server/openresty-server" name="command-reference/lapis-server/openresty-server">OpenResty Server</a></h4>
 
 <p>The default configuration utilizes OpenResty as the webserver. The <code>server</code>
 command first builds the config, ensures logs exist, then starts the nginx
@@ -227,9 +242,11 @@ binary with the local <code>nginx.conf</code> file.</p>
 <code>$PATH</code> and any common OpenResty installation directories to find the correct
 binary.</p>
 
-<p>Lapis searches the following directories for an installation of OpenResty:</p>
+<p>Lapis searches the following directories for a binary named <code>nginx</code> or
+<code>openresty</code>:</p>
 
-<pre><code>"/usr/local/openresty/nginx/sbin/"
+<pre><code>"/opt/openresty/nginx/sbin/"
+"/usr/local/openresty/nginx/sbin/"
 "/usr/local/opt/openresty/bin/"
 "/usr/sbin/"
 ""
@@ -244,20 +261,23 @@ so with the <code>LAPIS_OPENRESTY</code> environment variable:</p>
 <p>After finding the correct binary it will run a command similar to this to start
 the server (where <code>nginx</code> is the path to the located OpenResty installation):</p>
 
-<pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">nginx</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_keyword">-p</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_string">&quot;$(pwd)&quot;</span><span class="sh_operator">/</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_keyword">-c</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_string">&quot;nginx.conf.compiled&quot;</span></code>
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span> <span class="sh_identifier">nginx</span> <span class="sh_keyword">-p</span> <span class="sh_string">&quot;$(pwd)&quot;</span><span class="sh_operator">/</span> <span class="sh_keyword">-c</span> <span class="sh_string">&quot;nginx.conf.compiled&quot;</span></code>
 </pre>
 
 
-<h4><a name="command-reference/lapis-server/cqueues-server" href="#command-reference/lapis-server/cqueues-server">Cqueues Server</a></h4>
+<h4><a href="#command-reference/lapis-server/cqueues-server" name="command-reference/lapis-server/cqueues-server">Cqueues Server</a></h4>
 
 <p>When using Cqueues &amp; lua-http, no additional processes are created. Your server
 is started directly inside of the Lapis command. After reading the
-configuration model it will attempt to load a module called <code>app</code> to serve.</p>
+configuration it will load the application module to serve, which is <code>app</code> by
+default. The module can be changed with the <code>default_app_module</code> <a href="configuration.html#built-in-configuration">configuration
+value</a>.</p>
 
-<h3><a name="command-reference/lapis-migrate" href="#command-reference/lapis-migrate"><code>lapis migrate</code></a></h3>
+<h3><a href="#command-reference/lapis-migrate" name="command-reference/lapis-migrate"><code>lapis migrate</code></a></h3>
 
 <pre><code>Usage: lapis migrate [-h] [--migrations-module &lt;module&gt;]
-       [&lt;environment&gt;] [--transaction [{global,individual}]]
+       [--statement-timeout &lt;timeout&gt;] [--dry-run] [&lt;environment&gt;]
+       [--transaction [{global,individual}]]
 
 Run any outstanding migrations
 
@@ -268,12 +288,16 @@ Options:
    -h, --help            Show this help message and exit.
    --migrations-module &lt;module&gt;
                          Module to load for migrations (default: migrations)
+   --statement-timeout &lt;timeout&gt;
+                         Set Postgres statement_timeout before migrating to
+                         abort slow queries (eg. 5000 or '5s'). Postgres only
+   --dry-run             Immediately roll back after applying migrations. Forces migrations to run in a transaction
    --transaction [{global,individual}]
 </code></pre>
 
-<p>This will run any outstanding migrations. The migrations table if it does not
-exist yet. A database must be configured in the environment for this command to
-work.</p>
+<p>This will run any outstanding migrations. The migrations table will be created
+if it does not exist yet. A database must be configured in the environment for
+this command to work.</p>
 
 <p>This command expects a <code>migrations</code> module as described in <a href="database.html#database-migrations/running-migrations">Running
 Migrations</a>. The module
@@ -286,25 +310,68 @@ loaded can be overwritten with the <code>--migrations-module</code> flag.</p>
         <button type="button" data-lang="lua" class="set_language">Lua</button>
         <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
       </div>
-<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">migrations</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;migrations&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.db.migrations&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">run_migrations</span><span class="sh_operator">(</span><span class="sh_identifier">migrations</span><span class="sh_operator">)</span></code>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">migrations</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;migrations&quot;</span><span class="sh_operator">)</span>
+<span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.db.migrations&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">run_migrations</span><span class="sh_operator">(</span><span class="sh_identifier">migrations</span><span class="sh_operator">)</span></code>
 </pre>
-<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">run_migrations</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.db.migrations&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-</span><span class="sh_identifier">run_migrations</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;migrations&quot;</span></code>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span> <span class="sh_identifier">run_migrations</span> <span class="sh_keyword">from</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.db.migrations&quot;</span>
+<span class="sh_identifier">run_migrations</span> <span class="sh_function">require</span> <span class="sh_string">&quot;migrations&quot;</span></code>
 </pre>
 </div>
 
 </p>
 
-<p>You can instruct the migrations to be run in a transaction by providng the
+<p>You can instruct the migrations to be run in a transaction by providing the
 <code>--transaction</code> flag.</p>
 
 <p>To wrap each individual migration in a transaction use:
 <code>--transaction=individual</code></p>
 
-<h3><a name="command-reference/lapis-build" href="#command-reference/lapis-build"><code>lapis build</code></a></h3>
+<p>The <code>--dry-run</code> flag runs the migrations inside of a transaction that is rolled
+back instead of committed, so you can check that pending migrations run
+without errors before applying them.</p>
 
-<pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">build</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">[</span><span class="sh_identifier">environment</span><span class="sh_operator">]</span></code>
+<p>Some statements can&rsquo;t run inside of a transaction, like Postgres&rsquo;s <code>CREATE
+INDEX CONCURRENTLY</code>. Wrap a migration with <code>no_transaction</code> to always run it
+outside of one. In <code>global</code> mode the open transaction is committed before the
+migration runs and a new one is started after it. A dry run stops before any
+<code>no_transaction</code> migration, since it can&rsquo;t be rolled back.</p>
+
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">no_transaction</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.db.migrations&quot;</span><span class="sh_operator">).</span><span class="sh_identifier">no_transaction</span>
+
+<span class="sh_keyword">return</span> <span class="sh_operator">{</span>
+  <span class="sh_operator">[</span><span class="sh_number">1790452452</span><span class="sh_operator">]</span> <span class="sh_operator">=</span> <span class="sh_identifier">no_transaction</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">()</span>
+    <span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span><span class="sh_operator">(</span><span class="sh_string">&quot;create index concurrently games_title_idx on games (title)&quot;</span><span class="sh_operator">)</span>
+  <span class="sh_keyword">end</span><span class="sh_operator">)</span>
+<span class="sh_operator">}</span></code>
+</pre>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span> <span class="sh_identifier">no_transaction</span> <span class="sh_keyword">from</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.db.migrations&quot;</span>
+
+<span class="sh_symbol sh_embedded">{</span>
+  <span class="sh_symbol sh_embedded">[</span><span class="sh_number">1790452452</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span> <span class="sh_identifier">no_transaction</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+    <span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">query</span> <span class="sh_string">&quot;create index concurrently games_title_idx on games (title)&quot;</span>
+<span class="sh_symbol sh_embedded">}</span></code>
+</pre>
+</div>
+
+</p>
+
+<p>When running against Postgres you can pass <code>--statement-timeout</code> to set the
+<a href="https://www.postgresql.org/docs/current/runtime-config-client.html#GUC-STATEMENT-TIMEOUT"><code>statement_timeout</code></a>
+before the migrations run. Any query that exceeds the timeout is aborted, which
+lets you cancel a runaway migration instead of waiting for it indefinitely. The
+value is passed directly to Postgres, so it accepts a number of milliseconds
+(eg. <code>--statement-timeout=5000</code>) or a string with units (eg.
+<code>--statement-timeout=5s</code>). This flag is only supported on Postgres; using it
+with another backend is an error.</p>
+
+<h3><a href="#command-reference/lapis-build" name="command-reference/lapis-build"><code>lapis build</code></a></h3>
+
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span> <span class="sh_identifier">lapis</span> <span class="sh_identifier">build</span> <span class="sh_operator">[</span><span class="sh_identifier">environment</span><span class="sh_operator">]</span> <span class="sh_operator">[--</span><span class="sh_identifier">test</span><span class="sh_operator">-</span><span class="sh_identifier">config</span><span class="sh_operator">]</span></code>
 </pre>
 
 
@@ -322,9 +389,31 @@ is also reloaded.</p>
 <p>This is the best approach when deploying a new version of your code to
 production. You'll be able to reload everything without dropping any requests.</p>
 
-<p>You can read more in the <a href="http://wiki.nginx.org/CommandLine#Loading_a_New_Configuration_Using_Signals">Nginx manual</a>.</p>
+<p>You can read more in the <a href="https://nginx.org/en/docs/control.html#reconfiguration">Nginx manual</a>.</p>
 
-<h3><a name="command-reference/lapis-term" href="#command-reference/lapis-term"><code>lapis term</code></a></h3>
+<h4><a href="#command-reference/lapis-build/config-validation" name="command-reference/lapis-build/config-validation">Config validation</a></h4>
+
+<p>Before reloading a running server, <code>lapis build</code> validates the freshly compiled
+config by running <code>nginx -t</code> on it. If the config is invalid the command prints
+Nginx&rsquo;s error output and aborts <strong>without</strong> sending the <code>HUP</code> signal, leaving
+your running server untouched on its previous, working config.</p>
+
+<p>This guards against a subtle failure mode: when Nginx receives a <code>HUP</code> with a
+broken config it logs the error to its <code>error.log</code> and keeps running the old
+workers with the <em>old</em> config. Without this check a bad <code>lapis build</code> would
+appear to succeed while silently failing to apply your changes.</p>
+
+<p>The validation only runs when there is a server to reload. If no server is
+running, the config is rebuilt without testing (any error will surface the next
+time you start the server). Pass <code>--test-config</code> to force the <code>nginx -t</code> check
+even when no server is running, which is useful as a pre-flight check before
+deploying:</p>
+
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span> <span class="sh_identifier">lapis</span> <span class="sh_identifier">build</span> <span class="sh_operator">--</span><span class="sh_identifier">test</span><span class="sh_operator">-</span><span class="sh_identifier">config</span></code>
+</pre>
+
+
+<h3><a href="#command-reference/lapis-term" name="command-reference/lapis-term"><code>lapis term</code></a></h3>
 
 <blockquote><p>This command is only available for OpenResty</p></blockquote>
 
@@ -334,9 +423,30 @@ can stop it using Ctrl-C.</p>
 
 <p>It works by sending a TERM signal to the Nginx master process.</p>
 
-<h3><a name="command-reference/lapis-simulate" href="#command-reference/lapis-simulate"><code>lapis simulate</code></a></h3>
+<h3><a href="#command-reference/lapis-exec" name="command-reference/lapis-exec"><code>lapis exec</code></a></h3>
 
-<pre><code>Usage: lapis simulate [-h] [--app-class &lt;app_class&gt;]
+<pre><code>Usage: lapis exec [--lua] [-h] &lt;code&gt;
+
+Execute Lua on the server (server: nginx)
+</code></pre>
+
+<blockquote><p>This command is only available for OpenResty</p></blockquote>
+
+<p>Executes a string of Lua code inside of the running server, and prints any
+output. <code>print</code> is redirected to the output of the command. If the server is
+not running then a temporary one is started for the duration of the command.
+Pass <code>-</code> as the code to read it from stdin.</p>
+
+<p>This is useful for inspecting the state of a running server, eg. reading from a
+shared dictionary:</p>
+
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span> <span class="sh_identifier">lapis</span> <span class="sh_identifier">exec</span> <span class="sh_string">&#x27;print(ngx.shared.page_cache:get(&quot;hello&quot;))&#x27;</span></code>
+</pre>
+
+
+<h3><a href="#command-reference/lapis-simulate" name="command-reference/lapis-simulate"><code>lapis simulate</code></a></h3>
+
+<pre><code>Usage: lapis simulate [-h] [--app-module &lt;app_module&gt;]
        [--helper &lt;helper&gt;]
        [--method {GET,POST,PUT,DELETE,OPTIONS,HEAD,PATCH}]
        [--body &lt;body&gt;] [--form &lt;form&gt;] [--header &lt;header&gt;]
@@ -367,18 +477,19 @@ Display options:
 
 Other options:
    -h, --help            Show this help message and exit.
-   --app-class &lt;app_class&gt;
-                         Override default app class module name
+   --app-module &lt;app_module&gt;,
+    --app-class &lt;app_module&gt;
+                         Override default app module name
    --helper &lt;helper&gt;     Module name to require before loading app
 </code></pre>
 
 <p>Examples:</p>
 
-<pre class="highlight lang_bash"><code><span class="sh_comment"># Request the root page with a GET request</span><span class="sh_bash_whitespace sh_whitespace">
-</span><span class="sh_identifier">lapis</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">simulate</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">/</span><span class="sh_bash_whitespace sh_whitespace">
+<pre class="highlight lang_bash"><code><span class="sh_comment"># Request the root page with a GET request</span>
+<span class="sh_identifier">lapis</span> <span class="sh_identifier">simulate</span> <span class="sh_operator">/</span>
 
-</span><span class="sh_comment"># Request the login page with form data in a POST request, output response as JSON</span><span class="sh_bash_whitespace sh_whitespace">
-</span><span class="sh_identifier">lapis</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">simulate</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">/</span><span class="sh_identifier">login</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">--</span><span class="sh_identifier">csrf</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">--</span><span class="sh_identifier">print</span><span class="sh_operator">-</span><span class="sh_identifier">json</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">-</span><span class="sh_identifier">F</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">username</span><span class="sh_operator">=</span><span class="sh_identifier">bart</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">-</span><span class="sh_identifier">F</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">password</span><span class="sh_operator">=</span><span class="sh_identifier">cool</span></code>
+<span class="sh_comment"># Request the login page with form data in a POST request, output response as JSON</span>
+<span class="sh_identifier">lapis</span> <span class="sh_identifier">simulate</span> <span class="sh_operator">/</span><span class="sh_identifier">login</span> <span class="sh_operator">--</span><span class="sh_identifier">csrf</span> <span class="sh_operator">--</span><span class="sh_identifier">print</span><span class="sh_operator">-</span><span class="sh_identifier">json</span> <span class="sh_operator">-</span><span class="sh_identifier">F</span> <span class="sh_identifier">username</span><span class="sh_operator">=</span><span class="sh_identifier">bart</span> <span class="sh_operator">-</span><span class="sh_identifier">F</span> <span class="sh_identifier">password</span><span class="sh_operator">=</span><span class="sh_identifier">cool</span></code>
 </pre>
 
 
@@ -388,7 +499,7 @@ is stubbed as if requested through the OpenResty server)</p>
 
 <p>This command will execute the request in either the default environment or the
 specified one. This is important to note if your request makes changes to the
-database. The simulate commannd <strong>does not</strong> run in the <em>test</em> environment
+database. The simulate command <strong>does not</strong> run in the <em>test</em> environment
 unless explicitly specified.</p>
 
 <p>By default the command will print information about the response, like the
@@ -398,7 +509,7 @@ output can be configured with flags like <code>--print-json</code> or <code>--pr
 <p>When using the <code>--print-json</code> format option, if a session is set by the
 request, it will be decoded into the json object for easy viewing.</p>
 
-<h3><a name="command-reference/lapis-generate" href="#command-reference/lapis-generate"><code>lapis generate</code></a></h3>
+<h3><a href="#command-reference/lapis-generate" name="command-reference/lapis-generate"><code>lapis generate</code></a></h3>
 
 <pre><code>Usage: lapis generate [-h] &lt;template_name&gt; [&lt;args&gt;] ...
 
@@ -417,17 +528,44 @@ based on templates that lapis includes. This can help simplify setting up an
 initial app. The <code>lapis new</code> command internally calls a series of generators to
 create the initial project.</p>
 
-<h4><a name="command-reference/lapis-generate/lapis-generate-rockspec" href="#command-reference/lapis-generate/lapis-generate-rockspec"><code>lapis generate rockspec</code></a></h4>
+<p>The following generators are available. Run <code>lapis generate NAME --help</code> to see
+the options for each:</p>
+
+<ul>
+<li><code>application</code> &mdash; An empty application module</li>
+<li><code>config</code> &mdash; A configuration module</li>
+<li><code>model</code> &mdash; An empty <a href="models.html">model</a> in the <code>models</code> directory, eg. <code>lapis generate model users</code></li>
+<li><code>flow</code> &mdash; An empty <a href="flows.html">flow</a> in the <code>flows</code> directory, eg. <code>lapis generate flow edit_post</code></li>
+<li><code>migration</code> &mdash; Adds a new migration to the migrations module</li>
+<li><code>rockspec</code> &mdash; A LuaRocks rockspec file for the app&rsquo;s dependencies</li>
+</ul>
+
+
+<p>The generators will create MoonScript files if a <code>config.moon</code> file exists in
+the current directory, otherwise Lua files are created. This can be overridden
+with <code>--lua</code> or <code>--moonscript</code>.</p>
+
+<p>If a module named <code>generators.{name}</code> exists in your project then it will be
+used in place of the built-in generator of the same name, letting you
+customize the templates. To preview what a generator will create without
+writing any files, set the <code>LAPIS_GENERATE_STDOUT</code> environment variable:</p>
+
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span> <span class="sh_identifier">LAPIS_GENERATE_STDOUT</span><span class="sh_operator">=</span><span class="sh_number">1</span> <span class="sh_identifier">lapis</span> <span class="sh_identifier">generate</span> <span class="sh_identifier">model</span> <span class="sh_identifier">users</span></code>
+</pre>
+
+
+<h4><a href="#command-reference/lapis-generate/lapis-generate-rockspec" name="command-reference/lapis-generate/lapis-generate-rockspec"><code>lapis generate rockspec</code></a></h4>
 
 <p>Creates a LuaRocks rockspec file that can be used to manage the dependencies of the app.</p>
 
 <pre><code>Usage: lapis generate rockspec [-h] [--app-name &lt;app_name&gt;]
-       [--version-name &lt;version_name&gt;] [--moonscript] [--sqlite]
-       [--postgresql] [--mysql]
+       [--version-name &lt;version_name&gt;] [--cqueues] [--moonscript]
+       [--sqlite] [--postgresql] [--mysql]
 
 Generate a LuaRocks rockspec file for managing dependencies
 
 Dependencies:
+   --cqueues             Include dependencies for cqueues server support
    --moonscript, --moon  Include MoonScript as dependency
    --sqlite              Include SQLite dependencies
    --postgresql, --postgres
@@ -443,32 +581,32 @@ Other options:
 
 <p>As an example, to set up your app for using sqlite and MoonScript, you might run:</p>
 
-<pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">generate</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">rockspec</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">--</span><span class="sh_identifier">moonscript</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">--</span><span class="sh_identifier">sqlite</span></code>
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span> <span class="sh_identifier">lapis</span> <span class="sh_identifier">generate</span> <span class="sh_identifier">rockspec</span> <span class="sh_operator">--</span><span class="sh_identifier">moonscript</span> <span class="sh_operator">--</span><span class="sh_identifier">sqlite</span></code>
 </pre>
 
 
-<p>This wil create a new <code>.rockspec</code> file in the current directory, named after
-the current directory. (You can rename name of the rockspec with <code>--app-name</code>)</p>
+<p>This will create a new <code>.rockspec</code> file in the current directory, named after
+the current directory. (You can change the name of the rockspec with <code>--app-name</code>)</p>
 
 <p>You can then use LuaRocks to install the necessary dependencies, something like:</p>
 
-<pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">luarocks</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">--</span><span class="sh_keyword">local</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">--</span><span class="sh_identifier">lua</span><span class="sh_operator">-</span><span class="sh_identifier">version</span><span class="sh_operator">=</span><span class="sh_number">5.1</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">build</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">--</span><span class="sh_identifier">only</span><span class="sh_operator">-</span><span class="sh_identifier">deps</span></code>
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span> <span class="sh_identifier">luarocks</span> <span class="sh_operator">--</span><span class="sh_keyword">local</span> <span class="sh_operator">--</span><span class="sh_identifier">lua</span><span class="sh_operator">-</span><span class="sh_identifier">version</span><span class="sh_operator">=</span><span class="sh_number">5.1</span> <span class="sh_identifier">build</span> <span class="sh_operator">--</span><span class="sh_identifier">only</span><span class="sh_operator">-</span><span class="sh_identifier">deps</span></code>
 </pre>
 
 
 <p>If desired, you can lock your dependencies by version for the current project
 by running something like:</p>
 
-<pre class="highlight lang_bash"><code><span class="sh_default">$</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">luarocks</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">--</span><span class="sh_keyword">local</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">--</span><span class="sh_identifier">lua</span><span class="sh_operator">-</span><span class="sh_identifier">version</span><span class="sh_operator">=</span><span class="sh_number">5.1</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_identifier">build</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">--</span><span class="sh_identifier">only</span><span class="sh_operator">-</span><span class="sh_identifier">deps</span><span class="sh_bash_whitespace sh_whitespace"> </span><span class="sh_operator">--</span><span class="sh_identifier">pin</span></code>
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span> <span class="sh_identifier">luarocks</span> <span class="sh_operator">--</span><span class="sh_keyword">local</span> <span class="sh_operator">--</span><span class="sh_identifier">lua</span><span class="sh_operator">-</span><span class="sh_identifier">version</span><span class="sh_operator">=</span><span class="sh_number">5.1</span> <span class="sh_identifier">build</span> <span class="sh_operator">--</span><span class="sh_identifier">only</span><span class="sh_operator">-</span><span class="sh_identifier">deps</span> <span class="sh_operator">--</span><span class="sh_identifier">pin</span></code>
 </pre>
 
 
 <blockquote><p>When pinning dependencies, a luarocks.lock file is created in the current
-directory. This should be checked into the repository. <a href="https://github.com/luarocks/luarocks/wiki/Pinning-versions-with-a-lock-file">Learn more about
+directory. This should be checked into the repository. <a href="https://github.com/luarocks/luarocks/blob/main/docs/pinning_versions_with_a_lock_file.md">Learn more about
 pinning versions with
 LuaRocks</a></p></blockquote>
 
-<h4><a name="command-reference/lapis-generate/lapis-generate-migration" href="#command-reference/lapis-generate/lapis-generate-migration"><code>lapis generate migration</code></a></h4>
+<h4><a href="#command-reference/lapis-generate/lapis-generate-migration" name="command-reference/lapis-generate/lapis-generate-migration"><code>lapis generate migration</code></a></h4>
 
 <pre><code>Usage: lapis generate migration ([--lua] | [--moonscript]) [-h]
        [--counter {timestamp,increment}]
@@ -501,8 +639,8 @@ of the file. By default, the new migration will be named with a unix timestamp.<
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Fri Mar  8 20:35:44 2024"></script>
-  <script type="text/javascript" src="../reference.js?Fri Mar  8 20:35:44 2024"></script>
+  <script type="text/javascript" src="../search.js?Thu Oct 22 18:58:16 2026"></script>
+  <script type="text/javascript" src="../reference.js?Thu Oct 22 18:58:16 2026"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>

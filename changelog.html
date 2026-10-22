@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Changelog - Lapis - A web framework for Lua</title>
-  <link rel="stylesheet" href="home.css?Fri Mar  8 20:35:45 2024" />
+  <link rel="stylesheet" href="home.css?Thu Oct 22 18:58:18 2026" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-136625-1']);
-    _gaq.push(['_trackPageview']);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-136625-1');
 
     (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var ga = document.createElement('script'); ga.async = true;
+      ga.src = 'https://www.googletagmanager.com/gtag/js?id=UA-136625-1';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
   }
@@ -33,7 +34,7 @@
       </div>
 
       <div class="version_flag">
-        <a href="./changelog.html">v1.16.0</a>
+        <a href="./changelog.html">v1.19.0</a>
       </div>
     </section>
 
@@ -59,13 +60,172 @@
 
   <div class="sub_header">
     <div class="center_column">
-      <strong>November 2nd, 2023:</strong> Lapis v1.16.0 &mdash; <code>types.params_map</code>, improved <code>model:update</code>: <a href="./changelog.html">changelog</a>
+      <strong>August 13th, 2026:</strong> Lapis v1.19.0 &mdash; <code>db.raw</code> relation keys, <code>Model:create</code> conflict handling: <a href="./changelog.html">changelog</a>
     </div>
   </div>
 
   <div class="content center_column">
 
 <h1>Changelog</h1>
+
+<h2>v1.19.0 &ndash; August 13 2026</h2>
+
+<h3>Models and Database</h3>
+
+<ul>
+<li>Relation and <code>include_in</code> keys can now use <code>db.raw</code> for the column name, letting you match rows on a computed expression.</li>
+</ul>
+
+
+<pre class="highlight lang_moon"><code><span class="sh_keyword">class</span> <span class="sh_proper_ident sh_class">Users</span> <span class="sh_keyword">extends</span> <span class="sh_proper_ident sh_class">Model</span>
+  <span class="sh_self_ref sh_label">@relations</span><span class="sh_operator">:</span> <span class="sh_symbol sh_embedded">{</span>
+    <span class="sh_symbol sh_embedded">{</span><span class="sh_string">&quot;user_emails&quot;</span><span class="sh_operator">,</span> <span class="sh_tbl_key sh_regex">has_many:</span> <span class="sh_string">&quot;UserEmails&quot;</span><span class="sh_operator">,</span> <span class="sh_tbl_key sh_regex">key:</span> <span class="sh_symbol sh_embedded">{</span>
+      <span class="sh_symbol sh_embedded">[</span><span class="sh_identifier">db</span><span class="sh_operator">.</span><span class="sh_identifier">raw</span> <span class="sh_string">&quot;lower(email)&quot;</span><span class="sh_symbol sh_embedded">]</span><span class="sh_operator">:</span> <span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">u</span><span class="sh_symbol sh_embedded">)</span> <span class="sh_fndef sh_preprocessor">-&gt;</span> <span class="sh_identifier">u</span><span class="sh_operator">.</span><span class="sh_identifier">email</span><span class="sh_operator">\</span><span class="sh_identifier">lower</span><span class="sh_operator">!</span>
+    <span class="sh_symbol sh_embedded">}}</span>
+  <span class="sh_symbol sh_embedded">}</span></code>
+</pre>
+
+
+<p>  When preloading, the raw expression is aliased in the generated query so the returned rows can be matched back to their source objects. The alias columns are stripped from the loaded models.</p>
+
+<ul>
+<li><code>Model:create</code> accepts an <code>on_conflict</code> option. Currently only <code>"do_nothing"</code> is supported, which appends <code>ON CONFLICT DO NOTHING</code> to the insert. If the conflict prevents the row from being inserted then <code>create</code> returns <code>nil</code> with no error message. Postgres and SQLite only.</li>
+</ul>
+
+
+<pre class="highlight lang_moon"><code><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">create</span> <span class="sh_symbol sh_embedded">{</span>
+  <span class="sh_tbl_key sh_regex">id:</span> <span class="sh_number">1</span>
+  <span class="sh_tbl_key sh_regex">profile_color:</span> <span class="sh_string">&quot;blue&quot;</span>
+<span class="sh_symbol sh_embedded">}</span><span class="sh_operator">,</span> <span class="sh_tbl_key sh_regex">on_conflict:</span> <span class="sh_string">&quot;do_nothing&quot;</span></code>
+</pre>
+
+
+<h3>OpenResty</h3>
+
+<ul>
+<li>Fixed bug where after dispatch lock was stored globally on a worker instead of per ctx, resulting in <code>you tried add to after_dispatch while running a callback</code> error. </li>
+<li>Added <code>lapis.nginx.is_simulate</code>, which returns <code>true</code> when running under a simulated request instead of real Nginx.</li>
+</ul>
+
+
+<h3>CLI</h3>
+
+<ul>
+<li><code>lapis build</code> validates the compiled config with <code>nginx -t</code> before reloading a running server. If the config is invalid the Nginx error output is printed and the <code>HUP</code> signal is not sent, so the running server keeps serving its previous config. Without this check a broken config would appear to reload successfully while the old workers kept running. Pass <code>--test-config</code> to force the check when no server is running, useful as a pre-flight before deploying.</li>
+</ul>
+
+
+<pre class="highlight lang_bash"><code><span class="sh_default">$</span> <span class="sh_identifier">lapis</span> <span class="sh_identifier">build</span> <span class="sh_operator">--</span><span class="sh_identifier">test</span><span class="sh_operator">-</span><span class="sh_identifier">config</span></code>
+</pre>
+
+
+<ul>
+<li><code>lapis migrate</code> accepts <code>--statement-timeout</code> to set the Postgres <code>statement_timeout</code> before migrations run, so a runaway migration is aborted instead of blocking indefinitely. The value is passed to Postgres directly, so it takes milliseconds (<code>--statement-timeout=5000</code>) or a string with units (<code>--statement-timeout=5s</code>). Postgres only, using it with another backend is an error.</li>
+<li><code>lapis simulate</code> forces <code>socket.http</code> as the HTTP client instead of trying to use <code>ngx.location.capture</code>.</li>
+</ul>
+
+
+<h3>Configuration</h3>
+
+<ul>
+<li>The default app module is now selected with <code>config.default_app_module</code>, replacing the undocumented <code>config.app_class</code>. Loading the app module is unified across the command line and the server backends.</li>
+</ul>
+
+
+<h2>v1.18.0 &ndash; April 23 2026</h2>
+
+<h3>HTTP and OpenResty</h3>
+
+<ul>
+<li>Added <code>lapis.nginx.resty_http</code>, an HTTP client utilizing <code>lua-resty-http</code></li>
+<li><code>lapis.nginx.http</code> automatically switches to <code>lua-resty-http</code> in timer phase callbacks where <code>ngx.location.capture</code> isn&rsquo;t available</li>
+<li>Documentation for supporting HTTPS certificate verification for both proxy-pass and <code>lua-resty-http</code> clients</li>
+</ul>
+
+
+<h3>Models and Database</h3>
+
+<ul>
+<li><code>include_in</code> supports computed key functions returning <code>db.list(...)</code> for matching multiple related rows</li>
+<li><code>include_in</code> preserves transformed values from the <code>value</code> option when used with computed <code>db.list</code> keys</li>
+<li>Polymorphic <code>belongs_to</code> preloading now forwards preload options like <code>skip_included</code> to the underlying calls</li>
+<li>New <code>db.clause + db.clause</code> syntax for combining clauses with OR logic</li>
+<li><code>json_encodable</code> preserves table metatables, including <code>cjson.array_mt</code>, so empty arrays stay encoded as JSON arrays</li>
+<li><code>OrderedPaginator:each_page(...)</code> accepts an initial cursor parameter</li>
+</ul>
+
+
+<h3>Testing</h3>
+
+<ul>
+<li>Added <code>simulate_request</code> and <code>simulate_action</code> as clearer alternatives to the existing helpers (old names remain as deprecated aliases)</li>
+<li>Enhanced <code>stub_request</code> setup for params, GET/POST tables, session, cookies, headers, and custom request classes</li>
+<li>Request simulation now uses higher-resolution LuaSocket time</li>
+</ul>
+
+
+<h3>Application and Flows</h3>
+
+<ul>
+<li>Requests expose <code>route_pattern</code> alongside <code>route_name</code></li>
+<li>Renamed <code>is_flow</code> to <code>is_flow_class</code> for clarity</li>
+<li>Expanded flow documentation</li>
+</ul>
+
+
+<h3>CLI</h3>
+
+<ul>
+<li>Third-party command modules resolve as top-level commands without the need for special <code>_</code> command</li>
+<li>Added shortcut action for <a href="https://github.com/leafo/lapis-exceptions">lapis-exceptions</a></li>
+<li>Command discovery checks module availability without requiring module loading</li>
+</ul>
+
+
+<h2>v1.17.0 &ndash; November 12 2025</h2>
+
+<h3>Postgres Update</h3>
+
+<p>This version contains the first rewrite of the database modules to allow for running multiple connection configurations in parallel instead of relying on a global configuration. This refactor will eventually make it to the other database modules in future versions.</p>
+
+<ul>
+<li>The <code>lapis.db.postgres</code> module is now a proxy object for the <code>"default"</code> connection configuration</li>
+<li>Add <code>configure</code> function to <code>lapis.db.postgres</code> to define a new connection configuration. (Returns a compatible <code>db</code> object)</li>
+<li>Add <code>logger</code> field to <code>db</code> object. The <code>db</code> object will use that logger for any logging actions (queries, connections). Defaults to the module <code>lapis.logger</code></li>
+<li>Add <code>db_connection</code> logger function to <code>lapis.logger</code>. The default implementation is empty and is designed to be overridden.</li>
+<li>Postgres connection now emits <code>logging.db_connection(db, pgmoon, success, err)</code> so you can add metrics on connections as you see fit</li>
+<li>Removed the <code>pgmoon_conn</code> performance fields, they were unreliable given that multiple connections could be created in a single request</li>
+<li>Add explicit <code>disconnect</code> and <code>connect</code> functions to the <code>db</code> module. The connection configuration can automatically reconnect if the connection has been disconnected.</li>
+<li><strong>Note:</strong> The entire <code>lapis.db.postgres</code> module has mostly been rewritten, if you were relying on undocumented exports for custom behavior you should review your code before deploying</li>
+</ul>
+
+
+<h3>Other additions</h3>
+
+<ul>
+<li>Added <code>timer_at</code> to <code>lapis.nginx</code>, a safe wrapper around <code>ngx.timer.at</code> that runs callbacks under <code>pcall</code>, bubbles errors, and guarantees <code>after_dispatch</code> is called to clean up any database connections</li>
+<li>After dispatch callbacks are removed after running to prevent double running if manually called</li>
+<li><code>lapis.http</code> defaults to <code>socket.http</code> unless the cqueues is explicitly running (previously it would try to load lua-http)</li>
+<li><code>params_shape</code> accepts <code>label = false</code>, letting you hide the automatic <code>field:</code> prefix when you want bare error strings or custom labels.</li>
+<li>Add support for dot syntax in default Nginx config template syntax to access fields of tables, eg. <code>${{postgres.host}}</code></li>
+</ul>
+
+
+<h3>Fixes</h3>
+
+<ul>
+<li>Fix a bug where a nested preload could try to load relations on a basic value type that was returned by a relation</li>
+</ul>
+
+
+<h3>CLI</h3>
+
+<ul>
+<li>Top level <code>lapis</code> command supports a <code>--dir</code> flag (requires <code>luafilesystem</code>), so you can run <code>lapis</code> from outside the project root</li>
+<li>Add <code>lapis mcp</code> shortcut for the <a href="httpshttps://github.com/leafo/lapis-mcp">lapis-mcp</a> package</li>
+<li>When using <code>lapis generate migration</code> the name of the generated migration is now printed to stdout</li>
+</ul>
+
 
 <h2>v1.16.0 &ndash; November 2 2023</h2>
 
@@ -1399,7 +1559,7 @@ can now run queries directly in the console.</li>
       </div>
 
       <div>
-        Fri Mar  8 20:35:45 2024 PST
+        Thu Oct 22 18:58:18 2026 PST
       </div>
     </div>
   </div>
@@ -1425,8 +1585,8 @@ can now run queries directly in the console.</li>
   <script src="./lib/react-dom.production.min.js"></script>
   <script src="./lib/react-dom-factories.js"></script>
   <script src="./lib/lunr.min.js"></script>
-  <script type="text/javascript" src="./search.js?Fri Mar  8 20:35:45 2024"></script>
-  <script type="text/javascript" src="./home.js?Fri Mar  8 20:35:45 2024"></script>
+  <script type="text/javascript" src="./search.js?Thu Oct 22 18:58:18 2026"></script>
+  <script type="text/javascript" src="./home.js?Thu Oct 22 18:58:18 2026"></script>
 
   <script type="text/javascript">
     new L.Home();

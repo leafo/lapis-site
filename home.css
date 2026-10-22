@@ -74,35 +74,6 @@
 .highlight .sh_function {
   color: #F69385; }
 
-.highlight {
-  /* builtins */
-  /* strings */
-  /* proper names, self */
-  /* true, false, nil */
-  /* function lit, braces, parens  */
-  /* operators */
-  /* keywords */ }
-  .highlight .nb, .highlight .nt {
-    color: #F69385; }
-  .highlight .s, .highlight .s1, .highlight .s2, .highlight .se {
-    color: #F1BF8E; }
-  .highlight .nc, .highlight .vc, .highlight .bp {
-    color: #99CBCA; }
-  .highlight .kc {
-    color: #B3EFE5; }
-  .highlight .nf, .highlight .kt, .highlight .na, .highlight .p {
-    color: #B0D89C; }
-  .highlight .o, .highlight .si {
-    color: #F277A1; }
-  .highlight .nv, .highlight .ow {
-    color: #F277A1; }
-  .highlight .k, .highlight .kd {
-    color: #BB84B4; }
-  .highlight .c1, .highlight .c2, .highlight .c {
-    color: #929292; }
-  .highlight .m, .highlight .mi, .highlight .mf, .highlight .mh {
-    color: #9D8FF2; }
-
 ::selection {
   background: #0CF;
   color: white; }

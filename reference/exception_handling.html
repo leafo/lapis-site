@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Exception Handling - Lapis Reference Manual</title>
-  <link rel="stylesheet" href="../reference.css?Fri Mar  8 20:35:45 2024" />
+  <link rel="stylesheet" href="../reference.css?Thu Oct 22 18:58:17 2026" />
   <script type="text/javascript">
   if (window.location.hostname != "localhost") {
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-136625-1']);
-    _gaq.push(['_trackPageview']);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-136625-1');
 
     (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var ga = document.createElement('script'); ga.async = true;
+      ga.src = 'https://www.googletagmanager.com/gtag/js?id=UA-136625-1';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
   }
@@ -27,7 +28,7 @@
     </h1>
     <div id="search_drop" data-root=".." data-index="../reference.json"></div>
     <a href="../changelog.html" class="version_flag">
-      v1.16.0
+      v1.19.0
     </a>
   </div>
 
@@ -47,7 +48,7 @@
 <li><a href="#error-handling-functions">Error Handling Functions</a></li>
 <ul><li><a href="#error-handling-functions/capture_errors"><code>capture_errors(fn, [error_handler_fn])</code></a></li>
 <li><a href="#error-handling-functions/capture_errors_json"><code>capture_errors_json(fn)</code></a></li>
-<li><a href="#error-handling-functions/yield_error"><code>yield_error(msg)</code></a></li>
+<li><a href="#error-handling-functions/yield_error"><code>yield_error(msg="unknown error")</code></a></li>
 <li><a href="#error-handling-functions/assert_error"><code>assert_error(cond, ...)</code></a></li></ul></ul>
           </div>
         
@@ -71,6 +72,7 @@
 <li><a href="../reference/moon_creating_configurations.html">MoonScript configuration syntax</a></li>
 </ul>
 </li>
+<li><a href="../reference/server_backends.html">Server Backends</a></li>
 <li><a href="../reference/database.html">Database Access, and Queries</a>
 
 <ul>
@@ -78,6 +80,7 @@
 </ul>
 </li>
 <li><a href="../reference/exception_handling.html">Handling Exceptions</a></li>
+<li><a href="../reference/flows.html">Flows</a></li>
 <li><a href="../reference/input_validation.html">Input Validation</a></li>
 <li><a href="../reference/html_generation.html">HTML Generation</a></li>
 <li><a href="../reference/etlua_templates.html">etlua Templates</a></li>
@@ -96,11 +99,11 @@
     <div class="nav_offset">
       <div class="text_column"><h1>Exception Handling</h1>
 
-<h2><a name="the-kinds-of-errors" href="#the-kinds-of-errors">The Kinds of Errors</a></h2>
+<h2><a href="#the-kinds-of-errors" name="the-kinds-of-errors">The Kinds of Errors</a></h2>
 
 <p>Lapis makes a distinction between two kinds of errors: Recoverable and
 non-recoverable errors. Errors thrown by Lua&rsquo;s runtime during execution or
-calls to  <code>error</code> are considered non-recoverable. (This also includes the Lua
+calls to <code>error</code> are considered non-recoverable. (This also includes the Lua
 built-in function <code>assert</code>)</p>
 
 <p>Because non-recoverable errors aren&rsquo;t expected to be captured by the user,
@@ -118,9 +121,9 @@ coroutines instead of Lua&rsquo;s error system.</p>
 <p>Examples include non-valid inputs from users, or missing records from the
 database.</p>
 
-<h2><a name="capturing-recoverable-errors" href="#capturing-recoverable-errors">Capturing Recoverable Errors</a></h2>
+<h2><a href="#capturing-recoverable-errors" name="capturing-recoverable-errors">Capturing Recoverable Errors</a></h2>
 
-<p>The <code>capture_errors</code> helper is used wrap an action such that it can capture
+<p>The <code>capture_errors</code> helper is used to wrap an action such that it can capture
 errors and run an error handler.</p>
 
 <p>This does not capture runtime errors. You should use <code>pcall</code> if you
@@ -131,28 +134,33 @@ Lapis creates an exception handling system using coroutines. We must define the
 scope in which we will capture errors. We do that using the <code>capture_errors</code>
 helper. Then we can throw a raw error using <code>yield_error</code>.</p>
 
-<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app_helpers</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">lapis</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span>
+<span class="sh_keyword">local</span> <span class="sh_identifier">app_helpers</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">)</span>
 
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">yield_error</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app_helpers</span><span class="sh_operator">.</span><span class="sh_identifier">capture_errors</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app_helpers</span><span class="sh_operator">.</span><span class="sh_identifier">yield_error</span><span class="sh_lua_whitespace sh_whitespace">
+<span class="sh_keyword">local</span> <span class="sh_identifier">capture_errors</span><span class="sh_operator">,</span> <span class="sh_identifier">yield_error</span> <span class="sh_operator">=</span> <span class="sh_identifier">app_helpers</span><span class="sh_operator">.</span><span class="sh_identifier">capture_errors</span><span class="sh_operator">,</span> <span class="sh_identifier">app_helpers</span><span class="sh_operator">.</span><span class="sh_identifier">yield_error</span>
 
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+<span class="sh_keyword">local</span> <span class="sh_identifier">app</span> <span class="sh_operator">=</span> <span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span>
 
-</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/do_something&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_identifier">yield_error</span><span class="sh_operator">(</span><span class="sh_string">&quot;something bad happened&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;Hello!&quot;</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_keyword">end</span><span class="sh_operator">))</span></code>
+<span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/do_something&quot;</span><span class="sh_operator">,</span> <span class="sh_identifier">capture_errors</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+  <span class="sh_identifier">yield_error</span><span class="sh_operator">(</span><span class="sh_string">&quot;something bad happened&quot;</span><span class="sh_operator">)</span>
+  <span class="sh_keyword">return</span> <span class="sh_string">&quot;Hello!&quot;</span>
+<span class="sh_keyword">end</span><span class="sh_operator">))</span></code>
 </pre>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span> <span class="sh_identifier">capture_errors</span><span class="sh_operator">,</span> <span class="sh_identifier">yield_error</span> <span class="sh_keyword">from</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.application&quot;</span>
 
-
-<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">yield_error</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-
-</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_string">&quot;/do_something&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-    </span><span class="sh_identifier">yield_error</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;something bad happened&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-    </span><span class="sh_string">&quot;Hello!&quot;</span></code>
+<span class="sh_keyword">class</span> <span class="sh_proper_ident sh_class">App</span> <span class="sh_keyword">extends</span> <span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span>
+  <span class="sh_string">&quot;/do_something&quot;</span><span class="sh_operator">:</span> <span class="sh_identifier">capture_errors</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+    <span class="sh_identifier">yield_error</span> <span class="sh_string">&quot;something bad happened&quot;</span>
+    <span class="sh_string">&quot;Hello!&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>What happens when there is an error? The action will stop executing at the
 first error, and then the error handler is run. The default error handler will
@@ -161,75 +169,96 @@ class="for_moon"><code>@errors</code></span><span class="for_lua"><code>self.err
 return <span class="for_moon"><code>render: true</code></span><span class="for_lua"><code>{
 render = true }</code></span>. In your view you can then display the errors. This
 means that if you have a named route the view of that route will render. You
-should then code your view to sometimes have a <code>errors</code> table.</p>
+should then code your view to sometimes have an <code>errors</code> table.</p>
 
 <p>If you want to have a custom error handler you can invoke <code>capture_errors</code> with
 a table: (note that <span class="for_moon"><code>@errors</code></span><span
 class="for_lua"><code>self.errors</code></span> is set before the custom handler)</p>
 
-<pre class="highlight lang_lua"><code><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/do_something&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_operator">({</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_identifier">on_error</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-    </span><span class="sh_identifier">log_errors</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">errors</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_comment">-- you would supply the log_errors function</span><span class="sh_lua_whitespace sh_whitespace">
-    </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">render</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;my_error_page&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">status</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_number">500</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_keyword">end</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-    </span><span class="sh_keyword">if</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">params</span><span class="sh_operator">.</span><span class="sh_identifier">bad_thing</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">then</span><span class="sh_lua_whitespace sh_whitespace">
-      </span><span class="sh_identifier">yield_error</span><span class="sh_operator">(</span><span class="sh_string">&quot;something bad happened&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-    </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
-    </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">render</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_keyword">end</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_operator">}))</span></code>
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/do_something&quot;</span><span class="sh_operator">,</span> <span class="sh_identifier">capture_errors</span><span class="sh_operator">({</span>
+  <span class="sh_identifier">on_error</span> <span class="sh_operator">=</span> <span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+    <span class="sh_identifier">log_errors</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">errors</span><span class="sh_operator">)</span> <span class="sh_comment">-- you would supply the log_errors function</span>
+    <span class="sh_keyword">return</span> <span class="sh_operator">{</span> <span class="sh_identifier">render</span> <span class="sh_operator">=</span> <span class="sh_string">&quot;my_error_page&quot;</span><span class="sh_operator">,</span> <span class="sh_identifier">status</span> <span class="sh_operator">=</span> <span class="sh_number">500</span> <span class="sh_operator">}</span>
+  <span class="sh_keyword">end</span><span class="sh_operator">,</span>
+  <span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+    <span class="sh_keyword">if</span> <span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">params</span><span class="sh_operator">.</span><span class="sh_identifier">bad_thing</span> <span class="sh_keyword">then</span>
+      <span class="sh_identifier">yield_error</span><span class="sh_operator">(</span><span class="sh_string">&quot;something bad happened&quot;</span><span class="sh_operator">)</span>
+    <span class="sh_keyword">end</span>
+    <span class="sh_keyword">return</span> <span class="sh_operator">{</span> <span class="sh_identifier">render</span> <span class="sh_operator">=</span> <span class="sh_keyword">true</span> <span class="sh_operator">}</span>
+  <span class="sh_keyword">end</span>
+<span class="sh_operator">}))</span></code>
 </pre>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">class</span> <span class="sh_proper_ident sh_class">App</span> <span class="sh_keyword">extends</span> <span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span>
+  <span class="sh_string">&quot;/do_something&quot;</span><span class="sh_operator">:</span> <span class="sh_identifier">capture_errors</span> <span class="sh_symbol sh_embedded">{</span>
+    <span class="sh_tbl_key sh_regex">on_error:</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+      <span class="sh_identifier">log_errors</span> <span class="sh_self_ref sh_label">@errors</span> <span class="sh_comment">-- you would supply the log_errors function</span>
+      <span class="sh_tbl_key sh_regex">render:</span> <span class="sh_string">&quot;my_error_page&quot;</span><span class="sh_operator">,</span> <span class="sh_tbl_key sh_regex">status:</span> <span class="sh_number">500</span>
 
-
-<pre class="highlight lang_moon"><code><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_string">&quot;/do_something&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
-    </span><span class="sh_tbl_key sh_regex">on_error:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-      </span><span class="sh_identifier">log_errors</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@errors</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_comment">-- you would supply the log_errors function</span><span class="sh_moonscript_whitespace sh_whitespace">
-      </span><span class="sh_tbl_key sh_regex">render:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;my_error_page&quot;</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">status:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_number">500</span><span class="sh_moonscript_whitespace sh_whitespace">
-
-    </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-      </span><span class="sh_keyword">if</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@params</span><span class="sh_operator">.</span><span class="sh_identifier">bad_thing</span><span class="sh_moonscript_whitespace sh_whitespace">
-        </span><span class="sh_identifier">yield_error</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;something bad happened&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-      </span><span class="sh_tbl_key sh_regex">render:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">true</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_symbol sh_embedded">}</span></code>
+    <span class="sh_fndef sh_preprocessor">=&gt;</span>
+      <span class="sh_keyword">if</span> <span class="sh_self_ref sh_label">@params</span><span class="sh_operator">.</span><span class="sh_identifier">bad_thing</span>
+        <span class="sh_identifier">yield_error</span> <span class="sh_string">&quot;something bad happened&quot;</span>
+      <span class="sh_tbl_key sh_regex">render:</span> <span class="sh_constant">true</span>
+  <span class="sh_symbol sh_embedded">}</span></code>
 </pre>
+</div>
 
+</p>
 
 <p><code>capture_errors</code> when called with a table will use the first positional value
 as the action.</p>
 
+<p>The <code>on_error</code> field of the table passed to
+<a href="utilities.html#application-helpers/respond_to"><code>respond_to</code></a> also wraps the
+action with <code>capture_errors</code>, using the value as the error handler.</p>
+
+<p>Errors can also be thrown by the input validation functions, like
+<a href="input_validation.html#assert-valid"><code>assert_valid</code></a>, and by
+<a href="input_validation.html#tableshape-validation/type-constructors/types.assert_error"><code>types.assert_error</code></a>
+when using tableshape validation. These may yield many errors at once, so
+<span class="for_moon"><code>@errors</code></span><span
+class="for_lua"><code>self.errors</code></span> can contain more than one message.</p>
+
 <p>If you're building a JSON API then another method is provided,
 <code>capture_errors_json</code>, which renders the errors in a JSON object like so:</p>
 
-<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app_helpers</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">lapis</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span>
+<span class="sh_keyword">local</span> <span class="sh_identifier">app_helpers</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">)</span>
 
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors_json</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">yield_error</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app_helpers</span><span class="sh_operator">.</span><span class="sh_identifier">capture_errors_json</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app_helpers</span><span class="sh_operator">.</span><span class="sh_identifier">yield_error</span><span class="sh_lua_whitespace sh_whitespace">
+<span class="sh_keyword">local</span> <span class="sh_identifier">capture_errors_json</span><span class="sh_operator">,</span> <span class="sh_identifier">yield_error</span> <span class="sh_operator">=</span> <span class="sh_identifier">app_helpers</span><span class="sh_operator">.</span><span class="sh_identifier">capture_errors_json</span><span class="sh_operator">,</span> <span class="sh_identifier">app_helpers</span><span class="sh_operator">.</span><span class="sh_identifier">yield_error</span>
 
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+<span class="sh_keyword">local</span> <span class="sh_identifier">app</span> <span class="sh_operator">=</span> <span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span>
 
-</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors_json</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_identifier">yield_error</span><span class="sh_operator">(</span><span class="sh_string">&quot;something bad happened&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_keyword">end</span><span class="sh_operator">))</span></code>
+<span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span> <span class="sh_identifier">capture_errors_json</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+  <span class="sh_identifier">yield_error</span><span class="sh_operator">(</span><span class="sh_string">&quot;something bad happened&quot;</span><span class="sh_operator">)</span>
+<span class="sh_keyword">end</span><span class="sh_operator">))</span></code>
 </pre>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span> <span class="sh_identifier">capture_errors_json</span><span class="sh_operator">,</span> <span class="sh_identifier">yield_error</span> <span class="sh_keyword">from</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.application&quot;</span>
 
-
-<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors_json</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">yield_error</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-
-</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors_json</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-    </span><span class="sh_identifier">yield_error</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;something bad happened&quot;</span></code>
+<span class="sh_keyword">class</span> <span class="sh_proper_ident sh_class">App</span> <span class="sh_keyword">extends</span> <span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span>
+  <span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span> <span class="sh_identifier">capture_errors_json</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+    <span class="sh_identifier">yield_error</span> <span class="sh_string">&quot;something bad happened&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>Would render (with the correct content type):</p>
 
-<pre class="highlight lang_json"><code><span class="sh_operator">{</span><span class="sh_json_whitespace sh_whitespace"> </span><span class="sh_default">errors</span><span class="sh_operator">:</span><span class="sh_json_whitespace sh_whitespace"> </span><span class="sh_operator">[</span><span class="sh_string">&quot;something bad happened&quot;</span><span class="sh_operator">]</span><span class="sh_json_whitespace sh_whitespace"> </span><span class="sh_operator">}</span></code>
+<pre class="highlight lang_json"><code><span class="sh_operator">{</span> <span class="sh_string">&quot;errors&quot;</span><span class="sh_operator">:</span> <span class="sh_operator">[</span><span class="sh_string">&quot;something bad happened&quot;</span><span class="sh_operator">]</span> <span class="sh_operator">}</span></code>
 </pre>
 
 
-<h2><a name="error-handling-functions" href="#error-handling-functions">Error Handling Functions</a></h2>
+<h2><a href="#error-handling-functions" name="error-handling-functions">Error Handling Functions</a></h2>
 
 <p>All of these functions are available in the <code>lapis.application</code> module.</p>
 
@@ -238,17 +267,17 @@ as the action.</p>
         <button type="button" data-lang="lua" class="set_language">Lua</button>
         <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
       </div>
-<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">application</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">)</span></code>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">application</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">)</span></code>
 </pre>
-<pre class="highlight lang_moon"><code><span class="sh_identifier">application</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.application&quot;</span></code>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">application</span> <span class="sh_operator">=</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.application&quot;</span></code>
 </pre>
 </div>
 
 </p>
 
-<h3><a name="error-handling-functions/capture_errors" href="#error-handling-functions/capture_errors"><code>capture_errors(fn, [error_handler_fn])</code></a></h3>
+<h3><a href="#error-handling-functions/capture_errors" name="error-handling-functions/capture_errors"><code>capture_errors(fn, [error_handler_fn])</code></a></h3>
 
-<p>Wraps action action handler <code>fn</code> in a coroutine that will look for errors
+<p>Wraps the action handler <code>fn</code> in a coroutine that will look for errors
 thrown by <code>yield_error</code> or <code>assert_error</code>.</p>
 
 <p>As a convenience, <code>fn</code> can also be a table. In that case, then the first item
@@ -265,7 +294,7 @@ name, then this will cause the request to fail with an exception.</p>
 handler function. The return value is used to control how the response is
 written. Things like status codes and redirects can be used as normally.</p>
 
-<h3><a name="error-handling-functions/capture_errors_json" href="#error-handling-functions/capture_errors_json"><code>capture_errors_json(fn)</code></a></h3>
+<h3><a href="#error-handling-functions/capture_errors_json" name="error-handling-functions/capture_errors_json"><code>capture_errors_json(fn)</code></a></h3>
 
 <p>Similar to <code>capture_errors</code> but provides a default error handler that returns
 <code>self.errors</code> as a JSON response. Here is the full implementation:</p>
@@ -275,33 +304,32 @@ written. Things like status codes and redirects can be used as normally.</p>
         <button type="button" data-lang="lua" class="set_language">Lua</button>
         <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
       </div>
-<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors_json</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_identifier">capture_errors_json</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">fn</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_operator">(</span><span class="sh_identifier">fn</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-    </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
-      </span><span class="sh_identifier">json</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">{</span><span class="sh_lua_whitespace sh_whitespace">
-        </span><span class="sh_identifier">errors</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">errors</span><span class="sh_lua_whitespace sh_whitespace">
-      </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
-    </span><span class="sh_operator">}</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_keyword">end</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_keyword">end</span></code>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">capture_errors_json</span>
+<span class="sh_identifier">capture_errors_json</span> <span class="sh_operator">=</span> <span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">fn</span><span class="sh_operator">)</span>
+  <span class="sh_keyword">return</span> <span class="sh_identifier">capture_errors</span><span class="sh_operator">(</span><span class="sh_identifier">fn</span><span class="sh_operator">,</span> <span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+    <span class="sh_keyword">return</span> <span class="sh_operator">{</span>
+      <span class="sh_identifier">json</span> <span class="sh_operator">=</span> <span class="sh_operator">{</span>
+        <span class="sh_identifier">errors</span> <span class="sh_operator">=</span> <span class="sh_identifier">self</span><span class="sh_operator">.</span><span class="sh_identifier">errors</span>
+      <span class="sh_operator">}</span>
+    <span class="sh_operator">}</span>
+  <span class="sh_keyword">end</span><span class="sh_operator">)</span>
+<span class="sh_keyword">end</span></code>
 </pre>
-<pre class="highlight lang_moon"><code><span class="sh_identifier">capture_errors_json</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">fn</span><span class="sh_symbol sh_embedded">)</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">-&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_identifier">capture_errors</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">fn</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace">
-    </span><span class="sh_tbl_key sh_regex">json:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">{</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">errors:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_self_ref sh_label">@errors</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_symbol sh_embedded">}</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_symbol sh_embedded">}</span></code>
+<pre class="highlight lang_moon"><code><span class="sh_identifier">capture_errors_json</span> <span class="sh_operator">=</span> <span class="sh_symbol sh_embedded">(</span><span class="sh_identifier">fn</span><span class="sh_symbol sh_embedded">)</span> <span class="sh_fndef sh_preprocessor">-&gt;</span>
+  <span class="sh_identifier">capture_errors</span> <span class="sh_identifier">fn</span><span class="sh_operator">,</span> <span class="sh_fndef sh_preprocessor">=&gt;</span> <span class="sh_symbol sh_embedded">{</span>
+    <span class="sh_tbl_key sh_regex">json:</span> <span class="sh_symbol sh_embedded">{</span> <span class="sh_tbl_key sh_regex">errors:</span> <span class="sh_self_ref sh_label">@errors</span> <span class="sh_symbol sh_embedded">}</span>
+  <span class="sh_symbol sh_embedded">}</span></code>
 </pre>
 </div>
 
 </p>
 
-<h3><a name="error-handling-functions/yield_error" href="#error-handling-functions/yield_error"><code>yield_error(msg)</code></a></h3>
+<h3><a href="#error-handling-functions/yield_error" name="error-handling-functions/yield_error"><code>yield_error(msg="unknown error")</code></a></h3>
 
 <p>Sends an error message up to the wrapping <code>capture_errors</code>. The coroutine is
-never resumed on error so the any code following <code>yield_error</code> will not
-execute.</p>
+never resumed on error so any code following <code>yield_error</code> will not execute.</p>
 
-<h3><a name="error-handling-functions/assert_error" href="#error-handling-functions/assert_error"><code>assert_error(cond, ...)</code></a></h3>
+<h3><a href="#error-handling-functions/assert_error" name="error-handling-functions/assert_error"><code>assert_error(cond, ...)</code></a></h3>
 
 <p>It is idiomatic in Lua to return <code>nil</code> and an error message from a function
 when it fails. For this reason the helper <code>assert_error</code> exists. If the first
@@ -311,29 +339,33 @@ error, otherwise all the arguments are returned from the function unchanged.</p>
 <p><code>assert_error</code> is very handy with database methods, which make use of this
 idiom.</p>
 
-<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app_helpers</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
+<p><div class="dual_code">
+<div class="dual_code_tabs">
+        <button type="button" data-lang="lua" class="set_language">Lua</button>
+        <button type="button" data-lang="moonscript" class="set_language">MoonScript</button>
+      </div>
+<pre class="highlight lang_lua"><code><span class="sh_keyword">local</span> <span class="sh_identifier">lapis</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis&quot;</span><span class="sh_operator">)</span>
+<span class="sh_keyword">local</span> <span class="sh_identifier">app_helpers</span> <span class="sh_operator">=</span> <span class="sh_function">require</span><span class="sh_operator">(</span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_operator">)</span>
 
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">assert_error</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app_helpers</span><span class="sh_operator">.</span><span class="sh_identifier">capture_errors</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app_helpers</span><span class="sh_operator">.</span><span class="sh_identifier">assert_error</span><span class="sh_lua_whitespace sh_whitespace">
+<span class="sh_keyword">local</span> <span class="sh_identifier">capture_errors</span><span class="sh_operator">,</span> <span class="sh_identifier">assert_error</span> <span class="sh_operator">=</span> <span class="sh_identifier">app_helpers</span><span class="sh_operator">.</span><span class="sh_identifier">capture_errors</span><span class="sh_operator">,</span> <span class="sh_identifier">app_helpers</span><span class="sh_operator">.</span><span class="sh_identifier">assert_error</span>
 
-</span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">app</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span><span class="sh_lua_whitespace sh_whitespace">
+<span class="sh_keyword">local</span> <span class="sh_identifier">app</span> <span class="sh_operator">=</span> <span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_identifier">Application</span><span class="sh_operator">()</span>
 
-</span><span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_keyword">local</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">assert_error</span><span class="sh_operator">(</span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">({</span><span class="sh_identifier">id</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;leafo&quot;</span><span class="sh_operator">}))</span><span class="sh_lua_whitespace sh_whitespace">
-  </span><span class="sh_keyword">return</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_string">&quot;result: &quot;</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_operator">..</span><span class="sh_lua_whitespace sh_whitespace"> </span><span class="sh_identifier">user</span><span class="sh_operator">.</span><span class="sh_identifier">id</span><span class="sh_lua_whitespace sh_whitespace">
-</span><span class="sh_keyword">end</span><span class="sh_operator">))</span><span class="sh_lua_whitespace sh_whitespace">
-</span></code>
+<span class="sh_identifier">app</span><span class="sh_operator">:</span><span class="sh_identifier">match</span><span class="sh_operator">(</span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">,</span> <span class="sh_identifier">capture_errors</span><span class="sh_operator">(</span><span class="sh_keyword">function</span><span class="sh_operator">(</span><span class="sh_identifier">self</span><span class="sh_operator">)</span>
+  <span class="sh_keyword">local</span> <span class="sh_identifier">user</span> <span class="sh_operator">=</span> <span class="sh_identifier">assert_error</span><span class="sh_operator">(</span><span class="sh_identifier">Users</span><span class="sh_operator">:</span><span class="sh_identifier">find</span><span class="sh_operator">({</span><span class="sh_identifier">id</span> <span class="sh_operator">=</span> <span class="sh_string">&quot;leafo&quot;</span><span class="sh_operator">}))</span>
+  <span class="sh_keyword">return</span> <span class="sh_string">&quot;result: &quot;</span> <span class="sh_operator">..</span> <span class="sh_identifier">user</span><span class="sh_operator">.</span><span class="sh_identifier">id</span>
+<span class="sh_keyword">end</span><span class="sh_operator">))</span></code>
 </pre>
+<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span> <span class="sh_identifier">capture_errors</span><span class="sh_operator">,</span> <span class="sh_identifier">assert_error</span> <span class="sh_keyword">from</span> <span class="sh_function">require</span> <span class="sh_string">&quot;lapis.application&quot;</span>
 
-
-<pre class="highlight lang_moon"><code><span class="sh_keyword">import</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_operator">,</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">assert_error</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">from</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_function">require</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;lapis.application&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-
-</span><span class="sh_keyword">class</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">App</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_keyword">extends</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span><span class="sh_moonscript_whitespace sh_whitespace">
-  </span><span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">capture_errors</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_fndef sh_preprocessor">=&gt;</span><span class="sh_moonscript_whitespace sh_whitespace">
-    </span><span class="sh_identifier">user</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_operator">=</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_identifier">assert_error</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">find</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_tbl_key sh_regex">id:</span><span class="sh_moonscript_whitespace sh_whitespace"> </span><span class="sh_string">&quot;leafo&quot;</span><span class="sh_moonscript_whitespace sh_whitespace">
-    </span><span class="sh_string">&quot;result: #{user.id}&quot;</span></code>
+<span class="sh_keyword">class</span> <span class="sh_proper_ident sh_class">App</span> <span class="sh_keyword">extends</span> <span class="sh_identifier">lapis</span><span class="sh_operator">.</span><span class="sh_proper_ident sh_class">Application</span>
+  <span class="sh_string">&quot;/&quot;</span><span class="sh_operator">:</span> <span class="sh_identifier">capture_errors</span> <span class="sh_fndef sh_preprocessor">=&gt;</span>
+    <span class="sh_identifier">user</span> <span class="sh_operator">=</span> <span class="sh_identifier">assert_error</span> <span class="sh_proper_ident sh_class">Users</span><span class="sh_operator">\</span><span class="sh_identifier">find</span> <span class="sh_tbl_key sh_regex">id:</span> <span class="sh_string">&quot;leafo&quot;</span>
+    <span class="sh_string">&quot;result: </span><span class="sh_interpolation sh_embedded">#{</span><span class="sh_identifier">user</span><span class="sh_operator">.</span><span class="sh_identifier">id</span><span class="sh_interpolation sh_embedded">}</span><span class="sh_string">&quot;</span></code>
 </pre>
+</div>
 
+</p>
 
 <p>If you call this function not within a <code>capture_errors</code> context, then a hard
 Lua <code>error</code> will be thrown.</p>
@@ -348,8 +380,8 @@ Lua <code>error</code> will be thrown.</p>
   <script src="../lib/react-dom.production.min.js"></script>
   <script src="../lib/react-dom-factories.js"></script>
   <script src="../lib/lunr.min.js"></script>
-  <script type="text/javascript" src="../search.js?Fri Mar  8 20:35:45 2024"></script>
-  <script type="text/javascript" src="../reference.js?Fri Mar  8 20:35:45 2024"></script>
+  <script type="text/javascript" src="../search.js?Thu Oct 22 18:58:17 2026"></script>
+  <script type="text/javascript" src="../reference.js?Thu Oct 22 18:58:17 2026"></script>
   <script type="text/javascript">
     new L.Reference();
   </script>
