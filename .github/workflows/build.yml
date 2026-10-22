@@ -9,14 +9,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
 
     - uses: leafo/gh-actions-lua@master
       with:
         luaVersion: "luajit"
-
-    - name: checkout lapis
-      run: git submodule update --init --recursive
 
     - uses: leafo/gh-actions-luarocks@master
 
@@ -36,9 +35,26 @@ jobs:
       run: |
         find www -iname '.gitignore' | xargs rm
 
-    - name: deploy to github pages
-      uses: JamesIves/github-pages-deploy-action@4.1.5
+    - name: upload pages artifact
+      uses: actions/upload-pages-artifact@v3
       if: github.ref == 'refs/heads/master'
       with:
-        branch: gh-pages
-        folder: www
+        path: www
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+    - name: deploy to github pages
+      id: deployment
+      uses: actions/deploy-pages@v4
