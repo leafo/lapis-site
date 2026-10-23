@@ -57,9 +57,41 @@ code, pre {
 
 .sub_header {
     background: $background_sub;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 12px;
+    padding-bottom: 14px;
     line-height: 1.5em;
+
+    .release_meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px 12px;
+        font-size: 14px;
+    }
+
+    .release_version {
+        font-weight: 900;
+    }
+
+    .release_date {
+        color: rgba($text_color, 0.7);
+    }
+
+    .release_link {
+        margin-left: auto;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .release_summary {
+        margin: 6px 0 0 0;
+    }
+
+    code {
+        background: rgba(white, 0.6);
+        padding: 1px 4px;
+        border-radius: 3px;
+    }
 }
 
 .header {
